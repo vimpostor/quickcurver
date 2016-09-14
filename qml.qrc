@@ -1,0 +1,25 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>PlayerSelector.qml</file>
+        <file>../../../../Pictures/flash.png</file>
+        <file>curveitem.cpp</file>
+        <file>curveitem.h</file>
+        <file>dieanimation.cpp</file>
+        <file>dieanimation.h</file>
+        <file>game.cpp</file>
+        <file>game.h</file>
+        <file>graphnode.cpp</file>
+        <file>graphnode.h</file>
+        <file>headnode.cpp</file>
+        <file>headnode.h</file>
+        <file>main.cpp</file>
+        <file>playerselector.cpp</file>
+        <file>playerselector.h</file>
+        <file>qcurver.cpp</file>
+        <file>qcurver.h</file>
+        <file>segment.cpp</file>
+        <file>segment.h</file>
+        <file>images/flash.png</file>
+    </qresource>
+</RCC>
