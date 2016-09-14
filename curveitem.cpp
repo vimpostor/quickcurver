@@ -98,7 +98,9 @@ void CurveItem::useAll() {
 }
 
 void CurveItem::stopTimer() {
-	timer->stop();
+	if (timer != NULL) {
+		timer->stop();
+	}
 }
 
 void CurveItem::deuseMyself() {
