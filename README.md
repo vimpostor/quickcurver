@@ -3,7 +3,7 @@ This is an OpenGL accelerated Qt/C++ implementation of the famous game "Achtung 
 
 ![alt tag](http://i.imgur.com/HTNalqO.png)
 
-Please not that this project is yet in development and hasn't reached a stable version for now. This means that you could experience bugs, when playing this game.
+Please note that this project is yet in development and hasn't reached a stable version for now. This means that you could experience bugs, when playing this game.
 
 #Installation
 Navigate to the directory and execute:
