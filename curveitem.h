@@ -26,8 +26,9 @@ public:
 	bool testCollision(QPointF p);
 	QColor getColor();
 	void useItem(int playerCount, QCurver** curver, QCurver* collector);
+	void setRound(int round);
 public slots:
-	void stopTimer();
+//	void renderUseless();
 protected slots:
 	void deuseMyself();
 	void deuseAll();
@@ -53,6 +54,8 @@ protected:
 	QSGTexture* texture;
 	QColor color;
 	QTimer* timer;
+	bool invisible = false;
+	int round = -1;
 };
 
 #endif // CURVEITEM_H

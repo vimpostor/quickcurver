@@ -32,7 +32,6 @@ public:
 	short int playercount = 1;
 
 signals:
-	void stopItemTimer();
 public slots:
 	void progress();
 	void curverDied(QCurver* who);
@@ -51,7 +50,7 @@ private:
 	QTimer* nextRoundTimer;
 	QTime lastTime;
 	QSGNode *node = 0;
-	int roundCount = 1;
+	int roundCount = 0;
 	void nextRound();
 	int nextItemSpawn; //time in milliseconds
 	QTime lastItemSpawn;

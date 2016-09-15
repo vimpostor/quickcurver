@@ -28,6 +28,9 @@ void Game::start() {
 		connect(curver[i], SIGNAL(died(QCurver*)), this, SLOT(curverDied(QCurver*)));
 		connect(curver[i], SIGNAL(requestIntersectionChecking(QPointF,QPointF)), this, SLOT(checkforIntersection(QPointF,QPointF)));
 	}
+	for (int i = 0; i < MAXITEMCOUNT; i++) {
+		items[i] = NULL;
+	}
 	setFlag(ItemHasContents, true);
 
 	connect(timer, SIGNAL(timeout()), this, SLOT(progress()));
@@ -51,6 +54,7 @@ void Game::progress() {
 		for (i = 0; items[i] != NULL; i++) { //find first free item slot
 		}
 		items[i] = new FastItem(node);
+		items[i]->setRound(roundCount);
 		lastItemSpawn = lastTime;
 		nextItemSpawn = segment::randInt(1000,10000);
 	}
@@ -132,7 +136,7 @@ void Game::checkforIntersection(QPointF a, QPointF b) {
 }
 
 void Game::changeControls(int index, Qt::Key k, bool isRight) {
-	controls[index][isRight? 1 : 0] = k;
+	controls[index][isRight] = k;
 	qDebug() << "Assigned key to player "<< index <<": " + QKeySequence(k).toString();
 }
 
@@ -149,12 +153,9 @@ void Game::startNextRound() {
 	}
 	for (int i = 0; i < MAXITEMCOUNT; i++) {
 		if (items[i] != NULL) {
-//			connect(this, SIGNAL(stopItemTimer()), items[i], SLOT(stopTimer()));
-//			emit stopItemTimer();
-//			disconnect(this, SIGNAL(stopItemTimer()), items[i], SLOT(stopTimer()));
 			delete items[i];
+			items[i] = NULL;
 		}
-		items[i] = NULL;
 	}
 	lastItemSpawn = QTime::currentTime();
 	timer->start();

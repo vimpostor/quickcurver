@@ -130,6 +130,7 @@ void QCurver::reset() {
 	segmentchangeTime = 2000;
 	nextSegmentTime = 2000;
 	changingSegment = true;
+	roundCount++;
 }
 
 QPointF QCurver::getPos() {
@@ -142,4 +143,12 @@ void QCurver::doubleSpeed() {
 
 void QCurver::halfSpeed() {
 	velocity = velocity / 2;
+}
+
+bool QCurver::verifyCorrectRound(int round) {
+	bool r = (round == roundCount);
+	if (!r) {
+		qDebug() << "Item deactivation prevented, because next round began";
+	}
+	return r;
 }

@@ -36,7 +36,10 @@ CurveItem::CurveItem(QSGNode *node) {
 
 CurveItem::~CurveItem() {
 	//destruct
-	node->removeChildNode(gnode);
+	if (invisible == false) { //fixes an issue where simultaneously using an item and starting a new round would render the whole screen black
+		node->removeChildNode(gnode);
+		invisible = true;
+	}
 }
 
 int CurveItem::getSize() {
@@ -72,6 +75,7 @@ void CurveItem::useItem(int playerCount, QCurver **curver, QCurver *collector) {
 		useAll();
 	}
 	node->removeChildNode(gnode);
+	invisible = true;
 	if (deUseTime != 0) {
 		deuseIn(deUseTime);
 	} else {
@@ -97,32 +101,48 @@ void CurveItem::useAll() {
 	}
 }
 
-void CurveItem::stopTimer() {
-	if (timer != NULL) {
-		timer->stop();
-	}
-}
+//void CurveItem::renderUseless() {
+//	if (invisible == false) {
+//		node->removeChildNode(gnode);
+//		invisible = true;
+//	}
+//	valid = false;
+//	if (timer == NULL) { //if no timer is running delete us ASAP
+//		delete this;
+//	} //if a timer is running we cannot delete us ourself, because the timer runs in another thread
+//	//when the timer finishes, then we will delete us in the deuse*() method automatically
+//}
 
 void CurveItem::deuseMyself() {
-	deuse(collector);
+	if (collector->verifyCorrectRound(round)) { //are we still in the same round?
+		deuse(collector);
+	}
+	delete this;
 }
 
 void CurveItem::deuseAll() {
-	for (int i = 0; i < playerCount; i++) {
-		deuse(curver[i]);
-	}
-}
-
-void CurveItem::deuseOthers() {
-	for (int i = 0; i < playerCount; i++) {
-		if (curver[i] != collector) {
+	if (collector->verifyCorrectRound(round)) {
+		for (int i = 0; i < playerCount; i++) {
 			deuse(curver[i]);
 		}
 	}
+	delete this;
+}
+
+void CurveItem::deuseOthers() {
+	if (collector->verifyCorrectRound(round)) {
+		for (int i = 0; i < playerCount; i++) {
+			if (curver[i] != collector) {
+				deuse(curver[i]);
+			}
+		}
+	}
+	delete this;
 }
 
 void CurveItem::deuseIn(int msecs) {
 	timer = new QTimer;
+	qDebug() << "deusing in";
 	if (color == Qt::green) {
 		timer->singleShot(deUseTime, this, SLOT(deuseMyself()));
 	} else if (color == Qt::red) {
@@ -130,6 +150,10 @@ void CurveItem::deuseIn(int msecs) {
 	} else { //blue
 		timer->singleShot(deUseTime, this, SLOT(deuseAll()));
 	}
+}
+
+void CurveItem::setRound(int round) {
+	this->round = round;
 }
 
 //the following methods are implemented later in subclasses

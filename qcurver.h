@@ -33,6 +33,7 @@ public:
 	QPointF getPos();
 	void doubleSpeed();
 	void halfSpeed();
+	bool verifyCorrectRound(int round);
 
 signals:
 	void died(QCurver* who);
@@ -63,6 +64,7 @@ private:
 	QColor color;
 	QSGFlatColorMaterial* material;
 	bool wallCollision();
+	int roundCount = 0;
 	int playerCollision(); //returns -1  if no collision, else returns the number of the player with whom we are colliding
 };
 
