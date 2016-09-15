@@ -142,7 +142,6 @@ void CurveItem::deuseOthers() {
 
 void CurveItem::deuseIn(int msecs) {
 	timer = new QTimer;
-	qDebug() << "deusing in";
 	if (color == Qt::green) {
 		timer->singleShot(deUseTime, this, SLOT(deuseMyself()));
 	} else if (color == Qt::red) {

@@ -146,9 +146,5 @@ void QCurver::halfSpeed() {
 }
 
 bool QCurver::verifyCorrectRound(int round) {
-	bool r = (round == roundCount);
-	if (!r) {
-		qDebug() << "Item deactivation prevented, because next round began";
-	}
-	return r;
+	return (round == this->roundCount);
 }
