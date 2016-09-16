@@ -7,6 +7,7 @@ Please note that this project is yet in development and hasn't reached a stable 
 
 #Installation
 ##Compiled binary
+###Linux/X11
 Coming soon!!
 ##Compiling from source
 Quick Curver uses [qml-material](https://github.com/papyros/qml-material) which must be installed first:
