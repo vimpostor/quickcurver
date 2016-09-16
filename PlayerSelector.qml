@@ -32,6 +32,7 @@ Item {
         }
         Button {
             id: startButton
+            focus: true
             anchors.top: playerList.bottom
             anchors.right: parent.right
             anchors.left: parent.left

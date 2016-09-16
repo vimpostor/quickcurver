@@ -21,6 +21,7 @@ void Game::start() {
 	timer = new QTimer(this);
 	nextRoundTimer = new QTimer(this);
 	node = new QSGNode;
+	wall = new wallNode(node);
 	for (int i = 0; i < playercount; i++) {
 		alive[i] = true;
 		score[i] = 0;

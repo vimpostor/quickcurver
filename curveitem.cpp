@@ -86,7 +86,7 @@ void CurveItem::useItem(int playerCount, QCurver **curver, QCurver *collector) {
 	node->removeChildNode(gnode);
 	invisible = true;
 	if (deUseTime != 0) {
-		deuseIn(deUseTime);
+		deuseIn();
 	} else {
 		delete this;
 	}
@@ -149,7 +149,7 @@ void CurveItem::deuseOthers() {
 	delete this;
 }
 
-void CurveItem::deuseIn(int msecs) {
+void CurveItem::deuseIn() {
 	timer = new QTimer;
 	if (color == Qt::green) {
 		timer->singleShot(deUseTime, this, SLOT(deuseMyself()));

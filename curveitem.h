@@ -40,7 +40,7 @@ protected:
 	virtual void use(QCurver* curver);
 	virtual void deuse(QCurver* curver);
 	int deUseTime = 0; //millisecs, 0 if no deUse at all
-	void deuseIn(int msecs);
+	void deuseIn();
 	void useMyself();
 	void useAll();
 	void useOthers();

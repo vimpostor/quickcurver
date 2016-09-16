@@ -13,6 +13,7 @@
 #include "curveitem.h"
 #include "fastitem.h"
 #include <QQuickView>
+#include "wallnode.h"
 #define MAXPLAYERCOUNT 20
 #define MAXITEMCOUNT 20
 
@@ -55,6 +56,7 @@ private:
 	void nextRound();
 	int nextItemSpawn; //time in milliseconds
 	QTime lastItemSpawn;
+	wallNode *wall;
 };
 
 #endif // GAME_H

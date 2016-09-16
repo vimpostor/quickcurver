@@ -11,7 +11,8 @@ SOURCES += main.cpp \
     dieanimation.cpp \
     curveitem.cpp \
     slowitem.cpp \
-    fastitem.cpp
+    fastitem.cpp \
+    wallnode.cpp
 
 RESOURCES += \
     qml.qrc \
@@ -33,4 +34,5 @@ HEADERS += \
     dieanimation.h \
     curveitem.h \
     slowitem.h \
-    fastitem.h
+    fastitem.h \
+    wallnode.h

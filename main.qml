@@ -10,7 +10,7 @@ import Game 1.0
 
 ApplicationWindow {
     id: root
-    width: 997
+    width: 1000
     height: 1150
     minimumWidth: 997
     minimumHeight: 997
