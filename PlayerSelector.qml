@@ -39,7 +39,6 @@ Item {
             text: "Start!"
             elevation: 1
             backgroundColor: Theme.primaryColor
-            anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
                 game.focus = true;
                 game.start();
@@ -50,8 +49,10 @@ Item {
         ListModel {
             id: playerListModel
             ListElement {
+                name: "Player 0"
             }
             ListElement {
+                name: "Player 1"
             }
         }
 
@@ -113,6 +114,46 @@ Item {
                                     this.text = event.text;
                                 }
                                 game.changeControls(index, event.key, true);
+                            }
+                        }
+                        Text {
+                            text: "Color:"
+                        }
+                        Button {
+                            elevation: 1
+                            backgroundColor: mycolor
+                            onClicked: {
+                                mycolorPicker.show();
+                            }
+                        }
+                        Dialog {
+                            id: mycolorPicker
+                            title: "Pick color"
+                            positiveButtonText: "Done"
+                            Grid {
+                                columns: 7
+                                spacing: dp(8)
+                                Repeater {
+                                    model: [
+                                        "red", "pink", "purple", "deepPurple", "indigo",
+                                        "blue", "lightBlue", "cyan", "teal", "green",
+                                        "lightGreen", "lime", "yellow", "amber", "orange",
+                                        "deepOrange", "grey", "blueGrey", "brown", "black",
+                                        "white"
+                                    ]
+                                    Rectangle {
+                                        width: dp(30)
+                                        height: dp(30)
+                                        radius: dp(2)
+                                        color: Palette.colors[modelData]["500"]
+                                        border.width: modelData === "white" ? dp(2) : 0
+                                        border.color: Theme.alpha("#000", 0.26)
+                                        Ink {
+                                            anchors.fill: parent
+                                            onPressed: mycolor = parent.color
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

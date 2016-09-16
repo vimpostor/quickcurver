@@ -13,7 +13,7 @@
 #include "curveitem.h"
 #include "fastitem.h"
 #include <QQuickView>
-#define MAXPLAYERCOUNT 10
+#define MAXPLAYERCOUNT 20
 #define MAXITEMCOUNT 20
 
 
