@@ -9,7 +9,7 @@ Game::Game(QQuickItem *parent) : QQuickItem(parent) {
 }
 
 Game::~Game() {
-	timer->deleteLater();
+//	timer->deleteLater();
 }
 
 QSGNode *Game::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *) {

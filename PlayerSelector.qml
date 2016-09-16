@@ -1,167 +1,147 @@
 import QtQuick 2.7
-import QtQuick.Window 2.2
-import QtQuick.Controls 1.4
-import QtQuick.Dialogs 1.2
-import QtQuick.Controls.Styles 1.4
+import QtQuick.Layouts 1.1
+//import QtQuick.Controls 1.3 as QuickControls
+import Material 0.2
+import Material.ListItems 0.1 as ListItem
+import Material.Extras 0.1
 import QtQuick.Controls.Material 2.0
 
-Rectangle {
-      ColorDialog {
-            id: colorDialog
-            signal colorChosen(color newColor)
-            onAccepted: {
-                 console.log("You chose: " + colorDialog.color)
-                 /*  HERE IS how you actually send that signal out */
-                 colorChosen(colorDialog.currentColor);
-            }
-
+Item {
+    View {
+        anchors.fill: parent
+        anchors.margins: dp(32)
+        elevation: 1
+        ListItem.Subheader {
+            id: playerListHeader
+            text: "Players"
+            anchors.bottom: playerList.top
         }
-    id: listViewContainer
-    width: parent.width/10*9;
-    height: 50
-    Behavior on height {
-        NumberAnimation {
-            duration: 100;
-        }
-    }
 
-    gradient: Gradient {
-        GradientStop {position: 0.0; color: "white" }
-        GradientStop {position: 1.0; color: "silver" }
-    }
-    radius: 5
-
-    ListModel {
-        id: playerListViewModel;
-        ListElement {
-            name: "Name"
-        }
-    }
-
-    Component {
-        id: playerDelegate
-//        property ListView listViewModel: playerListViewModel
-        Item {
+        View {
+            id: playerList
+            anchors.top: playerListHeader.bottom
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: dp(50)
             anchors.left: parent.left
             anchors.right: parent.right
-            height: 50
-            function changeColor(newColor) {
-                console.log("newColor="+newColor);
-                playerListViewModel.get(index).playerColor = newColor;
-                playerListViewModel.get(index).name = newColor;
-                root.colorChanged(index, newColor);
-                console.log("After setting playerColor = newColor, playerColor="+playerListViewModel.get(index).playerColor);
-                colorDialog.colorChosen.disconnect(changeColor);
+            ListView {
+                anchors.fill: parent
+                model: playerListModel
+                delegate: playerDelegate
             }
-            Column {
-                TextInput { text: name }
-                Item {
-                    id: colorSelector
-                    property color color: Material.color(Math.random()*19)
-                    onColorChanged: {
-                        game.changeColor(index, color);
-                    }
-                }
-                ColorDialog {
-                    id: colorDialog
-                    modality: Qt.ApplicationModal
-                    title: "Please choose a color"
-                    onAccepted: colorSelector.color = currentColor
-                }
-                Row {
-                    MouseArea {
-                        width: 20
-                        height: 20
-                        onClicked: {
-                            colorDialog.color = colorSelector.color;
-                            colorDialog.open();
-                            //open color dialog
-                        }
+        }
+        Button {
+            id: startButton
+            anchors.top: playerList.bottom
+            anchors.right: parent.right
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            text: "Start!"
+            elevation: 1
+            backgroundColor: Theme.primaryColor
+            anchors.horizontalCenter: parent.horizontalCenter
+            onClicked: {
+                game.focus = true;
+                game.start();
+                pageStack.push(Qt.resolvedUrl("gamePage.qml"));
+            }
+        }
 
-                        Rectangle {
-                            radius: 3
-                            anchors.fill: parent
-//                            color: Qt.binding(function() { return playerColor})
-                            color: colorSelector.color
-                        }
+        ListModel {
+            id: playerListModel
+            ListElement {
+            }
+            ListElement {
+            }
+        }
+
+        Component {
+            id: playerDelegate
+            ListItem.Subtitled {
+                property string name: "Player "+index
+                property color mycolor:  Material.color(Math.random()*19)
+                onMycolorChanged: game.changeColor(index, mycolor);
+                text: name
+                subText: "Change color, controls etc..."
+                secondaryItem: Button {
+                    text: "Edit player"
+                    textColor: mycolor
+                    anchors.verticalCenter: parent.verticalCenter
+                    onClicked: {
+                        playerEditDialog.show();
                     }
-                    Button {
-                        id: leftButton
-                        width: 200
-                        height: 20
-                        text: "Left"
-                        style: ButtonStyle {
-                            label: Text {
-                                text: leftButton.text
-                                horizontalAlignment: Text.Center
-                            }
-                        }
-                        onClicked: {
-                            this.forceActiveFocus();
-                        }
-                        Keys.onPressed: {
-                            if (event.text == "") {
-                                this.text = "No key description available"
-                            } else {
-                                this.text = event.text;
-                            }
-                            game.changeControls(index, event.key, false);
-                        }
+                }
+                Dialog {
+                    id: playerEditDialog
+                    title: "Edit Player"
+                    hasActions: true
+                    TextField {
+                        id: nameTextField
+                        focus: true
+                        width: parent.width
+                        placeholderText: "Name"
+                        floatingLabel: true
+                        onTextChanged: name = this.text
                     }
-                    Button {
-                        id: rightButton
-                        width: 200
-                        height: 20
-                        text: "Right"
-                        style: ButtonStyle {
-                            label: Text {
-                                text: rightButton.text
-                                horizontalAlignment: Text.Center
+                    GridLayout {
+                        id: editPlayerGrid
+                        rowSpacing: dp(20)
+                        columnSpacing: dp(10)
+                        columns: 2
+
+                        Button {
+                            text: "Left"
+                            elevation: 1
+                            activeFocusOnPress: true
+                            Keys.onPressed: {
+                                if (event.text == "") {
+                                    this.text = "No key description available";
+                                } else {
+                                    this.text = event.text;
+                                }
+                                game.changeControls(index, event.key, false);
                             }
                         }
-                        onClicked: {
-                            this.forceActiveFocus();
-                        }
-                        Keys.onPressed: {
-                            if (event.text == "") {
-                                this.text = "No key description available"
-                            } else {
-                                this.text = event.text;
+                        Button {
+                            text: "Right"
+                            elevation: 1
+                            activeFocusOnPress: true
+                            Keys.onPressed: {
+                                if (event.text == "") {
+                                    this.text = "No key description available";
+                                } else {
+                                    this.text = event.text;
+                                }
+                                game.changeControls(index, event.key, true);
                             }
-                            game.changeControls(index, event.key, true);
                         }
                     }
                 }
             }
         }
+
+
+    }
+    ActionButton {
+        anchors {
+            right: parent.right
+            bottom: snackbar.top
+            margins: dp(64)
+        }
+        action: Action {
+            id: addPlayer
+            text: "&Add"
+            shortcut: "Ctrl+N"
+            onTriggered: {
+                game.addPlayer();
+                playerListModel.append({});
+                snackbar.open("Added new Player");
+            }
+        }
+        iconName: "content/add"
     }
 
-    ListView {
-        id: playerListView
-        anchors.rightMargin: 0
-        anchors.bottomMargin: 0
-        anchors.leftMargin: 0
-        anchors.topMargin: 0
-        anchors.fill: parent
-        model: playerListViewModel
-
-        delegate: playerDelegate
-    }
-    Button {
-        id: addPlayerButton
-        anchors.top: playerListView.bottom
-        anchors.left: playerListView.left
-        anchors.right: playerListView.right
-        style: ButtonStyle {
-            label: Text {
-                text: "Add new player"
-                horizontalAlignment: Text.Center
-            }
-        }
-        onClicked: {
-            root.addnewPlayer(playerListView);
-            playerListViewModel.append({name: "Name"});
-            listViewContainer.height += 50;
-        }
+    Snackbar {
+        id: snackbar
     }
 }

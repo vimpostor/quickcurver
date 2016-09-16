@@ -3,6 +3,8 @@
 #include "curveitem.h"
 #include <QSGNode>
 #include "qcurver.h"
+#include <QSGNode>
+#include <QQuickView>
 
 class FastItem : public CurveItem
 {

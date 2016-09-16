@@ -14,6 +14,10 @@ QCurver::QCurver(QColor color, QSGNode *node) {
 }
 
 QCurver::~QCurver() {
+	for (int i = 0; i < segmentcount; i++) {
+		delete segments[i];
+	}
+	delete headnode;
 }
 
 

@@ -18,19 +18,28 @@ CurveItem::CurveItem(QSGNode *node) {
 	gnode = new QSGGeometryNode;
 	geometry = new QSGGeometry(QSGGeometry::defaultAttributes_Point2D(), 0);
 	geometry->setLineWidth(4);
-	geometry->setDrawingMode(GL_LINE_STRIP);
+	geometry->setDrawingMode(GL_TRIANGLES);
 	gnode->setGeometry(geometry);
 	gnode->setFlag(QSGNode::OwnsGeometry);
 	QSGFlatColorMaterial *material = new QSGFlatColorMaterial;
 	material->setColor(color);
+//	QImage *img = new QImage(":/images/flash.png");
+//	this->material = new QSGTextureMaterial;
+//	texture = view->createTextureFromImage(*img);
+//	texture->setMipmapFiltering(QSGTexture::Linear);
+//	texture->setHorizontalWrapMode(QSGTexture::Repeat);
+//	texture->setVerticalWrapMode(QSGTexture::Repeat);
+//	this->material->setTexture(texture);
 	gnode->setMaterial(material);
 	gnode->setFlag(QSGNode::OwnsMaterial);
-	geometry->allocate(4);
+	geometry->allocate(6);
 	vertices = geometry->vertexDataAsPoint2D();
 	vertices[0].set(pos.x()-10,pos.y()-10);
 	vertices[1].set(pos.x()-10,pos.y()+10);
 	vertices[2].set(pos.x()+10, pos.y()-10);
 	vertices[3].set(pos.x()+10, pos.y()+10);
+	vertices[4].set(pos.x()-10, pos.y()+10);
+	vertices[5].set(pos.x()+10, pos.y()-10);
 	node->appendChildNode(gnode);
 }
 

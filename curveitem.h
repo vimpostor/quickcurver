@@ -12,6 +12,8 @@
 #include "qcurver.h"
 #include "segment.h"
 #include <QTimer>
+#include <QImage>
+#include <QQuickView>
 
 #define SIZE 10
 

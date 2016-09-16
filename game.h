@@ -12,6 +12,7 @@
 #include <QSGGeometry>
 #include "curveitem.h"
 #include "fastitem.h"
+#include <QQuickView>
 #define MAXPLAYERCOUNT 10
 #define MAXITEMCOUNT 20
 
@@ -28,8 +29,8 @@ public:
 	Q_INVOKABLE void changeControls(int index, Qt::Key k, bool isRight);
 	QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *);
     ~Game();
-	void addPlayer();
-	short int playercount = 1;
+	Q_INVOKABLE void addPlayer();
+	short int playercount = 2;
 
 signals:
 public slots:
