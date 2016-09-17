@@ -29,6 +29,7 @@ public:
 	Q_INVOKABLE void changeColor(int index, QColor color);
 	Q_INVOKABLE void changeControls(int index, Qt::Key k, bool isRight);
 	Q_INVOKABLE void changeName(int index, QString newName);
+	Q_INVOKABLE void changeTimerInterval(int newInterval);
 	QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *);
     ~Game();
 	Q_INVOKABLE void addPlayer();
@@ -59,6 +60,7 @@ private:
 	int nextItemSpawn; //time in milliseconds
 	QTime lastItemSpawn;
 	wallNode *wall;
+	int timerInterval = 30;
 };
 
 #endif // GAME_H

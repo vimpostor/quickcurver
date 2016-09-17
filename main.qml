@@ -33,6 +33,9 @@ ApplicationWindow {
                 iconName: "action/settings"
                 name: "Settings"
                 hoverAnimation: true
+                onTriggered: {
+                    pageStack.push(Qt.resolvedUrl("settings.qml"));
+                }
             }
 
         ]

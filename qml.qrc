@@ -4,5 +4,6 @@
         <file>PlayerSelector.qml</file>
         <file>images/flash.png</file>
         <file>gamePage.qml</file>
+        <file>settings.qml</file>
     </qresource>
 </RCC>

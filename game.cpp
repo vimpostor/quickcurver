@@ -38,7 +38,7 @@ void Game::start() {
 	lastTime = QTime::currentTime();
 	lastItemSpawn = lastTime;
 	nextItemSpawn = segment::randInt(5000,10000);
-	timer->start(30);
+	timer->start(timerInterval);
 }
 
 void Game::changeColor(int index, QColor color) {
@@ -164,4 +164,8 @@ void Game::startNextRound() {
 
 void Game::changeName(int index, QString newName) {
 	names[index] = newName;
+}
+
+void Game::changeTimerInterval(int newInterval) {
+	timerInterval = newInterval;
 }
