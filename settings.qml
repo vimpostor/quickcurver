@@ -41,7 +41,7 @@ TabbedPage {
                         numericValueLabel: true
                         stepSize: 3
                         minimumValue: 1
-                        maximumValue: 100
+                        maximumValue: 55
                         darkBackground: true
                         onValueChanged: game.changeTimerInterval(value)
                     }
@@ -52,8 +52,9 @@ TabbedPage {
                     Slider {
                         value: 2
                         tickmarksEnabled: true
+                        stepSize: 1
                         numericValueLabel: true
-                        minimumValue: 1
+                        minimumValue: 0
                         maximumValue: 10
                         darkBackground: true
                         onValueChanged: game.setRoundTimeout(value)

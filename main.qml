@@ -10,9 +10,9 @@ import Game 1.0
 
 ApplicationWindow {
     id: root
-    width: 1000
+    width: 1400
     height: 1150
-    minimumWidth: 997
+    minimumWidth: 1400
     minimumHeight: 997
     title: "Quick Curver"
     visible: true
