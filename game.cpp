@@ -75,7 +75,7 @@ void Game::progress() {
 	update();
 }
 
-Q_INVOKABLE void Game::sendKey(Qt::Key k) {
+void Game::sendKey(Qt::Key k) {
 	for (int i = 0; i < playercount; i++) {
 		if (controls[i][0] == k) {
 			curver[i]->rotating = ROTATE_LEFT;
@@ -85,7 +85,7 @@ Q_INVOKABLE void Game::sendKey(Qt::Key k) {
 	}
 }
 
-Q_INVOKABLE void Game::releaseKey(Qt::Key k) {
+void Game::releaseKey(Qt::Key k) {
 	for (int i = 0; i < playercount; i++) {
 		if (controls[i][0] == k || controls[i][1] == k) {
 			curver[i]->rotating = ROTATE_NONE;
@@ -105,7 +105,7 @@ void Game::curverDied(QCurver *who) {
 			score[i]++;
 	}
 	alive[i] = false;
-	qDebug() << "Player " << i << " died";
+	qDebug() << names[i] + " died";
 	i++;
 	for (i = 0; i < playercount; i++) {
 		if (alive[i])
@@ -120,7 +120,7 @@ void Game::curverDied(QCurver *who) {
 		}
 	}
 	if (stillAlive == 1) {
-		qDebug() << "Player " << alivePlayer << " has won!";
+		qDebug() << names[alivePlayer] + " has won!";
 		nextRound();
 	}
 }
@@ -160,4 +160,8 @@ void Game::startNextRound() {
 	}
 	lastItemSpawn = QTime::currentTime();
 	timer->start();
+}
+
+void Game::changeName(int index, QString newName) {
+	names[index] = newName;
 }

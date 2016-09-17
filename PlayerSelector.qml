@@ -62,6 +62,7 @@ Item {
             ListItem.Subtitled {
                 property string name: "Player "+index
                 property color mycolor:  Material.color(Math.random()*19)
+                onNameChanged: game.changeName(index, name);
                 onMycolorChanged: game.changeColor(index, mycolor);
                 text: name
                 subText: "Change color, controls etc..."

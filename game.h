@@ -28,6 +28,7 @@ public:
 	Q_INVOKABLE void start();
 	Q_INVOKABLE void changeColor(int index, QColor color);
 	Q_INVOKABLE void changeControls(int index, Qt::Key k, bool isRight);
+	Q_INVOKABLE void changeName(int index, QString newName);
 	QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *);
     ~Game();
 	Q_INVOKABLE void addPlayer();
@@ -48,6 +49,7 @@ private:
 	Qt::Key controls[MAXPLAYERCOUNT][2]; //first one is left key, second one is right key
 	int score[MAXPLAYERCOUNT];
 	CurveItem* items[MAXITEMCOUNT];
+	QString names[MAXITEMCOUNT];
 	QTimer* timer;
 	QTimer* nextRoundTimer;
 	QTime lastTime;
