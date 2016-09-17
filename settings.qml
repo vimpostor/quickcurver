@@ -59,6 +59,20 @@ TabbedPage {
                         darkBackground: true
                         onValueChanged: game.setRoundTimeout(value)
                     }
+                    Label {
+                        text: "Base speed"
+                        color: Theme.dark.textColor
+                    }
+                    Slider {
+                        value: 128
+                        tickmarksEnabled: true
+                        stepSize: 32
+                        numericValueLabel: true
+                        minimumValue: 64
+                        maximumValue: 512
+                        darkBackground: true
+                        onValueChanged: game.setBaseSpeed(value)
+                    }
                 }
             }
         }

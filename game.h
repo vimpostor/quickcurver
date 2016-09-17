@@ -31,6 +31,7 @@ public:
 	Q_INVOKABLE void setName(int index, QString newName);
 	Q_INVOKABLE void changeTimerInterval(int newInterval);
 	Q_INVOKABLE void setRoundTimeout(int seconds);
+	Q_INVOKABLE void setBaseSpeed(int baseSpeed);
 	QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *);
     ~Game();
 	Q_INVOKABLE void addPlayer();
@@ -63,6 +64,7 @@ private:
 	wallNode *wall;
 	int timerInterval = 25;
 	int roundTimeout = 2000; //milliseconds
+	int baseSpeed = 128;
 };
 
 #endif // GAME_H

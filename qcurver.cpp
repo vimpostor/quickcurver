@@ -1,9 +1,11 @@
 #include "qcurver.h"
 
-QCurver::QCurver(QColor color, QSGNode *node) {
+QCurver::QCurver(QSGNode *node, QColor color, int baseSpeed) {
 	connect(this,SIGNAL(died(QCurver*)), this, SLOT(rollDieAnimation()));
 	this->color = color;
 	this->node = node;
+	this->baseSpeed = baseSpeed;
+	velocity = baseSpeed;
 	material = new QSGFlatColorMaterial;
 	material->setColor(color);
 	segments[0] = new segment(color, node, material);
@@ -129,7 +131,7 @@ void QCurver::reset() {
 	rotateDirection(segment::randFloat()*2*M_PI);
 	lastPoint = QPointF(segment::randInt(100,900),segment::randInt(100,900));
 	lastnewSegment = QTime::currentTime();
-	velocity = 128;
+	velocity = baseSpeed;
 	thickness = 16;
 	segmentchangeTime = 2000;
 	nextSegmentTime = 2000;

@@ -23,7 +23,7 @@ class QCurver : public QObject
 {
     Q_OBJECT
 public:
-	explicit QCurver(QColor color, QSGNode* node);
+	explicit QCurver(QSGNode* node, QColor color, int baseSpeed);
     ~QCurver();
 	segment* segments[MAXSEGMENTCOUNT];
 	int segmentcount = 1;
@@ -51,6 +51,7 @@ private:
 	QPointF lastPoint;
 	float angle = 0;
 	int velocity = 128;
+	int baseSpeed = 128;
 	void rotateDirection(float radians);
 	float rotateVelocity = M_PI;
 	QTime lastnewSegment;

@@ -25,7 +25,7 @@ void Game::start() {
 	for (int i = 0; i < playercount; i++) {
 		alive[i] = true;
 		score[i] = 0;
-		curver[i] = new QCurver(colors[i], node);
+		curver[i] = new QCurver(node, colors[i], baseSpeed);
 		connect(curver[i], SIGNAL(died(QCurver*)), this, SLOT(curverDied(QCurver*)));
 		connect(curver[i], SIGNAL(requestIntersectionChecking(QPointF,QPointF)), this, SLOT(checkforIntersection(QPointF,QPointF)));
 	}
@@ -172,4 +172,8 @@ void Game::changeTimerInterval(int newInterval) {
 
 void Game::setRoundTimeout(int seconds) {
 	roundTimeout = 1000*seconds;
+}
+
+void Game::setBaseSpeed(int baseSpeed) {
+	this->baseSpeed = baseSpeed;
 }
