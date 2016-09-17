@@ -176,9 +176,12 @@ Item {
             text: "&Add"
             shortcut: "Ctrl+N"
             onTriggered: {
-                game.addPlayer();
-                playerListModel.append({});
-                snackbar.open("Added new Player");
+                if (playerListModel.count >= 20) {
+                    snackbar.open("Sorry, you have reached maximum player capacity!");
+                } else {
+                    game.addPlayer();
+                    playerListModel.append({});
+                }
             }
         }
         iconName: "content/add"
