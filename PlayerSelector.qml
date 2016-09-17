@@ -41,9 +41,9 @@ Item {
             elevation: 1
             backgroundColor: Theme.primaryColor
             onClicked: {
-                game.focus = true;
-                game.start();
                 pageStack.push(Qt.resolvedUrl("gamePage.qml"));
+                game.start();
+                game.focus = true;
             }
         }
 
@@ -62,8 +62,8 @@ Item {
             ListItem.Subtitled {
                 property string name: "Player "+index
                 property color mycolor:  Material.color(Math.random()*19)
-                onNameChanged: game.changeName(index, name);
-                onMycolorChanged: game.changeColor(index, mycolor);
+                onNameChanged: game.setName(index, name);
+                onMycolorChanged: game.setColor(index, mycolor);
                 text: name
                 subText: "Change color, controls etc..."
                 secondaryItem: Button {
@@ -102,7 +102,7 @@ Item {
                                 } else {
                                     this.text = event.text;
                                 }
-                                game.changeControls(index, event.key, false);
+                                game.setControls(index, event.key, false);
                             }
                         }
                         Button {
@@ -115,7 +115,7 @@ Item {
                                 } else {
                                     this.text = event.text;
                                 }
-                                game.changeControls(index, event.key, true);
+                                game.setControls(index, event.key, true);
                             }
                         }
                         Text {

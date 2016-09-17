@@ -10,6 +10,7 @@
 
 int main(int argc, char *argv[])
 {
+	//TODO: Fix Anti Aliasing!!!
 	QGLFormat fmt;
 	fmt = QGLFormat::defaultFormat();
 	fmt.setSamples(16);

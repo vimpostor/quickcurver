@@ -36,7 +36,7 @@ TabbedPage {
 
                     Slider {
                         Layout.alignment: Qt.AlignCenter
-                        value: 30
+                        value: 25
                         tickmarksEnabled: true
                         numericValueLabel: true
                         stepSize: 3
@@ -44,6 +44,19 @@ TabbedPage {
                         maximumValue: 100
                         darkBackground: true
                         onValueChanged: game.changeTimerInterval(value)
+                    }
+                    Label {
+                        text: "Round timeout"
+                        color: Theme.dark.textColor
+                    }
+                    Slider {
+                        value: 2
+                        tickmarksEnabled: true
+                        numericValueLabel: true
+                        minimumValue: 1
+                        maximumValue: 10
+                        darkBackground: true
+                        onValueChanged: game.setRoundTimeout(value)
                     }
                 }
             }

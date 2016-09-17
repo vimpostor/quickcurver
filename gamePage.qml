@@ -3,5 +3,7 @@ import Material 0.2
 import Material.ListItems 0.1 as ListItem
 import Material.Extras 0.1
 
-Item {
+Page {
+    backgroundColor: "#31363b"
+    focus: false
 }

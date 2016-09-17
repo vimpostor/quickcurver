@@ -41,7 +41,7 @@ void Game::start() {
 	timer->start(timerInterval);
 }
 
-void Game::changeColor(int index, QColor color) {
+void Game::setColor(int index, QColor color) {
 	colors[index] = color;
 }
 
@@ -136,13 +136,13 @@ void Game::checkforIntersection(QPointF a, QPointF b) {
 	}
 }
 
-void Game::changeControls(int index, Qt::Key k, bool isRight) {
+void Game::setControls(int index, Qt::Key k, bool isRight) {
 	controls[index][isRight] = k;
 	qDebug() << "Assigned key to player "<< index <<": " + QKeySequence(k).toString();
 }
 
 void Game::nextRound() {
-	nextRoundTimer->singleShot(2000, this, SLOT(startNextRound()));
+	nextRoundTimer->singleShot(roundTimeout, this, SLOT(startNextRound()));
 }
 
 void Game::startNextRound() {
@@ -162,10 +162,14 @@ void Game::startNextRound() {
 	timer->start();
 }
 
-void Game::changeName(int index, QString newName) {
+void Game::setName(int index, QString newName) {
 	names[index] = newName;
 }
 
 void Game::changeTimerInterval(int newInterval) {
 	timerInterval = newInterval;
+}
+
+void Game::setRoundTimeout(int seconds) {
+	roundTimeout = 1000*seconds;
 }
