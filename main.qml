@@ -9,8 +9,9 @@ import Game 1.0
 //import QtQuick.Controls.Styles 1.4
 
 ApplicationWindow {
-    function changeScore(index, newScore) {
+    function changeScore(index, newScore, roundScore) {
         playerListModel.setProperty(index, "escore", newScore);
+        playerListModel.setProperty(index, "eroundScore", roundScore);
     }
 
     id: root
@@ -126,10 +127,12 @@ ApplicationWindow {
         ListElement {
             ename: "Player 0"
             escore: 0
+            eroundScore: 0
         }
         ListElement {
             ename: "Player 1"
             escore: 0
+            eroundScore: 0
         }
     }
 }

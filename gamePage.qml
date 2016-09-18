@@ -38,7 +38,7 @@ Page {
                     text: ename
                     secondaryItem: Label {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: escore
+                        text: escore + " (+" +  eroundScore + ")"
                     }
                 }
             }

@@ -55,6 +55,7 @@ private:
 	int score[MAXPLAYERCOUNT];
 	CurveItem* items[MAXITEMCOUNT];
 	QString names[MAXITEMCOUNT];
+	int roundScore[MAXITEMCOUNT];
 	QTimer* timer;
 	QTimer* nextRoundTimer;
 	QTime lastTime;

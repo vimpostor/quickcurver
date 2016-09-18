@@ -25,6 +25,7 @@ void Game::start() {
 	for (int i = 0; i < playercount; i++) {
 		alive[i] = true;
 		score[i] = 0;
+		roundScore[i] = 0;
 		curver[i] = new QCurver(node, colors[i], baseSpeed);
 		connect(curver[i], SIGNAL(died(QCurver*)), this, SLOT(curverDied(QCurver*)));
 		connect(curver[i], SIGNAL(requestIntersectionChecking(QPointF,QPointF)), this, SLOT(checkforIntersection(QPointF,QPointF)));
@@ -149,6 +150,9 @@ void Game::startNextRound() {
 	timer->stop();
 	roundCount++;
 	for (int i = 0; i < playercount; i++) {
+		roundScore[i] = 0;
+		QVariant returnedValue;
+		QMetaObject::invokeMethod(qmlobject, "changeScore", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, i) , Q_ARG(QVariant, score[i]), Q_ARG(QVariant, roundScore[i]));
 		curver[i]->reset();
 		alive[i] = true;
 	}
@@ -184,6 +188,7 @@ void Game::setQmlObject(QObject *o) {
 
 void Game::increaseScore(int index) {
 	score[index]++;
+	roundScore[index]++;
 	QVariant returnedValue;
-	QMetaObject::invokeMethod(qmlobject, "changeScore", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, index) , Q_ARG(QVariant, score[index]));
+	QMetaObject::invokeMethod(qmlobject, "changeScore", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, index) , Q_ARG(QVariant, score[index]), Q_ARG(QVariant, roundScore[index]));
 }
