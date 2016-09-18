@@ -36,7 +36,7 @@ TabbedPage {
 
                     Slider {
                         Layout.alignment: Qt.AlignCenter
-                        value: 25
+                        value: 16
                         tickmarksEnabled: true
                         numericValueLabel: true
                         stepSize: 3

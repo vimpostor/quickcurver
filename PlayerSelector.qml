@@ -62,7 +62,6 @@ Item {
         Component {
             id: playerDelegate
             ListItem.Subtitled {
-//                elevation: 1
                 property string name: "Player "+index
                 property color mycolor:  Material.color(Math.random()*19)
                 onNameChanged: {
