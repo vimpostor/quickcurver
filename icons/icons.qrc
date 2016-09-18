@@ -37,4 +37,7 @@
     <qresource prefix="/icons/navigation">
         <file alias="arrow_drop_down.svg">navigation_arrow_drop_down.svg</file>
     </qresource>
+    <qresource prefix="/icons/editor">
+		<file alias="mode_edit.svg">editor_mode_edit.svg</file>
+    </qresource>
 </RCC>

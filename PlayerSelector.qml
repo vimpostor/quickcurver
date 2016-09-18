@@ -25,6 +25,7 @@ Item {
             anchors.left: parent.left
             anchors.right: parent.right
             ListView {
+                spacing: dp(8)
                 anchors.fill: parent
                 model: playerListModel
                 delegate: playerDelegate
@@ -60,19 +61,18 @@ Item {
         Component {
             id: playerDelegate
             ListItem.Subtitled {
+                elevation: 1
                 property string name: "Player "+index
                 property color mycolor:  Material.color(Math.random()*19)
                 onNameChanged: game.setName(index, name);
                 onMycolorChanged: game.setColor(index, mycolor);
                 text: name
                 subText: "Change color, controls etc..."
-                secondaryItem: Button {
-                    text: "Edit player"
-                    textColor: mycolor
+                secondaryItem: IconButton {
+                    iconName: "editor/mode_edit"
                     anchors.verticalCenter: parent.verticalCenter
-                    onClicked: {
-                        playerEditDialog.show();
-                    }
+                    color: mycolor
+                    onClicked: playerEditDialog.show()
                 }
                 Dialog {
                     id: playerEditDialog
