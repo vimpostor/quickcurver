@@ -19,7 +19,6 @@ Page {
                 id: scoreListHeader
                 text: "Players"
                 anchors.top: parent.top
-
             }
             View {
                 anchors.top: scoreListHeader.bottom

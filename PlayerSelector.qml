@@ -26,7 +26,7 @@ Item {
             anchors.right: parent.right
             ListView {
                 id: playerListView
-                spacing: dp(8)
+//                spacing: dp(8)
                 anchors.fill: parent
                 model: playerListModel
                 delegate: playerDelegate
@@ -62,7 +62,7 @@ Item {
         Component {
             id: playerDelegate
             ListItem.Subtitled {
-                elevation: 1
+//                elevation: 1
                 property string name: "Player "+index
                 property color mycolor:  Material.color(Math.random()*19)
                 onNameChanged: {
