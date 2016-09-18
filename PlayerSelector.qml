@@ -48,15 +48,15 @@ Item {
             }
         }
 
-        ListModel {
-            id: playerListModel
-            ListElement {
-                name: "Player 0"
-            }
-            ListElement {
-                name: "Player 1"
-            }
-        }
+//        ListModel {
+//            id: playerListModel
+//            ListElement {
+//                name: "Player 0"
+//            }
+//            ListElement {
+//                name: "Player 1"
+//            }
+//        }
 
         Component {
             id: playerDelegate
@@ -64,7 +64,10 @@ Item {
                 elevation: 1
                 property string name: "Player "+index
                 property color mycolor:  Material.color(Math.random()*19)
-                onNameChanged: game.setName(index, name);
+                onNameChanged: {
+                    game.setName(index, name);
+                    this.name = name;
+                }
                 onMycolorChanged: game.setColor(index, mycolor);
                 text: name
                 subText: "Change color, controls etc..."
@@ -176,7 +179,7 @@ Item {
             text: "&Add"
             shortcut: "Ctrl+N"
             onTriggered: {
-                if (playerListModel.count >= 20) {
+                if (playerListModel.count >= 16) {
                     snackbar.open("Sorry, you have reached maximum player capacity!");
                 } else {
                     game.addPlayer();

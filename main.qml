@@ -100,6 +100,7 @@ ApplicationWindow {
     }
     Item {
         y: 55
+        x: parent.width - 1000
         Game {
             id: game
             objectName: "game"
@@ -111,6 +112,15 @@ ApplicationWindow {
             Keys.onReleased: {
                 game.releaseKey(event.key);
             }
+        }
+    }
+    ListModel {
+        id: playerListModel
+        ListElement {
+            name: "Player 0"
+        }
+        ListElement {
+            name: "Player 1"
         }
     }
 }

@@ -8,17 +8,38 @@ Page {
     focus: false
     canGoBack: false
     onGoBack: pageStack.push(this) //as of now, canGoBack = false does not work, this disables it manually
-    Sidebar {
-        mode: "right"
+    PageSidebar {
+//        mode: "right"
         width: parent.width - 1000
-        ListItem.Subheader {
-            id: scoreListHeader
-            text: "Players"
-            anchors.top: parent.top
+        backgroundColor: Theme.backgroundColor
+        Card {
+            anchors.fill: parent
+            anchors.margins: dp(30)
+            ListItem.Subheader {
+                id: scoreListHeader
+                text: "Players"
+                anchors.top: parent.top
 
+            }
+            View {
+                anchors.top: scoreListHeader.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                ListView {
+                    anchors.fill: parent
+                    model: playerListModel
+                    delegate: scoreListDelegate
+                }
+            }
+            Component {
+                id: scoreListDelegate
+                ListItem.Standard {
+                    text: name
+                }
+            }
         }
-        Label {
-            text: "Here you will see the score later!"
-        }
+
+
     }
 }

@@ -14,7 +14,7 @@
 #include "fastitem.h"
 #include <QQuickView>
 #include "wallnode.h"
-#define MAXPLAYERCOUNT 20
+#define MAXPLAYERCOUNT 16
 #define MAXITEMCOUNT 20
 
 
