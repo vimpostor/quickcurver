@@ -21,7 +21,11 @@ int main(int argc, char *argv[])
 
 	qmlRegisterType<Game>("Game", 1, 0, "Game");
 	QQmlApplicationEngine engine;
-	engine.load(QUrl(QLatin1String("qrc:/main.qml")));
+	QQmlComponent component(&engine, QUrl(QLatin1String("qrc:/main.qml")));
+	QObject *object = component.create();
+	Game* game = object->findChild<Game*>("game");
+	game->setQmlObject(object);
+//	engine.load(QUrl(QLatin1String("qrc:/main.qml")));
 
     return app.exec();
 }

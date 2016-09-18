@@ -9,6 +9,10 @@ import Game 1.0
 //import QtQuick.Controls.Styles 1.4
 
 ApplicationWindow {
+    function changeScore(index, newScore) {
+        playerListModel.setProperty(index, "escore", newScore);
+    }
+
     id: root
     width: 1400
     height: 1150
@@ -21,6 +25,9 @@ ApplicationWindow {
         accentColor: "red"
         tabHighlightColor: "white"
     }
+//    Wave {
+//        id: wave
+//    }
 
     initialPage: Page {
         actions: [
@@ -117,10 +124,12 @@ ApplicationWindow {
     ListModel {
         id: playerListModel
         ListElement {
-            name: "Player 0"
+            ename: "Player 0"
+            escore: 0
         }
         ListElement {
-            name: "Player 1"
+            ename: "Player 1"
+            escore: 0
         }
     }
 }

@@ -14,7 +14,7 @@ Page {
         backgroundColor: Theme.backgroundColor
         Card {
             anchors.fill: parent
-            anchors.margins: dp(30)
+            anchors.margins: dp(32)
             ListItem.Subheader {
                 id: scoreListHeader
                 text: "Players"
@@ -35,7 +35,11 @@ Page {
             Component {
                 id: scoreListDelegate
                 ListItem.Standard {
-                    text: name
+                    text: ename
+                    secondaryItem: Label {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: escore
+                    }
                 }
             }
         }

@@ -14,6 +14,7 @@
 #include "fastitem.h"
 #include <QQuickView>
 #include "wallnode.h"
+#include <QObject>
 #define MAXPLAYERCOUNT 16
 #define MAXITEMCOUNT 20
 
@@ -36,6 +37,7 @@ public:
     ~Game();
 	Q_INVOKABLE void addPlayer();
 	short int playercount = 2;
+	void setQmlObject(QObject *o);
 
 signals:
 public slots:
@@ -65,6 +67,8 @@ private:
 	int timerInterval = 25;
 	int roundTimeout = 2000; //milliseconds
 	int baseSpeed = 128;
+	QObject *qmlobject;
+	void increaseScore(int index);
 };
 
 #endif // GAME_H

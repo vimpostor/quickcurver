@@ -25,6 +25,7 @@ Item {
             anchors.left: parent.left
             anchors.right: parent.right
             ListView {
+                id: playerListView
                 spacing: dp(8)
                 anchors.fill: parent
                 model: playerListModel
@@ -48,7 +49,7 @@ Item {
             }
         }
 
-//        ListModel {
+//        ListModel { //this got moved to main.qml
 //            id: playerListModel
 //            ListElement {
 //                name: "Player 0"
@@ -66,9 +67,12 @@ Item {
                 property color mycolor:  Material.color(Math.random()*19)
                 onNameChanged: {
                     game.setName(index, name);
-                    this.name = name;
+                    ename = name;
                 }
-                onMycolorChanged: game.setColor(index, mycolor);
+                onMycolorChanged: {
+                    game.setColor(index, mycolor);
+                }
+
                 text: name
                 subText: "Change color, controls etc..."
                 secondaryItem: IconButton {
@@ -184,6 +188,9 @@ Item {
                 } else {
                     game.addPlayer();
                     playerListModel.append({});
+//                    wave.width = playerListView.currentItem.width;
+//                    wave.height = playerListView.currentItem.height;
+//                    wave.open(playerListView.currentItem.x, playerListView.currentItem.y);
                 }
             }
         }

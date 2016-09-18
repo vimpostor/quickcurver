@@ -102,14 +102,14 @@ void Game::curverDied(QCurver *who) {
 	int i;
 	for (i = 0; curver[i] != who; i++) {
 		if (alive[i]) //if he is still alive, increase his score
-			score[i]++;
+			increaseScore(i);
 	}
 	alive[i] = false;
 	qDebug() << names[i] + " died";
 	i++;
-	for (i = 0; i < playercount; i++) {
+	for (; i < playercount; i++) {
 		if (alive[i])
-			score[i]++;
+			increaseScore(i);
 	}
 	int stillAlive = 0;
 	int alivePlayer;
@@ -176,4 +176,14 @@ void Game::setRoundTimeout(int seconds) {
 
 void Game::setBaseSpeed(int baseSpeed) {
 	this->baseSpeed = baseSpeed;
+}
+
+void Game::setQmlObject(QObject *o) {
+	qmlobject = o;
+}
+
+void Game::increaseScore(int index) {
+	score[index]++;
+	QVariant returnedValue;
+	QMetaObject::invokeMethod(qmlobject, "changeScore", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, index) , Q_ARG(QVariant, score[index]));
 }
