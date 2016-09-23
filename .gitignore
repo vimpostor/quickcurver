@@ -37,4 +37,4 @@ Makefile*
 CMakeLists.txt.user
 
 #Ignore build folder
-/build/
+/build/*
