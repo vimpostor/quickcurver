@@ -44,7 +44,6 @@ CurveItem::CurveItem(QSGNode *node) {
 }
 
 CurveItem::~CurveItem() {
-	//destruct
 	if (invisible == false) { //fixes an issue where simultaneously using an item and starting a new round would render the whole screen black
 		node->removeChildNode(gnode);
 		invisible = true;
