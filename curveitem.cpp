@@ -109,18 +109,6 @@ void CurveItem::useAll() {
 	}
 }
 
-//void CurveItem::renderUseless() {
-//	if (invisible == false) {
-//		node->removeChildNode(gnode);
-//		invisible = true;
-//	}
-//	valid = false;
-//	if (timer == NULL) { //if no timer is running delete us ASAP
-//		delete this;
-//	} //if a timer is running we cannot delete us ourself, because the timer runs in another thread
-//	//when the timer finishes, then we will delete us in the deuse*() method automatically
-//}
-
 void CurveItem::deuseMyself() {
 	if (collector->verifyCorrectRound(round)) { //are we still in the same round?
 		deuse(collector);
