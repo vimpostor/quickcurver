@@ -19,6 +19,7 @@ In case you have Qt5 properly installed, you can just download the executable in
 * libm.so.6
 * libgcc_s.so.1
 * libc.so.6
+
 You can find a script in sharedLibrariesTest.sh to test if you have everything installed.
 In case you have not Qt5 installed, there will be a single static executable available some time.
 ##Compiling from source
