@@ -37,4 +37,6 @@ Makefile*
 CMakeLists.txt.user
 
 #Ignore build folder
-/build/
+/build/*
+#But not the executable
+!/build/QuickCurver

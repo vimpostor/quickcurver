@@ -96,7 +96,7 @@ void Game::releaseKey(Qt::Key k) {
 
 void Game::addPlayer() {
 	playercount++;
-	qDebug() << "added player " << playercount;
+	// qDebug() << "added player " << playercount;
 }
 
 void Game::curverDied(QCurver *who) {
