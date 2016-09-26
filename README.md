@@ -26,7 +26,7 @@ In case you have not Qt5 installed, there will be a single static executable ava
 Quick Curver uses [qml-material](https://github.com/papyros/qml-material) which must be installed first:
 Navigate to a directory where you want to install qml-material and execute:
 ```{r, engine='bash', count_lines}
-git clone git@github.com:papyros/qml-material.git //you can alternatively clone over HTTPS
+git clone git@github.com:papyros/qml-material.git //you can alternatively clone using HTTPS
 mkdir build; cd build
 qmake ..
 make
@@ -35,7 +35,7 @@ make install # use sudo if necessary
 Now we can proceed with the installation of Quick Curver itself:
 Navigate to a new directory where you want to install Quick Curver and execute:
 ```{r, engine='bash', count_lines}
-git clone git@github.com:Magnus2552/quickcurver.git //you can alternatively clone over HTTPS
+git clone git@github.com:Magnus2552/quickcurver.git //you can alternatively clone using HTTPS
 cd build
 qmake ..
 make

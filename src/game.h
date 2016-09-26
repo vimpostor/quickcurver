@@ -15,6 +15,7 @@
 #include <QQuickView>
 #include "wallnode.h"
 #include <QObject>
+#include "aicontroller.h"
 #define MAXPLAYERCOUNT 16
 #define MAXITEMCOUNT 20
 
@@ -33,6 +34,7 @@ public:
 	Q_INVOKABLE void changeTimerInterval(int newInterval);
 	Q_INVOKABLE void setRoundTimeout(int seconds);
 	Q_INVOKABLE void setBaseSpeed(int baseSpeed);
+	Q_INVOKABLE void setAIcontrolled(int index, bool newState);
 	QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *);
     ~Game();
 	Q_INVOKABLE void addPlayer();
@@ -52,6 +54,8 @@ private:
 	bool alive[MAXPLAYERCOUNT];
 	QColor colors[MAXPLAYERCOUNT];
 	Qt::Key controls[MAXPLAYERCOUNT][2]; //first one is left key, second one is right key
+	bool controlledByAI[MAXPLAYERCOUNT];
+	AIController* ai[MAXPLAYERCOUNT];
 	int score[MAXPLAYERCOUNT];
 	CurveItem* items[MAXITEMCOUNT];
 	QString names[MAXITEMCOUNT];

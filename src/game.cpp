@@ -5,6 +5,7 @@ Game::Game(QQuickItem *parent) : QQuickItem(parent) {
 	for (int i = 0; i < MAXPLAYERCOUNT; i++) {
 		controls[i][0] = Qt::Key_Left;
 		controls[i][1] = Qt::Key_Right;
+		controlledByAI[i] = false;
 	}
 }
 
@@ -27,6 +28,9 @@ void Game::start() {
 		score[i] = 0;
 		roundScore[i] = 0;
 		curver[i] = new QCurver(node, colors[i], baseSpeed);
+		if (controlledByAI[i]) {
+			ai[i] = new AIController(curver[i], curver, playercount);
+		}
 		connect(curver[i], SIGNAL(died(QCurver*)), this, SLOT(curverDied(QCurver*)));
 		connect(curver[i], SIGNAL(requestIntersectionChecking(QPointF,QPointF)), this, SLOT(checkforIntersection(QPointF,QPointF)));
 	}
@@ -70,6 +74,10 @@ void Game::progress() {
 					items[j] = NULL; //dont worry it will delete it by its own
 				}
 			}
+			//let the AI make its move now
+			if (controlledByAI[i]) {
+				ai[i]->makeMove(deltat);
+			}
 			curver[i]->progress(deltat);
 		}
 	}
@@ -78,18 +86,22 @@ void Game::progress() {
 
 void Game::sendKey(Qt::Key k) {
 	for (int i = 0; i < playercount; i++) {
-		if (controls[i][0] == k) {
-			curver[i]->rotating = ROTATE_LEFT;
-		} else if (controls[i][1] == k) {
-			curver[i]->rotating = ROTATE_RIGHT;
+		if (!controlledByAI[i]) {
+			if (controls[i][0] == k) {
+				curver[i]->rotating = ROTATE_LEFT;
+			} else if (controls[i][1] == k) {
+				curver[i]->rotating = ROTATE_RIGHT;
+			}
 		}
 	}
 }
 
 void Game::releaseKey(Qt::Key k) {
 	for (int i = 0; i < playercount; i++) {
-		if (controls[i][0] == k || controls[i][1] == k) {
-			curver[i]->rotating = ROTATE_NONE;
+		if (!controlledByAI[i]) {
+			if (controls[i][0] == k || controls[i][1] == k) {
+				curver[i]->rotating = ROTATE_NONE;
+			}
 		}
 	}
 }
@@ -136,6 +148,8 @@ void Game::checkforIntersection(QPointF a, QPointF b) {
 		emit who->died(who);
 	}
 }
+
+
 
 void Game::setControls(int index, Qt::Key k, bool isRight) {
 	controls[index][isRight] = k;
@@ -191,4 +205,8 @@ void Game::increaseScore(int index) {
 	roundScore[index]++;
 	QVariant returnedValue;
 	QMetaObject::invokeMethod(qmlobject, "changeScore", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, index) , Q_ARG(QVariant, score[index]), Q_ARG(QVariant, roundScore[index]));
+}
+
+void Game::setAIcontrolled(int index, bool newState) {
+	controlledByAI[index] = newState;
 }

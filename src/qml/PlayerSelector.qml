@@ -71,6 +71,7 @@ Item {
                 onMycolorChanged: {
                     game.setColor(index, mycolor);
                 }
+                onClicked: playerEditDialog.show()
 
                 text: name
                 subText: "Change color, controls etc..."
@@ -92,6 +93,12 @@ Item {
                         floatingLabel: true
                         onTextChanged: name = this.text
                     }
+                    CheckBox {
+                        id: checkboxAI
+                        text: "Bot"
+                        onCheckedChanged: game.setAIcontrolled(index, checked)
+                    }
+
                     GridLayout {
                         id: editPlayerGrid
                         rowSpacing: dp(20)
@@ -99,6 +106,8 @@ Item {
                         columns: 2
 
                         Button {
+                            id: buttonLeft
+                            enabled: !checkboxAI.checked
                             text: "Left"
                             elevation: 1
                             activeFocusOnPress: true
@@ -112,6 +121,8 @@ Item {
                             }
                         }
                         Button {
+                            id: buttonRight
+                            enabled: !checkboxAI.checked
                             text: "Right"
                             elevation: 1
                             activeFocusOnPress: true
@@ -195,8 +206,15 @@ Item {
         }
         iconName: "content/add"
     }
+    Action {
+        shortcut: "Ctrl+Shift+N"
+        //this should add a bot player
+    }
 
     Snackbar {
         id: snackbar
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.margins: dp(70)
     }
 }

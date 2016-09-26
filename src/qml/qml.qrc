@@ -2,7 +2,6 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>PlayerSelector.qml</file>
-        <file>images/flash.png</file>
         <file>gamePage.qml</file>
         <file>settings.qml</file>
     </qresource>

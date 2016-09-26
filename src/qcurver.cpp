@@ -74,6 +74,11 @@ void QCurver::turnRight(float deltat) {
 
 void QCurver::rotateDirection(float radians) {
 	angle = angle + radians;
+	if (angle > 2*M_PI) {
+		angle -= 2*M_PI;
+	} else if (angle < 0) {
+		angle += 2*M_PI;
+	}
 	direction.setX(cos(angle));
 	direction.setY(sin(angle));
 }
@@ -153,4 +158,16 @@ void QCurver::halfSpeed() {
 
 bool QCurver::verifyCorrectRound(int round) {
 	return (round == this->roundCount);
+}
+
+QPointF QCurver::getEstimatedNextPos(float deltat, float angle, float velocityMultiplier) {
+	return lastPoint + deltat * velocity * velocityMultiplier * getDirectionRotatedBy(angle);
+}
+
+QPointF QCurver::getDirectionRotatedBy(float angle) {
+	return QPointF(cos(this->angle+angle), sin(this->angle+angle));
+}
+
+float QCurver::getAngle() {
+	return angle;
 }

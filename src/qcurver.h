@@ -34,6 +34,8 @@ public:
 	void doubleSpeed();
 	void halfSpeed();
 	bool verifyCorrectRound(int round);
+	QPointF getEstimatedNextPos(float deltat, float angle, float velocityMultiplier = 1);
+	float getAngle();
 
 signals:
 	void died(QCurver* who);
@@ -53,6 +55,7 @@ private:
 	int velocity = 128;
 	int baseSpeed = 128;
 	void rotateDirection(float radians);
+	QPointF getDirectionRotatedBy(float angle);
 	float rotateVelocity = M_PI;
 	QTime lastnewSegment;
 	int thickness = 16;

@@ -3,19 +3,22 @@ TEMPLATE = app
 QT += qml quick opengl
 CONFIG += c++11
 
-SOURCES += main.cpp \
-    qcurver.cpp \
-    game.cpp \
-    segment.cpp \
-    headnode.cpp \
-    dieanimation.cpp \
-    curveitem.cpp \
-    slowitem.cpp \
-    fastitem.cpp \
-    wallnode.cpp
+SOURCES += src/curveitem.cpp \
+src/dieanimation.cpp \
+src/fastitem.cpp \
+src/game.cpp \
+src/graphnode.cpp \
+src/headnode.cpp \
+src/main.cpp \
+src/qcurver.cpp \
+src/segment.cpp \
+src/slowitem.cpp \
+src/wallnode.cpp \
+    src/aicontroller.cpp
+
 
 RESOURCES += \
-    qml.qrc \
+    src/qml/qml.qrc \
     icons/icons.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
@@ -26,13 +29,14 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-HEADERS += \
-    qcurver.h \
-    game.h \
-    segment.h \
-    headnode.h \
-    dieanimation.h \
-    curveitem.h \
-    slowitem.h \
-    fastitem.h \
-    wallnode.h
+HEADERS += src/curveitem.h \
+src/dieanimation.h \
+src/fastitem.h \
+src/game.h \
+src/graphnode.h \
+src/headnode.h \
+src/qcurver.h \
+src/segment.h \
+src/slowitem.h \
+src/wallnode.h \
+    src/aicontroller.h
