@@ -8,9 +8,9 @@ QCurver::QCurver(QSGNode *node, QColor color, int baseSpeed) {
 	velocity = baseSpeed;
 	material = new QSGFlatColorMaterial;
 	material->setColor(color);
-	segments[0] = new segment(color, node, material);
-	rotateDirection(segment::randFloat()*2*M_PI);
 	lastPoint = QPointF(segment::randInt(100,900),segment::randInt(100,900));
+	segments[0] = new segment(color, thickness, node, material);
+	rotateDirection(segment::randFloat()*2*M_PI);
 	lastnewSegment = QTime::currentTime();
 	headnode = new headNode(lastPoint, material, node);
 }
@@ -38,14 +38,14 @@ void QCurver::progress(float deltat) {
 	if (!changingSegment) {
 		if (lastnewSegment.msecsTo(QTime::currentTime()) > nextSegmentTime) {
 			//new Segment
-			segments[segmentcount] = new segment(color, node, material);
+			segments[segmentcount] = new segment(color, thickness, node, material);
 			segmentcount++;
 			lastnewSegment = QTime::currentTime();
 			nextSegmentTime = segment::randInt(1000,5000);
 			changingSegment = true;
 		} else {
 			//no new Segment
-			segments[segmentcount-1]->appendPoint(newPoint);
+			segments[segmentcount-1]->appendPoint(newPoint, angle);
 			bool wCollision = wallCollision();
 			if (segments[segmentcount-1]->poscount > 1) {
 				int pCollision = playerCollision();
@@ -54,9 +54,10 @@ void QCurver::progress(float deltat) {
 	} else {
 		//check if we should produce a new line again
 		if (lastnewSegment.msecsTo(QTime::currentTime()) > segmentchangeTime) {
+			qDebug() << lastnewSegment.msecsTo(QTime::currentTime());
 			lastnewSegment = QTime::currentTime();
 			changingSegment = false;
-			segmentchangeTime = 70;
+			segmentchangeTime = 128;
 		}
 	}
 	headnode->updatePosition(newPoint);
@@ -130,14 +131,14 @@ void QCurver::reset() {
 	for (int i = 0; i < oldSegmentcount; i++) {
 		delete segments[i];
 	}
-	segments[0] = new segment(color, node, material);
+	lastPoint = QPointF(segment::randInt(100,900),segment::randInt(100,900));
+	segments[0] = new segment(color, thickness, node, material);
 	segmentcount = 1;
 	rotating = ROTATE_NONE;
 	rotateDirection(segment::randFloat()*2*M_PI);
-	lastPoint = QPointF(segment::randInt(100,900),segment::randInt(100,900));
 	lastnewSegment = QTime::currentTime();
 	velocity = baseSpeed;
-	thickness = 16;
+//	thickness = 16;
 	segmentchangeTime = 2000;
 	nextSegmentTime = 2000;
 	changingSegment = true;

@@ -5,19 +5,20 @@
 #include <QtQuick/qsgflatcolormaterial.h>
 #include <QSGGeometry>
 #include <QMutex>
+#include <QtMath>
 #include <QTime>
-#define MAXPOSSIZE 600
+#define MAXPOSSIZE 2048
 
 
 class segment : public QObject
 {
 	Q_OBJECT
 public:
-	segment(QColor color, QSGNode *node, QSGFlatColorMaterial* material);
+	segment(QColor color, int thickness, QSGNode *node, QSGFlatColorMaterial* material);
 	~segment();
 	QPointF pos[MAXPOSSIZE];
 	short int poscount = 0;
-	void appendPoint(QPointF addedPoint);
+	void appendPoint(QPointF addedPoint, float angle);
 	QPointF getLastPoint();
 	bool checkforIntersection(QPointF a, QPointF b);
 	static int randInt(int min, int max);
@@ -32,7 +33,7 @@ private:
 	QSGGeometryNode* gnode;
 	QSGGeometry* geometry;
 	QMutex nodeMutex;
-	int thickness = 16;
+	int thickness;
 	QSGNode* node;
 };
 

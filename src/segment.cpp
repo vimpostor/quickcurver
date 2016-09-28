@@ -1,13 +1,14 @@
 #include "segment.h"
 
-segment::segment(QColor color, QSGNode *node, QSGFlatColorMaterial *material) {
+segment::segment(QColor color, int thickness, QSGNode *node, QSGFlatColorMaterial *material) {
 	this->node = node;
 	this->color = color;
+	this->thickness = thickness;
 	nodeMutex.lock();
 	gnode = new QSGGeometryNode;
 	geometry = new QSGGeometry(QSGGeometry::defaultAttributes_Point2D(), 0);
-	geometry->setLineWidth(thickness);
-	geometry->setDrawingMode(GL_LINE_STRIP);
+	geometry->setLineWidth(1);
+	geometry->setDrawingMode(GL_TRIANGLE_STRIP);
 	gnode->setGeometry(geometry);
 	gnode->setFlag(QSGNode::OwnsGeometry);
 	gnode->setMaterial(material);
@@ -27,16 +28,39 @@ void segment::initRand() {
 	qsrand(QTime::currentTime().msecsSinceStartOfDay());
 }
 
-void segment::appendPoint(QPointF addedPoint) {
+void segment::appendPoint(QPointF addedPoint, float angle) {
 	nodeMutex.lock();
-	pos[poscount] = addedPoint;
-	poscount++;
-	geometry->allocate(poscount);
-	QSGGeometry::Point2D *vertices = geometry->vertexDataAsPoint2D();
-	for (int i = 0; i < poscount; i++) {
-		vertices[i].set(pos[i].x(), pos[i].y());
+	if (poscount != 0) { //general case
+
+		QPointF lastPoint = getLastPoint();
+		float normalAngle = angle+M_PI/2;
+		QPointF thicknessVector = thickness * QPointF(cos(normalAngle), sin(normalAngle));
+		pos[poscount] = lastPoint + thicknessVector;
+		poscount++;
+		pos[poscount] = addedPoint + thicknessVector;
+		poscount++;
+		pos[poscount] = lastPoint - thicknessVector;
+		poscount++;
+		pos[poscount] = addedPoint - thicknessVector;
+		poscount++;
+		pos[poscount] = addedPoint;
+		poscount++;
+	//	geometry->allocate(poscount/2);
+	//	QSGGeometry::Point2D *vertices = geometry->vertexDataAsPoint2D();
+	//	for (int i = 1; i < poscount; i+=2) {
+	//		vertices[(i-1)/2].set(pos[i].x(), pos[i].y());
+	//	}
+		geometry->allocate(poscount);
+		QSGGeometry::Point2D *vertices = geometry->vertexDataAsPoint2D();
+		for (int i = 0; i < poscount; i++) {
+			vertices[i].set(pos[i].x(), pos[i].y());
+		}
+
+		gnode->markDirty(QSGNode::DirtyGeometry);
+	} else { //poscount == 0
+		pos[0] = addedPoint;
+		poscount = 1;
 	}
-	gnode->markDirty(QSGNode::DirtyGeometry);
 	nodeMutex.unlock();
 }
 

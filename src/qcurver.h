@@ -58,7 +58,7 @@ private:
 	QPointF getDirectionRotatedBy(float angle);
 	float rotateVelocity = M_PI;
 	QTime lastnewSegment;
-	int thickness = 16;
+	int thickness = 4;
 	int segmentchangeTime = 2000; //amount of time in milliseconds that you produce no line between segments
 	int nextSegmentTime = 2000; //amount of time that you produce a line
 	QSGNode* node;

@@ -14,7 +14,7 @@ Game::~Game() {
 }
 
 QSGNode *Game::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *) {
-	//we don't need oldNode
+	(void) oldNode; //suppresses unused variable warning
 	return node;
 }
 

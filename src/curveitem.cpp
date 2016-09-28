@@ -153,7 +153,9 @@ void CurveItem::setRound(int round) {
 
 //the following methods are implemented later in subclasses
 void CurveItem::use(QCurver *curver) {
+	(void) curver; //suppresses unused variable warning
 }
 
 void CurveItem::deuse(QCurver *curver) {
+	(void) curver; //suppresses unused variable warning
 }
