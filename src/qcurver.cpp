@@ -54,7 +54,6 @@ void QCurver::progress(float deltat) {
 	} else {
 		//check if we should produce a new line again
 		if (lastnewSegment.msecsTo(QTime::currentTime()) > segmentchangeTime) {
-			qDebug() << lastnewSegment.msecsTo(QTime::currentTime());
 			lastnewSegment = QTime::currentTime();
 			changingSegment = false;
 			segmentchangeTime = 128;

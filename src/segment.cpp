@@ -78,7 +78,7 @@ float segment::randFloat() {
 
 bool segment::checkforIntersection(QPointF a, QPointF b) {
 	float bax, dcx, acy, dcy, bay, baxdcy, s, t;
-	for (int i = 0; i < poscount-3; i++) { //we dont check with the last line, because that could be the same line, as the one that emited intersection checking
+	for (int i = 1; i < poscount-3; i+=2) { //we dont check with the last line, because that could be the same line, as the one that emited intersection checking
 		QPointF c = pos[i];
 		QPointF d = pos[i+1];
 		bax = b.x()-a.x();
