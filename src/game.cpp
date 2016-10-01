@@ -75,12 +75,15 @@ void Game::progress() {
 				}
 			}
 			//let the AI make its move now
-			if (controlledByAI[i]) {
+			if (controlledByAI[i] && ((frameCount+i) % AIINTERVAL == 0)) {
+				qDebug() << "Player " << i << "is making a move";
 				ai[i]->makeMove(deltat);
+				qDebug() << "and he finished";
 			}
 			curver[i]->progress(deltat);
 		}
 	}
+	frameCount++;
 	update();
 }
 
@@ -182,10 +185,6 @@ void Game::startNextRound() {
 
 void Game::setName(int index, QString newName) {
 	names[index] = newName;
-}
-
-void Game::changeTimerInterval(int newInterval) {
-	timerInterval = newInterval;
 }
 
 void Game::setRoundTimeout(int seconds) {

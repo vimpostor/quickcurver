@@ -18,6 +18,7 @@
 #include "aicontroller.h"
 #define MAXPLAYERCOUNT 16
 #define MAXITEMCOUNT 20
+#define AIINTERVAL 10
 
 
 class Game : public QQuickItem
@@ -31,7 +32,6 @@ public:
 	Q_INVOKABLE void setColor(int index, QColor color);
 	Q_INVOKABLE void setControls(int index, Qt::Key k, bool isRight);
 	Q_INVOKABLE void setName(int index, QString newName);
-	Q_INVOKABLE void changeTimerInterval(int newInterval);
 	Q_INVOKABLE void setRoundTimeout(int seconds);
 	Q_INVOKABLE void setBaseSpeed(int baseSpeed);
 	Q_INVOKABLE void setAIcontrolled(int index, bool newState);
@@ -72,6 +72,7 @@ private:
 	int timerInterval = 16;
 	int roundTimeout = 2000; //milliseconds
 	int baseSpeed = 128;
+	int frameCount = 0;
 	QObject *qmlobject;
 	void increaseScore(int index);
 };

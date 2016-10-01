@@ -29,23 +29,6 @@ TabbedPage {
                     columns: 2
 
                     Label {
-                        text: "Timer interval"
-                        Layout.alignment:  Qt.AlignBottom
-                        color: Theme.dark.textColor
-                    }
-
-                    Slider {
-                        Layout.alignment: Qt.AlignCenter
-                        value: 16
-                        tickmarksEnabled: true
-                        numericValueLabel: true
-                        stepSize: 3
-                        minimumValue: 1
-                        maximumValue: 55
-                        darkBackground: true
-                        onValueChanged: game.changeTimerInterval(value)
-                    }
-                    Label {
                         text: "Round timeout"
                         color: Theme.dark.textColor
                     }

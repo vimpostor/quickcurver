@@ -3,6 +3,9 @@
 
 #include "qcurver.h"
 #include <QPointF>
+#include <QtMath>
+
+#define LOOKAHEADFACTOR 200
 
 class AIController : public QObject
 {
@@ -14,6 +17,7 @@ private:
 	QCurver* curver;
 	QCurver** player;
 	int playerCount;
+	float fmod(float a, float b);
 public slots:
 };
 

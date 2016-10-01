@@ -198,9 +198,6 @@ Item {
                 } else {
                     game.addPlayer();
                     playerListModel.append({});
-//                    wave.width = playerListView.currentItem.width;
-//                    wave.height = playerListView.currentItem.height;
-//                    wave.open(playerListView.currentItem.x, playerListView.currentItem.y);
                 }
             }
         }
@@ -208,7 +205,7 @@ Item {
     }
     Action {
         shortcut: "Ctrl+Shift+N"
-        //this should add a bot player
+        //TODO: this should add a bot player
     }
 
     Snackbar {
