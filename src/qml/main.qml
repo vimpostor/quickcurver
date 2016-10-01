@@ -128,11 +128,13 @@ ApplicationWindow {
             ename: "Player 0"
             escore: 0
             eroundScore: 0
+            eBot: false
         }
         ListElement {
             ename: "Player 1"
             escore: 0
             eroundScore: 0
+            eBot: true
         }
     }
 }

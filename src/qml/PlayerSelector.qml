@@ -62,7 +62,7 @@ Item {
         Component {
             id: playerDelegate
             ListItem.Subtitled {
-                property string name: "Player "+index
+                property string name: (eBot ? "Bot " : "Player ") +index
                 property color mycolor:  Material.color(Math.random()*19)
                 onNameChanged: {
                     game.setName(index, name);
@@ -95,6 +95,7 @@ Item {
                     }
                     CheckBox {
                         id: checkboxAI
+                        checked: eBot;
                         text: "Bot"
                         onCheckedChanged: game.setAIcontrolled(index, checked)
                     }
@@ -205,7 +206,14 @@ Item {
     }
     Action {
         shortcut: "Ctrl+Shift+N"
-        //TODO: this should add a bot player
+        onTriggered: {
+            if (playerListModel.count >= 16) {
+                snackbar.open("Sorry, you have reached maximum player capacity!");
+            } else {
+                game.addPlayer();
+                playerListModel.append({eBot: true});
+            }
+        }
     }
 
     Snackbar {

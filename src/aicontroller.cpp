@@ -42,7 +42,7 @@ void AIController::makeMove(float deltat) {
 				break;
 			}
 		}
-		rotatePriority[direction+1] += (M_PI/4-turnAngle)/M_PI*50; //the higher the angle that we have to rotate, the less likely we want to take that route (linearly interpolated)
+		rotatePriority[direction+1] += (M_PI/4-turnAngle)/M_PI*70; //the higher the angle that we have to rotate, the less likely we want to take that route (linearly interpolated)
 	}
 
 
