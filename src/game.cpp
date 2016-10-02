@@ -76,9 +76,7 @@ void Game::progress() {
 			}
 			//let the AI make its move now
 			if (controlledByAI[i] && ((frameCount+i) % AIINTERVAL == 0)) {
-				qDebug() << "Player " << i << "is making a move";
 				ai[i]->makeMove(deltat);
-				qDebug() << "and he finished";
 			}
 			curver[i]->progress(deltat);
 		}

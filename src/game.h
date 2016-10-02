@@ -18,7 +18,7 @@
 #include "aicontroller.h"
 #define MAXPLAYERCOUNT 16
 #define MAXITEMCOUNT 20
-#define AIINTERVAL 10
+#define AIINTERVAL 4
 
 
 class Game : public QQuickItem
