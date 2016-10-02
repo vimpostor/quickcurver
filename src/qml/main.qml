@@ -26,11 +26,10 @@ ApplicationWindow {
         accentColor: "red"
         tabHighlightColor: "white"
     }
-//    Wave {
-//        id: wave
-//    }
 
     initialPage: Page {
+        title: "Quick Curver"
+        actionBar.maxActionCount: 3
         actions: [
             Action {
                 iconName: "image/color_lens"
@@ -44,6 +43,16 @@ ApplicationWindow {
                 onTriggered: {
                     pageStack.push(Qt.resolvedUrl("settings.qml"));
                 }
+            },
+            Action {
+//                iconName: "navigation/refresh"
+                name: "Update"
+                onTriggered: playerselector.mysnackbar.open("Looks like the developer was too lazy to implement an Auto-Update feature yet. Stay tuned!")
+            },
+            Action {
+//                iconName:
+                name: "Licenses"
+                onTriggered: licensesDialog.open()
             }
 
         ]
@@ -55,6 +64,7 @@ ApplicationWindow {
 ////            onEnabledChanged: smallLoader.active = enabled
 //        }
         PlayerSelector {
+            id: playerselector
             anchors.fill: parent
         }
     }
@@ -135,6 +145,13 @@ ApplicationWindow {
             escore: 0
             eroundScore: 0
             eBot: true
+        }
+    }
+    Dialog {
+        id: licensesDialog
+        anchors.fill: parent
+        anchors.margins: dp(80)
+        Licenses {
         }
     }
 }

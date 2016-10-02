@@ -7,6 +7,7 @@ import Material.Extras 0.1
 import QtQuick.Controls.Material 2.0
 
 Item {
+    property variant mysnackbar: snackbar
     View {
         anchors.fill: parent
         anchors.margins: dp(32)

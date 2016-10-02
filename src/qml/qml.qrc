@@ -4,5 +4,7 @@
         <file>PlayerSelector.qml</file>
         <file>gamePage.qml</file>
         <file>settings.qml</file>
+        <file>Licenses.qml</file>
+        <file>LicenseCard.qml</file>
     </qresource>
 </RCC>

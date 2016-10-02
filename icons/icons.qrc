@@ -33,11 +33,13 @@
         <file alias="delete.svg">action_delete.svg</file>
         <file alias="language.svg">action_language.svg</file>
         <file alias="settings.svg">action_settings.svg</file>
+        <file alias="update.svg">action_update.svg</file>
     </qresource>
     <qresource prefix="/icons/navigation">
         <file alias="arrow_drop_down.svg">navigation_arrow_drop_down.svg</file>
+        <file alias="refresh.svg">navigation_refresh.svg</file>
     </qresource>
     <qresource prefix="/icons/editor">
-		<file alias="mode_edit.svg">editor_mode_edit.svg</file>
+        <file alias="mode_edit.svg">editor_mode_edit.svg</file>
     </qresource>
 </RCC>
