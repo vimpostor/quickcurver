@@ -16,9 +16,11 @@
 #include "wallnode.h"
 #include <QObject>
 #include "aicontroller.h"
+#include "cleaninstallitem.h"
 #define MAXPLAYERCOUNT 16
 #define MAXITEMCOUNT 20
 #define AIINTERVAL 4
+#define ITEMVARIETY 2
 
 
 class Game : public QQuickItem
@@ -35,6 +37,7 @@ public:
 	Q_INVOKABLE void setRoundTimeout(int seconds);
 	Q_INVOKABLE void setBaseSpeed(int baseSpeed);
 	Q_INVOKABLE void setAIcontrolled(int index, bool newState);
+	Q_INVOKABLE void setItemPriority(int index, int newPriority);
 	QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *);
     ~Game();
 	Q_INVOKABLE void addPlayer();
@@ -75,6 +78,8 @@ private:
 	int frameCount = 0;
 	QObject *qmlobject;
 	void increaseScore(int index);
+	int itemPriority[ITEMVARIETY] = {3, 1};
+	int itemPrioritySum = 0; //a for loop will set this in the start() method
 };
 
 #endif // GAME_H

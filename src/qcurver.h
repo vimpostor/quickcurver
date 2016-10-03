@@ -29,7 +29,8 @@ public:
 	int segmentcount = 1;
 	enum rotation rotating = ROTATE_NONE;
 	bool checkforIntersection(QPointF a, QPointF b);
-	void reset();
+	void reset(); //completely resets for next round
+	void cleanInstall(); //resets in the round (like from a cleaninstall item)
 	QPointF getPos();
 	void doubleSpeed();
 	void halfSpeed();

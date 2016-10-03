@@ -1,10 +1,21 @@
 #include "curveitem.h"
 
-CurveItem::CurveItem(QSGNode *node) {
+CurveItem::CurveItem(QSGNode *node, bool greenAllowed, bool redAllowed, bool blueAllowed) {
 	this->node = node;
 	pos = QPointF(segment::randInt(10, 990), segment::randInt(10,990));
-	int r = segment::randInt(0,2);
-	switch (r) {
+
+	//find a random allowed color
+	bool allowedColors[3] = {greenAllowed, redAllowed, blueAllowed};
+	int allowedColorsSum = greenAllowed + redAllowed + blueAllowed;
+	int r = segment::randInt(0, allowedColorsSum-1);
+	int i = -1;
+	int colorCount = -1;
+	do {
+		i++;
+		colorCount++;
+		for (; !allowedColors[i]; i++) {}; //this moves to the next possible color position
+	} while (colorCount != r);
+	switch (i) {
 	case 0:
 		color = Qt::green;
 		break;
@@ -15,6 +26,7 @@ CurveItem::CurveItem(QSGNode *node) {
 		color = Qt::blue;
 		break;
 	}
+
 	gnode = new QSGGeometryNode;
 	geometry = new QSGGeometry(QSGGeometry::defaultAttributes_Point2D(), 0);
 	geometry->setLineWidth(4);

@@ -1,6 +1,6 @@
 #include "fastitem.h"
 
-FastItem::FastItem(QSGNode *node) : CurveItem(node) {
+FastItem::FastItem(QSGNode *node) : CurveItem(node, true, true, false) {
 //	node->markDirty(QSGNode::DirtyGeometry);
 	deUseTime = 2000;
 }

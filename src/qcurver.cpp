@@ -144,6 +144,20 @@ void QCurver::reset() {
 	roundCount++;
 }
 
+void QCurver::cleanInstall() {
+	int oldSegmentcount = segmentcount;
+	segmentcount = 0;
+	for (int i = 0; i < oldSegmentcount; i++) {
+		delete segments[i];
+	}
+	segments[0] = new segment(color, thickness, node, material);
+	segmentcount = 1;
+	lastnewSegment = QTime::currentTime();
+	segmentchangeTime = 50;
+	nextSegmentTime = 2000;
+	changingSegment = true;
+}
+
 QPointF QCurver::getPos() {
 	return lastPoint;
 }

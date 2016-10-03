@@ -23,6 +23,9 @@ void Game::start() {
 	nextRoundTimer = new QTimer(this);
 	node = new QSGNode;
 	wall = new wallNode(node);
+	for (int i = 0; i < ITEMVARIETY; i++) {
+		itemPrioritySum += itemPriority[i];
+	}
 	for (int i = 0; i < playercount; i++) {
 		alive[i] = true;
 		score[i] = 0;
@@ -59,7 +62,20 @@ void Game::progress() {
 		int i;
 		for (i = 0; items[i] != NULL; i++) { //find first free item slot
 		}
-		items[i] = new FastItem(node);
+		int r = segment::randInt(1, itemPrioritySum);
+		int itemSelector = 0;
+		for (itemSelector; r > 0; r -= itemPriority[itemSelector], itemSelector++) {};
+		itemSelector--;
+		switch (itemSelector) {
+		case 0:
+			items[i] = new FastItem(node);
+			break;
+		case 1:
+			items[i] = new CleaninstallItem(node);
+			break;
+		default:
+			break;
+		}
 		items[i]->setRound(roundCount);
 		lastItemSpawn = lastTime;
 		nextItemSpawn = segment::randInt(1000,10000);
@@ -206,4 +222,8 @@ void Game::increaseScore(int index) {
 
 void Game::setAIcontrolled(int index, bool newState) {
 	controlledByAI[index] = newState;
+}
+
+void Game::setItemPriority(int index, int newPriority) {
+	itemPriority[index] = newPriority;
 }

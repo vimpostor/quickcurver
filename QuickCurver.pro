@@ -14,7 +14,8 @@ src/qcurver.cpp \
 src/segment.cpp \
 src/slowitem.cpp \
 src/wallnode.cpp \
-    src/aicontroller.cpp
+    src/aicontroller.cpp \
+    src/cleaninstallitem.cpp
 
 
 RESOURCES += \
@@ -39,4 +40,5 @@ src/qcurver.h \
 src/segment.h \
 src/slowitem.h \
 src/wallnode.h \
-    src/aicontroller.h
+    src/aicontroller.h \
+    src/cleaninstallitem.h

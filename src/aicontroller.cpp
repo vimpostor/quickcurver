@@ -38,7 +38,7 @@ void AIController::makeMove(float deltat) {
 			c = false;
 			//check if we would collide with someone with this angle
 			for (int i = 0; i < playerCount && !c; i++) {
-				c = player[i]->checkforIntersection(currentPos, curver->getEstimatedNextPos(deltat, turnAngle, 64));
+				c = player[i]->checkforIntersection(currentPos, curver->getEstimatedNextPos(deltat, turnAngle, 128));
 			}
 			if (!c) { //when we found the first acceptable angle we break
 				break;

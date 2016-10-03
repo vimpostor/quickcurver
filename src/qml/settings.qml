@@ -1,8 +1,9 @@
 import QtQuick 2.7
+import QtQuick.Layouts 1.1
 import Material 0.3
 import Material.ListItems 0.1 as ListItem
 import Material.Extras 0.1
-import QtQuick.Layouts 1.1
+import QtQuick.Controls.Material 2.0
 
 TabbedPage {
     id: settings
@@ -61,6 +62,40 @@ TabbedPage {
         }
     }
     Tab {
-        title: "Miscellaneous"
+        property var itemNames: ["Faster Item", "Cleaninstall"]
+        property var defaultValues: [3, 1]
+        title: "Item Spawn Probabilities"
+        ColumnLayout {
+            spacing: 0
+            Repeater {
+                model: 2
+                Card {
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    Layout.margins: dp(10)
+
+                    GridLayout {
+                        anchors.centerIn: parent
+                        rowSpacing: dp(20)
+                        columnSpacing: dp(10)
+                        columns: 2
+
+                        Label {
+                            text: itemNames[index]
+                        }
+
+                        Slider {
+                            Layout.alignment: Qt.AlignCenter
+                            tickmarksEnabled: true
+                            numericValueLabel: true
+                            minimumValue: 0
+                            maximumValue: 10
+                            value: defaultValues[index]
+                            onValueChanged: game.setItemPriority(index, value)
+                        }
+                    }
+                }
+            }
+        }
     }
 }
