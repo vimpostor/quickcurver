@@ -11,7 +11,7 @@
 #include <QObject>
 
 #define ANIMATIONDURATION 200
-#define MAXPOSITIONSIZE 2048
+#define MAXPOSITIONSIZE 4048
 
 
 class CleanInstallAnimation : public QObject

@@ -43,7 +43,7 @@ void CleanInstallAnimation::progress(float timeSinceStart) {
 }
 
 void CleanInstallAnimation::addSegment(segment *s) {
-	for (int i = 0; i < s->poscount; i++) {
+	for (int i = 0; i < s->poscount; i+=2) {
 		pos[posCount] = s->pos[i];
 		posCount++;
 	}
