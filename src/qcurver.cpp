@@ -149,6 +149,11 @@ void QCurver::reset() {
 }
 
 void QCurver::cleanInstall() {
+	CleanInstallAnimation* cleaninstallAnimation = new CleanInstallAnimation(node, material, this);
+	for (int i = 0; i < segmentcount; i++) {
+		cleaninstallAnimation->addSegment(segments[i]);
+	}
+	cleaninstallAnimation->fireAnimation();
 	int oldSegmentcount = segmentcount;
 	segmentcount = 0;
 	for (int i = 0; i < oldSegmentcount; i++) {

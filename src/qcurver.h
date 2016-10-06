@@ -10,6 +10,7 @@
 #include "headnode.h"
 #include "segment.h"
 #include "dieanimation.h"
+#include "cleaninstallanimation.h"
 
 #define MAXSEGMENTCOUNT 60
 

@@ -16,7 +16,8 @@ src/slowitem.cpp \
 src/wallnode.cpp \
     src/aicontroller.cpp \
     src/cleaninstallitem.cpp \
-    src/fatteritem.cpp
+    src/fatteritem.cpp \
+    src/cleaninstallanimation.cpp
 
 
 RESOURCES += \
@@ -43,4 +44,5 @@ src/slowitem.h \
 src/wallnode.h \
     src/aicontroller.h \
     src/cleaninstallitem.h \
-    src/fatteritem.h
+    src/fatteritem.h \
+    src/cleaninstallanimation.h
