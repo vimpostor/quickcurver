@@ -17,10 +17,11 @@
 #include <QObject>
 #include "aicontroller.h"
 #include "cleaninstallitem.h"
+#include "fatteritem.h"
 #define MAXPLAYERCOUNT 16
 #define MAXITEMCOUNT 20
 #define AIINTERVAL 4
-#define ITEMVARIETY 2
+#define ITEMVARIETY 6
 
 
 class Game : public QQuickItem
@@ -78,7 +79,7 @@ private:
 	int frameCount = 0;
 	QObject *qmlobject;
 	void increaseScore(int index);
-	int itemPriority[ITEMVARIETY] = {3, 1};
+	int itemPriority[ITEMVARIETY] = {3, 0, 1, 0, 0, 2};
 	int itemPrioritySum = 0; //a for loop will set this in the start() method
 };
 

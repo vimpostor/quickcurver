@@ -22,3 +22,8 @@ void headNode::updatePosition(QPointF newPos) {
 	vertices[0].set(pos.x(),pos.y());
 	this->markDirty(QSGNode::DirtyGeometry);
 }
+
+void headNode::setThickness(int newThickness) {
+	thickness = 2*newThickness - 2;
+	geometry->setLineWidth(thickness);
+}

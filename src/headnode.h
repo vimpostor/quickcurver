@@ -11,6 +11,7 @@ class headNode : public QSGGeometryNode
 public:
 	headNode(QPointF startPos, QSGFlatColorMaterial* material, QSGNode* node);
 	void updatePosition(QPointF newPos);
+	void setThickness(int newThickness);
 private:
 	QPointF pos;
 	QSGGeometry* geometry;

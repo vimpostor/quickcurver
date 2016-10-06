@@ -15,7 +15,8 @@ src/segment.cpp \
 src/slowitem.cpp \
 src/wallnode.cpp \
     src/aicontroller.cpp \
-    src/cleaninstallitem.cpp
+    src/cleaninstallitem.cpp \
+    src/fatteritem.cpp
 
 
 RESOURCES += \
@@ -41,4 +42,5 @@ src/segment.h \
 src/slowitem.h \
 src/wallnode.h \
     src/aicontroller.h \
-    src/cleaninstallitem.h
+    src/cleaninstallitem.h \
+    src/fatteritem.h

@@ -78,7 +78,7 @@ float segment::randFloat() {
 
 bool segment::checkforIntersection(QPointF a, QPointF b) {
 	float bax, dcx, acy, dcy, bay, baxdcy, s, t;
-	for (int i = 1; i < poscount-3; i+=2) { //we dont check with the last line, because that could be the same line, as the one that emited intersection checking
+	for (int i = 1; i < poscount-5; i+=2) { //we dont check with the last line, because that could be the same line, as the one that emited intersection checking
 		QPointF c = pos[i];
 		QPointF d = pos[i+1];
 		bax = b.x()-a.x();
@@ -87,6 +87,9 @@ bool segment::checkforIntersection(QPointF a, QPointF b) {
 		dcy = d.y()-c.y();
 		bay = b.y()-a.y();
 		baxdcy = bax*dcy;
+		if (bax == 0 || dcy == 0 || dcx*bay == 1) {
+			qDebug() << "Nulldivision!!! :(";
+		}
 		s = ((c.x()-a.x())/bax+dcx*acy/baxdcy)/(1-dcx*bay/(bax*dcy));
 		if (s < 0 || s > 1) {
 			continue;

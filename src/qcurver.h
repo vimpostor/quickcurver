@@ -37,6 +37,8 @@ public:
 	bool verifyCorrectRound(int round);
 	QPointF getEstimatedNextPos(float deltat, float angle, float velocityMultiplier = 1);
 	float getAngle();
+	void doubleThickness();
+	void halfThickness();
 
 signals:
 	void died(QCurver* who);

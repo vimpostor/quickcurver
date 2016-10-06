@@ -71,7 +71,19 @@ void Game::progress() {
 			items[i] = new FastItem(node);
 			break;
 		case 1:
+//			items[i] = new SlowItem(node);
+			break;
+		case 2:
 			items[i] = new CleaninstallItem(node);
+			break;
+		case 3:
+			//global wall hack
+			break;
+		case 4:
+			//solo wall hack
+			break;
+		case 5:
+			items[i] = new FatterItem(node);
 			break;
 		default:
 			break;

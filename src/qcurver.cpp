@@ -47,7 +47,7 @@ void QCurver::progress(float deltat) {
 			//no new Segment
 			segments[segmentcount-1]->appendPoint(newPoint, angle);
 			bool wCollision = wallCollision();
-			if (segments[segmentcount-1]->poscount > 1) {
+			if (segments[segmentcount-1]->poscount > 3) {
 				int pCollision = playerCollision();
 			}
 		}
@@ -104,7 +104,10 @@ bool QCurver::wallCollision() {
 
 int QCurver::playerCollision() {
 	short int p = -1;
+//	emit requestIntersectionChecking(segments[segmentcount-1]->pos[segments[segmentcount-1]->poscount-2], lastPoint);
 	emit requestIntersectionChecking(segments[segmentcount-1]->pos[segments[segmentcount-1]->poscount-2], lastPoint);
+	emit requestIntersectionChecking(segments[segmentcount-1]->pos[segments[segmentcount-1]->poscount-4], lastPoint);
+
 
 	if (p != -1) {
 		emit died(this);
@@ -131,13 +134,14 @@ void QCurver::reset() {
 		delete segments[i];
 	}
 	lastPoint = QPointF(segment::randInt(100,900),segment::randInt(100,900));
+	thickness = 4;
+	headnode->setThickness(thickness);
 	segments[0] = new segment(color, thickness, node, material);
 	segmentcount = 1;
 	rotating = ROTATE_NONE;
 	rotateDirection(segment::randFloat()*2*M_PI);
 	lastnewSegment = QTime::currentTime();
 	velocity = baseSpeed;
-//	thickness = 16;
 	segmentchangeTime = 2000;
 	nextSegmentTime = 2000;
 	changingSegment = true;
@@ -184,4 +188,18 @@ QPointF QCurver::getDirectionRotatedBy(float angle) {
 
 float QCurver::getAngle() {
 	return angle;
+}
+
+void QCurver::doubleThickness() {
+	thickness *= 2;
+	headnode->setThickness(thickness);
+	segments[segmentcount] = new segment(color, thickness, node, material);
+	segmentcount++;
+}
+
+void QCurver::halfThickness() {
+	thickness /= 2;
+	headnode->setThickness(thickness);
+	segments[segmentcount] = new segment(color, thickness, node, material);
+	segmentcount++;
 }

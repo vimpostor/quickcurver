@@ -3,7 +3,6 @@ import QtQuick.Layouts 1.1
 import Material 0.3
 import Material.ListItems 0.1 as ListItem
 import Material.Extras 0.1
-import QtQuick.Controls.Material 2.0
 
 TabbedPage {
     id: settings
@@ -62,38 +61,54 @@ TabbedPage {
         }
     }
     Tab {
-        property var itemNames: ["Faster Item", "Cleaninstall"]
-        property var defaultValues: [3, 1]
         title: "Item Spawn Probabilities"
-        ColumnLayout {
-            spacing: 0
-            Repeater {
-                model: 2
-                Card {
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                    Layout.margins: dp(10)
+        ListView {
+            anchors.fill: parent
+            model: ListModel {
+                ListElement {
+                    name: "Faster Item"
+                    description: "Makes you faster for some time"
+                    defaultValue: 3
+                }
+                ListElement {
+                    name: "Slower Item"
+                    description: "Makes you slower for some time"
+                    defaultValue: 0
+                }
+                ListElement {
+                    name: "Cleaninstall"
+                    description: "Deletes every line drawn to this point"
+                    defaultValue: 1
+                }
+                ListElement {
+                    name: "Wall Hack"
+                    description: "Opens the wall for every player"
+                    defaultValue: 0
+                }
+                ListElement {
+                    name: "Solo Wall Hack"
+                    description: "Opens the wall only for you"
+                    defaultValue: 0
+                }
+                ListElement {
+                    name: "Fatter Item"
+                    description: "Makes the enemy fatter"
+                    defaultValue: 2
+                }
+            }
 
-                    GridLayout {
-                        anchors.centerIn: parent
-                        rowSpacing: dp(20)
-                        columnSpacing: dp(10)
-                        columns: 2
-
-                        Label {
-                            text: itemNames[index]
-                        }
-
-                        Slider {
-                            Layout.alignment: Qt.AlignCenter
-                            tickmarksEnabled: true
-                            numericValueLabel: true
-                            minimumValue: 0
-                            maximumValue: 10
-                            value: defaultValues[index]
-                            onValueChanged: game.setItemPriority(index, value)
-                        }
-                    }
+            delegate: ListItem.Subtitled {
+                text: name
+                subText: description
+                enabled: defaultValue != 0 //some items are not implemented yet
+                secondaryItem: Slider {
+                    value: defaultValue
+                    anchors.verticalCenter: parent.verticalCenter
+                    tickmarksEnabled: true
+                    numericValueLabel: true
+                    minimumValue: 0
+                    maximumValue: 10
+                    onValueChanged: game.setItemPriority(index, value)
                 }
             }
         }
