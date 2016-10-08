@@ -21,7 +21,7 @@ Now we can proceed with the installation of Quick Curver itself:
 Navigate to a new directory where you want to install Quick Curver and execute:
 ```{r, engine='bash', count_lines}
 git clone git@github.com:Magnus2552/quickcurver.git //you can alternatively clone using HTTPS
-cd build
+mkdir build; cd build
 qmake ..
 make
 ./QuickCurver

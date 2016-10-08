@@ -87,17 +87,18 @@ bool segment::checkforIntersection(QPointF a, QPointF b) {
 		dcy = d.y()-c.y();
 		bay = b.y()-a.y();
 		baxdcy = bax*dcy;
-		if (bax == 0 || dcy == 0 || dcx*bay == 1) {
-			qDebug() << "Nulldivision!!! :(";
-		}
-		s = ((c.x()-a.x())/bax+dcx*acy/baxdcy)/(1-dcx*bay/(bax*dcy));
-		if (s < 0 || s > 1) {
-			continue;
-		} else {
-			t = acy/dcy+s*bay/dcy;
-			if (t >= 0 && t <= 1) {
-				return true;
+		if (!(bax == 0 || dcy == 0 || dcx*bay == 1)) { //normal situation
+			s = ((c.x()-a.x())/bax+dcx*acy/baxdcy)/(1-dcx*bay/(bax*dcy));
+			if (s < 0 || s > 1) {
+				continue;
+			} else {
+				t = acy/dcy+s*bay/dcy;
+				if (t >= 0 && t <= 1) {
+					return true;
+				}
 			}
+		} else { //zero division
+			return false; //we return false for safety, ignoring possible false negatives
 		}
 	}
 	return false;
