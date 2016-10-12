@@ -1,17 +1,27 @@
 import QtQuick 2.7
-//import QtQuick.Window 2.2
 import Material 0.3
 import Material.ListItems 0.1 as ListItem
 import Material.Extras 0.1
 
 import Game 1.0
-//import QtQuick.Controls 1.4
-//import QtQuick.Controls.Styles 1.4
+import QtQuick.Layouts 1.1
 
 ApplicationWindow {
     function changeScore(index, newScore, roundScore) {
         playerListModel.setProperty(index, "escore", newScore);
         playerListModel.setProperty(index, "eroundScore", roundScore);
+    }
+    function setJoinStatus(s) {
+        if (s == "JOINED") {
+            joinButton.text = "Joined, waiting for host to start...";
+        } else if (s == "REJECTED") {
+            playerselector.mysnackbar.open("Join request was rejected :(");
+            clientDialog.close();
+        } else if (s == "STARTED") {
+            clientDialog.close();
+            pageStack.push(Qt.resolvedUrl("gamePage.qml"));
+            game.focus = true;
+        }
     }
 
     id: root
@@ -29,8 +39,14 @@ ApplicationWindow {
 
     initialPage: Page {
         title: "Quick Curver"
-        actionBar.maxActionCount: 3
+        actionBar.maxActionCount: 4
         actions: [
+            Action {
+                iconName: "file/cloud_upload"
+                name: "Join an online game"
+                onTriggered: clientDialog.show()
+                shortcut: "Ctrl+J"
+            },
             Action {
                 iconName: "image/color_lens"
                 name: "Colors"
@@ -40,9 +56,7 @@ ApplicationWindow {
                 iconName: "action/settings"
                 name: "Settings"
                 hoverAnimation: true
-                onTriggered: {
-                    pageStack.push(Qt.resolvedUrl("settings.qml"));
-                }
+                onTriggered: pageStack.push(Qt.resolvedUrl("settings.qml"))
             },
             Action {
 //                iconName: "navigation/refresh"
@@ -152,6 +166,91 @@ ApplicationWindow {
         anchors.fill: parent
         anchors.margins: dp(80)
         Licenses {
+        }
+    }
+    Dialog {
+        id: clientDialog
+        title: "Join Online Game"
+        hasActions: false
+        RowLayout {
+            TextField {
+                id: serverIp
+                placeholderText: "Server IP Adress"
+                floatingLabel: true
+            }
+            Label {
+                text: ":"
+            }
+
+            TextField {
+                id: serverPort
+                placeholderText: "Port"
+                floatingLabel: true
+                text: "52552"
+            }
+        }
+        ProgressCircle {
+            id: cyclicColorProgress
+            visible: false
+            SequentialAnimation {
+                id: animation
+                running: true
+                loops: Animation.Infinite
+
+                ColorAnimation {
+                    from: "red"
+                    to: "blue"
+                    target: cyclicColorProgress
+                    properties: "color"
+                    easing.type: Easing.InOutQuad
+                    duration: 2400
+                }
+
+                ColorAnimation {
+                    from: "blue"
+                    to: "green"
+                    target: cyclicColorProgress
+                    properties: "color"
+                    easing.type: Easing.InOutQuad
+                    duration: 1560
+                }
+
+                ColorAnimation {
+                    from: "green"
+                    to: "#FFCC00"
+                    target: cyclicColorProgress
+                    properties: "color"
+                    easing.type: Easing.InOutQuad
+                    duration:  840
+                }
+
+                ColorAnimation {
+                    from: "#FFCC00"
+                    to: "red"
+                    target: cyclicColorProgress
+                    properties: "color"
+                    easing.type: Easing.InOutQuad
+                    duration:  1200
+                }
+            }
+        }
+
+        Button {
+            id: joinButton
+            elevation: 1
+            text: "Join"
+            backgroundColor: Theme.accentColor
+            onClicked: {
+                enabled = false;
+                cyclicColorProgress.visible = true;
+                text = "Waiting for server response...";
+                game.clientStart(serverIp.text, serverPort.text);
+            }
+        }
+        onOpened: {
+            cyclicColorProgress.visible = false;
+            joinButton.enabled = true;
+            joinButton.text = "Join";
         }
     }
 }

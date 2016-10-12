@@ -94,12 +94,46 @@ Item {
                         floatingLabel: true
                         onTextChanged: name = this.text
                     }
-                    CheckBox {
-                        id: checkboxAI
-                        checked: eBot;
-                        text: "Bot"
-                        onCheckedChanged: game.setAIcontrolled(index, checked)
+
+                MenuField {
+                    id: playerController
+                    model: ["Local Player", "Bot", "Online Player"]
+                    width: dp(160)
+                    selectedIndex: eBot ? 1 : 0
+                    onSelectedIndexChanged: {
+//                        if (selectedIndex == 2) {
+//                            serverDialog.show()
+//                        }
+                        game.setController(index, selectedIndex)
                     }
+                }
+
+//                Dialog {
+//                    id: serverDialog
+//                    title: "Host a game"
+//                    RowLayout {
+//                        TextField {
+//                            placeholderText: "Client IP Adress"
+//                            floatingLabel: true
+//                        }
+//                        Label {
+//                            text: ":"
+//                        }
+
+//                        TextField {
+//                            placeholderText: "Port"
+//                            floatingLabel: true
+//                            text: "52552"
+//                        }
+//                    }
+//                    onAccepted: playerselector.mysnackbar.open("This feature is not implemented yet. Stay tuned!")
+//                    Button {
+//                        elevation: 1
+//                        text: "Copy my IP to clipboard"
+//                        backgroundColor: Theme.accentColor
+//                        onClicked: playerselector.mysnackbar.open("This feature is not implemented yet. Stay tuned!")
+//                    }
+//                }
 
                     GridLayout {
                         id: editPlayerGrid
@@ -109,7 +143,7 @@ Item {
 
                         Button {
                             id: buttonLeft
-                            enabled: !checkboxAI.checked
+                            enabled: playerController.selectedIndex == 0
                             text: "Left"
                             elevation: 1
                             activeFocusOnPress: true
@@ -124,7 +158,7 @@ Item {
                         }
                         Button {
                             id: buttonRight
-                            enabled: !checkboxAI.checked
+                            enabled: buttonLeft.enabled
                             text: "Right"
                             elevation: 1
                             activeFocusOnPress: true

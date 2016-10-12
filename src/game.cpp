@@ -6,11 +6,12 @@ Game::Game(QQuickItem *parent) : QQuickItem(parent) {
 		controls[i][0] = Qt::Key_Left;
 		controls[i][1] = Qt::Key_Right;
 		controlledByAI[i] = false;
+		controlledByNetwork[i] = false;
 	}
+	server = new Server(curver, 52552, this);
 }
 
 Game::~Game() {
-//	timer->deleteLater();
 }
 
 QSGNode *Game::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *) {
@@ -46,7 +47,17 @@ void Game::start() {
 	lastTime = QTime::currentTime();
 	lastItemSpawn = lastTime;
 	nextItemSpawn = segment::randInt(5000,10000);
+	server->start();
 	timer->start(timerInterval);
+}
+
+void Game::clientStart(QString ip, int port) {
+	server->shutdown();
+	host = false;
+//	node = new QSGNode;
+//	wall = new wallNode(node);
+	client = new Client(ip, port, this);
+	connect(client, SIGNAL(joinStatusChanged(QString)), this, SLOT(setJoinStatus(QString)));
 }
 
 void Game::setColor(int index, QColor color) {
@@ -114,24 +125,32 @@ void Game::progress() {
 }
 
 void Game::sendKey(Qt::Key k) {
-	for (int i = 0; i < playercount; i++) {
-		if (!controlledByAI[i]) {
-			if (controls[i][0] == k) {
-				curver[i]->rotating = ROTATE_LEFT;
-			} else if (controls[i][1] == k) {
-				curver[i]->rotating = ROTATE_RIGHT;
+	if (host) {
+		for (int i = 0; i < playercount; i++) {
+			if (!controlledByAI[i] && !controlledByNetwork[i]) {
+				if (controls[i][0] == k) {
+					curver[i]->rotating = ROTATE_LEFT;
+				} else if (controls[i][1] == k) {
+					curver[i]->rotating = ROTATE_RIGHT;
+				}
 			}
 		}
+	} else { //client
+		client->sendKey(k);
 	}
 }
 
 void Game::releaseKey(Qt::Key k) {
-	for (int i = 0; i < playercount; i++) {
-		if (!controlledByAI[i]) {
-			if (controls[i][0] == k || controls[i][1] == k) {
-				curver[i]->rotating = ROTATE_NONE;
+	if (host) {
+		for (int i = 0; i < playercount; i++) {
+			if (!controlledByAI[i] && !controlledByNetwork[i]) {
+				if (controls[i][0] == k || controls[i][1] == k) {
+					curver[i]->rotating = ROTATE_NONE;
+				}
 			}
 		}
+	} else { //client
+		client->releaseKey(k);
 	}
 }
 
@@ -232,10 +251,17 @@ void Game::increaseScore(int index) {
 	QMetaObject::invokeMethod(qmlobject, "changeScore", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, index) , Q_ARG(QVariant, score[index]), Q_ARG(QVariant, roundScore[index]));
 }
 
-void Game::setAIcontrolled(int index, bool newState) {
-	controlledByAI[index] = newState;
+void Game::setController(int index, int newControllerState) {
+	controlledByAI[index] = (newControllerState == 1);
+	controlledByNetwork[index] = (newControllerState == 2);
+	server->setAvailable(index, controlledByNetwork[index]);
 }
 
 void Game::setItemPriority(int index, int newPriority) {
 	itemPriority[index] = newPriority;
+}
+
+void Game::setJoinStatus(QString s) {
+	QVariant returnedValue;
+	QMetaObject::invokeMethod(qmlobject, "setJoinStatus", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, s));
 }

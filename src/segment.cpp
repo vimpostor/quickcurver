@@ -88,7 +88,7 @@ bool segment::checkforIntersection(QPointF a, QPointF b) {
 		bay = b.y()-a.y();
 		baxdcy = bax*dcy;
 		if (!(bax == 0 || dcy == 0 || dcx*bay == 1)) { //normal situation
-			s = ((c.x()-a.x())/bax+dcx*acy/baxdcy)/(1-dcx*bay/(bax*dcy));
+			s = ((c.x()-a.x())/bax+dcx*acy/baxdcy)/(1-dcx*bay/(baxdcy));
 			if (s < 0 || s > 1) {
 				continue;
 			} else {

@@ -18,6 +18,8 @@
 #include "aicontroller.h"
 #include "cleaninstallitem.h"
 #include "fatteritem.h"
+#include "server.h"
+#include "client.h"
 #define MAXPLAYERCOUNT 16
 #define MAXITEMCOUNT 20
 #define AIINTERVAL 4
@@ -32,12 +34,13 @@ public:
 	Q_INVOKABLE void sendKey(Qt::Key k);
 	Q_INVOKABLE void releaseKey(Qt::Key k);
 	Q_INVOKABLE void start();
+	Q_INVOKABLE void clientStart(QString ip, int port);
 	Q_INVOKABLE void setColor(int index, QColor color);
 	Q_INVOKABLE void setControls(int index, Qt::Key k, bool isRight);
 	Q_INVOKABLE void setName(int index, QString newName);
 	Q_INVOKABLE void setRoundTimeout(int seconds);
 	Q_INVOKABLE void setBaseSpeed(int baseSpeed);
-	Q_INVOKABLE void setAIcontrolled(int index, bool newState);
+	Q_INVOKABLE void setController(int index, int newControllerState);
 	Q_INVOKABLE void setItemPriority(int index, int newPriority);
 	QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *);
     ~Game();
@@ -52,6 +55,7 @@ public slots:
 	void checkforIntersection(QPointF a, QPointF b);
 private slots:
 	void startNextRound();
+	void setJoinStatus(QString s);
 
 private:
 	QCurver* curver[MAXPLAYERCOUNT];
@@ -59,7 +63,11 @@ private:
 	QColor colors[MAXPLAYERCOUNT];
 	Qt::Key controls[MAXPLAYERCOUNT][2]; //first one is left key, second one is right key
 	bool controlledByAI[MAXPLAYERCOUNT];
+	bool controlledByNetwork[MAXPLAYERCOUNT];
 	AIController* ai[MAXPLAYERCOUNT];
+	Server *server;
+	Client *client;
+	bool host = true;
 	int score[MAXPLAYERCOUNT];
 	CurveItem* items[MAXITEMCOUNT];
 	QString names[MAXITEMCOUNT];

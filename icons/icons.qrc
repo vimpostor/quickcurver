@@ -23,6 +23,7 @@
     </qresource>
     <qresource prefix="/icons/file">
         <file alias="file_download.svg">file_file_download.svg</file>
+        <file alias="cloud_upload.svg">file_cloud_upload.svg</file>
     </qresource>
     <qresource prefix="/icons/social">
         <file alias="share.svg">social_share.svg</file>
