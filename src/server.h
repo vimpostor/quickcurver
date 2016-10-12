@@ -28,6 +28,7 @@ private:
 	int isValidInput(QHostAddress *sender); //returns -1 on error, else returns the index of the curver that sender is in control of
 	QCurver **curver;
 	void turn(QHostAddress *sender, rotation r);
+	bool started = false;
 };
 
 #endif // SERVER_H

@@ -56,6 +56,10 @@ void Client::readPendingDatagrams() {
 			shutdown();
 		} else if (msg == "STARTED") {
 			emit joinStatusChanged("STARTED");
+		} else if (msg == "HOTJOINED") {
+			emit joinStatusChanged("STARTED");
+		} else if (msg == "KICKED") {
+			emit joinStatusChanged(("KICKED"));
 		} else {
 			qDebug() << "Server replied with unsupported datagram";
 		}

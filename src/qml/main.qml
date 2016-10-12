@@ -24,6 +24,9 @@ ApplicationWindow {
             clientDialog.close();
             pageStack.push(Qt.resolvedUrl("gamePage.qml"));
             game.focus = true;
+        } else if (s == "KICKED") {
+            clientDialog.close();
+            playerselector.mysnackbar.open("You got kicked from the game!");
         }
     }
 
@@ -67,7 +70,6 @@ ApplicationWindow {
                 onTriggered: playerselector.mysnackbar.open("Looks like the developer was too lazy to implement an Auto-Update feature yet. Stay tuned!")
             },
             Action {
-//                iconName:
                 name: "Licenses"
                 onTriggered: licensesDialog.open()
             }

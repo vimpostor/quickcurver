@@ -41,6 +41,9 @@ void Server::readPendingDatagrams() {
 			}
 			answer = success ? "JOINED" : "REJECTED";
 			qDebug() << sender->toString() + " " + answer;
+			if (answer == "JOINED" && started) {
+				answer = "HOTJOINED";
+			}
 		} else if (msg == "LEAVE") {
 			int i = isValidInput(sender);
 			if (i != -1) {
@@ -86,11 +89,18 @@ void Server::turn(QHostAddress *sender, rotation r) {
 }
 
 void Server::setAvailable(int index, bool newState) {
+	if (newState == false && clients[index] != NULL) {
+		//kick player
+		QByteArray datagram;
+		datagram.append("KICKED");
+		udpSocket->writeDatagram(datagram, *clients[index], 55225);
+		clients[index] = NULL;
+	}
 	available[index] = newState;
-	//TODO kick player if already connected and newState=false
 }
 
 void Server::start() {
+	started = true;
 	QByteArray datagram;
 	datagram.append("STARTED");
 	for (int i = 0; i < 16; i++) {
