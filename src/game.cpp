@@ -56,6 +56,9 @@ void Game::clientStart(QString ip, int port) {
 	host = false;
 //	node = new QSGNode;
 //	wall = new wallNode(node);
+	if (client != NULL) {
+		delete client;
+	}
 	client = new Client(ip, port, this);
 	connect(client, SIGNAL(joinStatusChanged(QString)), this, SLOT(setJoinStatus(QString)));
 }

@@ -15,9 +15,12 @@ ApplicationWindow {
         if (s == "JOINED") {
             joinButton.text = "Joined, waiting for host to start...";
         } else if (s == "REJECTED") {
-            playerselector.mysnackbar.open("Join request was rejected :(");
             clientDialog.close();
-        } else if (s == "STARTED") {
+            playerselector.mysnackbar.open("Join request was rejected :(");
+        } else if (s == "TIMEOUT") {
+            clientDialog.close();
+            playerselector.mysnackbar.open("Join request timed out! :(");
+        }  else if (s == "STARTED") {
             clientDialog.close();
             pageStack.push(Qt.resolvedUrl("gamePage.qml"));
             game.focus = true;

@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QtNetwork>
 #include "qcurver.h"
+#include <QTimer>
 
 
 class Client : public QObject
@@ -20,6 +21,7 @@ signals:
 private slots:
 	void readPendingDatagrams();
 	void socketError(QAbstractSocket::SocketError socketError);
+	void timeout();
 private:
 	void initSocket();
 	QUdpSocket *udpSocket;
@@ -27,6 +29,8 @@ private:
 	quint16 port;
 	quint16 myport = 55225;
 	void join();
+	QTimer *timeoutTimer;
+	bool joined = false;
 };
 
 #endif // CLIENT_H

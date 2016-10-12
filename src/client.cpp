@@ -3,6 +3,7 @@
 Client::Client(QString ip, int port, QObject *parent) : QObject(parent) {
 	this->ip = new QHostAddress(ip);
 	this->port = port;
+	timeoutTimer = new QTimer;
 	initSocket();
 	join();
 }
@@ -48,6 +49,7 @@ void Client::readPendingDatagrams() {
 		QString msg = datagram;
 //		QString answer = "";
 		if (msg == "JOINED") { //we successfully joined
+			joined = true;
 			emit joinStatusChanged("JOINED");
 		} else if (msg == "REJECTED") {
 			emit joinStatusChanged("REJECTED");
@@ -78,4 +80,12 @@ void Client::join() {
 	QByteArray datagram;
 	datagram.append("JOIN");
 	udpSocket->writeDatagram(datagram, *ip, port);
+	timeoutTimer->singleShot(5000, this, SLOT(timeout()));
+}
+
+void Client::timeout() {
+	if (!joined) {
+		emit joinStatusChanged("TIMEOUT");
+		shutdown();
+	}
 }
