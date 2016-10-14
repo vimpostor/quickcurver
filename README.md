@@ -9,7 +9,7 @@ Please note that this project is yet in development and hasn't reached a stable 
 #Features
 * Material Design
 * Local Multiplayer
-* Online Multiplayer
+* Online Multiplayer (still in development)
 * Bots
 * Items
 
