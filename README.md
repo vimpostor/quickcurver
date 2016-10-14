@@ -6,6 +6,14 @@ This is an OpenGL accelerated Qt/C++ implementation of the famous game "Achtung 
 
 Please note that this project is yet in development and hasn't reached a stable version for now. This means that you could experience bugs, when playing this game.
 
+#Features
+* Material Design
+* Local Multiplayer
+* Online Multiplayer
+* Bots
+* Items
+
+
 #Installation
 ##Compiling from source
 Quick Curver uses [qml-material](https://github.com/papyros/qml-material) which must be installed first:

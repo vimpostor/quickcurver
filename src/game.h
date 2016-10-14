@@ -42,6 +42,7 @@ public:
 	Q_INVOKABLE void setBaseSpeed(int baseSpeed);
 	Q_INVOKABLE void setController(int index, int newControllerState);
 	Q_INVOKABLE void setItemPriority(int index, int newPriority);
+	Q_INVOKABLE void close();
 	QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *);
     ~Game();
 	Q_INVOKABLE void addPlayer();

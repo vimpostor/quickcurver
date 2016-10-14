@@ -7,6 +7,7 @@ import Game 1.0
 import QtQuick.Layouts 1.1
 
 ApplicationWindow {
+    onClosing: game.close()
     function changeScore(index, newScore, roundScore) {
         playerListModel.setProperty(index, "escore", newScore);
         playerListModel.setProperty(index, "eroundScore", roundScore);

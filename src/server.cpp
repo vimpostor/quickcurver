@@ -3,9 +3,11 @@
 Server::Server(QCurver **curver, quint16 port, QObject *parent) : QObject(parent) {
 	this->port = port;
 	this->curver = curver;
-	for (int i = 0; i < 16; i++) {
+	for (int i = 0; i < MAXPLAYERCOUNT; i++) {
 		available[i] = false;
 		clients[i] = NULL;
+		currentSegment[i] = 0;
+		currentPos[i] = 0;
 	}
 	initSocket();
 }
@@ -34,8 +36,8 @@ void Server::readPendingDatagrams() {
 			bool success = false;
 			//check if there is a curver available to take control of
 			int i;
-			for (i = 0; i < 16 && !(available[i] && clients[i] == NULL); i++) {} //increase counter until we find a suitable place
-			if (i < 16) { //if a place is free
+			for (i = 0; i < MAXPLAYERCOUNT && !(available[i] && clients[i] == NULL); i++) {} //increase counter until we find a suitable place
+			if (i < MAXPLAYERCOUNT) { //if a place is free
 				clients[i] = sender;
 				success = true;
 			}
@@ -77,8 +79,8 @@ void Server::socketError(QAbstractSocket::SocketError socketError) {
 
 int Server::isValidInput(QHostAddress *sender) {
 	int i;
-	for (i = 0; i < 16 && !(clients[i] != NULL && sender->toString() == clients[i]->toString()); i++); //increment until out of boundaries or sender found
-	return i < 16 ? i : -1;
+	for (i = 0; i < MAXPLAYERCOUNT && !(clients[i] != NULL && sender->toString() == clients[i]->toString()); i++); //increment until out of boundaries or sender found
+	return i < MAXPLAYERCOUNT ? i : -1;
 }
 
 void Server::turn(QHostAddress *sender, rotation r) {
@@ -103,9 +105,34 @@ void Server::start() {
 	started = true;
 	QByteArray datagram;
 	datagram.append("STARTED");
-	for (int i = 0; i < 16; i++) {
+	sendToAll(&datagram);
+	broadcastTimer = new QTimer(this);
+	connect(broadcastTimer, SIGNAL(timeout()), this, SLOT(broadcast()));
+	broadcastTimer->start(BROADCASTINTERVAL);
+}
+
+void Server::broadcast() {
+	for (int i = 0; i < playercount; i++) {
+		QCurver *c = curver[i];
+		QByteArray datagram;
+		//first send new head positions
+//		datagram.append("HEAD" + (QString) i + ":");
+//		QPointF pos = c->getPos();
+//		QByteArray headPos;
+//		sendToAll(&datagram);
+		//send new positions: datagram format example: "POS2:13:<posinbinary><posinbinary> ..." means that curver 2 got positions added to segment 13 whereas posinbinary contains the positions as QPointF
+//		datagram.append("POS" + i + ":" + currentSegment[i] + ":");
+	}
+}
+
+void Server::sendToAll(QByteArray *datagram) {
+	for (int i = 0; i < MAXPLAYERCOUNT; i++) {
 		if (clients[i] != NULL) {
-			udpSocket->writeDatagram(datagram, *clients[i], 55225);
+			udpSocket->writeDatagram(*datagram, *clients[i], 55225);
 		}
 	}
+}
+
+void Server::setPlayerCount(int playercount) {
+	this->playercount = playercount;
 }

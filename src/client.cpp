@@ -60,6 +60,12 @@ void Client::readPendingDatagrams() {
 			emit joinStatusChanged("STARTED");
 		} else if (msg == "KICKED") {
 			emit joinStatusChanged(("KICKED"));
+		}/* else if (msg.startsWith("HEAD")) { //head data comes in
+			int i = (int) msg.mid(4, msg.indexOf(":")-4);
+			QPointF headPos = msg.right(msg.indexOf(":") + 1);
+			qDebug() << i << headPos;
+		}*/ else if (msg.startsWith("POS")) {
+			//new data comes in
 		} else {
 			qDebug() << "Server replied with unsupported datagram";
 		}

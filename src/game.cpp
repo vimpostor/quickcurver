@@ -12,6 +12,9 @@ Game::Game(QQuickItem *parent) : QQuickItem(parent) {
 }
 
 Game::~Game() {
+	timer->stop();
+	node->removeAllChildNodes();
+	delete node;
 }
 
 QSGNode *Game::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *) {
@@ -47,6 +50,7 @@ void Game::start() {
 	lastTime = QTime::currentTime();
 	lastItemSpawn = lastTime;
 	nextItemSpawn = segment::randInt(5000,10000);
+	server->setPlayerCount(playercount);
 	server->start();
 	timer->start(timerInterval);
 }
@@ -267,4 +271,8 @@ void Game::setItemPriority(int index, int newPriority) {
 void Game::setJoinStatus(QString s) {
 	QVariant returnedValue;
 	QMetaObject::invokeMethod(qmlobject, "setJoinStatus", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, s));
+}
+
+void Game::close() {
+	delete this;
 }
