@@ -81,8 +81,12 @@ void Server::readPendingDatagrams() {
 }
 
 void Server::shutdown() {
-	udpSocket->close();
-    tcpServer->close();
+    if (udpSocket != NULL) {
+        udpSocket->close();
+    }
+    if (tcpServer != NULL) {
+        tcpServer->close();
+    }
 	disconnect(udpSocket, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));
 }
 
