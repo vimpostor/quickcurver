@@ -9,18 +9,30 @@ Server::Server(QCurver **curver, quint16 port, QObject *parent) : QObject(parent
 		currentSegment[i] = 0;
 		currentPos[i] = 0;
 	}
-	initSocket();
+    setServerIp();
+    initUdpSocket();
+    initTcpServer();
 }
 
 Server::~Server() {
 	shutdown();
 }
 
-void Server::initSocket() {
+void Server::initUdpSocket() {
+    const QHostAddress &h = *serverIp;
 	udpSocket = new QUdpSocket(this);
 	connect(udpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError(QAbstractSocket::SocketError)));
 	connect(udpSocket, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));
-	udpSocket->bind(QHostAddress::LocalHost, port);
+    udpSocket->bind(h, port);
+}
+
+void Server::initTcpServer() {
+    tcpServer = new QTcpServer(this);
+    if (!tcpServer->listen()) {
+        qDebug() << "Unable to start the Tcp Server";
+        return;
+    }
+    connect(tcpServer, SIGNAL(newConnection()), this, SLOT(newConnection()));
 }
 
 void Server::readPendingDatagrams() {
@@ -70,6 +82,7 @@ void Server::readPendingDatagrams() {
 
 void Server::shutdown() {
 	udpSocket->close();
+    tcpServer->close();
 	disconnect(udpSocket, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));
 }
 
@@ -135,4 +148,29 @@ void Server::sendToAll(QByteArray *datagram) {
 
 void Server::setPlayerCount(int playercount) {
 	this->playercount = playercount;
+}
+
+void Server::setServerIp() {
+    QString ipAddress;
+    QList<QHostAddress> ipAddressesList = QNetworkInterface::allAddresses();
+    // use the first non-localhost IPv4 address
+    for (int i = 0; i < ipAddressesList.size(); ++i) {
+        if (ipAddressesList.at(i) != QHostAddress::LocalHost && ipAddressesList.at(i).toIPv4Address()) {
+            ipAddress = ipAddressesList.at(i).toString();
+            break;
+        }
+    }
+    // if we did not find one, use IPv4 localhost
+    if (ipAddress.isEmpty())
+        ipAddress = QHostAddress(QHostAddress::LocalHost).toString();
+
+    serverIp = new QHostAddress(ipAddress);
+    qDebug() << "Server set up on " + ipAddress;
+}
+
+
+void Server::newConnection() {
+    qDebug() << "Someone connected on Tcp";
+    QTcpSocket *clientConnection = tcpServer->nextPendingConnection();
+    connect(clientConnection, SIGNAL(disconnected()), clientConnection, SLOT(deleteLater()));
 }

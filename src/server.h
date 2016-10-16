@@ -24,9 +24,13 @@ private slots:
 	void readPendingDatagrams();
 	void socketError(QAbstractSocket::SocketError socketError);
 	void broadcast();
+    void newConnection();
 private:
-	void initSocket();
+    QTcpSocket *clientConnections[MAXPLAYERCOUNT];
+    void initUdpSocket();
+    void initTcpServer();
 	QUdpSocket *udpSocket;
+    QTcpServer *tcpServer;
 	quint16 port;
 	bool available[MAXPLAYERCOUNT]; //determines if curver[i] is an Online player. if it already is used is determined by clients
 	QHostAddress *clients[MAXPLAYERCOUNT]; //is NULL if not connected, otherwise holds client information
@@ -39,6 +43,8 @@ private:
 	int currentSegment[16]; //determines the segment that the last broadcast sent positions from
 	int currentPos[16]; //determines the index of the next position that we have to send from currentSegment
 	int playercount = 0;
+    QHostAddress *serverIp;
+    void setServerIp();
 };
 
 #endif // SERVER_H

@@ -4,7 +4,6 @@
 #include <QtQuick>
 #include "qcurver.h"
 #include "game.h"
-//#include "graphnode.h"
 #include "segment.h"
 #include <QGLFormat>
 
