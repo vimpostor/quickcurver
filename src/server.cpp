@@ -11,7 +11,7 @@ Server::Server(QCurver **curver, quint16 port, QObject *parent) : QObject(parent
 	}
     setServerIp();
     initUdpSocket();
-    initTcpServer();
+//    initTcpServer();
 }
 
 Server::~Server() {
