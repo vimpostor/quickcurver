@@ -4,7 +4,7 @@
 #include <QtNetwork>
 #include "qcurver.h"
 #include <QTimer>
-#define BROADCASTINTERVAL 50
+#define BROADCASTINTERVAL 33
 #define MAXPLAYERCOUNT 16
 
 

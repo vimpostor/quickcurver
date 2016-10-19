@@ -1,14 +1,14 @@
 #include "server.h"
 
 Server::Server(QCurver **curver, quint16 port, QObject *parent) : QObject(parent) {
-	this->port = port;
-	this->curver = curver;
-	for (int i = 0; i < MAXPLAYERCOUNT; i++) {
-		available[i] = false;
-		clients[i] = NULL;
-		currentSegment[i] = 0;
-		currentPos[i] = 0;
-	}
+    this->port = port;
+    this->curver = curver;
+    for (int i = 0; i < MAXPLAYERCOUNT; i++) {
+        available[i] = false;
+        clients[i] = NULL;
+        currentSegment[i] = 0;
+        currentPos[i] = 0;
+    }
     setServerIp();
     initUdpSocket();
 //    initTcpServer();
@@ -83,11 +83,11 @@ void Server::readPendingDatagrams() {
 void Server::shutdown() {
     if (udpSocket != NULL) {
         udpSocket->close();
+        disconnect(udpSocket, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));
     }
     if (tcpServer != NULL) {
         tcpServer->close();
     }
-	disconnect(udpSocket, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));
 }
 
 void Server::socketError(QAbstractSocket::SocketError socketError) {
@@ -132,12 +132,10 @@ void Server::broadcast() {
 	for (int i = 0; i < playercount; i++) {
 		QCurver *c = curver[i];
 		QByteArray datagram;
-		//first send new head positions
-//		datagram.append("HEAD" + (QString) i + ":");
-//		QPointF pos = c->getPos();
-//		QByteArray headPos;
-//		sendToAll(&datagram);
-		//send new positions: datagram format example: "POS2:13:<posinbinary><posinbinary> ..." means that curver 2 got positions added to segment 13 whereas posinbinary contains the positions as QPointF
+        QPointF pos = c->getPos();
+        QDataStream out(&datagram, QIODevice::WriteOnly);
+        out << QString("HEAD") << i << pos;
+        sendToAll(&datagram);
 //		datagram.append("POS" + i + ":" + currentSegment[i] + ":");
 	}
 }

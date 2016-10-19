@@ -6,7 +6,7 @@
 class FatterItem : public CurveItem
 {
 public:
-	FatterItem(QSGNode *node);
+    FatterItem(QSGNode *node, int fieldsize);
 private:
 	void use(QCurver *curver);
 	void deuse(QCurver *curver);

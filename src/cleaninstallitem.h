@@ -8,7 +8,7 @@
 class CleaninstallItem : public CurveItem
 {
 public:
-	CleaninstallItem(QSGNode *node);
+    CleaninstallItem(QSGNode *node, int fieldsize);
 private:
 	void use(QCurver *curver);
 };

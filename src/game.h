@@ -42,6 +42,7 @@ public:
 	Q_INVOKABLE void setBaseSpeed(int baseSpeed);
 	Q_INVOKABLE void setController(int index, int newControllerState);
 	Q_INVOKABLE void setItemPriority(int index, int newPriority);
+    Q_INVOKABLE void setFieldSize(int s);
 	Q_INVOKABLE void close();
 	QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *);
     ~Game();
@@ -57,9 +58,10 @@ public slots:
 private slots:
 	void startNextRound();
 	void setJoinStatus(QString s);
+    void updateGUI();
 
 private:
-	QCurver* curver[MAXPLAYERCOUNT];
+    QCurver* curver[MAXPLAYERCOUNT];
 	bool alive[MAXPLAYERCOUNT];
 	QColor colors[MAXPLAYERCOUNT];
 	Qt::Key controls[MAXPLAYERCOUNT][2]; //first one is left key, second one is right key
@@ -90,6 +92,7 @@ private:
 	void increaseScore(int index);
 	int itemPriority[ITEMVARIETY] = {3, 0, 1, 0, 0, 2};
 	int itemPrioritySum = 0; //a for loop will set this in the start() method
+    int fieldsize = 1000;
 };
 
 #endif // GAME_H

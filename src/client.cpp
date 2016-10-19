@@ -1,11 +1,15 @@
 #include "client.h"
 
-Client::Client(QString ip, int port, QObject *parent) : QObject(parent) {
-	this->ip = new QHostAddress(ip);
-	this->port = port;
-	timeoutTimer = new QTimer;
-	initSocket();
-	join();
+Client::Client(QString ip, QSGNode *node, int port, QObject *parent) : QObject(parent) {
+    this->ip = new QHostAddress(ip);
+    this->port = port;
+    this->node = node;
+    timeoutTimer = new QTimer;
+    initSocket();
+    join();
+    QSGFlatColorMaterial *material = new QSGFlatColorMaterial;
+    material->setColor(Qt::red);
+    headnode = new headNode(QPointF(0,0), material, node);
 }
 
 Client::~Client() {
@@ -60,14 +64,24 @@ void Client::readPendingDatagrams() {
 			emit joinStatusChanged("STARTED");
 		} else if (msg == "KICKED") {
 			emit joinStatusChanged(("KICKED"));
-		}/* else if (msg.startsWith("HEAD")) { //head data comes in
-			int i = (int) msg.mid(4, msg.indexOf(":")-4);
-			QPointF headPos = msg.right(msg.indexOf(":") + 1);
-			qDebug() << i << headPos;
-		}*/ else if (msg.startsWith("POS")) {
+        } else if (msg.startsWith("HEAD")) { //head data comes in
+            qDebug() << msg;
+        } else if (msg.startsWith("POS")) {
 			//new data comes in
 		} else {
-			qDebug() << "Server replied with unsupported datagram";
+            //try reading stream
+            QString title;
+            QDataStream in(&datagram, QIODevice::ReadOnly);
+            in >> title;
+            if (title == "HEAD") {
+                int i;
+                QPointF pos;
+                in >> i >> pos; //index of curver and position of its head
+                headnode->updatePosition(pos);
+                emit updateGUI();
+            } else {
+                qDebug() << "Server replied with unsupported datagram";
+            }
 		}
 //		if (answer != "") {
 //			QByteArray answerDatagram;
@@ -78,8 +92,10 @@ void Client::readPendingDatagrams() {
 }
 
 void Client::shutdown() {
-	udpSocket->close();
-	disconnect(udpSocket, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));
+    if (udpSocket != NULL) {
+        udpSocket->close();
+        disconnect(udpSocket, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));
+    }
 }
 
 void Client::socketError(QAbstractSocket::SocketError socketError) {

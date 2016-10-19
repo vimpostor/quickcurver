@@ -1,9 +1,10 @@
 #include "aicontroller.h"
 
-AIController::AIController(QCurver* curver, QCurver** player, int playerCount) {
+AIController::AIController(QCurver* curver, QCurver** player, int playerCount, int fieldsize) {
 	this->curver = curver;
 	this->player = player;
 	this->playerCount = playerCount;
+    this->fieldsize = fieldsize;
 }
 
 void AIController::makeMove(float deltat) {
@@ -14,9 +15,9 @@ void AIController::makeMove(float deltat) {
 	for (int collisionDistance = 45; collisionDistance <=80; collisionDistance+=30) {
 		int distanceWeight = (collisionDistance == 45 ? 20 : 12); //a near collision has more weight to it than one far away
 		QPointF estimatedPos = curver->getEstimatedNextPos(deltat, 0, collisionDistance);
-		if (qAbs(estimatedPos.x() - 500) > 500 || qAbs(estimatedPos.y() - 500) > 500) { //we would collide with a wall
+        if (qAbs(estimatedPos.x() - fieldsize/2) > fieldsize/2 || qAbs(estimatedPos.y() - fieldsize/2) > fieldsize/2) { //we would collide with a wall
 	//		int quadrant = estimatedPos.x() > 500 ? (estimatedPos.y() > 500 ? 0 : 3) : (estimatedPos.y() > 500 ? 1 : 2); //bottom right: 0, bottom left: 1, top left: 2, top right: 3
-			int triangle = currentPos.x() > currentPos.y() ? (1000-currentPos.y() > currentPos.x() ? 3 : 0) : (1000-currentPos.y() > currentPos.x() ? 2 : 1); //right: 0, bot: 1, left: 2, top: 3
+            int triangle = currentPos.x() > currentPos.y() ? (fieldsize-currentPos.y() > currentPos.x() ? 3 : 0) : (fieldsize-currentPos.y() > currentPos.x() ? 2 : 1); //right: 0, bot: 1, left: 2, top: 3
 			float deltaAngle = angle - triangle * M_PI/2;
 			if (deltaAngle > 0) {
 				rotatePriority[ROTATE_RIGHT] += distanceWeight; //we wanna rotate right because that is the shorter option

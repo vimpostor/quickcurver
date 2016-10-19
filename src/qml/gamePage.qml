@@ -4,13 +4,14 @@ import Material.ListItems 0.1 as ListItem
 import Material.Extras 0.1
 
 Page {
+    property var fieldsize: 1000
     backgroundColor: "#31363b"
     focus: false
     canGoBack: false
     onGoBack: pageStack.push(this) //as of now, canGoBack = false does not work, this disables it manually
     PageSidebar {
 //        mode: "right"
-        width: parent.width - 1000
+        width: parent.width - fieldsize
         backgroundColor: Theme.backgroundColor
         Card {
             anchors.fill: parent

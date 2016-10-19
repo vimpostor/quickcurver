@@ -1,8 +1,8 @@
 #include "curveitem.h"
 
-CurveItem::CurveItem(QSGNode *node, bool greenAllowed, bool redAllowed, bool blueAllowed) {
+CurveItem::CurveItem(QSGNode *node, int fieldsize, bool greenAllowed, bool redAllowed, bool blueAllowed) {
 	this->node = node;
-	pos = QPointF(segment::randInt(10, 990), segment::randInt(10,990));
+    pos = QPointF(segment::randInt(10, fieldsize-10), segment::randInt(10,fieldsize-10));
 
 	//find a random allowed color
 	bool allowedColors[3] = {greenAllowed, redAllowed, blueAllowed};

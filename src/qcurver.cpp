@@ -1,18 +1,26 @@
 #include "qcurver.h"
 
-QCurver::QCurver(QSGNode *node, QColor color, int baseSpeed) {
+QCurver::QCurver(QSGNode *node, QColor color, int baseSpeed, int fieldsize) { //server
 	connect(this,SIGNAL(died(QCurver*)), this, SLOT(rollDieAnimation()));
 	this->color = color;
 	this->node = node;
 	this->baseSpeed = baseSpeed;
-	velocity = baseSpeed;
-	material = new QSGFlatColorMaterial;
-	material->setColor(color);
-	lastPoint = QPointF(segment::randInt(100,900),segment::randInt(100,900));
-	segments[0] = new segment(color, thickness, node, material);
-	rotateDirection(segment::randFloat()*2*M_PI);
-	lastnewSegment = QTime::currentTime();
-	headnode = new headNode(lastPoint, material, node);
+    this->fieldsize = fieldsize;
+    velocity = baseSpeed;
+    material = new QSGFlatColorMaterial;
+    material->setColor(color);
+    lastPoint = QPointF(segment::randInt(100,fieldsize-100),segment::randInt(100,fieldsize-100));
+    segments[0] = new segment(color, thickness, node, material);
+    rotateDirection(segment::randFloat()*2*M_PI);
+    lastnewSegment = QTime::currentTime();
+    headnode = new headNode(lastPoint, material, node);
+}
+
+QCurver::QCurver(QSGNode *node, QColor color) { //client
+    this->color = color;
+    this->node = node;
+    material = new QSGFlatColorMaterial;
+    material->setColor(color);
 }
 
 QCurver::~QCurver() {
@@ -24,43 +32,43 @@ QCurver::~QCurver() {
 
 
 void QCurver::progress(float deltat) {
-	progressMutex.lock();
-	if (rotating == ROTATE_LEFT) {
-		turnLeft(deltat);
-	} else if (rotating == ROTATE_RIGHT) {
-		turnRight(deltat);
-	} else { //ROTATE_NONE
-		//do nothing
-	}
-	QPointF addedPoint = deltat * velocity * direction;
-	QPointF newPoint = lastPoint + addedPoint;
-	lastPoint = newPoint; //this maybe should be moved to the end of this block later, however moving it will at least break wallcollision
-	if (!changingSegment) {
-		if (lastnewSegment.msecsTo(QTime::currentTime()) > nextSegmentTime) {
-			//new Segment
-			segments[segmentcount] = new segment(color, thickness, node, material);
-			segmentcount++;
-			lastnewSegment = QTime::currentTime();
-			nextSegmentTime = segment::randInt(1000,5000);
-			changingSegment = true;
-		} else {
-			//no new Segment
-			segments[segmentcount-1]->appendPoint(newPoint, angle);
-			bool wCollision = wallCollision();
-			if (segments[segmentcount-1]->poscount > 3) {
-				int pCollision = playerCollision();
-			}
-		}
-	} else {
-		//check if we should produce a new line again
-		if (lastnewSegment.msecsTo(QTime::currentTime()) > segmentchangeTime) {
-			lastnewSegment = QTime::currentTime();
-			changingSegment = false;
-			segmentchangeTime = 128;
-		}
-	}
-	headnode->updatePosition(newPoint);
-	progressMutex.unlock();
+    progressMutex.lock();
+    if (rotating == ROTATE_LEFT) {
+        turnLeft(deltat);
+    } else if (rotating == ROTATE_RIGHT) {
+        turnRight(deltat);
+    } else { //ROTATE_NONE
+        //do nothing
+    }
+    QPointF addedPoint = deltat * velocity * direction;
+    QPointF newPoint = lastPoint + addedPoint;
+    lastPoint = newPoint; //this maybe should be moved to the end of this block later, however moving it will at least break wallcollision
+    if (!changingSegment) {
+        if (lastnewSegment.msecsTo(QTime::currentTime()) > nextSegmentTime) {
+            //new Segment
+            segments[segmentcount] = new segment(color, thickness, node, material);
+            segmentcount++;
+            lastnewSegment = QTime::currentTime();
+            nextSegmentTime = segment::randInt(1000,5000);
+            changingSegment = true;
+        } else {
+            //no new Segment
+            segments[segmentcount-1]->appendPoint(newPoint, angle);
+            bool wCollision = wallCollision();
+            if (segments[segmentcount-1]->poscount > 3) {
+                int pCollision = playerCollision();
+            }
+        }
+    } else {
+        //check if we should produce a new line again
+        if (lastnewSegment.msecsTo(QTime::currentTime()) > segmentchangeTime) {
+            lastnewSegment = QTime::currentTime();
+            changingSegment = false;
+            segmentchangeTime = 128;
+        }
+    }
+    headnode->updatePosition(newPoint);
+    progressMutex.unlock();
 }
 
 
@@ -87,11 +95,11 @@ bool QCurver::wallCollision() {
 	bool c = false;
 	if (lastPoint.x() < 7) { //left
 		c = true;
-	} else if (lastPoint.x() > 995) { //right
+    } else if (lastPoint.x() > fieldsize-5) { //right
 		c = true;
 	} else if (lastPoint.y() < -7) { //top
 		c = true;
-	} else if (lastPoint.y() > 995) { //bottom
+    } else if (lastPoint.y() > fieldsize-5) { //bottom
 		c = true;
 	} else { //no wall collision
 		c = false;
@@ -133,7 +141,7 @@ void QCurver::reset() {
 	for (int i = 0; i < oldSegmentcount; i++) {
 		delete segments[i];
 	}
-	lastPoint = QPointF(segment::randInt(100,900),segment::randInt(100,900));
+    lastPoint = QPointF(segment::randInt(100,fieldsize-100),segment::randInt(100,fieldsize-100));
 	thickness = 4;
 	headnode->setThickness(thickness);
 	segments[0] = new segment(color, thickness, node, material);

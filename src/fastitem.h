@@ -8,7 +8,7 @@
 class FastItem : public CurveItem
 {
 public:
-	FastItem(QSGNode* node);
+    FastItem(QSGNode* node, int fieldsize);
 private:
 	void use(QCurver *curver);
 	void deuse(QCurver *curver);

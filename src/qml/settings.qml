@@ -56,6 +56,20 @@ TabbedPage {
                         darkBackground: true
                         onValueChanged: game.setBaseSpeed(value)
                     }
+                    Label {
+                        text: "Field size"
+                        color: Theme.dark.textColor
+                    }
+                    Slider {
+                        value: 1000
+                        tickmarksEnabled: true
+                        stepSize: 50
+                        numericValueLabel: true
+                        minimumValue: 300
+                        maximumValue: 1200
+                        darkBackground: true
+                        onValueChanged: game.setFieldSize(value)
+                    }
                 }
             }
         }

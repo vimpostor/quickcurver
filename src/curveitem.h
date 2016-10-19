@@ -21,7 +21,7 @@ class CurveItem : public QObject
 {
 	Q_OBJECT
 public:
-	explicit CurveItem(QSGNode* node, bool greenAllowed, bool redAllowed, bool blueAllowed);
+    explicit CurveItem(QSGNode* node, int fieldsize, bool greenAllowed, bool redAllowed, bool blueAllowed);
 	~CurveItem();
 	int getSize();
 	QPointF getPos();

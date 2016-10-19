@@ -24,10 +24,11 @@ class QCurver : public QObject
 {
     Q_OBJECT
 public:
-	explicit QCurver(QSGNode* node, QColor color, int baseSpeed);
+    explicit QCurver(QSGNode* node, QColor color, int baseSpeed, int fieldsize);
+    explicit QCurver(QSGNode* node, QColor color);
     ~QCurver();
 	segment* segments[MAXSEGMENTCOUNT];
-	int segmentcount = 1;
+    int segmentcount = 1;
 	enum rotation rotating = ROTATE_NONE;
 	bool checkforIntersection(QPointF a, QPointF b);
 	void reset(); //completely resets for next round
@@ -74,6 +75,9 @@ private:
 	bool wallCollision();
 	int roundCount = 0;
 	int playerCollision(); //returns -1  if no collision, else returns the number of the player with whom we are colliding
+    int clientSegment = -1; //last segment used
+    int clientPoscount = -1; //last pos synchronized
+    int fieldsize = 1000;
 };
 
 #endif // QCURVER_H
