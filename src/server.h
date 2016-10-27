@@ -18,8 +18,10 @@ public:
 	void setAvailable(int index, bool newState);
 	void start();
 	void setPlayerCount(int playercount);
+    void newRound();
 
 signals:
+    void playerStatusChanged(int index, QString s);
 private slots:
 	void readPendingDatagrams();
 	void socketError(QAbstractSocket::SocketError socketError);
@@ -40,8 +42,6 @@ private:
 	bool started = false;
 	QTimer *broadcastTimer;
 	void sendToAll(QByteArray *datagram);
-	int currentSegment[16]; //determines the segment that the last broadcast sent positions from
-	int currentPos[16]; //determines the index of the next position that we have to send from currentSegment
 	int playercount = 0;
     QHostAddress *serverIp;
     void setServerIp();

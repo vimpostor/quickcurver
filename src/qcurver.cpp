@@ -11,6 +11,7 @@ QCurver::QCurver(QSGNode *node, QColor color, int baseSpeed, int fieldsize) { //
     material->setColor(color);
     lastPoint = QPointF(segment::randInt(100,fieldsize-100),segment::randInt(100,fieldsize-100));
     segments[0] = new segment(color, thickness, node, material);
+    segmentcount++;
     rotateDirection(segment::randFloat()*2*M_PI);
     lastnewSegment = QTime::currentTime();
     headnode = new headNode(lastPoint, material, node);
@@ -21,6 +22,7 @@ QCurver::QCurver(QSGNode *node, QColor color) { //client
     this->node = node;
     material = new QSGFlatColorMaterial;
     material->setColor(color);
+    clientNewSegment();
 }
 
 QCurver::~QCurver() {
@@ -156,6 +158,16 @@ void QCurver::reset() {
 	roundCount++;
 }
 
+void QCurver::clientReset() {
+    for (int i = 0; i < segmentcount; i++) {
+        delete segments[i];
+    }
+    segments[0] = new segment(color, thickness, node, material);
+    segmentcount = 1;
+    clientSegment = 0;
+    clientPoscount = -1;
+}
+
 void QCurver::cleanInstall() {
 	CleanInstallAnimation* cleaninstallAnimation = new CleanInstallAnimation(node, material, this);
 	for (int i = 0; i < segmentcount; i++) {
@@ -164,6 +176,8 @@ void QCurver::cleanInstall() {
 	cleaninstallAnimation->fireAnimation();
 	int oldSegmentcount = segmentcount;
 	segmentcount = 0;
+    clientSegment = 0;
+    clientPoscount = -1;
 	for (int i = 0; i < oldSegmentcount; i++) {
 		delete segments[i];
 	}
@@ -215,4 +229,35 @@ void QCurver::halfThickness() {
 	headnode->setThickness(thickness);
 	segments[segmentcount] = new segment(color, thickness, node, material);
 	segmentcount++;
+}
+
+QColor QCurver::getColor() {
+    return color;
+}
+
+bool QCurver::hasUnsyncedSegPoints() {
+    return segments[clientSegment]->poscount - 1 > clientPoscount;
+}
+
+QPointF QCurver::readUnsyncedSegPoint() {
+    clientPoscount++;
+    return segments[clientSegment]->pos[clientPoscount];
+}
+
+bool QCurver::moveToNextSegment() {
+    if (hasUnsyncedSegPoints() || segments[clientSegment+1] == NULL) { //we should not proceed, if there is still data in last segment or if the next segment does not exist
+        return false;
+    } else {
+        clientSegment++;
+        clientPoscount = -1;
+        return true;
+    }
+}
+void QCurver::clientNewSegment() {
+    segments[segmentcount] = new segment(color, thickness, node, material);
+    segmentcount++;
+}
+
+void QCurver::clientAddPoint(QPointF p) {
+    segments[segmentcount-1]->clientappendPoint(p);
 }

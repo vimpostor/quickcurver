@@ -4,7 +4,7 @@ import Material.ListItems 0.1 as ListItem
 import Material.Extras 0.1
 
 Page {
-    property var fieldsize: 1000
+    property int fieldsize: 1000
     backgroundColor: "#31363b"
     focus: false
     canGoBack: false

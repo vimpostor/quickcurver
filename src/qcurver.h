@@ -28,7 +28,7 @@ public:
     explicit QCurver(QSGNode* node, QColor color);
     ~QCurver();
 	segment* segments[MAXSEGMENTCOUNT];
-    int segmentcount = 1;
+    int segmentcount = 0;
 	enum rotation rotating = ROTATE_NONE;
 	bool checkforIntersection(QPointF a, QPointF b);
 	void reset(); //completely resets for next round
@@ -41,6 +41,13 @@ public:
 	float getAngle();
 	void doubleThickness();
 	void halfThickness();
+    QColor getColor();
+    bool hasUnsyncedSegPoints();
+    QPointF readUnsyncedSegPoint();
+    bool moveToNextSegment(); //attempts to move to next segment, returns true on success, false on failure
+    void clientNewSegment();
+    void clientAddPoint(QPointF p);
+    void clientReset();
 
 signals:
 	void died(QCurver* who);
@@ -75,7 +82,7 @@ private:
 	bool wallCollision();
 	int roundCount = 0;
 	int playerCollision(); //returns -1  if no collision, else returns the number of the player with whom we are colliding
-    int clientSegment = -1; //last segment used
+    int clientSegment = 0; //last segment synchronized
     int clientPoscount = -1; //last pos synchronized
     int fieldsize = 1000;
 };

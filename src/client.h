@@ -7,6 +7,7 @@
 #include <QSGNode>
 #include "headnode.h"
 #include <qsgflatcolormaterial.h>
+#define MAXPLAYERCOUNT 16
 
 
 class Client : public QObject
@@ -36,7 +37,8 @@ private:
 	QTimer *timeoutTimer;
 	bool joined = false;
     QSGNode *node;
-    headNode *headnode;
+    headNode *headnodes[MAXPLAYERCOUNT];
+    QCurver *curver[MAXPLAYERCOUNT];
 };
 
 #endif // CLIENT_H

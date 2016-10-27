@@ -58,6 +58,7 @@ public slots:
 private slots:
 	void startNextRound();
 	void setJoinStatus(QString s);
+    void setPlayerStatus(int index, QString s);
     void updateGUI();
 
 private:

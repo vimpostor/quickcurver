@@ -7,9 +7,10 @@ Client::Client(QString ip, QSGNode *node, int port, QObject *parent) : QObject(p
     timeoutTimer = new QTimer;
     initSocket();
     join();
-    QSGFlatColorMaterial *material = new QSGFlatColorMaterial;
-    material->setColor(Qt::red);
-    headnode = new headNode(QPointF(0,0), material, node);
+    for (int i = 0; i < MAXPLAYERCOUNT; i++) {
+        headnodes[i] = NULL;
+        curver[i] = NULL;
+    }
 }
 
 Client::~Client() {
@@ -49,8 +50,8 @@ void Client::readPendingDatagrams() {
 		datagram.resize(udpSocket->pendingDatagramSize());
 		QHostAddress *sender = new QHostAddress();
 		quint16 senderPort;
-		udpSocket->readDatagram(datagram.data(), datagram.size(), sender, &senderPort);
-		QString msg = datagram;
+        udpSocket->readDatagram(datagram.data(), datagram.size(), sender, &senderPort);
+        QString msg = datagram;
 //		QString answer = "";
 		if (msg == "JOINED") { //we successfully joined
 			joined = true;
@@ -64,11 +65,13 @@ void Client::readPendingDatagrams() {
 			emit joinStatusChanged("STARTED");
 		} else if (msg == "KICKED") {
 			emit joinStatusChanged(("KICKED"));
-        } else if (msg.startsWith("HEAD")) { //head data comes in
-            qDebug() << msg;
-        } else if (msg.startsWith("POS")) {
-			//new data comes in
-		} else {
+        } else if (msg == "RESET") {
+            for (int i = 0; i < MAXPLAYERCOUNT; i++) {
+                if (curver[i] != NULL) {
+                    curver[i]->clientReset();
+                }
+            }
+        } else {
             //try reading stream
             QString title;
             QDataStream in(&datagram, QIODevice::ReadOnly);
@@ -76,9 +79,29 @@ void Client::readPendingDatagrams() {
             if (title == "HEAD") {
                 int i;
                 QPointF pos;
-                in >> i >> pos; //index of curver and position of its head
-                headnode->updatePosition(pos);
+                QColor color;
+                in >> i >> pos >> color; //index of curver and position of its head and color
+                if (headnodes[i] == NULL) { //create new curver
+                    QSGFlatColorMaterial *material = new QSGFlatColorMaterial;
+                    material->setColor(color);
+                    headnodes[i] = new headNode(pos, material, node);
+                    curver[i] = new QCurver(node, color);
+                } else {
+                    headnodes[i]->updatePosition(pos);
+                }
                 emit updateGUI();
+            } else if (title == "POS") {
+                int i;
+                bool newSegment;
+                QPointF pos;
+                in >> i >> newSegment;
+                if (newSegment) {
+                    curver[i]->clientNewSegment();
+                }
+                while (!in.atEnd()) {
+                    in >> pos;
+                    curver[i]->clientAddPoint(pos);
+                }
             } else {
                 qDebug() << "Server replied with unsupported datagram";
             }

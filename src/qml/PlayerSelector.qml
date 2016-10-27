@@ -75,7 +75,8 @@ Item {
                 onClicked: playerEditDialog.show()
 
                 text: name
-                subText: "Change color, controls etc..."
+                subText: playerController.selectedIndex == 2  ? (eJoined ? "Joined" : "Waiting for player to join...") : "Change color, controls etc..."
+
                 secondaryItem: IconButton {
                     iconName: "editor/mode_edit"
                     anchors.verticalCenter: parent.verticalCenter
@@ -100,40 +101,8 @@ Item {
                     model: ["Local Player", "Bot", "Online Player"]
                     width: dp(160)
                     selectedIndex: eBot ? 1 : 0
-                    onSelectedIndexChanged: {
-//                        if (selectedIndex == 2) {
-//                            serverDialog.show()
-//                        }
-                        game.setController(index, selectedIndex)
-                    }
+                    onSelectedIndexChanged: game.setController(index, selectedIndex)
                 }
-
-//                Dialog {
-//                    id: serverDialog
-//                    title: "Host a game"
-//                    RowLayout {
-//                        TextField {
-//                            placeholderText: "Client IP Adress"
-//                            floatingLabel: true
-//                        }
-//                        Label {
-//                            text: ":"
-//                        }
-
-//                        TextField {
-//                            placeholderText: "Port"
-//                            floatingLabel: true
-//                            text: "52552"
-//                        }
-//                    }
-//                    onAccepted: playerselector.mysnackbar.open("This feature is not implemented yet. Stay tuned!")
-//                    Button {
-//                        elevation: 1
-//                        text: "Copy my IP to clipboard"
-//                        backgroundColor: Theme.accentColor
-//                        onClicked: playerselector.mysnackbar.open("This feature is not implemented yet. Stay tuned!")
-//                    }
-//                }
 
                     GridLayout {
                         id: editPlayerGrid
@@ -148,7 +117,7 @@ Item {
                             elevation: 1
                             activeFocusOnPress: true
                             Keys.onPressed: {
-                                if (event.text == "") {
+                                if (event.text === "") {
                                     this.text = "No key description available";
                                 } else {
                                     this.text = event.text;
@@ -163,7 +132,7 @@ Item {
                             elevation: 1
                             activeFocusOnPress: true
                             Keys.onPressed: {
-                                if (event.text == "") {
+                                if (event.text === "") {
                                     this.text = "No key description available";
                                 } else {
                                     this.text = event.text;

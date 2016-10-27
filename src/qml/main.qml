@@ -13,21 +13,28 @@ ApplicationWindow {
         playerListModel.setProperty(index, "eroundScore", roundScore);
     }
     function setJoinStatus(s) {
-        if (s == "JOINED") {
+        if (s === "JOINED") {
             joinButton.text = "Joined, waiting for host to start...";
-        } else if (s == "REJECTED") {
+        } else if (s === "REJECTED") {
             clientDialog.close();
             playerselector.mysnackbar.open("Join request was rejected :(");
-        } else if (s == "TIMEOUT") {
+        } else if (s === "TIMEOUT") {
             clientDialog.close();
             playerselector.mysnackbar.open("Join request timed out! :(");
-        }  else if (s == "STARTED") {
+        }  else if (s === "STARTED") {
             clientDialog.close();
             pageStack.push(Qt.resolvedUrl("gamePage.qml"));
             game.focus = true;
-        } else if (s == "KICKED") {
+        } else if (s === "KICKED") {
             clientDialog.close();
             playerselector.mysnackbar.open("You got kicked from the game!");
+        }
+    }
+    function setPlayerStatus(index,s) {
+        if (s==="JOINED") {
+            playerListModel.setProperty(index, "eJoined", true);
+        } else if (s==="KICKED") {
+            playerListModel.setProperty(index, "eJoined", false);
         }
     }
 
@@ -159,12 +166,14 @@ ApplicationWindow {
             escore: 0
             eroundScore: 0
             eBot: false
+            eJoined: false
         }
         ListElement {
             ename: "Player 1"
             escore: 0
             eroundScore: 0
             eBot: true
+            eJoined: false
         }
     }
     Dialog {

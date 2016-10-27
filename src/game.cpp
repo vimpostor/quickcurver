@@ -8,7 +8,8 @@ Game::Game(QQuickItem *parent) : QQuickItem(parent) {
 		controlledByAI[i] = false;
 		controlledByNetwork[i] = false;
 	}
-	server = new Server(curver, 52552, this);
+    server = new Server(curver, 52552, this);
+    connect(server, SIGNAL(playerStatusChanged(int,QString)), this, SLOT(setPlayerStatus(int,QString)));
 }
 
 Game::~Game() {
@@ -222,6 +223,7 @@ void Game::nextRound() {
 
 void Game::startNextRound() {
 	timer->stop();
+    server->newRound();
 	roundCount++;
 	for (int i = 0; i < playercount; i++) {
 		roundScore[i] = 0;
@@ -288,4 +290,9 @@ void Game::updateGUI() {
 
 void Game::setFieldSize(int s) {
     fieldsize = s;
+}
+
+void Game::setPlayerStatus(int index, QString s) {
+    QVariant returnedValue;
+    QMetaObject::invokeMethod(qmlobject, "setPlayerStatus", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, index), Q_ARG(QVariant, s));
 }

@@ -64,6 +64,17 @@ void segment::appendPoint(QPointF addedPoint, float angle) {
 	nodeMutex.unlock();
 }
 
+void segment::clientappendPoint(QPointF p) {
+    pos[poscount] = p;
+    poscount++;
+    geometry->allocate(poscount);
+    QSGGeometry::Point2D *vertices = geometry->vertexDataAsPoint2D();
+    for (int i = 0; i < poscount; i++) {
+        vertices[i].set(pos[i].x(), pos[i].y());
+    }
+    gnode->markDirty(QSGNode::DirtyGeometry);
+}
+
 QPointF segment::getLastPoint() {
 	return pos[poscount-1];
 }
