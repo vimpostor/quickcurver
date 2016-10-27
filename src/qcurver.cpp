@@ -56,9 +56,9 @@ void QCurver::progress(float deltat) {
         } else {
             //no new Segment
             segments[segmentcount-1]->appendPoint(newPoint, angle);
-            bool wCollision = wallCollision();
+            (void) wallCollision();
             if (segments[segmentcount-1]->poscount > 3) {
-                int pCollision = playerCollision();
+                (void) playerCollision();
             }
         }
     } else {
@@ -134,7 +134,7 @@ bool QCurver::checkforIntersection(QPointF a, QPointF b) {
 }
 
 void QCurver::rollDieAnimation() {
-	dieAnimation* d = new dieAnimation(lastPoint, node, material, this);
+    (void) new dieAnimation(lastPoint, node, material, this);
 }
 
 void QCurver::reset() {

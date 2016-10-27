@@ -6,7 +6,7 @@ segment::segment(QColor color, int thickness, QSGNode *node, QSGFlatColorMateria
 	this->thickness = thickness;
 	nodeMutex.lock();
 	gnode = new QSGGeometryNode;
-	geometry = new QSGGeometry(QSGGeometry::defaultAttributes_Point2D(), 0);
+    geometry = new QSGGeometry(QSGGeometry::defaultAttributes_Point2D(), 0);
 	geometry->setLineWidth(1);
 	geometry->setDrawingMode(GL_TRIANGLE_STRIP);
 	gnode->setGeometry(geometry);
@@ -50,9 +50,9 @@ void segment::appendPoint(QPointF addedPoint, float angle) {
 	//	for (int i = 1; i < poscount; i+=2) {
 	//		vertices[(i-1)/2].set(pos[i].x(), pos[i].y());
 	//	}
-		geometry->allocate(poscount);
+        geometry->allocate(poscount);
 		QSGGeometry::Point2D *vertices = geometry->vertexDataAsPoint2D();
-		for (int i = 0; i < poscount; i++) {
+        for (int i = 0; i < poscount; i++) {
 			vertices[i].set(pos[i].x(), pos[i].y());
 		}
 

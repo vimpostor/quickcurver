@@ -71,8 +71,8 @@ private:
 	float rotateVelocity = M_PI;
 	QTime lastnewSegment;
 	int thickness = 4;
-	int segmentchangeTime = 2000; //amount of time in milliseconds that you produce no line between segments
-	int nextSegmentTime = 2000; //amount of time that you produce a line
+    int segmentchangeTime = 2000; //amount of time in milliseconds that you produce no line between segments
+    int nextSegmentTime = 2000; //amount of time that you produce a line
 	QSGNode* node;
 	QMutex progressMutex;
 	bool changingSegment = true;

@@ -31,6 +31,7 @@ void Game::start() {
     timer = new QTimer(this);
     nextRoundTimer = new QTimer(this);
     node = new QSGNode;
+    setFlag(ItemHasContents);
     wall = new wallNode(node, fieldsize);
     for (int i = 0; i < ITEMVARIETY; i++) {
         itemPrioritySum += itemPriority[i];
@@ -49,7 +50,6 @@ void Game::start() {
     for (int i = 0; i < MAXITEMCOUNT; i++) {
         items[i] = NULL;
     }
-    setFlag(ItemHasContents);
 
     connect(timer, SIGNAL(timeout()), this, SLOT(progress()));
     lastTime = QTime::currentTime();
@@ -135,7 +135,7 @@ void Game::progress() {
         }
     }
     frameCount++;
-	update();
+    update();
 }
 
 void Game::sendKey(Qt::Key k) {

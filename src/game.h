@@ -85,7 +85,7 @@ private:
 	int nextItemSpawn; //time in milliseconds
 	QTime lastItemSpawn;
 	wallNode *wall;
-	int timerInterval = 16;
+    int timerInterval = 16;
 	int roundTimeout = 2000; //milliseconds
 	int baseSpeed = 128;
 	int frameCount = 0;
