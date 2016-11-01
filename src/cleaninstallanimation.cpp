@@ -32,7 +32,6 @@ void CleanInstallAnimation::progress() {
 
 void CleanInstallAnimation::progress(float timeSinceStart) {
 	int p = posCount - timeSinceStart / ANIMATIONDURATION * posCount;
-	qDebug() << p;
 	geometry->allocate(p);
 	QSGGeometry::Point2D *vertices = geometry->vertexDataAsPoint2D();
 	for (int i = 0; i < p; i++) {

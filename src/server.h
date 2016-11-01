@@ -44,7 +44,7 @@ private:
 	void sendToAll(QByteArray *datagram);
 	int playercount = 0;
     QHostAddress *serverIp;
-    void setServerIp();
+	void setServerIp();
 };
 
 #endif // SERVER_H

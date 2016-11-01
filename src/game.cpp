@@ -50,7 +50,6 @@ void Game::start() {
     for (int i = 0; i < MAXITEMCOUNT; i++) {
         items[i] = NULL;
     }
-
     connect(timer, SIGNAL(timeout()), this, SLOT(progress()));
     lastTime = QTime::currentTime();
     lastItemSpawn = lastTime;

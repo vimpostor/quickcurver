@@ -19,6 +19,9 @@ void AIController::makeMove(float deltat) {
 	//		int quadrant = estimatedPos.x() > 500 ? (estimatedPos.y() > 500 ? 0 : 3) : (estimatedPos.y() > 500 ? 1 : 2); //bottom right: 0, bottom left: 1, top left: 2, top right: 3
             int triangle = currentPos.x() > currentPos.y() ? (fieldsize-currentPos.y() > currentPos.x() ? 3 : 0) : (fieldsize-currentPos.y() > currentPos.x() ? 2 : 1); //right: 0, bot: 1, left: 2, top: 3
 			float deltaAngle = angle - triangle * M_PI/2;
+			if (triangle == 0 && angle > M_PI) {
+				deltaAngle = angle - 2*M_PI; //fixes anomaly at 2M_PI->0 jump
+			}
 			if (deltaAngle > 0) {
 				rotatePriority[ROTATE_RIGHT] += distanceWeight; //we wanna rotate right because that is the shorter option
 				rotatePriority[ROTATE_LEFT] += distanceWeight/4;

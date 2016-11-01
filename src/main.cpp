@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     if (!qputenv("QSG_RENDER_LOOP", "basic")) {  //threaded render_loop, which is default on non-mesa drivers, breaks drawing
         qDebug() << "Failed to set QSG_RENDER_LOOP=basic";
     }
-	QGLFormat fmt;
+    QGLFormat fmt;
 	fmt = QGLFormat::defaultFormat();
 	fmt.setSamples(16);
 	QGLFormat::setDefaultFormat(fmt);

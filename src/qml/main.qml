@@ -187,11 +187,15 @@ ApplicationWindow {
         id: clientDialog
         title: "Join Online Game"
         hasActions: false
+        onShowingChanged: serverIp.focus = true
         RowLayout {
             TextField {
                 id: serverIp
                 placeholderText: "Server IP Adress"
                 floatingLabel: true
+                Keys.onReturnPressed: {
+                    joinButton.clicked();
+                }
             }
             Label {
                 text: ":"
