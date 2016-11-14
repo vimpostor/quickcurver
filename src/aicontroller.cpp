@@ -12,8 +12,8 @@ void AIController::makeMove(float deltat) {
 	int rotatePriority[3] = {0, 0, 0};
 	float angle = curver->getAngle();
 	QPointF currentPos = curver->getPos();
-	for (int collisionDistance = 45; collisionDistance <=80; collisionDistance+=30) {
-		int distanceWeight = (collisionDistance == 45 ? 20 : 12); //a near collision has more weight to it than one far away
+	for (int collisionDistance = 45; collisionDistance <=100; collisionDistance+=30) {
+		int distanceWeight = (collisionDistance == 45 ? WALLCOLLISION_PENALTY_NEAR : WALLCOLLISION_PENALTY_FAR); //a near collision has more weight to it than one far away
 		QPointF estimatedPos = curver->getEstimatedNextPos(deltat, 0, collisionDistance);
         if (qAbs(estimatedPos.x() - fieldsize/2) > fieldsize/2 || qAbs(estimatedPos.y() - fieldsize/2) > fieldsize/2) { //we would collide with a wall
 	//		int quadrant = estimatedPos.x() > 500 ? (estimatedPos.y() > 500 ? 0 : 3) : (estimatedPos.y() > 500 ? 1 : 2); //bottom right: 0, bottom left: 1, top left: 2, top right: 3
@@ -37,18 +37,26 @@ void AIController::makeMove(float deltat) {
 	//now lets care about other players
 	bool c;
 	float turnAngle;
-	for (int direction = -1; direction < 2; direction+=2) {
-		for (turnAngle = 0; turnAngle < M_PI/2 && turnAngle > -M_PI/2; turnAngle+=direction*M_PI/16) {
-			c = false;
-			//check if we would collide with someone with this angle
-			for (int i = 0; i < playerCount && !c; i++) {
-				c = player[i]->checkforIntersection(currentPos, curver->getEstimatedNextPos(deltat, turnAngle, 80));
+	QPointF perpendicularVector = curver->getDirectionRotatedBy(-M_PI/2);
+	QPointF currentPosL = currentPos + curver->thickness * perpendicularVector;
+	QPointF currentPosR = currentPos - curver->thickness * perpendicularVector;
+	for (int collisionDistance = 50; collisionDistance < 101; collisionDistance+=50) {
+		int distanceWeight = collisionDistance == 50 ? PLAYERCOLLISION_PENALTY_NEAR : PLAYERCOLLISION_PENALTY_FAR;
+		for (int direction = -1; direction < 2; direction+=2) {
+			for (turnAngle = 0; qAbs(turnAngle) < MAXANGLE; turnAngle+=direction*ANGLEINCREMENT) {
+				c = false;
+				//check if we would collide with someone with this angle
+				for (int i = 0; i < playerCount && !c; i++) {
+					// c = player[i]->checkforIntersection(currentPos, curver->getEstimatedNextPos(deltat, turnAngle, 80));
+					c = player[i]->checkforIntersection(currentPosL, curver->getEstimatedNextPos(deltat, turnAngle, collisionDistance, -1)); //first check left side
+					c &= player[i]->checkforIntersection(currentPosR, curver->getEstimatedNextPos(deltat, turnAngle, collisionDistance, 1)); //right side
+				}
+				if (!c) { //when we found the first acceptable angle we break
+					break;
+				}
 			}
-			if (!c) { //when we found the first acceptable angle we break
-				break;
-			}
+			rotatePriority[direction+1] += (M_PI/2-turnAngle)/M_PI*distanceWeight; //the higher the angle that we have to rotate, the less likely we want to take that route (linearly interpolated)
 		}
-		rotatePriority[direction+1] += (M_PI/2-turnAngle)/M_PI*40; //the higher the angle that we have to rotate, the less likely we want to take that route (linearly interpolated)
 	}
 
 
@@ -65,14 +73,4 @@ void AIController::makeMove(float deltat) {
 		}
 	}
 	curver->rotating = static_cast<rotation>(maxIndex);
-}
-
-float AIController::fmod(float a, float b) {
-	while (a < 0) {
-		a += b;
-	}
-	while (a >= b) {
-		a -= b;
-	}
-	return a;
 }

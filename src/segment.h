@@ -20,7 +20,7 @@ public:
 	short int poscount = 0;
 	void appendPoint(QPointF addedPoint, float angle);
     void clientappendPoint(QPointF p);
-	QPointF getLastPoint();
+	QPointF getLastPoint(int offset = 0);
 	bool checkforIntersection(QPointF a, QPointF b);
 	static int randInt(int min, int max);
 	static float randFloat();

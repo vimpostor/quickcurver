@@ -79,7 +79,7 @@ void Game::setColor(int index, QColor color) {
 
 void Game::progress() {
 	//calculate time since last progress()
-    float deltat = (float) lastTime.msecsTo(QTime::currentTime())/1000;
+    float deltat = (float) lastTime.msecsTo(QTime::currentTime())/1000 * effectiveTimeMultiplier;
     lastTime = QTime::currentTime();
     if (lastItemSpawn.msecsTo(lastTime) > nextItemSpawn) {
         qDebug() << "Item spawned";
@@ -173,6 +173,7 @@ void Game::addPlayer() {
 
 void Game::curverDied(QCurver *who) {
 	int i;
+    bool onlyBotsAlive = true;
 	for (i = 0; curver[i] != who; i++) {
 		if (alive[i]) //if he is still alive, increase his score
 			increaseScore(i);
@@ -190,8 +191,14 @@ void Game::curverDied(QCurver *who) {
 		if (alive[i]) {
 			stillAlive++;
 			alivePlayer = i;
+            if (!controlledByAI[i]) {
+                onlyBotsAlive = false;
+            }
 		}
 	}
+    if (onlyBotsAlive) {
+        effectiveTimeMultiplier = timeMultiplier;
+    }
 	if (stillAlive == 1) {
 		qDebug() << names[alivePlayer] + " has won!";
 		nextRound();
@@ -217,10 +224,12 @@ void Game::setControls(int index, Qt::Key k, bool isRight) {
 }
 
 void Game::nextRound() {
+    effectiveTimeMultiplier = 1;
 	nextRoundTimer->singleShot(roundTimeout, this, SLOT(startNextRound()));
 }
 
 void Game::startNextRound() {
+    effectiveTimeMultiplier = 1;
 	timer->stop();
     server->newRound();
 	roundCount++;
@@ -294,4 +303,8 @@ void Game::setFieldSize(int s) {
 void Game::setPlayerStatus(int index, QString s) {
     QVariant returnedValue;
     QMetaObject::invokeMethod(qmlobject, "setPlayerStatus", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, index), Q_ARG(QVariant, s));
+}
+
+void Game::setTimeMultiplier(int t) {
+    timeMultiplier = t;
 }

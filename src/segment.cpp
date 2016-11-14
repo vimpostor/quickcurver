@@ -75,8 +75,12 @@ void segment::clientappendPoint(QPointF p) {
     gnode->markDirty(QSGNode::DirtyGeometry);
 }
 
-QPointF segment::getLastPoint() {
-	return pos[poscount-1];
+QPointF segment::getLastPoint(int offset) {
+	if (poscount + offset > 0 && offset <= 0) {
+		return pos[poscount-1-offset];
+	} else {
+		return QPointF(-1,-1);
+	}
 }
 
 int segment::randInt(int min, int max) {

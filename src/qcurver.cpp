@@ -189,8 +189,12 @@ void QCurver::cleanInstall() {
 	changingSegment = true;
 }
 
-QPointF QCurver::getPos() {
-	return lastPoint;
+QPointF QCurver::getPos(int offset) {
+	if (offset == 0) {
+		return lastPoint;
+	} else {
+		return segments[segmentcount-1]->getLastPoint(offset);
+	}
 }
 
 void QCurver::doubleSpeed() {
@@ -205,8 +209,9 @@ bool QCurver::verifyCorrectRound(int round) {
 	return (round == this->roundCount);
 }
 
-QPointF QCurver::getEstimatedNextPos(float deltat, float angle, float velocityMultiplier) {
-	return lastPoint + deltat * velocity * velocityMultiplier * getDirectionRotatedBy(angle);
+QPointF QCurver::getEstimatedNextPos(float deltat, float angle, float velocityMultiplier, float thicknessMultiplier) {
+	QPointF perpendicularVector = getDirectionRotatedBy(-M_PI/2);
+	return lastPoint + deltat * velocity * velocityMultiplier * getDirectionRotatedBy(angle) + thicknessMultiplier * thickness * perpendicularVector;
 }
 
 QPointF QCurver::getDirectionRotatedBy(float angle) {

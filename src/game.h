@@ -22,7 +22,7 @@
 #include "client.h"
 #define MAXPLAYERCOUNT 16
 #define MAXITEMCOUNT 20
-#define AIINTERVAL 4
+#define AIINTERVAL 2
 #define ITEMVARIETY 6
 
 
@@ -43,6 +43,7 @@ public:
 	Q_INVOKABLE void setController(int index, int newControllerState);
 	Q_INVOKABLE void setItemPriority(int index, int newPriority);
     Q_INVOKABLE void setFieldSize(int s);
+    Q_INVOKABLE void setTimeMultiplier(int t);
 	Q_INVOKABLE void close();
 	QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *);
     ~Game();
@@ -94,6 +95,8 @@ private:
 	int itemPriority[ITEMVARIETY] = {3, 0, 1, 0, 0, 2};
 	int itemPrioritySum = 0; //a for loop will set this in the start() method
     int fieldsize = 1000;
+    int timeMultiplier = 1;
+    int effectiveTimeMultiplier = 1;
 };
 
 #endif // GAME_H

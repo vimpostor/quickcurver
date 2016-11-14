@@ -33,11 +33,11 @@ public:
 	bool checkforIntersection(QPointF a, QPointF b);
 	void reset(); //completely resets for next round
 	void cleanInstall(); //resets in the round (like from a cleaninstall item)
-	QPointF getPos();
+	QPointF getPos(int offset = 0);
 	void doubleSpeed();
 	void halfSpeed();
 	bool verifyCorrectRound(int round);
-	QPointF getEstimatedNextPos(float deltat, float angle, float velocityMultiplier = 1);
+	QPointF getEstimatedNextPos(float deltat, float angle, float velocityMultiplier = 1, float thicknessMultiplier=0);
 	float getAngle();
 	void doubleThickness();
 	void halfThickness();
@@ -48,7 +48,8 @@ public:
     void clientNewSegment();
     void clientAddPoint(QPointF p);
     void clientReset();
-
+	QPointF getDirectionRotatedBy(float angle);
+	int thickness = 4;
 signals:
 	void died(QCurver* who);
 	void requestIntersectionChecking(QPointF a, QPointF b);
@@ -67,10 +68,8 @@ private:
 	int velocity = 128;
 	int baseSpeed = 128;
 	void rotateDirection(float radians);
-	QPointF getDirectionRotatedBy(float angle);
 	float rotateVelocity = M_PI;
 	QTime lastnewSegment;
-	int thickness = 4;
     int segmentchangeTime = 2000; //amount of time in milliseconds that you produce no line between segments
     int nextSegmentTime = 2000; //amount of time that you produce a line
 	QSGNode* node;

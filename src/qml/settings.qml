@@ -70,6 +70,20 @@ TabbedPage {
                         darkBackground: true
                         onValueChanged: game.setFieldSize(value)
                     }
+                    Label {
+                        text: "Time Multiplier when only bots are alive (Experimental)"
+                        color: Theme.dark.textColor
+                    }
+                    Slider {
+                        value: 1
+                        tickmarksEnabled: true
+                        stepSize: 1
+                        numericValueLabel: true
+                        minimumValue: 1
+                        maximumValue: 6
+                        darkBackground: true
+                        onValueChanged: game.setTimeMultiplier(value)
+                    }
                 }
             }
         }
