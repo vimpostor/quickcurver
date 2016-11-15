@@ -124,15 +124,15 @@ void Server::start() {
 	QByteArray datagram;
 	datagram.append("STARTED");
 	sendToAll(&datagram);
-	broadcastTimer = new QTimer(this);
-	connect(broadcastTimer, SIGNAL(timeout()), this, SLOT(broadcast()));
-	broadcastTimer->start(BROADCASTINTERVAL);
+    broadcastTimer = new QTimer(this);
+    connect(broadcastTimer, SIGNAL(timeout()), this, SLOT(broadcast()));
+    broadcastTimer->start(BROADCASTINTERVAL);
 }
 
 void Server::broadcast() {
-	for (int i = 0; i < playercount; i++) {
-		QCurver *c = curver[i];
-		QByteArray datagram;
+    for (int i = 0; i < playercount; i++) {
+        QCurver *c = curver[i];
+        QByteArray datagram;
         QDataStream out(&datagram, QIODevice::WriteOnly);
         out << QString("HEAD") << i << c->getPos() << c->getColor();
         sendToAll(&datagram);
@@ -141,11 +141,11 @@ void Server::broadcast() {
         //now send curver data
         bool newSegment = c->moveToNextSegment(); //tries moving to next segment if all data was read from the last one
         out << QString("POS") << i << newSegment;
-        for (int sentPoints = 0; sentPoints < 16 && c->hasUnsyncedSegPoints(); sentPoints++) { //add points
+        for (int sentPoints = 0; sentPoints < 16 && c->hasUnsyncedSegPoints(); ++sentPoints) { //add points
             out << c->readUnsyncedSegPoint();
         }
         sendToAll(&datagram);
-	}
+    }
 }
 
 void Server::sendToAll(QByteArray *datagram) {

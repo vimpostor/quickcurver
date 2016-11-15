@@ -40,7 +40,7 @@ void AIController::makeMove(float deltat) {
 	QPointF perpendicularVector = curver->getDirectionRotatedBy(-M_PI/2);
 	QPointF currentPosL = currentPos + curver->thickness * perpendicularVector;
 	QPointF currentPosR = currentPos - curver->thickness * perpendicularVector;
-	for (int collisionDistance = 50; collisionDistance < 101; collisionDistance+=50) {
+    for (int collisionDistance = 50; collisionDistance < 101; collisionDistance+=50) {
 		int distanceWeight = collisionDistance == 50 ? PLAYERCOLLISION_PENALTY_NEAR : PLAYERCOLLISION_PENALTY_FAR;
 		for (int direction = -1; direction < 2; direction+=2) {
 			for (turnAngle = 0; qAbs(turnAngle) < MAXANGLE; turnAngle+=direction*ANGLEINCREMENT) {
@@ -49,13 +49,13 @@ void AIController::makeMove(float deltat) {
 				for (int i = 0; i < playerCount && !c; i++) {
 					// c = player[i]->checkforIntersection(currentPos, curver->getEstimatedNextPos(deltat, turnAngle, 80));
 					c = player[i]->checkforIntersection(currentPosL, curver->getEstimatedNextPos(deltat, turnAngle, collisionDistance, -1)); //first check left side
-					c &= player[i]->checkforIntersection(currentPosR, curver->getEstimatedNextPos(deltat, turnAngle, collisionDistance, 1)); //right side
+                    c |= player[i]->checkforIntersection(currentPosR, curver->getEstimatedNextPos(deltat, turnAngle, collisionDistance, 1)); //right side
 				}
 				if (!c) { //when we found the first acceptable angle we break
 					break;
 				}
 			}
-			rotatePriority[direction+1] += (M_PI/2-turnAngle)/M_PI*distanceWeight; //the higher the angle that we have to rotate, the less likely we want to take that route (linearly interpolated)
+            rotatePriority[direction+1] += (MAXANGLE-turnAngle)/M_PI*distanceWeight; //the higher the angle that we have to rotate, the less likely we want to take that route (linearly interpolated)
 		}
 	}
 

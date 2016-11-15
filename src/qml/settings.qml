@@ -80,7 +80,7 @@ TabbedPage {
                         stepSize: 1
                         numericValueLabel: true
                         minimumValue: 1
-                        maximumValue: 6
+                        maximumValue: 5
                         darkBackground: true
                         onValueChanged: game.setTimeMultiplier(value)
                     }

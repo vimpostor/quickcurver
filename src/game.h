@@ -22,7 +22,7 @@
 #include "client.h"
 #define MAXPLAYERCOUNT 16
 #define MAXITEMCOUNT 20
-#define AIINTERVAL 2
+#define AIINTERVAL 4
 #define ITEMVARIETY 6
 
 

@@ -1,6 +1,9 @@
 #include "qcurver.h"
 
 QCurver::QCurver(QSGNode *node, QColor color, int baseSpeed, int fieldsize) { //server
+    for (int i = 0; i < MAXSEGMENTCOUNT; ++i) {
+        segments[i] = NULL;
+    }
 	connect(this,SIGNAL(died(QCurver*)), this, SLOT(rollDieAnimation()));
 	this->color = color;
 	this->node = node;
@@ -18,6 +21,9 @@ QCurver::QCurver(QSGNode *node, QColor color, int baseSpeed, int fieldsize) { //
 }
 
 QCurver::QCurver(QSGNode *node, QColor color) { //client
+    for (int i = 0; i < MAXSEGMENTCOUNT; ++i) {
+        segments[i] = NULL;
+    }
     this->color = color;
     this->node = node;
     material = new QSGFlatColorMaterial;
