@@ -40,8 +40,8 @@ void AIController::makeMove(float deltat) {
 	QPointF perpendicularVector = curver->getDirectionRotatedBy(-M_PI/2);
 	QPointF currentPosL = currentPos + curver->thickness * perpendicularVector;
 	QPointF currentPosR = currentPos - curver->thickness * perpendicularVector;
-    for (int collisionDistance = 50; collisionDistance < 101; collisionDistance+=50) {
-		int distanceWeight = collisionDistance == 50 ? PLAYERCOLLISION_PENALTY_NEAR : PLAYERCOLLISION_PENALTY_FAR;
+    for (int collisionDistance = 40; collisionDistance <= 90; collisionDistance+=50) {
+        int distanceWeight = collisionDistance == 40 ? PLAYERCOLLISION_PENALTY_NEAR : PLAYERCOLLISION_PENALTY_FAR;
 		for (int direction = -1; direction < 2; direction+=2) {
 			for (turnAngle = 0; qAbs(turnAngle) < MAXANGLE; turnAngle+=direction*ANGLEINCREMENT) {
 				c = false;

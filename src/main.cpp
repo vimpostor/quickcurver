@@ -27,7 +27,6 @@ int main(int argc, char *argv[])
 	QObject *object = component.create();
 	Game* game = object->findChild<Game*>("game");
 	game->setQmlObject(object);
-//	engine.load(QUrl(QLatin1String("qrc:/main.qml")));
 
     return app.exec();
 }
