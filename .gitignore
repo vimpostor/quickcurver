@@ -41,3 +41,6 @@ CMakeLists.txt.user
 #Ignore sublime project file
 *.sublime-project
 *.sublime-workspace
+# KDevelop
+*.kdev4
+/.kdev4/*

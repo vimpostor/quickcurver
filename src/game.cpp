@@ -82,13 +82,12 @@ void Game::progress() {
     float deltat = (float) lastTime.msecsTo(QTime::currentTime())/1000 * effectiveTimeMultiplier;
     lastTime = QTime::currentTime();
     if (lastItemSpawn.msecsTo(lastTime) > nextItemSpawn) {
-        qDebug() << "Item spawned";
         int i;
         for (i = 0; items[i] != NULL; i++) { //find first free item slot
         }
         int r = segment::randInt(1, itemPrioritySum);
         int itemSelector = 0;
-        for (itemSelector; r > 0; r -= itemPriority[itemSelector], itemSelector++) {};
+        for (itemSelector = 0; r > 0; r -= itemPriority[itemSelector], itemSelector++) {};
         itemSelector--;
         switch (itemSelector) {
         case 0:

@@ -32,6 +32,7 @@ void Client::sendKey(Qt::Key k) {
 }
 
 void Client::releaseKey(Qt::Key k) {
+    (void) k; // suppresses unused variable warning
 	QByteArray datagram;
 	datagram.append("NONE");
 	udpSocket->writeDatagram(datagram, *ip, port);
