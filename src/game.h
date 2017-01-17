@@ -96,7 +96,7 @@ private:
 	int itemPriority[ITEMVARIETY] = {3, 0, 1, 0, 0, 2};
 	int itemPrioritySum = 0; //a for loop will set this in the start() method
     int itemSpawnrate = 10;
-    int fieldsize = 1000;
+    int fieldsize = 800;
     int timeMultiplier = 1;
     int effectiveTimeMultiplier = 1;
 };

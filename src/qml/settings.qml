@@ -61,12 +61,12 @@ TabbedPage {
                         color: Theme.dark.textColor
                     }
                     Slider {
-                        value: 1000
+                        value: 800
                         tickmarksEnabled: true
                         stepSize: 50
                         numericValueLabel: true
                         minimumValue: 300
-                        maximumValue: 1200
+                        maximumValue: 1000
                         darkBackground: true
                         onValueChanged: game.setFieldSize(value)
                     }
