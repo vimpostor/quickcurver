@@ -42,6 +42,7 @@ public:
 	Q_INVOKABLE void setBaseSpeed(int baseSpeed);
 	Q_INVOKABLE void setController(int index, int newControllerState);
 	Q_INVOKABLE void setItemPriority(int index, int newPriority);
+    Q_INVOKABLE void setItemSpawnrate(int value);
     Q_INVOKABLE void setFieldSize(int s);
     Q_INVOKABLE void setTimeMultiplier(int t);
 	Q_INVOKABLE void close();
@@ -94,6 +95,7 @@ private:
 	void increaseScore(int index);
 	int itemPriority[ITEMVARIETY] = {3, 0, 1, 0, 0, 2};
 	int itemPrioritySum = 0; //a for loop will set this in the start() method
+    int itemSpawnrate = 10;
     int fieldsize = 1000;
     int timeMultiplier = 1;
     int effectiveTimeMultiplier = 1;

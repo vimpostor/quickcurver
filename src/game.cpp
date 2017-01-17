@@ -81,7 +81,7 @@ void Game::progress() {
 	//calculate time since last progress()
     float deltat = (float) lastTime.msecsTo(QTime::currentTime())/1000 * effectiveTimeMultiplier;
     lastTime = QTime::currentTime();
-    if (lastItemSpawn.msecsTo(lastTime) > nextItemSpawn) {
+    if (itemSpawnrate != 0 && lastItemSpawn.msecsTo(lastTime) > nextItemSpawn) {
         int i;
         for (i = 0; items[i] != NULL; i++) { //find first free item slot
         }
@@ -113,7 +113,7 @@ void Game::progress() {
         }
         items[i]->setRound(roundCount);
         lastItemSpawn = lastTime;
-        nextItemSpawn = segment::randInt(1000,10000);
+        nextItemSpawn = segment::randInt(10000 * 1/itemSpawnrate,100000 * 1/itemSpawnrate); // dont worry this is only entered, when itemSpawnrate != 0
     }
     for (int i = 0; i < playercount; i++) {
         if (alive[i]) {
@@ -280,6 +280,10 @@ void Game::setController(int index, int newControllerState) {
 
 void Game::setItemPriority(int index, int newPriority) {
 	itemPriority[index] = newPriority;
+}
+
+void Game::setItemSpawnrate(int value) {
+    itemSpawnrate = value;
 }
 
 void Game::setJoinStatus(QString s) {

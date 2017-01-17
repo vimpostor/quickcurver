@@ -94,6 +94,11 @@ TabbedPage {
             anchors.fill: parent
             model: ListModel {
                 ListElement {
+                    name: "Header"
+                    description: "General item spawn rate"
+                    defaultValue: 10
+                }
+                ListElement {
                     name: "Faster Item"
                     description: "Makes you faster for some time"
                     defaultValue: 3
@@ -126,7 +131,7 @@ TabbedPage {
             }
 
             delegate: ListItem.Subtitled {
-                text: name
+                text: name == "Header" ? "Item Spawn Rate" : name
                 subText: description
                 enabled: defaultValue != 0 //some items are not implemented yet
                 secondaryItem: Slider {
@@ -135,8 +140,14 @@ TabbedPage {
                     tickmarksEnabled: true
                     numericValueLabel: true
                     minimumValue: 0
-                    maximumValue: 10
-                    onValueChanged: game.setItemPriority(index, value)
+                    maximumValue: name == "Header" ? 100 : 10
+                    onValueChanged: {
+                        if (name == "Header") {
+                            game.setItemSpawnrate(value);
+                        } else {
+                            game.setItemPriority(index, value);
+                        }
+                    }
                 }
             }
         }
