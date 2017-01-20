@@ -83,37 +83,42 @@ void Game::progress() {
     lastTime = QTime::currentTime();
     if (itemSpawnrate != 0 && lastItemSpawn.msecsTo(lastTime) > nextItemSpawn) {
         int i;
-        for (i = 0; items[i] != NULL; i++) { //find first free item slot
+        for (i = 0; i < MAXITEMCOUNT && items[i] != NULL; i++) { //find first free item slot
         }
-        int r = segment::randInt(1, itemPrioritySum);
-        int itemSelector = 0;
-        for (itemSelector = 0; r > 0; r -= itemPriority[itemSelector], itemSelector++) {};
-        itemSelector--;
-        switch (itemSelector) {
-        case 0:
-            items[i] = new FastItem(node, fieldsize);
-            break;
-        case 1:
-//			items[i] = new SlowItem(node);
-            break;
-        case 2:
-            items[i] = new CleaninstallItem(node, fieldsize);
-            break;
-        case 3:
-            //global wall hack
-            break;
-        case 4:
-            //solo wall hack
-            break;
-        case 5:
-            items[i] = new FatterItem(node, fieldsize);
-            break;
-        default:
-            break;
+        if (i == MAXITEMCOUNT) { // no free slot
+            qDebug() << "No free slot for a new item";
+        } else { // free slot at i
+            int r = segment::randInt(1, itemPrioritySum);
+            int itemSelector = 0;
+            for (itemSelector = 0; r > 0; r -= itemPriority[itemSelector], itemSelector++) {};
+            itemSelector--;
+            switch (itemSelector) {
+            case 0:
+                items[i] = new FastItem(node, fieldsize);
+                break;
+            case 1:
+    //			items[i] = new SlowItem(node);
+                break;
+            case 2:
+                items[i] = new CleaninstallItem(node, fieldsize);
+                break;
+            case 3:
+                //global wall hack
+                break;
+            case 4:
+                //solo wall hack
+                break;
+            case 5:
+                items[i] = new FatterItem(node, fieldsize);
+                break;
+            default:
+                qDebug() << "This should not happen"; // the algorithm should always be able to decide what Item to spawn
+                break;
+            }
+            items[i]->setRound(roundCount);
         }
-        items[i]->setRound(roundCount);
         lastItemSpawn = lastTime;
-        nextItemSpawn = segment::randInt(10000 * 1/itemSpawnrate,100000 * 1/itemSpawnrate); // dont worry this is only entered, when itemSpawnrate != 0
+        nextItemSpawn = segment::randInt(10000/itemSpawnrate,100000/itemSpawnrate); // dont worry this is only entered, when itemSpawnrate != 0
     }
     for (int i = 0; i < playercount; i++) {
         if (alive[i]) {
