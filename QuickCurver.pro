@@ -7,7 +7,6 @@ SOURCES += src/curveitem.cpp \
 	src/dieanimation.cpp \
 	src/fastitem.cpp \
 	src/game.cpp \
-	src/graphnode.cpp \
 	src/headnode.cpp \
 	src/main.cpp \
 	src/qcurver.cpp \
@@ -38,7 +37,6 @@ HEADERS += src/curveitem.h \
 	src/dieanimation.h \
 	src/fastitem.h \
 	src/game.h \
-	src/graphnode.h \
 	src/headnode.h \
 	src/qcurver.h \
 	src/segment.h \
