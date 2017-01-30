@@ -44,3 +44,4 @@ CMakeLists.txt.user
 # KDevelop
 *.kdev4
 /.kdev4/*
+.directory
