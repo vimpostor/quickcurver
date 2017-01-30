@@ -87,6 +87,7 @@ void Game::progress() {
         }
         if (i == MAXITEMCOUNT) { // no free slot
             qDebug() << "No free slot for a new item, will try spawning later...";
+            nextItemSpawn = segment::randInt(100000/itemSpawnrate,1000000/itemSpawnrate); // dont worry this is only entered, when itemSpawnrate != 0
         } else { // free slot at i
             int r = segment::randInt(1, itemPrioritySum);
             int itemSelector = 0;
@@ -116,9 +117,9 @@ void Game::progress() {
                 break;
             }
             items[i]->setRound(roundCount);
+            nextItemSpawn = segment::randInt(10000/itemSpawnrate,100000/itemSpawnrate); // dont worry this is only entered, when itemSpawnrate != 0
         }
         lastItemSpawn = lastTime;
-        nextItemSpawn = segment::randInt(10000/itemSpawnrate,100000/itemSpawnrate); // dont worry this is only entered, when itemSpawnrate != 0
     }
     for (int i = 0; i < playercount; i++) {
         if (alive[i]) {
