@@ -31,6 +31,9 @@ Item {
                 anchors.fill: parent
                 model: playerListModel
                 delegate: playerDelegate
+                add: Transition {
+                    NumberAnimation { properties: "y"; from: startButton.y; duration: 100}
+                }
             }
         }
         Button {
