@@ -81,12 +81,12 @@ void Game::progress() {
 	//calculate time since last progress()
     float deltat = (float) lastTime.msecsTo(QTime::currentTime())/1000 * effectiveTimeMultiplier;
     lastTime = QTime::currentTime();
-    if (itemSpawnrate != 0 && lastItemSpawn.msecsTo(lastTime) > nextItemSpawn) {
+    if (itemSpawnrate != 0 && lastItemSpawn.msecsTo(lastTime) > nextItemSpawn) { // try spawning item
         int i;
         for (i = 0; i < MAXITEMCOUNT && items[i] != NULL; i++) { //find first free item slot
         }
         if (i == MAXITEMCOUNT) { // no free slot
-            qDebug() << "No free slot for a new item";
+            qDebug() << "No free slot for a new item, will try spawning later...";
         } else { // free slot at i
             int r = segment::randInt(1, itemPrioritySum);
             int itemSelector = 0;
@@ -112,7 +112,7 @@ void Game::progress() {
                 items[i] = new FatterItem(node, fieldsize);
                 break;
             default:
-                qDebug() << "This should not happen"; // the algorithm should always be able to decide what Item to spawn
+                qDebug() << "(EE) This should not happen, the algorithm should always be able to decide what item to spawn";
                 break;
             }
             items[i]->setRound(roundCount);

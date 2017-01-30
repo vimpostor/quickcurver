@@ -145,7 +145,7 @@ TabbedPage {
                         if (name == "Header") {
                             game.setItemSpawnrate(value);
                         } else {
-                            game.setItemPriority(index, value);
+                            game.setItemPriority(index-1, value);
                         }
                     }
                 }
