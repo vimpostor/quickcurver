@@ -2,6 +2,7 @@ import QtQuick 2.7
 import Material 0.3
 import Material.ListItems 0.1 as ListItem
 import Material.Extras 0.1
+import QtQuick.Layouts 1.1
 
 Page {
     property int fieldsize: 1000
@@ -15,7 +16,10 @@ Page {
         width: parent.width - fieldsize
         backgroundColor: Theme.backgroundColor
         Card {
-            anchors.fill: parent
+            id: statsCard
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
             anchors.margins: dp(32)
             ListItem.Subheader {
                 id: scoreListHeader
@@ -40,6 +44,75 @@ Page {
                     secondaryItem: Label {
                         anchors.verticalCenter: parent.verticalCenter
                         text: escore + " (+" +  eroundScore + ")"
+                    }
+                }
+            }
+        }
+        Card {
+            id: chatCard
+            anchors.top: statsCard.bottom
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.margins: dp(32)
+            ListItem.Subheader {
+                id: chatHeader
+                text: "Chat"
+                anchors.top: parent.top
+            }
+            View {
+                anchors.top: chatHeader.bottom
+                anchors.bottom: messageRowLayout.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                ListModel {
+                    id: chatModel
+//                    ListElement {
+//                        username: "Alice"
+//                        message: "Test message"
+//                    }
+                }
+                ListView {
+                    id: chatListView
+                    anchors.fill: parent
+                    model: chatModel
+                    delegate: chatDelegate
+                    add: Transition {
+                        NumberAnimation { properties: "y"; from: messageRowLayout.y; duration: 150}
+                    }
+                }
+                Component {
+                    id: chatDelegate
+                    ListItem.Subtitled {
+                        text: username
+                        subText: message
+                    }
+                }
+            }
+            RowLayout {
+                id: messageRowLayout
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                anchors.margins: dp(16)
+                TextField {
+                    id: chatTextField
+                    characterLimit: 32
+                    Layout.fillWidth: true
+                    placeholderText: "Send messages..."
+                    floatingLabel: true
+                    onAccepted: sendMessageAction.trigger()
+                }
+                ActionButton {
+                    iconName: "content/send"
+                    action: Action {
+                        id: sendMessageAction
+                        onTriggered: {
+                            chatModel.append({username: "Me", message: chatTextField.text});
+                            chatListView.positionViewAtEnd();
+                            chatTextField.text = "";
+                            game.focus = true;
+                        }
                     }
                 }
             }
