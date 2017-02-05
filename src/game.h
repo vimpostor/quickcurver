@@ -46,6 +46,7 @@ public:
     Q_INVOKABLE void setFieldSize(int s);
     Q_INVOKABLE void setTimeMultiplier(int t);
 	Q_INVOKABLE void close();
+    Q_INVOKABLE void requestSendMessage(QString message);
 	QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *);
     ~Game();
 	Q_INVOKABLE void addPlayer();
@@ -73,7 +74,7 @@ private:
 	AIController* ai[MAXPLAYERCOUNT];
 	Server *server;
 	Client *client;
-	bool host = true;
+    bool isHost = true;
 	int score[MAXPLAYERCOUNT];
 	CurveItem* items[MAXITEMCOUNT];
 	QString names[MAXITEMCOUNT];
@@ -93,6 +94,7 @@ private:
 	int frameCount = 0;
 	QObject *qmlobject;
 	void increaseScore(int index);
+    void sendMessageToQml(QString sender, QString message);
 	int itemPriority[ITEMVARIETY] = {3, 0, 1, 0, 0, 2};
 	int itemPrioritySum = 0; //a for loop will set this in the start() method
     int itemSpawnrate = 10;

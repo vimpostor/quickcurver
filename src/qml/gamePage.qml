@@ -5,6 +5,10 @@ import Material.Extras 0.1
 import QtQuick.Layouts 1.1
 
 Page {
+    function sendMessage(username, message) { // called by cpp when a message was sent
+        chatModel.append({username: username, message: message});
+        chatListView.positionViewAtEnd();
+    }
     property int fieldsize: 1000
     backgroundColor: "#31363b"
     focus: false

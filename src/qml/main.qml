@@ -8,6 +8,9 @@ import QtQuick.Layouts 1.1
 
 ApplicationWindow {
     onClosing: game.close()
+    function sendMessage(username, message) {
+        pageStack.currentItem.sendMessage(username, message);
+    }
     function changeScore(index, newScore, roundScore) {
         playerListModel.setProperty(index, "escore", newScore);
         playerListModel.setProperty(index, "eroundScore", roundScore);

@@ -61,7 +61,7 @@ void Game::start() {
 
 void Game::clientStart(QString ip, int port) {
     server->shutdown();
-    host = false;
+    isHost = false;
     node = new QSGNode;
     wall = new wallNode(node, fieldsize);
     if (client != NULL) {
@@ -143,7 +143,7 @@ void Game::progress() {
 }
 
 void Game::sendKey(Qt::Key k) {
-	if (host) {
+    if (isHost) {
 		for (int i = 0; i < playercount; i++) {
 			if (!controlledByAI[i] && !controlledByNetwork[i]) {
 				if (controls[i][0] == k) {
@@ -159,7 +159,7 @@ void Game::sendKey(Qt::Key k) {
 }
 
 void Game::releaseKey(Qt::Key k) {
-	if (host) {
+    if (isHost) {
 		for (int i = 0; i < playercount; i++) {
 			if (!controlledByAI[i] && !controlledByNetwork[i]) {
 				if (controls[i][0] == k || controls[i][1] == k) {
@@ -278,6 +278,12 @@ void Game::increaseScore(int index) {
 	QMetaObject::invokeMethod(qmlobject, "changeScore", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, index) , Q_ARG(QVariant, score[index]), Q_ARG(QVariant, roundScore[index]));
 }
 
+void Game::sendMessageToQml(QString sender, QString message) {
+    QVariant returnedValue;
+    QMetaObject::invokeMethod(qmlobject, "sendMessage", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, sender), Q_ARG(QVariant, message));
+}
+
+
 void Game::setController(int index, int newControllerState) {
 	controlledByAI[index] = (newControllerState == 1);
 	controlledByNetwork[index] = (newControllerState == 2);
@@ -316,4 +322,12 @@ void Game::setPlayerStatus(int index, QString s) {
 
 void Game::setTimeMultiplier(int t) {
     timeMultiplier = t;
+}
+
+void Game::requestSendMessage(QString message) {
+    if (isHost) {
+        // call something from server
+    } else {
+        // call something from client
+    }
 }
