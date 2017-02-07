@@ -19,14 +19,18 @@ public:
 	void start();
 	void setPlayerCount(int playercount);
     void newRound();
+    void broadcastChatMessage(QString username, QString message);
 
 signals:
     void playerStatusChanged(int index, QString s);
+    void sendMessage(QString username, QString message);
 private slots:
 	void readPendingDatagrams();
-	void socketError(QAbstractSocket::SocketError socketError);
+    void udpSocketError(QAbstractSocket::SocketError socketError);
+    void tcpSocketError(QAbstractSocket::SocketError socketError);
 	void broadcast();
     void newConnection();
+    void tcpReadyRead();
 private:
     QTcpSocket *clientConnections[MAXPLAYERCOUNT];
     void initUdpSocket();
@@ -34,17 +38,26 @@ private:
 	QUdpSocket *udpSocket;
     QTcpServer *tcpServer;
 	quint16 port;
-	bool available[MAXPLAYERCOUNT]; //determines if curver[i] is an Online player. if it already is used is determined by clients
-	QHostAddress *clients[MAXPLAYERCOUNT]; //is NULL if not connected, otherwise holds client information
-	int isValidInput(QHostAddress *sender); //returns -1 on error, else returns the index of the curver that sender is in control of
+    bool available[MAXPLAYERCOUNT]; // determines if curver[i] is an Online player. if it already is used is determined by clientsTcp
+    QHostAddress *clientsUdp[MAXPLAYERCOUNT]; // is NULL if not connected, otherwise holds client information
+    QTcpSocket *clientsTcp[MAXPLAYERCOUNT]; // is NULL if not connected, otherwise holds an active tcp socket to client
+    int isValidInput(QHostAddress *sender); // returns -1 on error, else returns the index of the curver that sender is in control of
 	QCurver **curver;
 	void turn(QHostAddress *sender, rotation r);
 	bool started = false;
 	QTimer *broadcastTimer;
-	void sendToAll(QByteArray *datagram);
+    void sendToAllUdp(QByteArray *datagram);
 	int playercount = 0;
     QHostAddress *serverIp;
 	void setServerIp();
+    int getFreePlace(); // returns index of first free slot. Returns -1, if no slot is free
+    void sendToAllTcp(QByteArray *block); // sends block to all
+    void transmitTcpMessage(QString message, QTcpSocket *s = NULL); // if s is not specified, sends to all
+    void transmitTcpMessages(QString *messages, int length, QTcpSocket *s = NULL);
+    void connectClient(QTcpSocket *client, int index);
+    bool tryConnectingClient(QTcpSocket *client); // returns true on success, also sends ACCEPTED OR REJECTED to the client
+    void disconnectClient(QTcpSocket *client, QString reason = ""); // if reason is specified, the client will be notified about the disconnection
+    QDataStream in[MAXPLAYERCOUNT];
 };
 
 #endif // SERVER_H

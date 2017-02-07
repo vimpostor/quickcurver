@@ -16,7 +16,9 @@ ApplicationWindow {
         playerListModel.setProperty(index, "eroundScore", roundScore);
     }
     function setJoinStatus(s) {
-        if (s === "JOINED") {
+        if (s === "TCPACK") {
+            joinButton.text = "Testing UDP connection...";
+        } else if (s === "JOINED") {
             joinButton.text = "Joined, waiting for host to start...";
         } else if (s === "REJECTED") {
             clientDialog.close();
@@ -77,7 +79,7 @@ ApplicationWindow {
             },
             Action {
 //                iconName: "navigation/refresh"
-                name: "Update"
+                name: "Search for updates..."
                 onTriggered: playerselector.mysnackbar.open("Looks like the developer was too lazy to implement an Auto-Update feature yet. Stay tuned!")
             },
             Action {
@@ -181,6 +183,7 @@ ApplicationWindow {
     }
     Dialog {
         id: licensesDialog
+        hasActions: false
         anchors.fill: parent
         anchors.margins: dp(80)
         Licenses {

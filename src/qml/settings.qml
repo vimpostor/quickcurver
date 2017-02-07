@@ -84,6 +84,15 @@ TabbedPage {
                         darkBackground: true
                         onValueChanged: game.setTimeMultiplier(value)
                     }
+                    Label {
+                        text: "Show winner as chat message"
+                        color: Theme.dark.textColor
+                    }
+                    Switch {
+                        checked: true
+                        darkBackground: true
+                        onCheckedChanged: game.setSendWinnerMessages(checked)
+                    }
                 }
             }
         }

@@ -50,6 +50,7 @@ public:
 	QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *);
     ~Game();
 	Q_INVOKABLE void addPlayer();
+    Q_INVOKABLE void setSendWinnerMessages(bool checked);
 	short int playercount = 2;
 	void setQmlObject(QObject *o);
 
@@ -63,6 +64,7 @@ private slots:
 	void setJoinStatus(QString s);
     void setPlayerStatus(int index, QString s);
     void updateGUI();
+    void sendMessageToQml(QString sender, QString message);
 
 private:
     QCurver* curver[MAXPLAYERCOUNT];
@@ -94,13 +96,14 @@ private:
 	int frameCount = 0;
 	QObject *qmlobject;
 	void increaseScore(int index);
-    void sendMessageToQml(QString sender, QString message);
 	int itemPriority[ITEMVARIETY] = {3, 0, 1, 0, 0, 2};
 	int itemPrioritySum = 0; //a for loop will set this in the start() method
     int itemSpawnrate = 10;
     int fieldsize = 800;
     int timeMultiplier = 1;
     int effectiveTimeMultiplier = 1;
+    QString username = "me";
+    bool sendWinnerMessages = true;
 };
 
 #endif // GAME_H

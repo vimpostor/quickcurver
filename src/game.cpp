@@ -55,6 +55,7 @@ void Game::start() {
     lastItemSpawn = lastTime;
     nextItemSpawn = segment::randInt(5000,10000);
     server->setPlayerCount(playercount);
+    connect(server, SIGNAL(sendMessage(QString,QString)), this, SLOT(sendMessageToQml(QString,QString)));
     server->start();
     timer->start(timerInterval);
 }
@@ -70,6 +71,7 @@ void Game::clientStart(QString ip, int port) {
     client = new Client(ip, node, port, this);
     connect(client, SIGNAL(joinStatusChanged(QString)), this, SLOT(setJoinStatus(QString)));
     connect(client, SIGNAL(updateGUI()), this, SLOT(updateGUI()));
+    connect(client, SIGNAL(sendMessage(QString,QString)), this, SLOT(sendMessageToQml(QString,QString)));
     setFlag(ItemHasContents);
 }
 
@@ -177,37 +179,44 @@ void Game::addPlayer() {
 }
 
 void Game::curverDied(QCurver *who) {
-	int i;
-    bool onlyBotsAlive = true;
-	for (i = 0; curver[i] != who; i++) {
-		if (alive[i]) //if he is still alive, increase his score
-			increaseScore(i);
-	}
-	alive[i] = false;
-	qDebug() << names[i] + " died";
-	i++;
-	for (; i < playercount; i++) {
-		if (alive[i])
-			increaseScore(i);
-	}
-	int stillAlive = 0;
-	int alivePlayer;
-	for (i = 0; i < playercount; i++) {
-		if (alive[i]) {
-			stillAlive++;
-			alivePlayer = i;
-            if (!controlledByAI[i]) {
-                onlyBotsAlive = false;
-            }
-		}
-	}
-    if (onlyBotsAlive) {
-        effectiveTimeMultiplier = timeMultiplier;
+    int index; // first get the index of the curver that died
+    for (index = 0; index < playercount && curver[index] != who; ++index) {
     }
-	if (stillAlive == 1) {
-		qDebug() << names[alivePlayer] + " has won!";
-		nextRound();
-	}
+    if (alive[index]) { // todo: fix "curverDied" being called multiple times
+        int i;
+        bool onlyBotsAlive = true;
+        for (i = 0; curver[i] != who; i++) {
+            if (alive[i]) //if he is still alive, increase his score
+                increaseScore(i);
+        }
+        alive[i] = false;
+//        server->broadcastChatMessage("Chat Bot", names[i] + " died");
+        i++;
+        for (; i < playercount; ++i) {
+            if (alive[i])
+                increaseScore(i);
+        }
+        int stillAlive = 0;
+        int alivePlayer;
+        for (i = 0; i < playercount; i++) {
+            if (alive[i]) {
+                stillAlive++;
+                alivePlayer = i;
+                if (!controlledByAI[i]) {
+                    onlyBotsAlive = false;
+                }
+            }
+        }
+        if (onlyBotsAlive) {
+            effectiveTimeMultiplier = timeMultiplier;
+        }
+        if (stillAlive == 1) {
+            if (sendWinnerMessages) {
+                server->broadcastChatMessage("Chat Bot", names[alivePlayer] + " has won!");
+            }
+            nextRound();
+        }
+    }
 }
 
 void Game::checkforIntersection(QPointF a, QPointF b) {
@@ -225,7 +234,7 @@ void Game::checkforIntersection(QPointF a, QPointF b) {
 
 void Game::setControls(int index, Qt::Key k, bool isRight) {
 	controls[index][isRight] = k;
-	qDebug() << "Assigned key to player "<< index <<": " + QKeySequence(k).toString();
+//	qDebug() << "Assigned key to player "<< index <<": " + QKeySequence(k).toString();
 }
 
 void Game::nextRound() {
@@ -326,8 +335,12 @@ void Game::setTimeMultiplier(int t) {
 
 void Game::requestSendMessage(QString message) {
     if (isHost) {
-        // call something from server
+        server->broadcastChatMessage(username, message);
     } else {
-        // call something from client
+        client->requestSendMessage(username, message);
     }
+}
+
+void Game::setSendWinnerMessages(bool checked) {
+    sendWinnerMessages = checked;
 }

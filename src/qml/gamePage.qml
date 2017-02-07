@@ -112,8 +112,7 @@ Page {
                     action: Action {
                         id: sendMessageAction
                         onTriggered: {
-                            chatModel.append({username: "Me", message: chatTextField.text});
-                            chatListView.positionViewAtEnd();
+                            game.requestSendMessage(chatTextField.text);
                             chatTextField.text = "";
                             game.focus = true;
                         }

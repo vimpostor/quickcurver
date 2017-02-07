@@ -19,17 +19,23 @@ public:
 	void sendKey(Qt::Key k);
 	void releaseKey(Qt::Key k);
 	void shutdown();
+    void requestSendMessage(QString username, QString message);
 signals:
 	void joinStatusChanged(QString s);
     void updateGUI();
+    void sendMessage(QString username, QString message);
 
 private slots:
-	void readPendingDatagrams();
-	void socketError(QAbstractSocket::SocketError socketError);
+    void udpReadPendingDatagrams();
+    void udpSocketError(QAbstractSocket::SocketError socketError);
 	void timeout();
+    void tcpReadyRead();
+    void tcpSocketError(QAbstractSocket::SocketError socketError);
 private:
-	void initSocket();
+    void initUdpSocket();
+    void initTcpSocket();
 	QUdpSocket *udpSocket;
+    QTcpSocket *tcpSocket;
 	QHostAddress *ip;
 	quint16 port;
 	quint16 myport = 55225;
@@ -39,6 +45,8 @@ private:
     QSGNode *node;
     headNode *headnodes[MAXPLAYERCOUNT];
     QCurver *curver[MAXPLAYERCOUNT];
+    QDataStream in;
+    void sendUdpMessage(QString msg);
 };
 
 #endif // CLIENT_H
