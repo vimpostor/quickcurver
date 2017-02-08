@@ -3,7 +3,6 @@ import Material 0.3
 import Material.ListItems 0.1 as ListItem
 import Material.Extras 0.1
 import QtQuick.Layouts 1.1
-import QtQml 2.2
 
 Page {
     function sendMessage(username, message) { // called by cpp when a message was sent

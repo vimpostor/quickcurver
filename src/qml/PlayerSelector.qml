@@ -75,7 +75,7 @@ Item {
                 onMycolorChanged: {
                     game.setColor(index, mycolor);
                 }
-                onClicked: playerEditDialog.show()
+                onClicked: playerEditOverlay.open(playerListView)
 
                 text: name
                 subText: playerController.selectedIndex == 2  ? (eJoined ? "Joined" : "Waiting for player to join...") : "Change color, controls etc..."
@@ -84,100 +84,115 @@ Item {
                     iconName: "editor/mode_edit"
                     anchors.verticalCenter: parent.verticalCenter
                     color: mycolor
-                    onClicked: playerEditDialog.show()
-                }
-                Dialog {
-                    id: playerEditDialog
-                    title: "Edit Player"
-                    hasActions: true
-                    TextField {
-                        id: nameTextField
-                        focus: true
-                        width: parent.width
-                        placeholderText: "Name"
-                        floatingLabel: true
-                        onTextChanged: name = this.text
+                    onClicked: mycolorPicker.show()
+                    Dialog {
+                        id: mycolorPicker
+                        title: "Pick color"
+                        positiveButtonText: "Done"
+                        Grid {
+                            columns: 7
+                            spacing: dp(8)
+                            Repeater {
+                                model: [
+                                    "red", "pink", "purple", "deepPurple", "indigo",
+                                    "blue", "lightBlue", "cyan", "teal", "green",
+                                    "lightGreen", "lime", "yellow", "amber", "orange",
+                                    "deepOrange", "grey", "blueGrey", "brown", "black",
+                                    "white"
+                                ]
+                                Rectangle {
+                                    width: dp(30)
+                                    height: dp(30)
+                                    radius: dp(2)
+                                    color: Palette.colors[modelData]["500"]
+                                    border.width: modelData === "white" ? dp(2) : 0
+                                    border.color: Theme.alpha("#000", 0.26)
+                                    Ink {
+                                        anchors.fill: parent
+                                        onPressed: mycolor = parent.color
+                                    }
+                                }
+                            }
+                        }
                     }
-
-                MenuField {
-                    id: playerController
-                    model: ["Local Player", "Bot", "Online Player"]
-                    width: dp(160)
-                    selectedIndex: eBot ? 1 : 0
-                    onSelectedIndexChanged: game.setController(index, selectedIndex)
                 }
+                OverlayView {
+                    id: playerEditOverlay
+                    width: dp(300)
+                    height: dp(300)
+                    ColumnLayout {
+                        id: playerEditDialog
+                        anchors.fill: parent
+                        anchors.margins: dp(16)
+                        Label {
+                            id: editHeader
+                            text: "Edit player"
+                            width: parent.width
+                            font.pixelSize: dp(22)
+                            Layout.alignment: Qt.AlignCenter
+                        }
 
-                    GridLayout {
-                        id: editPlayerGrid
-                        rowSpacing: dp(20)
-                        columnSpacing: dp(10)
-                        columns: 2
+                        Card {
+                            Layout.fillHeight: true
+                            Layout.fillWidth: true
+                            ColumnLayout {
+                                anchors.fill: parent
+                                anchors.margins: dp(32)
+                                TextField {
+                                    id: nameTextField
+                                    focus: true
+                                    width: parent.width
+                                    placeholderText: "Name"
+                                    floatingLabel: true
+                                    onTextChanged: name = this.text
+                                    Layout.fillWidth: true
+                                }
 
-                        Button {
-                            id: buttonLeft
-                            enabled: playerController.selectedIndex == 0
-                            text: "Left"
-                            elevation: 1
-                            activeFocusOnPress: true
-                            Keys.onPressed: {
-                                if (event.text === "") {
-                                    this.text = "No key description available";
-                                } else {
-                                    this.text = event.text;
+                                MenuField {
+                                    id: playerController
+                                    model: ["Local Player", "Bot", "Online Player"]
+                                    width: dp(160)
+                                    selectedIndex: eBot ? 1 : 0
+                                    Layout.fillWidth: true
+                                    onSelectedIndexChanged: game.setController(index, selectedIndex)
                                 }
-                                game.setControls(index, event.key, false);
-                            }
-                        }
-                        Button {
-                            id: buttonRight
-                            enabled: buttonLeft.enabled
-                            text: "Right"
-                            elevation: 1
-                            activeFocusOnPress: true
-                            Keys.onPressed: {
-                                if (event.text === "") {
-                                    this.text = "No key description available";
-                                } else {
-                                    this.text = event.text;
-                                }
-                                game.setControls(index, event.key, true);
-                            }
-                        }
-                        Text {
-                            text: "Color:"
-                        }
-                        Button {
-                            elevation: 1
-                            backgroundColor: mycolor
-                            onClicked: {
-                                mycolorPicker.show();
-                            }
-                        }
-                        Dialog {
-                            id: mycolorPicker
-                            title: "Pick color"
-                            positiveButtonText: "Done"
-                            Grid {
-                                columns: 7
-                                spacing: dp(8)
-                                Repeater {
-                                    model: [
-                                        "red", "pink", "purple", "deepPurple", "indigo",
-                                        "blue", "lightBlue", "cyan", "teal", "green",
-                                        "lightGreen", "lime", "yellow", "amber", "orange",
-                                        "deepOrange", "grey", "blueGrey", "brown", "black",
-                                        "white"
-                                    ]
-                                    Rectangle {
-                                        width: dp(30)
-                                        height: dp(30)
-                                        radius: dp(2)
-                                        color: Palette.colors[modelData]["500"]
-                                        border.width: modelData === "white" ? dp(2) : 0
-                                        border.color: Theme.alpha("#000", 0.26)
-                                        Ink {
-                                            anchors.fill: parent
-                                            onPressed: mycolor = parent.color
+
+                                GridLayout {
+                                    id: editPlayerGrid
+                                    rowSpacing: dp(20)
+                                    columnSpacing: dp(10)
+                                    columns: 2
+                                    Layout.fillWidth: true
+                                    Layout.alignment: Qt.AlignCenter
+
+                                    Button {
+                                        id: buttonLeft
+                                        enabled: playerController.selectedIndex == 0
+                                        text: "Left"
+                                        elevation: 1
+                                        activeFocusOnPress: true
+                                        Keys.onPressed: {
+                                            if (event.text === "") {
+                                                this.text = "No key description available";
+                                            } else {
+                                                this.text = event.text;
+                                            }
+                                            game.setControls(index, event.key, false);
+                                        }
+                                    }
+                                    Button {
+                                        id: buttonRight
+                                        enabled: buttonLeft.enabled
+                                        text: "Right"
+                                        elevation: 1
+                                        activeFocusOnPress: true
+                                        Keys.onPressed: {
+                                            if (event.text === "") {
+                                                this.text = "No key description available";
+                                            } else {
+                                                this.text = event.text;
+                                            }
+                                            game.setControls(index, event.key, true);
                                         }
                                     }
                                 }
@@ -187,8 +202,6 @@ Item {
                 }
             }
         }
-
-
     }
     ActionButton {
         anchors {
