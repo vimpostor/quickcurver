@@ -91,6 +91,7 @@ Page {
                         text: username
                         subText: message
                         valueText: new Date().toLocaleTimeString("hh:mm");
+                        iconName: "action/account_circle"
                     }
                 }
             }

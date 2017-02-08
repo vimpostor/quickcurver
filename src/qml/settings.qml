@@ -89,7 +89,7 @@ TabbedPage {
                         color: Theme.dark.textColor
                     }
                     Switch {
-                        checked: true
+                        checked: false
                         darkBackground: true
                         onCheckedChanged: game.setSendWinnerMessages(checked)
                     }

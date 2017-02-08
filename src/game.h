@@ -103,7 +103,7 @@ private:
     int timeMultiplier = 1;
     int effectiveTimeMultiplier = 1;
     QString username = "me";
-    bool sendWinnerMessages = true;
+    bool sendWinnerMessages = false;
 };
 
 #endif // GAME_H
