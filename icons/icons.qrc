@@ -4,6 +4,7 @@
     </qresource>
     <qresource prefix="/icons/communication">
         <file alias="email.svg">communication_email.svg</file>
+        <file alias="robot.svg">communication_robot.svg</file>
     </qresource>
     <qresource prefix="/icons/image">
         <file alias="color_lens.svg">image_color_lens.svg</file>

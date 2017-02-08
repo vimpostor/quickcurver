@@ -91,7 +91,7 @@ Page {
                         text: username
                         subText: message
                         valueText: new Date().toLocaleTimeString("hh:mm");
-                        iconName: "action/account_circle"
+                        iconName: username == "Chat Bot"? "communication/robot" : "action/account_circle"
                     }
                 }
             }
