@@ -1,6 +1,5 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.1
-//import QtQuick.Controls 1.3 as QuickControls
 import Material 0.3
 import Material.ListItems 0.1 as ListItem
 import Material.Extras 0.1
@@ -27,7 +26,6 @@ Item {
             anchors.right: parent.right
             ListView {
                 id: playerListView
-//                spacing: dp(8)
                 anchors.fill: parent
                 model: playerListModel
                 delegate: playerDelegate
@@ -53,16 +51,6 @@ Item {
             }
         }
 
-//        ListModel { //this got moved to main.qml
-//            id: playerListModel
-//            ListElement {
-//                name: "Player 0"
-//            }
-//            ListElement {
-//                name: "Player 1"
-//            }
-//        }
-
         Component {
             id: playerDelegate
             ListItem.Subtitled {
@@ -75,8 +63,10 @@ Item {
                 onMycolorChanged: {
                     game.setColor(index, mycolor);
                 }
-                onClicked: playerEditOverlay.open(playerListView)
-
+                onClicked: {
+                    playerListView.currentIndex = index;
+                    playerEditOverlay.open(playerListView.currentItem);
+                }
                 text: name
                 subText: playerController.selectedIndex == 2  ? (eJoined ? "Joined" : "Waiting for player to join...") : "Change color, controls etc..."
 
