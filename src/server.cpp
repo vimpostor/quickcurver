@@ -49,7 +49,8 @@ void Server::readPendingDatagrams() {
             for (i = 0; i < MAXPLAYERCOUNT && !(available[i] && clientsTcp[i] != NULL && clientsUdp[i] == NULL); ++i) {};
             // TODO: reject if this guy didn't save a slot
             answer = "[JOINED]";
-            qDebug() << sender->toString() + " " + "joined ";
+            qDebug() << sender->toString() + " joined ";
+            emit notifyGUI(sender->toString() + " joined", "SNACKBAR");
             emit playerStatusChanged(i, "JOINED");
         } else if (msg == "[LEFT]") {
 			turn(sender, ROTATE_LEFT);
@@ -283,4 +284,8 @@ void Server::disconnectClient(QTcpSocket *client, QString reason) {
 
 void Server::tcpSocketError(QAbstractSocket::SocketError socketError) {
     qDebug() << "A Tcp socket error occured!\n" << socketError;
+}
+
+QHostAddress *Server::getServerIp() {
+    return serverIp;
 }

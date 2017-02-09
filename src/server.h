@@ -20,10 +20,12 @@ public:
 	void setPlayerCount(int playercount);
     void newRound();
     void broadcastChatMessage(QString username, QString message);
+    QHostAddress *getServerIp();
 
 signals:
     void playerStatusChanged(int index, QString s);
     void sendMessage(QString username, QString message);
+    void notifyGUI(QString msg, QString mode);
 private slots:
 	void readPendingDatagrams();
     void udpSocketError(QAbstractSocket::SocketError socketError);

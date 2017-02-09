@@ -65,7 +65,7 @@ private slots:
     void setPlayerStatus(int index, QString s);
     void updateGUI();
     void sendMessageToQml(QString sender, QString message);
-
+    void notifyGUI(QString msg, QString mode);
 private:
     QCurver* curver[MAXPLAYERCOUNT];
 	bool alive[MAXPLAYERCOUNT];

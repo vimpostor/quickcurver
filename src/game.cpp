@@ -9,6 +9,7 @@ Game::Game(QQuickItem *parent) : QQuickItem(parent) {
 		controlledByNetwork[i] = false;
 	}
     server = new Server(curver, 52552, this);
+    connect(server, SIGNAL(notifyGUI(QString,QString)), this, SLOT(notifyGUI(QString,QString)));
     connect(server, SIGNAL(playerStatusChanged(int,QString)), this, SLOT(setPlayerStatus(int,QString)));
 }
 
@@ -343,4 +344,9 @@ void Game::requestSendMessage(QString message) {
 
 void Game::setSendWinnerMessages(bool checked) {
     sendWinnerMessages = checked;
+}
+
+void Game::notifyGUI(QString msg, QString mode) {
+    QVariant returnedValue;
+    QMetaObject::invokeMethod(qmlobject, "notifyGUI", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, msg), Q_ARG(QVariant, mode));
 }

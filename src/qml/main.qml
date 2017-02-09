@@ -36,10 +36,15 @@ ApplicationWindow {
         }
     }
     function setPlayerStatus(index,s) {
-        if (s==="JOINED") {
+        if (s === "JOINED") {
             playerListModel.setProperty(index, "eJoined", true);
-        } else if (s==="KICKED") {
+        } else if (s === "KICKED") {
             playerListModel.setProperty(index, "eJoined", false);
+        }
+    }
+    function notifyGUI(s, mode) {
+        if (mode === "SNACKBAR") {
+            playerselector.mysnackbar.open(s);
         }
     }
 
