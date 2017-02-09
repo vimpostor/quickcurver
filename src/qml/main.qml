@@ -194,82 +194,126 @@ ApplicationWindow {
         title: "Join Online Game"
         hasActions: false
         onShowingChanged: serverIp.focus = true
-        RowLayout {
-            TextField {
-                id: serverIp
-                placeholderText: "Server IP Adress"
-                floatingLabel: true
-                Keys.onReturnPressed: {
-                    joinButton.clicked();
+        ColumnLayout {
+            width: dp(360)
+            spacing: dp(16)
+            RowLayout {
+                Layout.fillWidth: true
+                TextField {
+                    id: serverIp
+                    Layout.fillWidth: true
+                    placeholderText: "Server IP Adress"
+                    floatingLabel: true
+                    Keys.onReturnPressed: {
+                        joinButton.clicked();
+                    }
+                }
+                Label {
+                    text: ":"
+                }
+
+                TextField {
+                    id: serverPort
+                    Layout.fillWidth: true
+                    placeholderText: "Port"
+                    floatingLabel: true
+                    text: "52552"
                 }
             }
-            Label {
-                text: ":"
-            }
-
-            TextField {
-                id: serverPort
-                placeholderText: "Port"
-                floatingLabel: true
-                text: "52552"
-            }
-        }
-        ProgressCircle {
-            id: cyclicColorProgress
-            visible: false
-            SequentialAnimation {
-                id: animation
-                running: true
-                loops: Animation.Infinite
-
-                ColorAnimation {
-                    from: "red"
-                    to: "blue"
-                    target: cyclicColorProgress
-                    properties: "color"
-                    easing.type: Easing.InOutQuad
-                    duration: 2400
-                }
-
-                ColorAnimation {
-                    from: "blue"
-                    to: "green"
-                    target: cyclicColorProgress
-                    properties: "color"
-                    easing.type: Easing.InOutQuad
-                    duration: 1560
-                }
-
-                ColorAnimation {
-                    from: "green"
-                    to: "#FFCC00"
-                    target: cyclicColorProgress
-                    properties: "color"
-                    easing.type: Easing.InOutQuad
-                    duration:  840
-                }
-
-                ColorAnimation {
-                    from: "#FFCC00"
-                    to: "red"
-                    target: cyclicColorProgress
-                    properties: "color"
-                    easing.type: Easing.InOutQuad
-                    duration:  1200
+            Card {
+                height: joinDialogDataLayout.height + dp(32)
+//                width: joinDialogDataLayout.width + dp(64)
+//                Layout.fillHeight: true
+                Layout.fillWidth: true
+                anchors.margins: dp(16)
+                ColumnLayout {
+                    id: joinDialogDataLayout
+                    spacing: dp(16)
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.margins: dp(16)
+                    ListItem.Standard {
+                        text: "Username"
+                        iconName: "action/account_circle"
+                        secondaryItem: TextField {
+                            id: userNameTextField
+                            anchors.centerIn: parent
+                            placeholderText: "Username"
+                            floatingLabel: true
+                        }
+                    }
+                    ListItem.Standard {
+                        // TODO: implement this
+                        text: "Ready"
+                        iconName: "action/check_circle"
+                        secondaryItem: CheckBox {
+                            id: readyCheckBox
+                            anchors.centerIn: parent
+                            checked: false
+                        }
+                        onClicked: readyCheckBox.checked = !readyCheckBox.checked
+                    }
                 }
             }
-        }
+            RowLayout {
+                ProgressCircle {
+                    id: cyclicColorProgress
+                    visible: false
+                    SequentialAnimation {
+                        id: animation
+                        running: true
+                        loops: Animation.Infinite
+                        ColorAnimation {
+                            from: "red"
+                            to: "blue"
+                            target: cyclicColorProgress
+                            properties: "color"
+                            easing.type: Easing.InOutQuad
+                            duration: 2400
+                        }
 
-        Button {
-            id: joinButton
-            elevation: 1
-            text: "Join"
-            backgroundColor: Theme.accentColor
-            onClicked: {
-                enabled = false;
-                cyclicColorProgress.visible = true;
-                text = "Waiting for server response...";
-                game.clientStart(serverIp.text, serverPort.text);
+                        ColorAnimation {
+                            from: "blue"
+                            to: "green"
+                            target: cyclicColorProgress
+                            properties: "color"
+                            easing.type: Easing.InOutQuad
+                            duration: 1560
+                        }
+
+                        ColorAnimation {
+                            from: "green"
+                            to: "#FFCC00"
+                            target: cyclicColorProgress
+                            properties: "color"
+                            easing.type: Easing.InOutQuad
+                            duration:  840
+                        }
+
+                        ColorAnimation {
+                            from: "#FFCC00"
+                            to: "red"
+                            target: cyclicColorProgress
+                            properties: "color"
+                            easing.type: Easing.InOutQuad
+                            duration:  1200
+                        }
+                    }
+                }
+                Button {
+                    id: joinButton
+                    Layout.fillWidth: true
+                    elevation: 1
+                    text: "Join"
+                    backgroundColor: Theme.accentColor
+                    onClicked: {
+                        enabled = false;
+                        cyclicColorProgress.visible = true;
+                        text = "Waiting for server response...";
+                        game.clientStart(serverIp.text, serverPort.text);
+                    }
+                }
             }
         }
         onOpened: {

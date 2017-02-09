@@ -36,6 +36,7 @@
         <file alias="language.svg">action_language.svg</file>
         <file alias="settings.svg">action_settings.svg</file>
         <file alias="update.svg">action_update.svg</file>
+        <file alias="check_circle.svg">action_check_circle.svg</file>
     </qresource>
     <qresource prefix="/icons/navigation">
         <file alias="arrow_drop_down.svg">navigation_arrow_drop_down.svg</file>
