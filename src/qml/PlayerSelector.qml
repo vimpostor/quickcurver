@@ -45,9 +45,11 @@ Item {
             elevation: 1
             backgroundColor: Theme.primaryColor
             onClicked: {
-                pageStack.push(Qt.resolvedUrl("gamePage.qml"));
-                game.start();
-                game.focus = true;
+                if (game.isReady()) {
+                    pageStack.push(Qt.resolvedUrl("gamePage.qml"));
+                    game.start();
+                    game.focus = true;
+                }
             }
         }
 
@@ -231,5 +233,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.margins: dp(70)
+        duration: buttonText == "" ? 2000 : 3000 // duration is longer if the notification comes with a button to press
+        onClicked: snackbar.open("Clicking the snackbar button is not implemented yet")
     }
 }

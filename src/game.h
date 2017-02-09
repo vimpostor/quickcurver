@@ -51,6 +51,7 @@ public:
     ~Game();
 	Q_INVOKABLE void addPlayer();
     Q_INVOKABLE void setSendWinnerMessages(bool checked);
+    Q_INVOKABLE bool isReady(); // checks if all players are ready, also sends an error message itself if someone is not ready
 	short int playercount = 2;
 	void setQmlObject(QObject *o);
 

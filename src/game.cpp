@@ -350,3 +350,7 @@ void Game::notifyGUI(QString msg, QString mode) {
     QVariant returnedValue;
     QMetaObject::invokeMethod(qmlobject, "notifyGUI", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, msg), Q_ARG(QVariant, mode));
 }
+
+bool Game::isReady() {
+    return server->isReady();
+}

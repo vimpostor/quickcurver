@@ -7,6 +7,7 @@ Server::Server(QCurver **curver, quint16 port, QObject *parent) : QObject(parent
         available[i] = false;
         clientsUdp[i] = NULL;
         clientsTcp[i] = NULL;
+        ready[i] = false;
     }
     setServerIp();
     initUdpSocket();
@@ -288,4 +289,22 @@ void Server::tcpSocketError(QAbstractSocket::SocketError socketError) {
 
 QHostAddress *Server::getServerIp() {
     return serverIp;
+}
+
+bool Server::isReady() {
+    for (int i = 0; i < MAXPLAYERCOUNT; ++i) {
+        if (available[i]) {
+            if (clientsTcp[i] == NULL) {
+                emit notifyGUI("There is an unused online slot! Please remove it or let someone join.", "SNACKBAR");
+                return false;
+            } else if (clientsUdp[i] == NULL) {
+                emit notifyGUI("One of the clients has not successfully joined yet!", "SNACKBAR");
+                return false;
+            } else if (!ready[i]) {
+                emit notifyGUI("One of the clients is not ready yet!", "SNACKBAR");
+                return false;
+            }
+        }
+    }
+    return true;
 }
