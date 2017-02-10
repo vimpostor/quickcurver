@@ -36,8 +36,8 @@ private slots:
 private:
     void initUdpSocket();
     void initTcpSocket();
-	QUdpSocket *udpSocket;
-    QTcpSocket *tcpSocket;
+    QUdpSocket *udpSocket = NULL;
+    QTcpSocket *tcpSocket = NULL;
 	QHostAddress *ip;
 	quint16 port;
 	quint16 myport = 55225;

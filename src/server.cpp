@@ -78,10 +78,16 @@ void Server::readPendingDatagrams() {
 void Server::shutdown() {
     if (udpSocket != NULL) {
         udpSocket->close();
-//        disconnect(udpSocket, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));
+        disconnect(udpSocket, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));
     }
     if (tcpServer != NULL) {
         tcpServer->close();
+    }
+    for (int i = 0; i < MAXPLAYERCOUNT; ++i) {
+        if (clientsTcp[i] != NULL) {
+            clientsTcp[i]->close();
+            disconnect(clientsTcp[i], SIGNAL(readyRead()), this, SLOT(tcpReadyRead()));
+        }
     }
 }
 

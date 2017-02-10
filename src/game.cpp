@@ -22,6 +22,12 @@ Game::~Game() {
         node->removeAllChildNodes();
         delete node;
     }
+    if (server != NULL) {
+        delete server;
+    }
+    if (client != NULL) {
+        delete client;
+    }
 }
 
 QSGNode *Game::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *) {
