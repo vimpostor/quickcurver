@@ -78,6 +78,7 @@ void Server::readPendingDatagrams() {
 void Server::shutdown() {
     if (udpSocket != NULL) {
         udpSocket->close();
+//        disconnect(udpSocket, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));
     }
     if (tcpServer != NULL) {
         tcpServer->close();
@@ -172,6 +173,7 @@ void Server::setServerIp() {
 
 void Server::newConnection() {
     QTcpSocket *clientConnection = tcpServer->nextPendingConnection();
+    connect(clientConnection, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(tcpSocketError(QAbstractSocket::SocketError)));
     connect(clientConnection, SIGNAL(disconnected()), clientConnection, SLOT(deleteLater()));
     (void) tryConnectingClient(clientConnection);
 }
@@ -271,6 +273,8 @@ void Server::tcpReadyRead() {
                 clientSettings[i].ready = ready;
                 emit playerStatusChanged(i, ready ? "READY" : "UNREADY");
                 emit playerStatusChanged(i, "USERNAME" + username);
+            } else if (message == "[LEFT]") {
+                disconnectClient(clientsTcp[i]);
             } else {
                 qDebug() << "Unsupported tcp message arrived on server";
                 qDebug() << message;
@@ -286,12 +290,22 @@ void Server::disconnectClient(QTcpSocket *client, QString reason) {
             if (reason != "") { // notify if reason is specified
                 transmitTcpMessage(reason, clientsTcp[i]);
             }
+            disconnect(clientsTcp[i], SIGNAL(readyRead()), this, SLOT(tcpReadyRead()));
             clientsTcp[i]->close();
-            delete clientsTcp[i];
+            disconnect(clientsTcp[i], SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(tcpSocketError(QAbstractSocket::SocketError)));
+//            delete clientsTcp[i]; // do not delete, the socket will be automatically deleted using deleteLater signal-slot
             clientsTcp[i] = NULL;
             clientsUdp[i] = NULL; // remove udp
             in[i].setDevice(NULL); // reset datastream
             in[i].resetStatus();
+            QString msg = clientSettings[i].username + " left the match";
+            if (started) {
+                broadcastChatMessage("Chat Bot", msg);
+            } else {
+                notifyGUI(msg, "SNACKBAR");
+            }
+            clientSettings[i].reset();
+            emit playerStatusChanged(i, "LEFT");
         }
     }
 }

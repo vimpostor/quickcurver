@@ -24,9 +24,12 @@ void Client::start(QSGNode *node, QString ip, int port) {
 void Client::shutdown() {
     if (udpSocket != NULL) {
         udpSocket->close();
+//        disconnect(udpSocket, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));
     }
     if (tcpSocket != NULL) {
+        sendTcpMessage("[LEFT]");
         tcpSocket->close();
+//        disconnect(tcpSocket, SIGNAL(readyRead()), this, SLOT(tcpReadyRead()));
     }
 }
 
@@ -163,6 +166,13 @@ void Client::sendUdpMessage(QString msg) {
     udpSocket->writeDatagram(datagram, *ip, port);
 }
 
+void Client::sendTcpMessage(QString msg) {
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out << msg;
+    tcpSocket->write(block);
+}
+
 void Client::requestSendMessage(QString username, QString message) {
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
@@ -180,3 +190,4 @@ void Client::changeSettings(QString username, bool ready) {
         tcpSocket->write(block);
     }
 }
+

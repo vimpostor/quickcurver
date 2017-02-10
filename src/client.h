@@ -19,7 +19,7 @@ public:
 	void sendKey(Qt::Key k);
 	void releaseKey(Qt::Key k);
     void start(QSGNode *node, QString ip, int port = 52552);
-	void shutdown();
+    void shutdown(); // also sends [LEFT] to the server if already joined
     void requestSendMessage(QString username, QString message);
     void changeSettings(QString username, bool ready);
 signals:
@@ -49,6 +49,7 @@ private:
     QCurver *curver[MAXPLAYERCOUNT];
     QDataStream in;
     void sendUdpMessage(QString msg);
+    void sendTcpMessage(QString msg);
     ClientSettings settings;
 };
 

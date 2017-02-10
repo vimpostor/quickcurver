@@ -38,7 +38,7 @@ When the server started the game, the client will have to be able to handle live
 ### Leaving
 - [ ] The server may close the game at any time, but will gracefully send a "[TERMINATE]" message over TCP to the client causing the client to leave the game
 - [ ] The server may kick the client at any time, which will trigger a "[KICKED]" message over TCP causing the client to leave the game
-- [ ] The client may leave the game at any time, but will gracefully send a "[LEFT]" message over TCP to the server
+- [x] The client may leave the game at any time, but will gracefully send a "[LEFT]" message over TCP to the server
 
 
 

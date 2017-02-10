@@ -356,3 +356,11 @@ bool Game::isReady() {
 void Game::changeClientSettings(QString username, bool ready) {
     client->changeSettings(username, ready);
 }
+
+void Game::leaveGame() {
+    if (!isHost) {
+        client->shutdown();
+        notifyGUI("You left the game!", "SNACKBAR");
+        isHost = true;
+    }
+}

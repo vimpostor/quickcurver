@@ -1,5 +1,10 @@
 #include "multiplayersettings.h"
 
+void ClientSettings::reset() {
+    username = "";
+    ready = false;
+}
+
 QDataStream &operator <<(QDataStream &out, const ClientSettings &clientSettings) {
     out << clientSettings.username << clientSettings.ready;
     return out;

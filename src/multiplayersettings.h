@@ -10,6 +10,8 @@ class ClientSettings {
 public:
     QString username = "";
     bool ready = false;
+
+    void reset();
 };
 
 QDataStream &operator <<(QDataStream &out, const ClientSettings &clientSettings);

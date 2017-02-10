@@ -8,6 +8,7 @@ import QtQuick.Layouts 1.1
 
 ApplicationWindow {
     onClosing: game.close()
+    property bool clientInGame: false;
     function sendMessage(username, message) {
         pageStack.currentItem.sendMessage(username, message);
     }
@@ -26,7 +27,8 @@ ApplicationWindow {
         } else if (s === "TIMEOUT") {
             clientDialog.close();
             playerselector.mysnackbar.open("Join request timed out! :(");
-        }  else if (s === "STARTED") {
+        } else if (s === "STARTED") {
+            clientInGame = true;
             clientDialog.close();
             pageStack.push(Qt.resolvedUrl("gamePage.qml"));
             game.focus = true;
@@ -38,8 +40,9 @@ ApplicationWindow {
     function setPlayerStatus(index,s) {
         if (s === "JOINED") {
             playerListModel.setProperty(index, "eJoined", true);
-        } else if (s === "KICKED") {
+        } else if (s === "LEFT") {
             playerListModel.setProperty(index, "eJoined", false);
+            playerListModel.setProperty(index, "eReady", false);
         } else if (s === "READY") {
             playerListModel.setProperty(index, "eReady", true);
         } else if (s === "UNREADY") {
@@ -206,7 +209,6 @@ ApplicationWindow {
         id: clientDialog
         title: "Join Online Game"
         hasActions: false
-        onShowingChanged: serverIp.focus = true
         ColumnLayout {
             width: dp(360)
             spacing: dp(16)
@@ -331,9 +333,15 @@ ApplicationWindow {
             }
         }
         onOpened: {
+            serverIp.focus = true;
             cyclicColorProgress.visible = false;
             joinButton.enabled = true;
             joinButton.text = "Join";
+        }
+        onClosed: {
+            if (!clientInGame) {
+                game.leaveGame();
+            }
         }
     }
 }

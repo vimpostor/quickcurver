@@ -34,6 +34,7 @@ public:
 	Q_INVOKABLE void sendKey(Qt::Key k);
 	Q_INVOKABLE void releaseKey(Qt::Key k);
 	Q_INVOKABLE void start();
+    Q_INVOKABLE void leaveGame(); // sends [LEFT] to the server if client
 	Q_INVOKABLE void clientStart(QString ip, int port);
 	Q_INVOKABLE void setColor(int index, QColor color);
 	Q_INVOKABLE void setControls(int index, Qt::Key k, bool isRight);
