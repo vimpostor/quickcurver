@@ -28,6 +28,9 @@
     </qresource>
     <qresource prefix="/icons/social">
         <file alias="share.svg">social_share.svg</file>
+        <file alias="account.svg">account.svg</file>
+        <file alias="account_off.svg">account_off.svg</file>
+        <file alias="account_check.svg">account_check.svg</file>
     </qresource>
     <qresource prefix="/icons/action">
         <file alias="account_circle.svg">action_account_circle.svg</file>
@@ -35,7 +38,6 @@
         <file alias="delete.svg">action_delete.svg</file>
         <file alias="language.svg">action_language.svg</file>
         <file alias="settings.svg">action_settings.svg</file>
-        <file alias="update.svg">action_update.svg</file>
         <file alias="check_circle.svg">action_check_circle.svg</file>
     </qresource>
     <qresource prefix="/icons/navigation">

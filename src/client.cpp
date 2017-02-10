@@ -62,6 +62,7 @@ void Client::udpReadPendingDatagrams() {
         if (msg == "[JOINED]") { //we successfully joined
 			joined = true;
             emit joinStatusChanged("JOINED");
+            changeSettings(settings.username, settings.ready); // send settings to server
         } else {
             //try reading stream
             QString title;
@@ -164,4 +165,15 @@ void Client::requestSendMessage(QString username, QString message) {
     QDataStream out(&block, QIODevice::WriteOnly);
     out << QString("[MESSAGE]") << username << message;
     tcpSocket->write(block);
+}
+
+void Client::changeSettings(QString username, bool ready) {
+    settings.username = username;
+    settings.ready = ready;
+    if (joined) {
+        QByteArray block;
+        QDataStream out(&block, QIODevice::WriteOnly);
+        out << QString("[SETTINGS]") << settings;
+        tcpSocket->write(block);
+    }
 }

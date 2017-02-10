@@ -7,7 +7,7 @@
 #include <QSGNode>
 #include "headnode.h"
 #include <qsgflatcolormaterial.h>
-#define MAXPLAYERCOUNT 16
+#include "multiplayersettings.h"
 
 
 class Client : public QObject
@@ -20,6 +20,7 @@ public:
 	void releaseKey(Qt::Key k);
 	void shutdown();
     void requestSendMessage(QString username, QString message);
+    void changeSettings(QString username, bool ready);
 signals:
 	void joinStatusChanged(QString s);
     void updateGUI();
@@ -47,6 +48,7 @@ private:
     QCurver *curver[MAXPLAYERCOUNT];
     QDataStream in;
     void sendUdpMessage(QString msg);
+    ClientSettings settings;
 };
 
 #endif // CLIENT_H

@@ -56,7 +56,7 @@ Item {
         Component {
             id: playerDelegate
             ListItem.Subtitled {
-                property string name: (eBot ? "Bot " : "Player ") +index
+                property string name: (eBot ? "Bot " : "Player ") + index
                 property color mycolor:  Material.color(Math.random()*19)
                 onNameChanged: {
                     game.setName(index, name);
@@ -69,8 +69,9 @@ Item {
                     playerListView.currentIndex = index;
                     playerEditOverlay.open(playerListView.currentItem);
                 }
-                text: name
+                text: ename
                 subText: playerController.selectedIndex == 2  ? (eJoined ? "Joined" : "Waiting for player to join...") : "Change color, controls etc..."
+                iconName: playerController.selectedIndex == 0 ? "action/account_circle" : (playerController.selectedIndex == 1 ? "communication/robot" : (!eJoined ? "social/account_off" : (eReady ? "social/account_check" : "social/account")))
 
                 secondaryItem: IconButton {
                     iconName: "editor/mode_edit"

@@ -18,7 +18,8 @@ SOURCES += src/curveitem.cpp \
     src/fatteritem.cpp \
     src/cleaninstallanimation.cpp \
     src/server.cpp \
-    src/client.cpp
+    src/client.cpp \
+    src/multiplayersettings.cpp
 
 
 RESOURCES += \
@@ -47,4 +48,5 @@ HEADERS += src/curveitem.h \
     src/fatteritem.h \
     src/cleaninstallanimation.h \
     src/server.h \
-    src/client.h
+    src/client.h \
+    src/multiplayersettings.h

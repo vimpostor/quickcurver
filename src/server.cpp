@@ -7,7 +7,8 @@ Server::Server(QCurver **curver, quint16 port, QObject *parent) : QObject(parent
         available[i] = false;
         clientsUdp[i] = NULL;
         clientsTcp[i] = NULL;
-        ready[i] = false;
+        clientSettings[i].username = "";
+        clientSettings[i].ready = false;
     }
     setServerIp();
     initUdpSocket();
@@ -258,6 +259,14 @@ void Server::tcpReadyRead() {
                 QString username, message;
                 in[i] >> username >> message;
                 broadcastChatMessage(username, message);
+            } else if (message == "[SETTINGS]") {
+                QString username;
+                bool ready;
+                in[i] >> username >> ready;
+                clientSettings[i].username = username;
+                clientSettings[i].ready = ready;
+                emit playerStatusChanged(i, ready ? "READY" : "UNREADY");
+                emit playerStatusChanged(i, "USERNAME" + username);
             } else {
                 qDebug() << "Unsupported tcp message arrived on server";
                 qDebug() << message;
@@ -300,8 +309,11 @@ bool Server::isReady() {
             } else if (clientsUdp[i] == NULL) {
                 emit notifyGUI("One of the clients has not successfully joined yet!", "SNACKBAR");
                 return false;
-            } else if (!ready[i]) {
+            } else if (!clientSettings[i].ready) {
                 emit notifyGUI("One of the clients is not ready yet!", "SNACKBAR");
+                return false;
+            } else if (clientSettings[i].username == "") {
+                emit notifyGUI("One of the clients hasn't set the username", "SNACKBAR");
                 return false;
             }
         }

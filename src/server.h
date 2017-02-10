@@ -4,8 +4,8 @@
 #include <QtNetwork>
 #include "qcurver.h"
 #include <QTimer>
+#include "multiplayersettings.h"
 #define BROADCASTINTERVAL 33
-#define MAXPLAYERCOUNT 16
 
 
 class Server : public QObject
@@ -43,7 +43,7 @@ private:
     bool available[MAXPLAYERCOUNT]; // determines if curver[i] is an Online player. if it already is used is determined by clientsTcp
     QHostAddress *clientsUdp[MAXPLAYERCOUNT]; // is NULL if not connected, otherwise holds client information
     QTcpSocket *clientsTcp[MAXPLAYERCOUNT]; // is NULL if not connected, otherwise holds an active tcp socket to client
-    bool ready[MAXPLAYERCOUNT]; // determines if the clients are ready
+    ClientSettings clientSettings[MAXPLAYERCOUNT];
     int isValidInput(QHostAddress *sender); // returns -1 on error, else returns the index of the curver that sender is in control of
 	QCurver **curver;
 	void turn(QHostAddress *sender, rotation r);

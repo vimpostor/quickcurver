@@ -13,7 +13,7 @@ When the user entered the ip and port in the Join dialog, the client tries joini
 - [x] If the client may join, the server answers with "[ACCEPTED]" on TCP and the client has to finally send "[JOIN]" on UDP
 - [x] If the client may not join, the server answers with "[REJECTED]" on TCP and the client will leave
 - [x] If "[JOIN]" on UDP reaches the server, the server answers with "[JOINED]" on UDP, which is proof for the client that he finally successfully joined
-- [ ] The client then transmits his settings (such as username etc) to the server using TCP
+- [x] The client then transmits his settings (such as username etc) to the server using TCP
 - [ ] The client will immediately get settings back from the server (TCP), which have to be handled
 
 Once the client is joined, the client has to wait for the server to start the game:

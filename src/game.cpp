@@ -354,3 +354,9 @@ void Game::notifyGUI(QString msg, QString mode) {
 bool Game::isReady() {
     return server->isReady();
 }
+
+void Game::changeClientSettings(QString username, bool ready) {
+    if (client != NULL) {
+        client->changeSettings(username, ready);
+    }
+}

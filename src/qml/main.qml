@@ -40,6 +40,12 @@ ApplicationWindow {
             playerListModel.setProperty(index, "eJoined", true);
         } else if (s === "KICKED") {
             playerListModel.setProperty(index, "eJoined", false);
+        } else if (s === "READY") {
+            playerListModel.setProperty(index, "eReady", true);
+        } else if (s === "UNREADY") {
+            playerListModel.setProperty(index, "eReady", false);
+        } else if (s.substring(0, 8) === "USERNAME") {
+            playerListModel.setProperty(index, "ename", s.substring(8));
         }
     }
     function notifyGUI(s, mode) {
@@ -177,6 +183,7 @@ ApplicationWindow {
             eroundScore: 0
             eBot: false
             eJoined: false
+            eReady: false
         }
         ListElement {
             ename: "Player 1"
@@ -184,6 +191,7 @@ ApplicationWindow {
             eroundScore: 0
             eBot: true
             eJoined: false
+            eReady: false
         }
     }
     Dialog {
@@ -242,22 +250,23 @@ ApplicationWindow {
                         text: "Username"
                         iconName: "action/account_circle"
                         secondaryItem: TextField {
-                            id: userNameTextField
+                            id: clientUserNameTextField
                             anchors.centerIn: parent
                             placeholderText: "Username"
                             floatingLabel: true
+                            onTextChanged: game.changeClientSettings(text, clientReadyCheckBox.checked)
                         }
                     }
                     ListItem.Standard {
-                        // TODO: implement this
                         text: "Ready"
                         iconName: "action/check_circle"
                         secondaryItem: CheckBox {
-                            id: readyCheckBox
+                            id: clientReadyCheckBox
                             anchors.centerIn: parent
                             checked: false
+                            onCheckedChanged: game.changeClientSettings(clientUserNameTextField.text, checked)
                         }
-                        onClicked: readyCheckBox.checked = !readyCheckBox.checked
+                        onClicked: clientReadyCheckBox.checked = !clientReadyCheckBox.checked
                     }
                 }
             }
