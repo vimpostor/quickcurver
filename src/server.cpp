@@ -49,11 +49,15 @@ void Server::readPendingDatagrams() {
         if (msg == "[JOIN]") { //a player wants to join
             int i;
             for (i = 0; i < MAXPLAYERCOUNT && !(available[i] && clientsTcp[i] != NULL && clientsUdp[i] == NULL); ++i) {};
-            // TODO: reject if this guy didn't save a slot
-            answer = "[JOINED]";
-            qDebug() << sender->toString() + " joined ";
-            emit notifyGUI(sender->toString() + " joined", "SNACKBAR");
-            emit playerStatusChanged(i, "JOINED");
+            if (i < MAXPLAYERCOUNT) {
+                clientsUdp[i] = sender;
+                answer = "[JOINED]";
+                qDebug() << sender->toString() + " joined ";
+                emit notifyGUI(sender->toString() + " joined", "SNACKBAR");
+                emit playerStatusChanged(i, "JOINED");
+            } else {
+                answer = "[REJECTED]";
+            }
         } else if (msg == "[LEFT]") {
 			turn(sender, ROTATE_LEFT);
         } else if (msg == "[NONE]") {

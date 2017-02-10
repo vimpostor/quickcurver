@@ -9,6 +9,7 @@ Game::Game(QQuickItem *parent) : QQuickItem(parent) {
 		controlledByNetwork[i] = false;
 	}
     server = new Server(curver, 52552, this);
+    client = new Client(this);
     connect(server, SIGNAL(notifyGUI(QString,QString)), this, SLOT(notifyGUI(QString,QString)));
     connect(server, SIGNAL(playerStatusChanged(int,QString)), this, SLOT(setPlayerStatus(int,QString)));
 }
@@ -66,13 +67,10 @@ void Game::clientStart(QString ip, int port) {
     isHost = false;
     node = new QSGNode;
     wall = new wallNode(node, fieldsize);
-    if (client != NULL) {
-        delete client;
-    }
-    client = new Client(ip, node, port, this);
     connect(client, SIGNAL(joinStatusChanged(QString)), this, SLOT(setJoinStatus(QString)));
     connect(client, SIGNAL(updateGUI()), this, SLOT(updateGUI()));
     connect(client, SIGNAL(sendMessage(QString,QString)), this, SLOT(sendMessageToQml(QString,QString)));
+    client->start(node, ip, port);
     setFlag(ItemHasContents);
 }
 
@@ -356,7 +354,5 @@ bool Game::isReady() {
 }
 
 void Game::changeClientSettings(QString username, bool ready) {
-    if (client != NULL) {
-        client->changeSettings(username, ready);
-    }
+    client->changeSettings(username, ready);
 }

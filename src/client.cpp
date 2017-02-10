@@ -1,13 +1,7 @@
 #include "client.h"
 
-Client::Client(QString ip, QSGNode *node, int port, QObject *parent) : QObject(parent) {
-    this->ip = new QHostAddress(ip);
-    this->port = port;
-    this->node = node;
+Client::Client(QObject *parent) : QObject(parent) {
     timeoutTimer = new QTimer;
-    initUdpSocket();
-    initTcpSocket();
-    join();
     for (int i = 0; i < MAXPLAYERCOUNT; i++) {
         headnodes[i] = NULL;
         curver[i] = NULL;
@@ -16,6 +10,24 @@ Client::Client(QString ip, QSGNode *node, int port, QObject *parent) : QObject(p
 
 Client::~Client() {
 	shutdown();
+}
+
+void Client::start(QSGNode *node, QString ip, int port) {
+    this->node = node;
+    this->ip = new QHostAddress(ip);
+    this->port = port;
+    initUdpSocket();
+    initTcpSocket();
+    join();
+}
+
+void Client::shutdown() {
+    if (udpSocket != NULL) {
+        udpSocket->close();
+    }
+    if (tcpSocket != NULL) {
+        tcpSocket->close();
+    }
 }
 
 void Client::sendKey(Qt::Key k) {
@@ -99,15 +111,6 @@ void Client::udpReadPendingDatagrams() {
             }
 		}
 	}
-}
-
-void Client::shutdown() {
-    if (udpSocket != NULL) {
-        udpSocket->close();
-    }
-    if (tcpSocket != NULL) {
-        tcpSocket->close();
-    }
 }
 
 void Client::udpSocketError(QAbstractSocket::SocketError socketError) {
