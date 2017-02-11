@@ -133,6 +133,7 @@ Item {
                                 anchors.margins: dp(32)
                                 TextField {
                                     id: nameTextField
+                                    enabled: playerController.selectedIndex != 2
                                     focus: true
                                     width: parent.width
                                     placeholderText: "Name"
