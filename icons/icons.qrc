@@ -5,6 +5,7 @@
     <qresource prefix="/icons/communication">
         <file alias="email.svg">communication_email.svg</file>
         <file alias="robot.svg">communication_robot.svg</file>
+        <file alias="clear_all.svg">communication_clear_all.svg</file>
     </qresource>
     <qresource prefix="/icons/image">
         <file alias="color_lens.svg">image_color_lens.svg</file>
@@ -18,6 +19,7 @@
         <file alias="create.svg">content_create.svg</file>
         <file alias="forward.svg">content_forward.svg</file>
         <file alias="send.svg">content_send.svg</file>
+        <file alias="speedometer.svg">content_speedometer.svg</file>
     </qresource>
     <qresource prefix="/icons/device">
         <file alias="access_alarm.svg">device_access_alarm.svg</file>
@@ -39,6 +41,8 @@
         <file alias="language.svg">action_language.svg</file>
         <file alias="settings.svg">action_settings.svg</file>
         <file alias="check_circle.svg">action_check_circle.svg</file>
+        <file alias="arrow_expand.svg">action_arrow_expand.svg</file>
+        <file alias="clock_fast.svg">action_clock_fast.svg</file>
     </qresource>
     <qresource prefix="/icons/navigation">
         <file alias="arrow_drop_down.svg">navigation_arrow_drop_down.svg</file>

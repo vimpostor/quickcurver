@@ -106,36 +106,43 @@ TabbedPage {
                     name: "Header"
                     description: "General item spawn rate"
                     defaultValue: 10
+                    eIconName: "content/speedometer"
                 }
                 ListElement {
                     name: "Faster Item"
                     description: "Makes you faster for some time"
                     defaultValue: 3
+                    eIconName: "action/clock_fast"
                 }
                 ListElement {
                     name: "Slower Item"
                     description: "Makes you slower for some time"
                     defaultValue: 0
+                    eIconName: ""
                 }
                 ListElement {
                     name: "Cleaninstall"
                     description: "Deletes every line drawn to this point"
                     defaultValue: 1
+                    eIconName: "communication/clear_all"
                 }
                 ListElement {
                     name: "Wall Hack"
                     description: "Opens the wall for every player"
                     defaultValue: 0
+                    eIconName: ""
                 }
                 ListElement {
                     name: "Solo Wall Hack"
                     description: "Opens the wall only for you"
                     defaultValue: 0
+                    eIconName: ""
                 }
                 ListElement {
                     name: "Fatter Item"
                     description: "Makes the enemy fatter"
                     defaultValue: 2
+                    eIconName: "action/arrow_expand"
                 }
             }
 
@@ -143,6 +150,7 @@ TabbedPage {
                 text: name == "Header" ? "Item Spawn Rate" : name
                 subText: description
                 enabled: defaultValue != 0 //some items are not implemented yet
+                iconName: eIconName
                 secondaryItem: Slider {
                     value: defaultValue
                     anchors.verticalCenter: parent.verticalCenter
