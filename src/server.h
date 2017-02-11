@@ -5,6 +5,7 @@
 #include "qcurver.h"
 #include <QTimer>
 #include "multiplayersettings.h"
+#include<QSignalMapper>
 #define BROADCASTINTERVAL 33
 
 
@@ -32,7 +33,7 @@ private slots:
     void tcpSocketError(QAbstractSocket::SocketError socketError);
 	void broadcast();
     void newConnection();
-    void tcpReadyRead();
+    void tcpReadyRead(int i);
 private:
     QTcpSocket *clientConnections[MAXPLAYERCOUNT];
     void initUdpSocket();
@@ -61,6 +62,7 @@ private:
     bool tryConnectingClient(QTcpSocket *client); // returns true on success, also sends ACCEPTED OR REJECTED to the client
     void disconnectClient(QTcpSocket *client, QString reason = ""); // if reason is specified, the client will be notified about the disconnection
     QDataStream in[MAXPLAYERCOUNT];
+    QSignalMapper *tcpReadyReadSignalMapper;
 };
 
 #endif // SERVER_H

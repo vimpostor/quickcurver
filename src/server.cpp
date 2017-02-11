@@ -3,6 +3,8 @@
 Server::Server(QCurver **curver, quint16 port, QObject *parent) : QObject(parent) {
     this->port = port;
     this->curver = curver;
+    this->tcpReadyReadSignalMapper = new QSignalMapper(this); // create tcpReadyRead signal mapper
+    connect(tcpReadyReadSignalMapper, SIGNAL(mapped(int)), this, SLOT(tcpReadyRead(int)));
     for (int i = 0; i < MAXPLAYERCOUNT; i++) {
         available[i] = false;
         clientsUdp[i] = NULL;
@@ -252,40 +254,37 @@ bool Server::tryConnectingClient(QTcpSocket *client) {
 
 void Server::connectClient(QTcpSocket *client, int index) {
     clientsTcp[index] = client;
-    connect(clientsTcp[index], SIGNAL(readyRead()), this, SLOT(tcpReadyRead()));
+    connect(client, SIGNAL(readyRead()), tcpReadyReadSignalMapper, SLOT(map()));
+    tcpReadyReadSignalMapper->setMapping(client, index);
 //    in[index].abortTransaction();
     in[index].setDevice(client);
 }
 
-void Server::tcpReadyRead() {
-    for (int i = 0; i < MAXPLAYERCOUNT; ++i) {
-        if (clientsTcp[i] != NULL && in[i].device() != NULL) {
-            in[i].startTransaction();
-            QString message;
-            in[i] >> message;
-            if (!in[i].commitTransaction()) {
-                continue;
-            }
+void Server::tcpReadyRead(int i) {
+    in[i].startTransaction();
+    QString message;
+    in[i] >> message;
+    if (!in[i].commitTransaction()) {
+        return;
+    }
 
-            if (message == "[MESSAGE]") {
-                QString username, message;
-                in[i] >> username >> message;
-                broadcastChatMessage(username, message);
-            } else if (message == "[SETTINGS]") {
-                QString username;
-                bool ready;
-                in[i] >> username >> ready;
-                clientSettings[i].username = username;
-                clientSettings[i].ready = ready;
-                emit playerStatusChanged(i, ready ? "READY" : "UNREADY");
-                emit playerStatusChanged(i, "USERNAME" + username);
-            } else if (message == "[LEFT]") {
-                disconnectClient(clientsTcp[i]);
-            } else {
-                qDebug() << "Unsupported tcp message arrived on server";
-                qDebug() << message;
-            }
-        }
+    if (message == "[MESSAGE]") {
+        QString username, message;
+        in[i] >> username >> message;
+        broadcastChatMessage(username, message);
+    } else if (message == "[SETTINGS]") {
+        QString username;
+        bool ready;
+        in[i] >> username >> ready;
+        clientSettings[i].username = username;
+        clientSettings[i].ready = ready;
+        emit playerStatusChanged(i, ready ? "READY" : "UNREADY");
+        emit playerStatusChanged(i, "USERNAME" + username);
+    } else if (message == "[LEFT]") {
+        disconnectClient(clientsTcp[i]);
+    } else {
+        qDebug() << "Unsupported tcp message arrived on server";
+        qDebug() << message;
     }
 }
 
@@ -296,7 +295,7 @@ void Server::disconnectClient(QTcpSocket *client, QString reason) {
             if (reason != "") { // notify if reason is specified
                 transmitTcpMessage(reason, clientsTcp[i]);
             }
-            disconnect(clientsTcp[i], SIGNAL(readyRead()), this, SLOT(tcpReadyRead()));
+            disconnect(client, SIGNAL(readyRead()), tcpReadyReadSignalMapper, SLOT(map()));
             clientsTcp[i]->close();
             disconnect(clientsTcp[i], SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(tcpSocketError(QAbstractSocket::SocketError)));
 //            delete clientsTcp[i]; // do not delete, the socket will be automatically deleted using deleteLater signal-slot
