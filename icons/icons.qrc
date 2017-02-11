@@ -20,6 +20,7 @@
         <file alias="forward.svg">content_forward.svg</file>
         <file alias="send.svg">content_send.svg</file>
         <file alias="speedometer.svg">content_speedometer.svg</file>
+        <file alias="timer_sand.svg">content_timer_sand.svg</file>
     </qresource>
     <qresource prefix="/icons/device">
         <file alias="access_alarm.svg">device_access_alarm.svg</file>
@@ -43,6 +44,7 @@
         <file alias="check_circle.svg">action_check_circle.svg</file>
         <file alias="arrow_expand.svg">action_arrow_expand.svg</file>
         <file alias="clock_fast.svg">action_clock_fast.svg</file>
+        <file alias="visibility_off.svg">action_visibility_off.svg</file>
     </qresource>
     <qresource prefix="/icons/navigation">
         <file alias="arrow_drop_down.svg">navigation_arrow_drop_down.svg</file>
@@ -50,5 +52,6 @@
     </qresource>
     <qresource prefix="/icons/editor">
         <file alias="mode_edit.svg">editor_mode_edit.svg</file>
+        <file alias="border_clear.svg">editor_border_clear.svg</file>
     </qresource>
 </RCC>

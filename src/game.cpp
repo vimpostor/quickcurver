@@ -114,7 +114,7 @@ void Game::progress() {
                 //global wall hack
                 break;
             case 4:
-                //solo wall hack
+                //invisibility
                 break;
             case 5:
                 items[i] = new FatterItem(node, fieldsize);

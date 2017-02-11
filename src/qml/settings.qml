@@ -118,7 +118,7 @@ TabbedPage {
                     name: "Slower Item"
                     description: "Makes you slower for some time"
                     defaultValue: 0
-                    eIconName: ""
+                    eIconName: "content/timer_sand"
                 }
                 ListElement {
                     name: "Cleaninstall"
@@ -130,13 +130,13 @@ TabbedPage {
                     name: "Wall Hack"
                     description: "Opens the wall for every player"
                     defaultValue: 0
-                    eIconName: ""
+                    eIconName: "editor/border_clear"
                 }
                 ListElement {
-                    name: "Solo Wall Hack"
-                    description: "Opens the wall only for you"
+                    name: "Invisibility"
+                    description: "Disables collisions for you"
                     defaultValue: 0
-                    eIconName: ""
+                    eIconName: "action/visibility_off"
                 }
                 ListElement {
                     name: "Fatter Item"
