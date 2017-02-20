@@ -92,13 +92,12 @@ ApplicationWindow {
                 onTriggered: pageStack.push(Qt.resolvedUrl("settings.qml"))
             },
             Action {
-//                iconName: "navigation/refresh"
-                name: "Search for updates..."
-                onTriggered: playerselector.mysnackbar.open("Looks like the developer was too lazy to implement an Auto-Update feature yet. Stay tuned!")
-            },
-            Action {
                 name: "Licenses"
                 onTriggered: licensesDialog.open()
+            },
+            Action {
+                name: "Quit"
+                onTriggered: close()
             }
 
         ]
