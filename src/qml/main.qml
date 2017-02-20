@@ -75,7 +75,7 @@ ApplicationWindow {
         actionBar.maxActionCount: 4
         actions: [
             Action {
-                iconName: "file/cloud_upload"
+                iconName: "action/search_web"
                 name: "Join an online game"
                 onTriggered: clientDialog.show()
                 shortcut: "Ctrl+J"
