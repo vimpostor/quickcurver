@@ -5,8 +5,6 @@
 #include "qcurver.h"
 #include <QQuickView>
 
-#define FASTERICON ":/icons/action/clock_fast.svg"
-
 class FastItem : public CurveItem
 {
 public:

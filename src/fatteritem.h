@@ -3,8 +3,6 @@
 #include "curveitem.h"
 #include "qcurver.h"
 
-#define FATTERICON ":/icons/action/arrow_expand.svg"
-
 class FatterItem : public CurveItem
 {
 public:

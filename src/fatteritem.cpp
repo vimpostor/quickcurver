@@ -1,6 +1,11 @@
 #include "fatteritem.h"
 
-FatterItem::FatterItem(QSGNode *node, QQuickView *view, int fieldsize) : CurveItem(node, view, fieldsize, FATTERICON, false, true, false) {
+#define FATTERICON ":/icons/action/arrow_expand.svg"
+#define REDALLOWED true
+#define GREENALLOWED false
+#define BLUEALLOWED false
+
+FatterItem::FatterItem(QSGNode *node, QQuickView *view, int fieldsize) : CurveItem(node, view, fieldsize, FATTERICON, REDALLOWED, GREENALLOWED, BLUEALLOWED) {
 	deUseTime = 5000;
 }
 

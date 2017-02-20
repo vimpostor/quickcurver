@@ -1,6 +1,11 @@
 #include "fastitem.h"
 
-FastItem::FastItem(QSGNode *node, QQuickView *view, int fieldsize) : CurveItem(node, view, fieldsize, FASTERICON, true, false, false) {
+#define FASTERICON ":/icons/action/clock_fast.svg"
+#define REDALLOWED true
+#define GREENALLOWED true
+#define BLUEALLOWED true
+
+FastItem::FastItem(QSGNode *node, QQuickView *view, int fieldsize) : CurveItem(node, view, fieldsize, FASTERICON, REDALLOWED, GREENALLOWED, BLUEALLOWED) {
 //	node->markDirty(QSGNode::DirtyGeometry);
 	deUseTime = 2000;
 }

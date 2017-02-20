@@ -2,7 +2,7 @@
 #include <QSvgRenderer>
 #include <QPainter>
 
-CurveItem::CurveItem(QSGNode *node, QQuickView *view, int fieldsize, QString iconPath, bool greenAllowed, bool redAllowed, bool blueAllowed) {
+CurveItem::CurveItem(QSGNode *node, QQuickView *view, int fieldsize, QString iconPath, bool redAllowed, bool greenAllowed, bool blueAllowed) {
 	this->node = node;
     pos = QPointF(segment::randInt(10, fieldsize-10), segment::randInt(10,fieldsize-10));
 
