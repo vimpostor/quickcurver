@@ -1,6 +1,6 @@
 #include "fatteritem.h"
 
-FatterItem::FatterItem(QSGNode *node, int fieldsize) : CurveItem(node, fieldsize, false, true, false) {
+FatterItem::FatterItem(QSGNode *node, QQuickView *view, int fieldsize) : CurveItem(node, view, fieldsize, FATTERICON, false, true, false) {
 	deUseTime = 5000;
 }
 

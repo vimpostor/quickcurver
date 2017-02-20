@@ -102,13 +102,13 @@ void Game::progress() {
             itemSelector--;
             switch (itemSelector) {
             case 0:
-                items[i] = new FastItem(node, fieldsize);
+                items[i] = new FastItem(node, &textureGenerator, fieldsize);
                 break;
             case 1:
     //			items[i] = new SlowItem(node);
                 break;
             case 2:
-                items[i] = new CleaninstallItem(node, fieldsize);
+                items[i] = new CleaninstallItem(node, &textureGenerator, fieldsize);
                 break;
             case 3:
                 //global wall hack
@@ -117,7 +117,7 @@ void Game::progress() {
                 //invisibility
                 break;
             case 5:
-                items[i] = new FatterItem(node, fieldsize);
+                items[i] = new FatterItem(node, &textureGenerator, fieldsize);
                 break;
             default:
                 qDebug() << "(EE) This should not happen, the algorithm should always be able to decide what item to spawn";

@@ -107,6 +107,7 @@ private:
     int effectiveTimeMultiplier = 1;
     QString username = "me";
     bool sendWinnerMessages = false;
+    QQuickView textureGenerator; // used to generate QSGTextures for the item icons
 };
 
 #endif // GAME_H

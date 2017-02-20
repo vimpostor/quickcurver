@@ -1,6 +1,8 @@
 #include "curveitem.h"
+#include <QSvgRenderer>
+#include <QPainter>
 
-CurveItem::CurveItem(QSGNode *node, int fieldsize, bool greenAllowed, bool redAllowed, bool blueAllowed) {
+CurveItem::CurveItem(QSGNode *node, QQuickView *view, int fieldsize, QString iconPath, bool greenAllowed, bool redAllowed, bool blueAllowed) {
 	this->node = node;
     pos = QPointF(segment::randInt(10, fieldsize-10), segment::randInt(10,fieldsize-10));
 
@@ -28,30 +30,31 @@ CurveItem::CurveItem(QSGNode *node, int fieldsize, bool greenAllowed, bool redAl
 	}
 
 	gnode = new QSGGeometryNode;
-	geometry = new QSGGeometry(QSGGeometry::defaultAttributes_Point2D(), 0);
-	geometry->setLineWidth(4);
-	geometry->setDrawingMode(GL_TRIANGLES);
-	gnode->setGeometry(geometry);
+    geometry = new QSGGeometry(QSGGeometry::defaultAttributes_TexturedPoint2D(), 0);
+    geometry->setDrawingMode(GL_TRIANGLE_STRIP);
+    gnode->setGeometry(geometry);
 	gnode->setFlag(QSGNode::OwnsGeometry);
-	QSGFlatColorMaterial *material = new QSGFlatColorMaterial;
-	material->setColor(color);
-//	QImage *img = new QImage(":/images/flash.png");
-//	this->material = new QSGTextureMaterial;
-//	texture = view->createTextureFromImage(*img);
-//	texture->setMipmapFiltering(QSGTexture::Linear);
-//	texture->setHorizontalWrapMode(QSGTexture::Repeat);
-//	texture->setVerticalWrapMode(QSGTexture::Repeat);
-//	this->material->setTexture(texture);
+    material = new QSGTextureMaterial();
+    QImage img = QImage(2*SIZE, 2*SIZE, QImage::Format_RGB16);
+    img.fill(color); // icon background color
+    QSvgRenderer renderer(iconPath);
+    QPainter painter(&img);
+    renderer.render(&painter); // paint the icon on top of it
+    material = new QSGTextureMaterial;
+    texture = view->createTextureFromImage(img);
+    texture->setMipmapFiltering(QSGTexture::Linear);
+    texture->setHorizontalWrapMode(QSGTexture::Repeat);
+    texture->setVerticalWrapMode(QSGTexture::Repeat);
+    texture->bind();
+    material->setTexture(texture);
 	gnode->setMaterial(material);
-	gnode->setFlag(QSGNode::OwnsMaterial);
-	geometry->allocate(6);
-	vertices = geometry->vertexDataAsPoint2D();
-	vertices[0].set(pos.x()-10,pos.y()-10);
-	vertices[1].set(pos.x()-10,pos.y()+10);
-	vertices[2].set(pos.x()+10, pos.y()-10);
-	vertices[3].set(pos.x()+10, pos.y()+10);
-	vertices[4].set(pos.x()-10, pos.y()+10);
-	vertices[5].set(pos.x()+10, pos.y()-10);
+    gnode->setFlag(QSGNode::OwnsMaterial);
+    geometry->allocate(4);
+    vertices = geometry->vertexDataAsTexturedPoint2D();
+    vertices[0].set(pos.x()-SIZE,pos.y()-SIZE,0,0);
+    vertices[1].set(pos.x()+SIZE,pos.y()-SIZE,1,0);
+    vertices[2].set(pos.x()-SIZE,pos.y()+SIZE,0,1);
+    vertices[3].set(pos.x()+SIZE,pos.y()+SIZE,1,1);
 	node->appendChildNode(gnode);
 }
 

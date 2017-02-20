@@ -15,13 +15,13 @@
 #include <QImage>
 #include <QQuickView>
 
-#define SIZE 10
+#define SIZE 12
 
 class CurveItem : public QObject
 {
 	Q_OBJECT
 public:
-    explicit CurveItem(QSGNode* node, int fieldsize, bool greenAllowed, bool redAllowed, bool blueAllowed);
+    explicit CurveItem(QSGNode* node, QQuickView *view, int fieldsize, QString iconPath, bool greenAllowed, bool redAllowed, bool blueAllowed);
 	~CurveItem();
 	int getSize();
 	QPointF getPos();
@@ -49,10 +49,10 @@ protected:
 	QCurver *collector;
 	QPointF pos;
 	QSGNode* node;
-	QSGTextureMaterial* material = material;
+    QSGTextureMaterial* material;
 	QSGGeometry* geometry;
 	QSGGeometryNode* gnode;
-	QSGGeometry::Point2D *vertices;
+    QSGGeometry::TexturedPoint2D *vertices;
 	QSGTexture* texture;
 	QColor color;
 	QTimer* timer;
