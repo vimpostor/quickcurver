@@ -1,8 +1,7 @@
 #Quick Curver
 This is an OpenGL accelerated Qt/C++ implementation of the famous game "Achtung die Kurve".
 
-![alt tag](http://i.imgur.com/HTNalqO.png)
-![alt tag](http://i.imgur.com/UAROtaY.png)
+![alt tag](http://i.imgur.com/IGa3NwA.png)
 
 Please note that this project is yet in development and hasn't reached a stable version for now. This means that you could experience bugs, when playing this game.
 
