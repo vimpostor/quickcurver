@@ -101,13 +101,6 @@ ApplicationWindow {
             }
 
         ]
-//        backAction: navDrawer.action
-
-//        NavigationDrawer {
-//            id: navDrawer
-//            enabled: root.width < dp(500)
-////            onEnabledChanged: smallLoader.active = enabled
-//        }
         PlayerSelector {
             id: playerselector
             anchors.fill: parent

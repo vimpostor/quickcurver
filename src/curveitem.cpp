@@ -2,10 +2,13 @@
 #include <QSvgRenderer>
 #include <QPainter>
 
-CurveItem::CurveItem(QSGNode *node, QQuickView *view, int fieldsize, QString iconPath, bool redAllowed, bool greenAllowed, bool blueAllowed) {
+CurveItem::CurveItem(QSGNode *node, QQuickView *view, int fieldsize, QString iconPath, bool redAllowed, bool greenAllowed, bool blueAllowed, QPointF *pos) {
 	this->node = node;
-    pos = QPointF(segment::randInt(10, fieldsize-10), segment::randInt(10,fieldsize-10));
-
+    if (pos == NULL) {
+        this->pos = QPointF(segment::randInt(10, fieldsize-10), segment::randInt(10,fieldsize-10));
+    } else {
+        this->pos = QPointF(pos->x(), pos->y());
+    }
 	//find a random allowed color
 	bool allowedColors[3] = {greenAllowed, redAllowed, blueAllowed};
 	int allowedColorsSum = greenAllowed + redAllowed + blueAllowed;
@@ -19,13 +22,13 @@ CurveItem::CurveItem(QSGNode *node, QQuickView *view, int fieldsize, QString ico
 	} while (colorCount != r);
 	switch (i) {
 	case 0:
-		color = Qt::green;
+        color = QColor(118, 255, 3); // green
 		break;
 	case 1:
-		color = Qt::red;
+        color = QColor(245, 0, 87); // red
 		break;
 	default:
-		color = Qt::blue;
+        color = QColor(61, 90, 254); // blue
 		break;
 	}
 
@@ -43,18 +46,16 @@ CurveItem::CurveItem(QSGNode *node, QQuickView *view, int fieldsize, QString ico
     material = new QSGTextureMaterial;
     texture = view->createTextureFromImage(img);
     texture->setMipmapFiltering(QSGTexture::Linear);
-    texture->setHorizontalWrapMode(QSGTexture::Repeat);
-    texture->setVerticalWrapMode(QSGTexture::Repeat);
     texture->bind();
     material->setTexture(texture);
 	gnode->setMaterial(material);
     gnode->setFlag(QSGNode::OwnsMaterial);
     geometry->allocate(4);
     vertices = geometry->vertexDataAsTexturedPoint2D();
-    vertices[0].set(pos.x()-SIZE,pos.y()-SIZE,0,0);
-    vertices[1].set(pos.x()+SIZE,pos.y()-SIZE,1,0);
-    vertices[2].set(pos.x()-SIZE,pos.y()+SIZE,0,1);
-    vertices[3].set(pos.x()+SIZE,pos.y()+SIZE,1,1);
+    vertices[0].set(this->pos.x()-SIZE,this->pos.y()-SIZE,0,0);
+    vertices[1].set(this->pos.x()+SIZE,this->pos.y()-SIZE,1,0);
+    vertices[2].set(this->pos.x()-SIZE,this->pos.y()+SIZE,0,1);
+    vertices[3].set(this->pos.x()+SIZE,this->pos.y()+SIZE,1,1);
 	node->appendChildNode(gnode);
 }
 
