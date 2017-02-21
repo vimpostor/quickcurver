@@ -22,13 +22,13 @@ CurveItem::CurveItem(QSGNode *node, QQuickView *view, int fieldsize, QString ico
 	} while (colorCount != r);
 	switch (i) {
 	case 0:
-        color = QColor(118, 255, 3); // green
+        color = ITEMGREENCOLOR;
 		break;
 	case 1:
-        color = QColor(245, 0, 87); // red
+        color = ITEMREDCOLOR;
 		break;
 	default:
-        color = QColor(61, 90, 254); // blue
+        color = ITEMBLUECOLOR;
 		break;
 	}
 
@@ -91,13 +91,15 @@ void CurveItem::useItem(int playerCount, QCurver **curver, QCurver *collector) {
 	this->playerCount = playerCount;
 	this->curver = curver;
 	this->collector = collector;
-	if (color == Qt::green) {
+    if (color == ITEMGREENCOLOR) {
 		useMyself();
-	} else if (color == Qt::red) {
+    } else if (color == ITEMREDCOLOR) {
 		useOthers();
-	} else {
+    } else if (color == ITEMBLUECOLOR) {
 		useAll();
-	}
+    } else  {
+        qDebug() << "Unexpected color in useItem()";
+    }
 	node->removeChildNode(gnode);
 	invisible = true;
 	if (deUseTime != 0) {
@@ -154,13 +156,15 @@ void CurveItem::deuseOthers() {
 
 void CurveItem::deuseIn() {
 	timer = new QTimer;
-	if (color == Qt::green) {
+    if (color == ITEMGREENCOLOR) {
 		timer->singleShot(deUseTime, this, SLOT(deuseMyself()));
-	} else if (color == Qt::red) {
+    } else if (color == ITEMREDCOLOR) {
 		timer->singleShot(deUseTime, this, SLOT(deuseOthers()));
-	} else { //blue
+    } else if (color == ITEMBLUECOLOR) {
 		timer->singleShot(deUseTime, this, SLOT(deuseAll()));
-	}
+    } else {
+        qDebug() << "Unexpected color in deuseIn()";
+    }
 }
 
 void CurveItem::setRound(int round) {

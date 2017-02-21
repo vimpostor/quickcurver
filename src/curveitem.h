@@ -16,6 +16,9 @@
 #include <QQuickView>
 
 #define SIZE 12
+#define ITEMREDCOLOR QColor(245, 0, 87)
+#define ITEMGREENCOLOR QColor(118, 255, 3)
+#define ITEMBLUECOLOR QColor(61, 90, 254)
 
 class CurveItem : public QObject
 {
