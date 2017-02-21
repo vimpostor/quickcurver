@@ -23,7 +23,7 @@ public:
     void broadcastChatMessage(QString username, QString message);
     QHostAddress *getServerIp();
     bool isReady();
-    void transmitNewItem(QString iconName, QColor color, QPointF pos);
+    void transmitNewItem(QString iconName, QColor color, QPointF pos, int index);
 signals:
     void playerStatusChanged(int index, QString s);
     void sendMessage(QString username, QString message);

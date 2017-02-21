@@ -151,6 +151,13 @@ void Client::tcpReadyRead() {
         emit sendMessage(username, message);
     } else if (message == "[STARTED]") {
         emit joinStatusChanged("STARTED");
+    } else if (message == "[ITEM]") {
+        QString iconName;
+        QColor color;
+        QPointF pos;
+        int index;
+        in >> iconName >> color >> pos >> index;
+        emit spawnItem(iconName, color, pos, index);
     } else {
         qDebug() << "Unsupported tcp message arrived on client";
     }

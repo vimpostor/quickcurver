@@ -2,41 +2,51 @@
 #include <QSvgRenderer>
 #include <QPainter>
 
+CurveItem::CurveItem(QSGNode *node, QQuickView *view, QString iconPath, QColor color, QPointF pos) {
+    this->node = node;
+    this->pos = pos;
+    this->color = color;
+    initCurveItem(view, iconPath);
+}
+
 CurveItem::CurveItem(QSGNode *node, QQuickView *view, int fieldsize, QString iconPath, bool redAllowed, bool greenAllowed, bool blueAllowed, QPointF *pos) {
-	this->node = node;
+    this->node = node;
     if (pos == NULL) {
         this->pos = QPointF(segment::randInt(10, fieldsize-10), segment::randInt(10,fieldsize-10));
     } else {
         this->pos = QPointF(pos->x(), pos->y());
     }
-	//find a random allowed color
-	bool allowedColors[3] = {greenAllowed, redAllowed, blueAllowed};
-	int allowedColorsSum = greenAllowed + redAllowed + blueAllowed;
-	int r = segment::randInt(0, allowedColorsSum-1);
-	int i = -1;
-	int colorCount = -1;
-	do {
-		i++;
-		colorCount++;
-		for (; !allowedColors[i]; i++) {}; //this moves to the next possible color position
-	} while (colorCount != r);
-	switch (i) {
-	case 0:
+    //find a random allowed color
+    bool allowedColors[3] = {greenAllowed, redAllowed, blueAllowed};
+    int allowedColorsSum = greenAllowed + redAllowed + blueAllowed;
+    int r = segment::randInt(0, allowedColorsSum-1);
+    int i = -1;
+    int colorCount = -1;
+    do {
+        i++;
+        colorCount++;
+        for (; !allowedColors[i]; i++) {}; //this moves to the next possible color position
+    } while (colorCount != r);
+    switch (i) {
+    case 0:
         color = ITEMGREENCOLOR;
-		break;
-	case 1:
+        break;
+    case 1:
         color = ITEMREDCOLOR;
-		break;
-	default:
+        break;
+    default:
         color = ITEMBLUECOLOR;
-		break;
-	}
+        break;
+    }
+    initCurveItem(view, iconPath);
+}
 
-	gnode = new QSGGeometryNode;
+void CurveItem::initCurveItem(QQuickView *view, QString iconPath) {
+    gnode = new QSGGeometryNode;
     geometry = new QSGGeometry(QSGGeometry::defaultAttributes_TexturedPoint2D(), 0);
     geometry->setDrawingMode(GL_TRIANGLE_STRIP);
     gnode->setGeometry(geometry);
-	gnode->setFlag(QSGNode::OwnsGeometry);
+    gnode->setFlag(QSGNode::OwnsGeometry);
     material = new QSGTextureMaterial();
     QImage img = QImage(2*SIZE, 2*SIZE, QImage::Format_RGB16);
     img.fill(color); // icon background color
@@ -48,7 +58,7 @@ CurveItem::CurveItem(QSGNode *node, QQuickView *view, int fieldsize, QString ico
     texture->setMipmapFiltering(QSGTexture::Linear);
     texture->bind();
     material->setTexture(texture);
-	gnode->setMaterial(material);
+    gnode->setMaterial(material);
     gnode->setFlag(QSGNode::OwnsMaterial);
     geometry->allocate(4);
     vertices = geometry->vertexDataAsTexturedPoint2D();
@@ -56,7 +66,7 @@ CurveItem::CurveItem(QSGNode *node, QQuickView *view, int fieldsize, QString ico
     vertices[1].set(this->pos.x()+SIZE,this->pos.y()-SIZE,1,0);
     vertices[2].set(this->pos.x()-SIZE,this->pos.y()+SIZE,0,1);
     vertices[3].set(this->pos.x()+SIZE,this->pos.y()+SIZE,1,1);
-	node->appendChildNode(gnode);
+    node->appendChildNode(gnode);
 }
 
 CurveItem::~CurveItem() {

@@ -76,6 +76,7 @@ void Game::clientStart(QString ip, int port) {
     connect(client, SIGNAL(joinStatusChanged(QString)), this, SLOT(setJoinStatus(QString)));
     connect(client, SIGNAL(updateGUI()), this, SLOT(updateGUI()));
     connect(client, SIGNAL(sendMessage(QString,QString)), this, SLOT(sendMessageToQml(QString,QString)));
+    connect(client, SIGNAL(spawnItem(QString,QColor,QPointF,int)), this, SLOT(clientSpawnItem(QString,QColor,QPointF,int)));
     client->start(node, ip, port);
     setFlag(ItemHasContents);
 }
@@ -124,7 +125,7 @@ void Game::progress() {
                 break;
             }
             items[i]->setRound(roundCount);
-            server->transmitNewItem(items[i]->getIconName(), items[i]->getColor(), items[i]->getPos());
+            server->transmitNewItem(items[i]->getIconName(), items[i]->getColor(), items[i]->getPos(), i);
             nextItemSpawn = segment::randInt(10000/itemSpawnrate,100000/itemSpawnrate); // dont worry this is only entered, when itemSpawnrate != 0
         }
         lastItemSpawn = lastTime;
@@ -369,5 +370,13 @@ void Game::leaveGame() {
         client->shutdown();
         notifyGUI("You left the game!", "SNACKBAR");
         isHost = true;
+    }
+}
+
+void Game::clientSpawnItem(QString iconName, QColor color, QPointF pos, int index) {
+    if (items[index] != NULL) {
+        qDebug() << "Item is not NULL in clientSpawnItem()";
+    } else {
+        items[index] = new CurveItem(node, &textureGenerator, iconName, color, pos);
     }
 }

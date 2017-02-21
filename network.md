@@ -29,7 +29,7 @@ When the server started the game, the client will have to be able to handle live
 - [x] Depending on what direction is pressed, the client will send "[LEFT]", "[RIGHT]" or "[NONE]" to the server (UDP) as soon as the direction changes
 - [x] The client will periodically get the update of the position of a curver over UDP with the header "HEAD" and handle it
 - [x] The client will periodically get updates of curver segment data with the header "POS" over UDP and handle it
-- [ ] The client will have to be able to handle incoming "[ITEM]" TCP messages which contain the position of new items
+- [x] The client will have to be able to handle incoming "[ITEM]" TCP messages which contain the position of new items
 
 ### Chat messages
 - [x] The client may send chat messages to the server (TCP) at any time with the header "[MESSAGE]" followed by the username and the message
