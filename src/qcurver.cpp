@@ -162,6 +162,8 @@ void QCurver::reset() {
 	nextSegmentTime = 2000;
 	changingSegment = true;
 	roundCount++;
+    clientSegment = 0;
+    clientPoscount = 0;
 }
 
 void QCurver::clientReset() {
@@ -170,8 +172,6 @@ void QCurver::clientReset() {
     }
     segments[0] = new segment(color, thickness, node, material);
     segmentcount = 1;
-    clientSegment = 0;
-    clientPoscount = -1;
 }
 
 void QCurver::cleanInstall() {
@@ -264,6 +264,7 @@ bool QCurver::moveToNextSegment() {
         return true;
     }
 }
+
 void QCurver::clientNewSegment() {
     segments[segmentcount] = new segment(color, thickness, node, material);
     segmentcount++;

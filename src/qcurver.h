@@ -20,8 +20,7 @@ enum rotation {
 	ROTATE_RIGHT
 };
 
-class QCurver : public QObject
-{
+class QCurver : public QObject {
     Q_OBJECT
 public:
     explicit QCurver(QSGNode* node, QColor color, int baseSpeed, int fieldsize);
@@ -44,7 +43,7 @@ public:
     QColor getColor();
     bool hasUnsyncedSegPoints();
     QPointF readUnsyncedSegPoint();
-    bool moveToNextSegment(); //attempts to move to next segment, returns true on success, false on failure
+    bool moveToNextSegment(); // attempts to move to next segment, returns true on success, false on failure
     void clientNewSegment();
     void clientAddPoint(QPointF p);
     void clientReset();

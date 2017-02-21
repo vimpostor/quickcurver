@@ -158,6 +158,12 @@ void Client::tcpReadyRead() {
         int index;
         in >> iconName >> color >> pos >> index;
         emit spawnItem(iconName, color, pos, index);
+    } else if (message == "[RESET]") {
+        for (int i = 0; i < MAXPLAYERCOUNT; ++i) {
+            if (curver[i] != NULL) {
+                curver[i]->clientReset();
+            }
+        }
     } else {
         qDebug() << "Unsupported tcp message arrived on client";
     }

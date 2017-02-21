@@ -187,9 +187,7 @@ void Server::newConnection() {
 }
 
 void Server::newRound() {
-    QByteArray datagram;
-    datagram.append("RESET");
-    sendToAllUdp(&datagram);
+    transmitTcpMessage("[RESET]");
 }
 
 void Server::broadcastChatMessage(QString username, QString message) {
