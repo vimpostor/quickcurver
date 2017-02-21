@@ -32,6 +32,7 @@ public:
 	QColor getColor();
 	void useItem(int playerCount, QCurver** curver, QCurver* collector);
 	void setRound(int round);
+    QString getIconName();
 public slots:
 //	void renderUseless();
 protected slots:

@@ -5,10 +5,10 @@
 #include "qcurver.h"
 #include <QQuickView>
 
-class CleaninstallItem : public CurveItem
-{
+class CleaninstallItem : public CurveItem {
 public:
     CleaninstallItem(QSGNode *node, QQuickView *view, int fieldsize);
+    QString getIconName();
 private:
 	void use(QCurver *curver);
 };

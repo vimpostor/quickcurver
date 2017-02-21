@@ -17,3 +17,7 @@ void FastItem::use(QCurver *curver) {
 void FastItem::deuse(QCurver *curver) {
 	curver->halfSpeed();
 }
+
+QString FastItem::getIconName() {
+    return FASTERICON;
+}

@@ -124,6 +124,7 @@ void Game::progress() {
                 break;
             }
             items[i]->setRound(roundCount);
+            server->transmitNewItem(items[i]->getIconName(), items[i]->getColor(), items[i]->getPos());
             nextItemSpawn = segment::randInt(10000/itemSpawnrate,100000/itemSpawnrate); // dont worry this is only entered, when itemSpawnrate != 0
         }
         lastItemSpawn = lastTime;

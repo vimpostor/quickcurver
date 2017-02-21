@@ -11,3 +11,7 @@ CleaninstallItem::CleaninstallItem(QSGNode *node, QQuickView *view, int fieldsiz
 void CleaninstallItem::use(QCurver *curver) {
 	curver->cleanInstall();
 }
+
+QString CleaninstallItem::getIconName() {
+    return CLEANINSTALLICON;
+}

@@ -179,3 +179,7 @@ void CurveItem::use(QCurver *curver) {
 void CurveItem::deuse(QCurver *curver) {
 	(void) curver; //suppresses unused variable warning
 }
+
+QString CurveItem::getIconName() {
+    return "";
+}

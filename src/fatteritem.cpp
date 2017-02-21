@@ -16,3 +16,7 @@ void FatterItem::use(QCurver *curver) {
 void FatterItem::deuse(QCurver *curver) {
 	curver->halfThickness();
 }
+
+QString FatterItem::getIconName() {
+    return FATTERICON;
+}

@@ -343,3 +343,10 @@ bool Server::isReady() {
     }
     return true;
 }
+
+void Server::transmitNewItem(QString iconName, QColor color, QPointF pos) {
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out << "[ITEM]" << iconName << color << pos;
+    sendToAllTcp(&block);
+}
