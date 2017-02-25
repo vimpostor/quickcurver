@@ -47,6 +47,7 @@ Item {
             onClicked: {
                 if (game.isReady()) {
                     pageStack.push(Qt.resolvedUrl("gamePage.qml"));
+                    game.parent.x = game.parent.parent.width - game.getFieldSize();
                     game.start();
                     game.focus = true;
                 }

@@ -411,3 +411,7 @@ void Game::clientDeleteAllItems() {
         }
     }
 }
+
+int Game::getFieldSize() {
+    return this->fieldsize;
+}

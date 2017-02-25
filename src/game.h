@@ -58,6 +58,7 @@ public:
     Q_INVOKABLE void changeClientSettings(QString username, bool ready);
     Q_INVOKABLE QString getClipboardContent();
     Q_INVOKABLE QString copyIp();
+    Q_INVOKABLE int getFieldSize();
 	short int playercount = 2;
 	void setQmlObject(QObject *o);
 

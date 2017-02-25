@@ -58,10 +58,10 @@ ApplicationWindow {
     }
 
     id: root
-    width: 1400
-    height: 1150
-    minimumWidth: 1400
-    minimumHeight: 997
+    width: 1200
+    height: 900
+    minimumWidth: 1200
+    minimumHeight: 900
     title: "Quick Curver"
     visible: true
     theme {
@@ -162,7 +162,7 @@ ApplicationWindow {
     }
     Item {
         y: 55
-        x: parent.width - 1000
+        x: parent.width - 800
         Game {
             id: game
             objectName: "game"
