@@ -17,7 +17,7 @@ public:
 	segment(QColor color, int thickness, QSGNode *node, QSGFlatColorMaterial* material);
 	~segment();
 	QPointF pos[MAXPOSSIZE];
-	short int poscount = 0;
+    int poscount = 0;
 	void appendPoint(QPointF addedPoint, float angle);
     void clientappendPoint(QPointF p);
 	QPointF getLastPoint(int offset = 0);

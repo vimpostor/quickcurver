@@ -13,8 +13,6 @@ QCurver::QCurver(QSGNode *node, QColor color, int baseSpeed, int fieldsize) { //
     material = new QSGFlatColorMaterial;
     material->setColor(color);
     lastPoint = QPointF(segment::randInt(100,fieldsize-100),segment::randInt(100,fieldsize-100));
-    segments[0] = new segment(color, thickness, node, material);
-    segmentcount++;
     rotateDirection(segment::randFloat()*2*M_PI);
     lastnewSegment = QTime::currentTime();
     headnode = new headNode(lastPoint, material, node);
@@ -53,9 +51,6 @@ void QCurver::progress(float deltat) {
     lastPoint = newPoint; //this maybe should be moved to the end of this block later, however moving it will at least break wallcollision
     if (!changingSegment) {
         if (lastnewSegment.msecsTo(QTime::currentTime()) > nextSegmentTime) {
-            //new Segment
-            segments[segmentcount] = new segment(color, thickness, node, material);
-            segmentcount++;
             lastnewSegment = QTime::currentTime();
             nextSegmentTime = segment::randInt(1000,5000);
             changingSegment = true;
@@ -70,6 +65,9 @@ void QCurver::progress(float deltat) {
     } else {
         //check if we should produce a new line again
         if (lastnewSegment.msecsTo(QTime::currentTime()) > segmentchangeTime) {
+            //new Segment
+            segments[segmentcount] = new segment(color, thickness, node, material);
+            segmentcount++;
             lastnewSegment = QTime::currentTime();
             changingSegment = false;
             segmentchangeTime = 128;
@@ -121,8 +119,8 @@ bool QCurver::wallCollision() {
 int QCurver::playerCollision() {
 	short int p = -1;
 //	emit requestIntersectionChecking(segments[segmentcount-1]->pos[segments[segmentcount-1]->poscount-2], lastPoint);
-	emit requestIntersectionChecking(segments[segmentcount-1]->pos[segments[segmentcount-1]->poscount-2], lastPoint);
-	emit requestIntersectionChecking(segments[segmentcount-1]->pos[segments[segmentcount-1]->poscount-4], lastPoint);
+    emit requestIntersectionChecking(segments[segmentcount-1]->pos[segments[segmentcount-1]->poscount-2], lastPoint);
+    emit requestIntersectionChecking(segments[segmentcount-1]->pos[segments[segmentcount-1]->poscount-4], lastPoint);
 
 
 	if (p != -1) {
@@ -134,7 +132,7 @@ int QCurver::playerCollision() {
 bool QCurver::checkforIntersection(QPointF a, QPointF b) {
 	bool c = false;
 	for (int i = 0; i < segmentcount && !c; i++) {
-		c = segments[i]->checkforIntersection(a, b);
+        c = segments[i]->checkforIntersection(a, b);
 	}
 	return c;
 }
@@ -144,16 +142,13 @@ void QCurver::rollDieAnimation() {
 }
 
 void QCurver::reset() {
-	int oldSegmentcount = segmentcount;
-	segmentcount = 0;
-	for (int i = 0; i < oldSegmentcount; i++) {
+    for (int i = 0; i < segmentcount; ++i) {
 		delete segments[i];
 	}
     lastPoint = QPointF(segment::randInt(100,fieldsize-100),segment::randInt(100,fieldsize-100));
 	thickness = 4;
 	headnode->setThickness(thickness);
-	segments[0] = new segment(color, thickness, node, material);
-	segmentcount = 1;
+    segmentcount = 0;
 	rotating = ROTATE_NONE;
 	rotateDirection(segment::randFloat()*2*M_PI);
 	lastnewSegment = QTime::currentTime();
@@ -199,7 +194,7 @@ QPointF QCurver::getPos(int offset) {
 	if (offset == 0) {
 		return lastPoint;
 	} else {
-		return segments[segmentcount-1]->getLastPoint(offset);
+        return segments[segmentcount-1]->getLastPoint(offset);
 	}
 }
 
@@ -247,7 +242,11 @@ QColor QCurver::getColor() {
 }
 
 bool QCurver::hasUnsyncedSegPoints() {
-    return segments[clientSegment]->poscount - 1 > clientPoscount;
+    if (clientSegment != -1) {
+        return segments[clientSegment]->poscount - 1 > clientPoscount;
+    } else {
+        return false;
+    }
 }
 
 QPointF QCurver::readUnsyncedSegPoint() {

@@ -80,7 +80,7 @@ private:
 	bool wallCollision();
 	int roundCount = 0;
 	int playerCollision(); //returns -1  if no collision, else returns the number of the player with whom we are colliding
-    int clientSegment = 0; //last segment synchronized
+    int clientSegment = -1; //last segment synchronized
     int clientPoscount = -1; //last pos synchronized
     int fieldsize = 1000;
 };
