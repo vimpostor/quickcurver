@@ -74,6 +74,7 @@ private slots:
     void sendMessageToQml(QString sender, QString message);
     void notifyGUI(QString msg, QString mode);
     void clientSpawnItem(QString iconName, QColor color, QPointF pos, int index);
+    void clientDeleteItem(int index);
 private:
     QCurver* curver[MAXPLAYERCOUNT];
 	bool alive[MAXPLAYERCOUNT];

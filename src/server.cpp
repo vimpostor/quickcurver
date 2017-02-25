@@ -348,3 +348,10 @@ void Server::transmitNewItem(QString iconName, QColor color, QPointF pos, int in
     out << QString("[ITEM]") << iconName << color << pos << index;
     sendToAllTcp(&block);
 }
+
+void Server::useItem(int index) {
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out << QString("[ITEMUSED]") << index;
+    sendToAllTcp(&block);
+}

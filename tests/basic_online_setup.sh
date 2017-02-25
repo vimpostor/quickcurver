@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 ANIMATIONDURATION=0.4
-BUILDDIRECTORY='../../build'
+BUILDDIRECTORY='../build'
 if ! [ -d $BUILDDIRECTORY ]; then
 	echo 'Please create a build directory first and build the application'
 	exit 1

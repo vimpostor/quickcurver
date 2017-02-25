@@ -164,6 +164,10 @@ void Client::tcpReadyRead() {
                 curver[i]->clientReset();
             }
         }
+    } else if (message == "[ITEMUSED]") {
+        int index;
+        in >> index;
+        emit deleteItem(index);
     } else {
         qDebug() << "Unsupported tcp message arrived on client";
     }

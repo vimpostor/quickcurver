@@ -24,6 +24,7 @@ public:
     QHostAddress *getServerIp();
     bool isReady();
     void transmitNewItem(QString iconName, QColor color, QPointF pos, int index);
+    void useItem(int index);
 signals:
     void playerStatusChanged(int index, QString s);
     void sendMessage(QString username, QString message);

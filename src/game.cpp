@@ -77,6 +77,7 @@ void Game::clientStart(QString ip, int port) {
     connect(client, SIGNAL(updateGUI()), this, SLOT(updateGUI()));
     connect(client, SIGNAL(sendMessage(QString,QString)), this, SLOT(sendMessageToQml(QString,QString)));
     connect(client, SIGNAL(spawnItem(QString,QColor,QPointF,int)), this, SLOT(clientSpawnItem(QString,QColor,QPointF,int)));
+    connect(client, SIGNAL(deleteItem(int)), this, SLOT(clientDeleteItem(int)));
     client->start(node, ip, port);
     setFlag(ItemHasContents);
 }
@@ -138,6 +139,7 @@ void Game::progress() {
                     //use item
                     items[j]->useItem(playercount, curver, curver[i]);
                     items[j] = NULL; //dont worry it will delete it by its own
+                    server->useItem(j);
                 }
             }
             //let the AI make its move now
@@ -389,4 +391,13 @@ QString Game::copyIp() {
     QString ip = server->getServerIp()->toString();
     QGuiApplication::clipboard()->setText(ip);
     return ip;
+}
+
+void Game::clientDeleteItem(int index) {
+    if (items[index] == NULL) {
+        qDebug() << "Item not spawned in the first place";
+    } else {
+        delete items[index];
+        items[index] = NULL;
+    }
 }
