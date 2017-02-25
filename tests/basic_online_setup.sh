@@ -17,11 +17,11 @@ SWID=$(xdotool search 'Quick Curver'| head -1) # Window ID of server
 xdotool key 'Ctrl+c' # Copy ip address
 
 # Choose one player to be an online player
-xdotool mousemove --window $SWID 150 240 click 1
+xdotool mousemove --window $SWID 150 230 click 1
 sleep $ANIMATIONDURATION
-xdotool mousemove --window $SWID 700 520 click 1
+xdotool mousemove --window $SWID 660 470 click 1
 sleep $ANIMATIONDURATION
-xdotool mousemove --window $SWID 700 565 click 1 mousemove --window $SWID 700 50 click 1
+xdotool mousemove --window $SWID 660 500 click 1 mousemove --window $SWID 700 50 click 1
 
 ./QuickCurver 2>&1 | xargs -0 echo -e '\e[0;31m' & # Start Client (colored red)
 sleep $ANIMATIONDURATION # Wait for application to start
