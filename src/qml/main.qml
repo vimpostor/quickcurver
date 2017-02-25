@@ -72,13 +72,18 @@ ApplicationWindow {
 
     initialPage: Page {
         title: "Quick Curver"
-        actionBar.maxActionCount: 4
+        actionBar.maxActionCount: 5
         actions: [
             Action {
                 iconName: "action/search_web"
                 name: "Join an online game"
                 onTriggered: clientDialog.show()
                 shortcut: "Ctrl+J"
+            },
+            Action {
+                iconName: "content/copy"
+                name: "Copy IP address"
+                onTriggered: playerselector.mysnackbar.open("Copied IP address " + game.copyIp())
             },
             Action {
                 iconName: "image/color_lens"

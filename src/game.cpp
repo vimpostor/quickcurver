@@ -384,3 +384,9 @@ void Game::clientSpawnItem(QString iconName, QColor color, QPointF pos, int inde
 QString Game::getClipboardContent() {
     return QGuiApplication::clipboard()->text();
 }
+
+QString Game::copyIp() {
+    QString ip = server->getServerIp()->toString();
+    QGuiApplication::clipboard()->setText(ip);
+    return ip;
+}

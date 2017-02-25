@@ -57,6 +57,7 @@ public:
     Q_INVOKABLE bool isReady(); // checks if all players are ready, also sends an error message itself if someone is not ready
     Q_INVOKABLE void changeClientSettings(QString username, bool ready);
     Q_INVOKABLE QString getClipboardContent();
+    Q_INVOKABLE QString copyIp();
 	short int playercount = 2;
 	void setQmlObject(QObject *o);
 
