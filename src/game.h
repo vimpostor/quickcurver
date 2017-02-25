@@ -75,6 +75,7 @@ private slots:
     void notifyGUI(QString msg, QString mode);
     void clientSpawnItem(QString iconName, QColor color, QPointF pos, int index);
     void clientDeleteItem(int index);
+    void clientDeleteAllItems();
 private:
     QCurver* curver[MAXPLAYERCOUNT];
 	bool alive[MAXPLAYERCOUNT];

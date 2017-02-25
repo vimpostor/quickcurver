@@ -175,15 +175,14 @@ void QCurver::cleanInstall() {
 		cleaninstallAnimation->addSegment(segments[i]);
 	}
 	cleaninstallAnimation->fireAnimation();
-	int oldSegmentcount = segmentcount;
-	segmentcount = 0;
-    clientSegment = 0;
-    clientPoscount = -1;
-	for (int i = 0; i < oldSegmentcount; i++) {
+    for (int i = 0; i < segmentcount; i++) {
 		delete segments[i];
+        segments[i] = NULL;
 	}
-	segments[0] = new segment(color, thickness, node, material);
-	segmentcount = 1;
+//	segments[0] = new segment(color, thickness, node, material);
+    clientSegment = -1;
+    clientPoscount = -1;
+    segmentcount = 0;
 	lastnewSegment = QTime::currentTime();
 	segmentchangeTime = 50;
 	nextSegmentTime = 2000;

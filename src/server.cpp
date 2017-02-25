@@ -355,3 +355,7 @@ void Server::useItem(int index) {
     out << QString("[ITEMUSED]") << index;
     sendToAllTcp(&block);
 }
+
+void Server::cleanInstall() {
+    transmitTcpMessage("[CLEANINSTALL]");
+}

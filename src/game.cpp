@@ -78,6 +78,7 @@ void Game::clientStart(QString ip, int port) {
     connect(client, SIGNAL(sendMessage(QString,QString)), this, SLOT(sendMessageToQml(QString,QString)));
     connect(client, SIGNAL(spawnItem(QString,QColor,QPointF,int)), this, SLOT(clientSpawnItem(QString,QColor,QPointF,int)));
     connect(client, SIGNAL(deleteItem(int)), this, SLOT(clientDeleteItem(int)));
+    connect(client, SIGNAL(deleteAllItems()), this, SLOT(clientDeleteAllItems()));
     client->start(node, ip, port);
     setFlag(ItemHasContents);
 }
@@ -110,7 +111,7 @@ void Game::progress() {
     //			items[i] = new SlowItem(node);
                 break;
             case 2:
-                items[i] = new CleaninstallItem(node, &textureGenerator, fieldsize);
+                items[i] = new CleaninstallItem(node, &textureGenerator, fieldsize, server);
                 break;
             case 3:
                 //global wall hack
@@ -399,5 +400,14 @@ void Game::clientDeleteItem(int index) {
     } else {
         delete items[index];
         items[index] = NULL;
+    }
+}
+
+void Game::clientDeleteAllItems() {
+    for (int i = 0; i < MAXITEMCOUNT; ++i) {
+        if (items[i] != NULL) {
+            delete items[i];
+            items[i] = NULL;
+        }
     }
 }

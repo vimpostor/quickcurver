@@ -164,10 +164,17 @@ void Client::tcpReadyRead() {
                 curver[i]->clientReset();
             }
         }
+        emit deleteAllItems();
     } else if (message == "[ITEMUSED]") {
         int index;
         in >> index;
         emit deleteItem(index);
+    } else if (message == "[CLEANINSTALL]") {
+        for (int i = 0; i < MAXPLAYERCOUNT; ++i) {
+            if (curver[i] != NULL) {
+                curver[i]->cleanInstall();
+            }
+        }
     } else {
         qDebug() << "Unsupported tcp message arrived on client";
     }
