@@ -6,6 +6,7 @@
         <file alias="email.svg">communication_email.svg</file>
         <file alias="robot.svg">communication_robot.svg</file>
         <file alias="clear_all.svg">communication_clear_all.svg</file>
+        <file alias="telegram.svg">communication_telegram.svg</file>
     </qresource>
     <qresource prefix="/icons/image">
         <file alias="color_lens.svg">image_color_lens.svg</file>
