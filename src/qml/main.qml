@@ -84,6 +84,7 @@ ApplicationWindow {
                 iconName: "content/copy"
                 name: "Copy IP address"
                 onTriggered: playerselector.mysnackbar.open("Copied IP address " + game.copyIp())
+                shortcut: "Ctrl+C"
             },
             Action {
                 iconName: "image/color_lens"
