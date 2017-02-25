@@ -143,6 +143,7 @@ void QCurver::rollDieAnimation() {
 void QCurver::reset() {
     for (int i = 0; i < segmentcount; ++i) {
 		delete segments[i];
+        segments[i] = NULL;
 	}
     lastPoint = QPointF(segment::randInt(100,fieldsize-100),segment::randInt(100,fieldsize-100));
 	thickness = 4;
@@ -163,6 +164,7 @@ void QCurver::reset() {
 void QCurver::clientReset() {
     for (int i = 0; i < segmentcount; i++) {
         delete segments[i];
+        segments[i] = NULL;
     }
     segmentcount = 0;
 }
@@ -248,7 +250,7 @@ bool QCurver::hasUnsyncedSegPoints() {
 }
 
 QPointF QCurver::readUnsyncedSegPoint() {
-    clientPoscount++;
+    ++clientPoscount;
     return segments[clientSegment]->pos[clientPoscount];
 }
 
