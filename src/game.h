@@ -20,6 +20,8 @@
 #include "fatteritem.h"
 #include "server.h"
 #include "client.h"
+#include <QGuiApplication>
+#include <QClipboard>
 // maxplayercount is defined in multiplayersettings.h
 #define MAXITEMCOUNT 20
 #define AIINTERVAL 4
@@ -54,6 +56,7 @@ public:
     Q_INVOKABLE void setSendWinnerMessages(bool checked);
     Q_INVOKABLE bool isReady(); // checks if all players are ready, also sends an error message itself if someone is not ready
     Q_INVOKABLE void changeClientSettings(QString username, bool ready);
+    Q_INVOKABLE QString getClipboardContent();
 	short int playercount = 2;
 	void setQmlObject(QObject *o);
 

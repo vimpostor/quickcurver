@@ -380,3 +380,7 @@ void Game::clientSpawnItem(QString iconName, QColor color, QPointF pos, int inde
         items[index] = new CurveItem(node, &textureGenerator, iconName, color, pos);
     }
 }
+
+QString Game::getClipboardContent() {
+    return QGuiApplication::clipboard()->text();
+}

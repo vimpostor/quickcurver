@@ -21,6 +21,7 @@
         <file alias="send.svg">content_send.svg</file>
         <file alias="speedometer.svg">content_speedometer.svg</file>
         <file alias="timer_sand.svg">content_timer_sand.svg</file>
+        <file alias="paste.svg">content_paste.svg</file>
     </qresource>
     <qresource prefix="/icons/device">
         <file alias="access_alarm.svg">device_access_alarm.svg</file>

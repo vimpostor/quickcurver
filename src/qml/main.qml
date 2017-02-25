@@ -204,8 +204,23 @@ ApplicationWindow {
         ColumnLayout {
             width: dp(360)
             spacing: dp(16)
+            Item { // dummy element to create an height offset at the beginning
+                height: dp(0)
+                Layout.fillHeight: true
+            }
             RowLayout {
                 Layout.fillWidth: true
+                IconButton {
+                    iconName: "content/paste"
+                    onClicked: {
+                        var c = game.getClipboardContent();
+                        if (c === "") {
+                            playerselector.mysnackbar.open("No text in clipboard!");
+                        } else {
+                            serverIp.text = c;
+                        }
+                    }
+                }
                 TextField {
                     id: serverIp
                     Layout.fillWidth: true
