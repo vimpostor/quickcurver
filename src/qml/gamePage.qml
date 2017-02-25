@@ -15,7 +15,7 @@ Page {
     canGoBack: false
 //    onGoBack: pageStack.push(this) //as of now, canGoBack = false does not work, this disables it manually
     onGoBack: close()
-    onFocusChanged: fieldsize = game.getFieldSize()
+    onParentChanged: fieldsize = game.getFieldSize()
     PageSidebar {
 //        mode: "right"
         width: parent.width - fieldsize
