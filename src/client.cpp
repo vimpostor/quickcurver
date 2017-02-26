@@ -24,7 +24,7 @@ void Client::start(QSGNode *node, QString ip, int port) {
 void Client::shutdown() {
     if (udpSocket != NULL) {
         udpSocket->close();
-        disconnect(udpSocket, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));
+        disconnect(udpSocket, SIGNAL(readyRead()), this, SLOT(udpReadPendingDatagrams()));
     }
     if (tcpSocket != NULL) {
         sendTcpMessage("[LEFT]");
