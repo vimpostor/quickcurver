@@ -20,8 +20,11 @@ segment::segment(QColor color, int thickness, QSGNode *node, QSGFlatColorMateria
 
 segment::~segment() {
 	node->removeChildNode(gnode);
+    gnode->setFlag(QSGNode::OwnsGeometry, false);
 	delete geometry;
-//	delete gnode;
+    gnode->setFlag(QSGNode::OwnsMaterial, false);
+    gnode->setMaterial(NULL);
+    delete gnode;
 }
 
 void segment::initRand() {
