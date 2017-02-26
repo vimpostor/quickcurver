@@ -368,3 +368,10 @@ void Server::useItem(int index) {
 void Server::cleanInstall() {
     transmitTcpMessage("[CLEANINSTALL]");
 }
+
+void Server::curverDied(int index) {
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out << QString("[DEATH]") << index;
+    sendToAllTcp(&block);
+}

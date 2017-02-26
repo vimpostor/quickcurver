@@ -178,6 +178,10 @@ void Client::tcpReadyRead() {
                     curver[i]->cleanInstall();
                 }
             }
+        } else if (message == "[DEATH]") {
+            int index;
+            in >> index;
+            (void) new DieAnimation(curver[index]->getPos(), node, curver[index]->getMaterial(), this);
         } else {
             qDebug() << "Unsupported tcp message arrived on client";
         }

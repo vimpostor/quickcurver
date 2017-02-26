@@ -26,6 +26,7 @@ QCurver::QCurver(QSGNode *node, QColor color) { //client
     this->node = node;
     material = new QSGFlatColorMaterial;
     material->setColor(color);
+    lastPoint = QPointF(0, 0);
 }
 
 QCurver::~QCurver() {
@@ -271,4 +272,9 @@ void QCurver::clientAddPoint(QPointF p) {
     if (segmentcount > 0) {
         segments[segmentcount-1]->clientappendPoint(p);
     }
+    lastPoint = p;
+}
+
+QSGMaterial *QCurver::getMaterial() {
+    return this->material;
 }

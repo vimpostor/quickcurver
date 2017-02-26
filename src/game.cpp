@@ -195,6 +195,7 @@ void Game::curverDied(QCurver *who) {
     if (alive[index]) { // todo: fix "curverDied" being called multiple times
         int i;
         bool onlyBotsAlive = true;
+        server->curverDied(index);
         for (i = 0; curver[i] != who; i++) {
             if (alive[i]) //if he is still alive, increase his score
                 increaseScore(i);
