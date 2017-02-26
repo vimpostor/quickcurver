@@ -72,7 +72,7 @@ ApplicationWindow {
 
     initialPage: Page {
         title: "Quick Curver"
-        actionBar.maxActionCount: 6
+        actionBar.maxActionCount: 5
         actions: [
             Action {
                 iconName: "action/search_web"
@@ -85,11 +85,6 @@ ApplicationWindow {
                 name: "Copy IP address"
                 onTriggered: playerselector.mysnackbar.open("Copied IP address " + game.copyIp())
                 shortcut: "Ctrl+C"
-            },
-            Action {
-                iconName: "communication/telegram"
-                name: "Share IP via Telegram"
-                onTriggered: Qt.openUrlExternally("https://telegram.me/share/url?url="+game.copyIp())
             },
             Action {
                 iconName: "image/color_lens"
