@@ -137,7 +137,7 @@ bool QCurver::checkforIntersection(QPointF a, QPointF b) {
 }
 
 void QCurver::rollDieAnimation() {
-    (void) new dieAnimation(lastPoint, node, material, this);
+    (void) new DieAnimation(lastPoint, node, material, this); // deletes itself after the animation is finished
 }
 
 void QCurver::reset() {

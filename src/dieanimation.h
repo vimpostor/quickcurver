@@ -13,12 +13,12 @@
 #define PARTICLEVELOCITY 512
 #define PARTICLELIFETIME 512 //milliseconds
 
-class dieAnimation : public QObject
+class DieAnimation : public QObject
 {
 	Q_OBJECT
 public:
-	explicit dieAnimation(QPointF p, QSGNode* node, QSGMaterial* material, QObject *parent = 0);
-
+    explicit DieAnimation(QPointF p, QSGNode* node, QSGMaterial* material, QObject *parent = 0);
+    ~DieAnimation();
 signals:
 private:
 	QSGNode* node;
