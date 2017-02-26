@@ -318,7 +318,12 @@ void Server::disconnectClient(QTcpSocket *client, QString reason) {
 }
 
 void Server::tcpSocketError(QAbstractSocket::SocketError socketError) {
-    qDebug() << "A Tcp socket error occured!\n" << socketError;
+    QTcpSocket *s = (QTcpSocket *) sender();
+    if (socketError == QAbstractSocket::RemoteHostClosedError) {
+        disconnectClient(s); // disconnect client then if the connection was closed
+    } else {
+        qDebug() << "An unhandled Tcp socket error occured!\n" << socketError;
+    }
 }
 
 QHostAddress *Server::getServerIp() {
