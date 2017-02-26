@@ -35,6 +35,8 @@ ApplicationWindow {
         } else if (s === "KICKED") {
             clientDialog.close();
             playerselector.mysnackbar.open("You got kicked from the game!");
+        } else if (s === "TERMINATE") {
+            close();
         }
     }
     function setPlayerStatus(index,s) {

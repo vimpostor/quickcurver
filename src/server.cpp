@@ -88,13 +88,17 @@ void Server::shutdown() {
     for (int i = 0; i < MAXPLAYERCOUNT; ++i) {
         if (clientsTcp[i] != NULL) {
             clientsTcp[i]->close();
-            disconnect(clientsTcp[i], SIGNAL(readyRead()), this, SLOT(tcpReadyRead()));
+            disconnect(clientsTcp[i], SIGNAL(readyRead()), tcpReadyReadSignalMapper, SLOT(map()));
         }
     }
 }
 
 void Server::udpSocketError(QAbstractSocket::SocketError socketError) {
-    qDebug() << "A Udp socket error occured!\n" << socketError << udpSocket->errorString();
+    if (socketError == QAbstractSocket::AddressInUseError) {
+        qDebug() << "Cannot start the server, because the UDP socket is already used";
+    } else {
+        qDebug() << "An unhandled Udp socket error occured!\n" << socketError << udpSocket->errorString();
+    }
 }
 
 int Server::isValidInput(QHostAddress *sender) {

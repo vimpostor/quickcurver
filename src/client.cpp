@@ -27,7 +27,9 @@ void Client::shutdown() {
         disconnect(udpSocket, SIGNAL(readyRead()), this, SLOT(udpReadPendingDatagrams()));
     }
     if (tcpSocket != NULL) {
-        sendTcpMessage("[LEFT]");
+        if (tcpSocket->isOpen()) {
+            sendTcpMessage("[LEFT]");
+        }
         tcpSocket->close();
         disconnect(tcpSocket, SIGNAL(readyRead()), this, SLOT(tcpReadyRead()));
     }
@@ -181,7 +183,14 @@ void Client::tcpReadyRead() {
 }
 
 void Client::tcpSocketError(QAbstractSocket::SocketError socketError) {
-    qDebug() << "A TCP socket error occured!\n" << socketError << tcpSocket->errorString();
+    if (socketError == QAbstractSocket::RemoteHostClosedError) {
+        // leave the game then
+        tcpSocket->close();
+        qDebug() << "Terminating, because the server closed the connection";
+        emit joinStatusChanged("TERMINATE"); // TODO: this should be handled more gracefully
+    } else {
+        qDebug() << "An unhandled TCP socket error occured!\n" << socketError << tcpSocket->errorString();
+    }
 }
 
 void Client::sendUdpMessage(QString msg) {
