@@ -126,7 +126,12 @@ void Server::setAvailable(int index, bool newState) {
 }
 
 void Server::start() {
-	started = true;
+    started = true;
+    updateServerSettings();
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out << QString("[SETTINGS]") << serverSettings;
+    sendToAllTcp(&block);
     transmitTcpMessage("[STARTED]");
     broadcastTimer = new QTimer(this);
     connect(broadcastTimer, SIGNAL(timeout()), this, SLOT(broadcast()));
@@ -374,4 +379,12 @@ void Server::curverDied(int index) {
     QDataStream out(&block, QIODevice::WriteOnly);
     out << QString("[DEATH]") << index;
     sendToAllTcp(&block);
+}
+
+void Server::updateServerSettings() {
+    serverSettings.playerCount = this->playercount;
+    for (int i = 0; i < playercount; ++i) {
+        serverSettings.usernames[i] = clientSettings[i].username;
+        serverSettings.colors[i] = curver[i]->getColor();
+    }
 }

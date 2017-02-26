@@ -14,7 +14,7 @@ When the user entered the ip and port in the Join dialog, the client tries joini
 - [x] If the client may not join, the server answers with "[REJECTED]" on TCP and the client will leave
 - [x] If "[JOIN]" on UDP reaches the server, the server answers with "[JOINED]" on UDP, which is proof for the client that he finally successfully joined
 - [x] The client then transmits his settings (such as username etc) to the server using TCP
-- [ ] The client will immediately get settings back from the server (TCP), which have to be handled
+- [ ] The client will get settings back from the server (TCP), once the game begins, which have to be handled
 
 Once the client is joined, the client has to wait for the server to start the game:
 
@@ -51,7 +51,7 @@ When the server started the game, the client will have to be able to handle live
 ## Joining
 - [x] An incoming TCP connection could mean a potential client. The server will accept such an incoming connection. The server immediately responds with "[ACCEPTED]" or "[REJECTED]" on TCP depending on if the client may join
 - [x] If the server receives "[JOIN]" over UDP, the client will get its place in the game now. The server will respond with "[JOINED]" over UDP
-- [ ] The server will get settings from the client over TCP, deal with those and send back its own settings over TCP
+- [x] The server will get settings from the client over TCP, deal with those and send back its own settings as soon as the game starts over TCP
 
 ## Waiting for the beginning of the game
 - [ ] Since settings may be changed, the server must resend the settings to all existings clients on change (TCP)

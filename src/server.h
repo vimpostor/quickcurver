@@ -67,6 +67,8 @@ private:
     void disconnectClient(QTcpSocket *client, QString reason = ""); // if reason is specified, the client will be notified about the disconnection
     QDataStream in[MAXPLAYERCOUNT];
     QSignalMapper *tcpReadyReadSignalMapper;
+    ServerSettings serverSettings;
+    void updateServerSettings();
 };
 
 #endif // SERVER_H

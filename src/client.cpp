@@ -182,6 +182,15 @@ void Client::tcpReadyRead() {
             int index;
             in >> index;
             curver[index]->die();
+        } else if (message == "[SETTINGS]") {
+            in >> serverSettings;
+            // create curvers
+            for (int i = 0; i < serverSettings.playerCount; ++i) {
+                QSGFlatColorMaterial *material = new QSGFlatColorMaterial;
+                material->setColor(serverSettings.colors[i]);
+                headnodes[i] = new headNode(QPointF(), material, node);
+                curver[i] = new QCurver(node, serverSettings.colors[i]);
+            }
         } else {
             qDebug() << "Unsupported tcp message arrived on client";
         }

@@ -54,6 +54,7 @@ private:
     void sendUdpMessage(QString msg);
     void sendTcpMessage(QString msg);
     ClientSettings settings;
+    ServerSettings serverSettings;
 };
 
 #endif // CLIENT_H
