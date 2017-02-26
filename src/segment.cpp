@@ -23,7 +23,6 @@ segment::~segment() {
     gnode->setFlag(QSGNode::OwnsGeometry, false);
 	delete geometry;
     gnode->setFlag(QSGNode::OwnsMaterial, false);
-    gnode->setMaterial(NULL);
     delete gnode;
 }
 

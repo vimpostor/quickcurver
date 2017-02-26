@@ -179,7 +179,6 @@ void QCurver::cleanInstall() {
 		delete segments[i];
         segments[i] = NULL;
 	}
-//	segments[0] = new segment(color, thickness, node, material);
     clientSegment = -1;
     clientPoscount = -1;
     segmentcount = 0;
