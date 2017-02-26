@@ -160,6 +160,7 @@ void QCurver::reset() {
 	roundCount++;
     clientSegment = -1;
     clientPoscount = -1;
+    alive = true;
 }
 
 void QCurver::clientReset() {
@@ -168,6 +169,7 @@ void QCurver::clientReset() {
         segments[i] = NULL;
     }
     segmentcount = 0;
+    alive = true;
 }
 
 void QCurver::cleanInstall() {
@@ -275,6 +277,7 @@ void QCurver::clientAddPoint(QPointF p) {
     lastPoint = p;
 }
 
-QSGMaterial *QCurver::getMaterial() {
-    return this->material;
+void QCurver::die() {
+    alive = false;
+    (void) new DieAnimation(lastPoint, node, material, this); // deletes itself after the animation is finished
 }

@@ -49,7 +49,8 @@ public:
     void clientReset();
 	QPointF getDirectionRotatedBy(float angle);
 	int thickness = 4;
-    QSGMaterial *getMaterial();
+    bool alive = true;
+    void die();
 signals:
 	void died(QCurver* who);
 	void requestIntersectionChecking(QPointF a, QPointF b);

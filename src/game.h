@@ -79,7 +79,6 @@ private slots:
     void clientDeleteAllItems();
 private:
     QCurver* curver[MAXPLAYERCOUNT];
-	bool alive[MAXPLAYERCOUNT];
 	QColor colors[MAXPLAYERCOUNT];
 	Qt::Key controls[MAXPLAYERCOUNT][2]; //first one is left key, second one is right key
 	bool controlledByAI[MAXPLAYERCOUNT];

@@ -45,7 +45,6 @@ void Game::start() {
         itemPrioritySum += itemPriority[i];
     }
     for (int i = 0; i < playercount; i++) {
-        alive[i] = true;
         score[i] = 0;
         roundScore[i] = 0;
         curver[i] = new QCurver(node, colors[i], baseSpeed, fieldsize);
@@ -133,7 +132,7 @@ void Game::progress() {
         lastItemSpawn = lastTime;
     }
     for (int i = 0; i < playercount; i++) {
-        if (alive[i]) {
+        if (curver[i]->alive) {
             //check for item collision
             for (int j = 0; j < MAXITEMCOUNT; j++) {
                 if (items[j] != NULL && items[j]->testCollision(curver[i]->getPos())) {
@@ -192,25 +191,25 @@ void Game::curverDied(QCurver *who) {
     int index; // first get the index of the curver that died
     for (index = 0; index < playercount && curver[index] != who; ++index) {
     }
-    if (alive[index]) { // todo: fix "curverDied" being called multiple times
+    if (curver[index]->alive) { // todo: fix "curverDied" being called multiple times
         int i;
         bool onlyBotsAlive = true;
         server->curverDied(index);
         for (i = 0; curver[i] != who; i++) {
-            if (alive[i]) //if he is still alive, increase his score
+            if (curver[i]->alive) //if he is still alive, increase his score
                 increaseScore(i);
         }
-        alive[i] = false;
+        curver[i]->alive = false;
 //        server->broadcastChatMessage("Chat Bot", names[i] + " died");
         i++;
         for (; i < playercount; ++i) {
-            if (alive[i])
+            if (curver[i]->alive)
                 increaseScore(i);
         }
         int stillAlive = 0;
         int alivePlayer;
         for (i = 0; i < playercount; i++) {
-            if (alive[i]) {
+            if (curver[i]->alive) {
                 stillAlive++;
                 alivePlayer = i;
                 if (!controlledByAI[i]) {
@@ -263,8 +262,7 @@ void Game::startNextRound() {
 		QVariant returnedValue;
 		QMetaObject::invokeMethod(qmlobject, "changeScore", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, i) , Q_ARG(QVariant, score[i]), Q_ARG(QVariant, roundScore[i]));
 		curver[i]->reset();
-		alive[i] = true;
-	}
+    }
 	for (int i = 0; i < MAXITEMCOUNT; i++) {
 		if (items[i] != NULL) {
 			delete items[i];
@@ -292,10 +290,10 @@ void Game::setQmlObject(QObject *o) {
 }
 
 void Game::increaseScore(int index) {
-	score[index]++;
-	roundScore[index]++;
-	QVariant returnedValue;
-	QMetaObject::invokeMethod(qmlobject, "changeScore", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, index) , Q_ARG(QVariant, score[index]), Q_ARG(QVariant, roundScore[index]));
+    score[index]++;
+    roundScore[index]++;
+    QVariant returnedValue;
+    QMetaObject::invokeMethod(qmlobject, "changeScore", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, index) , Q_ARG(QVariant, score[index]), Q_ARG(QVariant, roundScore[index]));
 }
 
 void Game::sendMessageToQml(QString sender, QString message) {
