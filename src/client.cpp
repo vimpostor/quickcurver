@@ -135,50 +135,52 @@ void Client::timeout() {
 }
 
 void Client::tcpReadyRead() {
-    in.startTransaction();
-    QString message;
-    in >> message;
-    if (!in.commitTransaction()) {
-        return;
-    }
+    while (!tcpSocket->atEnd()) {
+        in.startTransaction();
+        QString message;
+        in >> message;
+        if (!in.commitTransaction()) {
+            return;
+        }
 
-    if (message == "[ACCEPTED]") {
-        sendUdpMessage("[JOIN]"); // test udp connection as well
-        emit joinStatusChanged("TCPACK");
-    } else if (message == "[REJECTED]") {
-        emit joinStatusChanged("REJECTED");
-    } else if (message == "[MESSAGE]") {
-        QString username, message;
-        in >> username >> message;
-        emit sendMessage(username, message);
-    } else if (message == "[STARTED]") {
-        emit joinStatusChanged("STARTED");
-    } else if (message == "[ITEM]") {
-        QString iconName;
-        QColor color;
-        QPointF pos;
-        int index;
-        in >> iconName >> color >> pos >> index;
-        emit spawnItem(iconName, color, pos, index);
-    } else if (message == "[RESET]") {
-        for (int i = 0; i < MAXPLAYERCOUNT; ++i) {
-            if (curver[i] != NULL) {
-                curver[i]->clientReset();
+        if (message == "[ACCEPTED]") {
+            sendUdpMessage("[JOIN]"); // test udp connection as well
+            emit joinStatusChanged("TCPACK");
+        } else if (message == "[REJECTED]") {
+            emit joinStatusChanged("REJECTED");
+        } else if (message == "[MESSAGE]") {
+            QString username, message;
+            in >> username >> message;
+            emit sendMessage(username, message);
+        } else if (message == "[STARTED]") {
+            emit joinStatusChanged("STARTED");
+        } else if (message == "[ITEM]") {
+            QString iconName;
+            QColor color;
+            QPointF pos;
+            int index;
+            in >> iconName >> color >> pos >> index;
+            emit spawnItem(iconName, color, pos, index);
+        } else if (message == "[RESET]") {
+            for (int i = 0; i < MAXPLAYERCOUNT; ++i) {
+                if (curver[i] != NULL) {
+                    curver[i]->clientReset();
+                }
             }
-        }
-        emit deleteAllItems();
-    } else if (message == "[ITEMUSED]") {
-        int index;
-        in >> index;
-        emit deleteItem(index);
-    } else if (message == "[CLEANINSTALL]") {
-        for (int i = 0; i < MAXPLAYERCOUNT; ++i) {
-            if (curver[i] != NULL) {
-                curver[i]->cleanInstall();
+            emit deleteAllItems();
+        } else if (message == "[ITEMUSED]") {
+            int index;
+            in >> index;
+            emit deleteItem(index);
+        } else if (message == "[CLEANINSTALL]") {
+            for (int i = 0; i < MAXPLAYERCOUNT; ++i) {
+                if (curver[i] != NULL) {
+                    curver[i]->cleanInstall();
+                }
             }
+        } else {
+            qDebug() << "Unsupported tcp message arrived on client";
         }
-    } else {
-        qDebug() << "Unsupported tcp message arrived on client";
     }
 }
 
