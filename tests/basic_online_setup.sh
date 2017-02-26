@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+NUMBEROFPLAYERS=$1
+if [ "$NUMBEROFPLAYERS" = "" ]; then
+	NUMBEROFPLAYERS=2
+fi
+echo $NUMBEROFPLAYERS
 ANIMATIONDURATION=0.4
 BUILDDIRECTORY='../build'
 if ! [ -d $BUILDDIRECTORY ]; then
@@ -22,6 +27,10 @@ sleep $ANIMATIONDURATION
 xdotool mousemove --window $SWID 660 470 click 1
 sleep $ANIMATIONDURATION
 xdotool mousemove --window $SWID 660 500 click 1 mousemove --window $SWID 700 50 click 1
+# Create the rest of players
+for (( i = 2; i < NUMBEROFPLAYERS; i++ )); do
+	xdotool key "Ctrl+Shift+n"
+done
 
 ./QuickCurver 2>&1 | xargs -0 echo -e '\e[0;31m' & # Start Client (colored red)
 sleep $ANIMATIONDURATION # Wait for application to start
