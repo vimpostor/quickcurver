@@ -10,7 +10,7 @@
 #include "segment.h"
 #include <QObject>
 
-#define ANIMATIONDURATION 200
+#define ANIMATIONDURATION 400
 #define MAXPOSITIONSIZE 4048
 
 
