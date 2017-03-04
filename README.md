@@ -45,8 +45,6 @@ If you do not have setup SSH keys on your machine, you can alternatively run the
 git clone https://github.com/Magnus2552/quickcurver.git
 cd quickcurver
 ./httpsClonePatch.sh # You may have to fix the permissions first with chmod +x ./httpsClonePatch.sh
-git submodule init
-git submodule update
 ./build.sh # You may have to fix the permissions first with chmod +x ./build.sh
 ./QuickCurver # starting the executable may vary on OSs other than Linux
 ```
