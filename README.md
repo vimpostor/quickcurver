@@ -30,9 +30,23 @@ First make sure, that you have the required dependencies of QuickCurver installe
 	- Qt5Network
 
 ###Build instructions
+####Cloning using SSH
+This is the preferred way, simply execute:
 ```{r, engine='bash', count_lines}
 git clone --recursive git@github.com:Magnus2552/quickcurver.git
 cd quickcurver
+./build.sh # You may have to fix the permissions first with chmod +x ./build.sh
+./QuickCurver # starting the executable may vary on OSs other than Linux
+```
+
+####Cloning using HTTPS
+If you do not have setup SSH keys on your machine, you can alternatively run the following commands:
+```{r, engine='bash', count_lines}
+git clone https://github.com/Magnus2552/quickcurver.git
+cd quickcurver
+./httpsClonePatch.sh # You may have to fix the permissions first with chmod +x ./httpsClonePatch.sh
+git submodule init
+git submodule update
 ./build.sh # You may have to fix the permissions first with chmod +x ./build.sh
 ./QuickCurver # starting the executable may vary on OSs other than Linux
 ```
