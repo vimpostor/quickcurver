@@ -21,7 +21,7 @@ First make sure, that you have the required dependencies of QuickCurver installe
 * g++ (You may use an alternative C++ compiler, but things will get slightly more difficult)
 * make
 * At least Qt 5.7
-* The following Qt Modules (package name depends on distribution):
+* The following Qt Modules (package name depends on distribution, Note: These modules are typically distributed in 3 different packages which are probably called something like qtbase, qtdeclarative and qtsvg):
 	- Qt5Core
 	- Qt5Gui
 	- Qt5Quick
