@@ -48,7 +48,7 @@ cd quickcurver
 ./QuickCurver # starting the executable may vary on OSs other than Linux
 ```
 
-In general prefer to use the script `./build.sh`. However, if the script fails for an **unexplainable reason**, you may want to run './build.sh -f'. If this still fails, try the following manually instead of `./build.sh`:
+In general prefer to use the script `./build.sh`. However, if the script fails due to an **unexplainable reason**, you may want to run './build.sh -f'. If this still fails, try the following manually instead of `./build.sh`:
 ```{r, engine='bash', count_lines}
 mkdir build; cd build
 qmake ..
