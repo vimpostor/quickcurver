@@ -1,16 +1,24 @@
 #!/usr/bin/env bash
 
-if ! [[ $(type qmake) ]]; then
-	echo 'Cannot find qmake. Do you have Qt installed?'; exit 1
+REQUIREDQTMAJORVERSION=5
+REQUIREDQTMINORVERSION=7
+
+if [[ $1 = '-f' ]]; then
+	echo 'Skipping Qt version check...'
+else
+	if ! [[ $(type qmake) ]]; then
+		echo 'Cannot find qmake. Do you have Qt installed?'; exit 1
+	fi
+	echo 'Checking Qt version...'
+	QTVERSION=$(qmake -v| tail -1| sed 's/Using Qt version //'| sed -r 's/ .*//')
+	QTMAJORVERSION=$(echo $QTVERSION| sed -r 's/\..*//')
+	QTMINORVERSION=$(echo $QTVERSION| grep -Eo '\..*'| grep -Eo '[[:digit:]].*'| sed -r 's/\..*//')
+	echo 'You are using Qt' $QTVERSION
+	if ( [ $QTMAJORVERSION -lt $REQUIREDQTMAJORVERSION ] || ( [ $QTMAJORVERSION -eq $REQUIREDQTMAJORVERSION ]  && [ $QTMINORVERSION -lt $REQUIREDQTMINORVERSION ] ) ); then
+		echo 'Your Qt version is too old, you need at least Qt' $REQUIREDQTMAJORVERSION.$REQUIREDQTMINORVERSION; exit 1
+	fi
 fi
-echo 'Checking Qt version...'
-QTVERSION=$(qmake -v| tail -1| sed 's/Using Qt version //'| sed -r 's/ .*//')
-echo 'You are using Qt' $QTVERSION
-if [[ $(echo $QTVERSION| sed -r 's/\..*//') -lt 5 ]]; then # major version number
-	echo 'Your Qt version is too old, you need at least Qt 5.7'; exit 1
-elif [[ $(echo $QTVERSION| grep -Eo '\..*'| grep -Eo '[[:digit:]].*'| sed -r 's/\..*//') -lt 7 ]]; then # minor version number
-	echo 'Your Qt version is too old, you need at least Qt 5.7'; exit 2
-fi
+
 if [[ -d build ]]; then
 	echo 'Found build directory' $(pwd)'/build'
 	cd build || exit 1
