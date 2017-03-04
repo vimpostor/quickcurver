@@ -35,8 +35,7 @@ This is the preferred way, simply execute:
 ```{r, engine='bash', count_lines}
 git clone --recursive git@github.com:Magnus2552/quickcurver.git
 cd quickcurver
-./build.sh # You may have to fix the permissions first with chmod +x ./build.sh
-./QuickCurver # starting the executable may vary on OSs other than Linux
+./build.sh
 ```
 
 ####Cloning using HTTPS
@@ -44,10 +43,11 @@ If you do not have setup SSH keys on your machine, you can alternatively run the
 ```{r, engine='bash', count_lines}
 git clone https://github.com/Magnus2552/quickcurver.git
 cd quickcurver
-./httpsClonePatch.sh # You may have to fix the permissions first with chmod +x ./httpsClonePatch.sh
-./build.sh # You may have to fix the permissions first with chmod +x ./build.sh
-./QuickCurver # starting the executable may vary on OSs other than Linux
+./httpsClonePatch.sh
+./build.sh
 ```
+
+When the application has been successfully compiled, it can usually be found in the build subdirectory with the name `./QuickCurver`.
 
 In general prefer to use the script `./build.sh`. However, if the script fails due to an **unexplainable reason**, you may want to run `./build.sh -f`. If this still fails, try the following manually instead of `./build.sh`:
 ```{r, engine='bash', count_lines}
