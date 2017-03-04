@@ -15,6 +15,19 @@ Please note that this project is yet in development and hasn't reached a stable 
 
 #Installation
 ##Compiling from source
+First make sure, that you have the required dependencies of QuickCurver installed. These are:
+
+* g++ # You may use an alternative C++ compiler, but things will get slightly more difficult
+* make
+* At least Qt 5.7
+* The following Qt Modules (package name depends on distribution):
+	- Qt5Core
+	- Qt5Gui
+	- Qt5Quick
+	- Qt5Qml
+	- Qt5Svg
+	- Qt5Network
+
 Quick Curver uses [qml-material](https://github.com/papyros/qml-material) which must be installed first:
 Navigate to a directory where you want to install qml-material and execute:
 ```{r, engine='bash', count_lines}
