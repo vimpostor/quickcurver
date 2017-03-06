@@ -221,10 +221,10 @@ void Client::sendTcpMessage(QString msg) {
     tcpSocket->write(block);
 }
 
-void Client::requestSendMessage(QString username, QString message) {
+void Client::requestSendMessage(QString message) {
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
-    out << QString("[MESSAGE]") << username << message;
+    out << QString("[MESSAGE]") << settings.username << message;
     tcpSocket->write(block);
 }
 

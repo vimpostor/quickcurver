@@ -20,7 +20,7 @@ public:
 	void releaseKey(Qt::Key k);
     void start(QSGNode *node, QString ip, int port = 52552);
     void shutdown(); // also sends [LEFT] to the server if already joined
-    void requestSendMessage(QString username, QString message);
+    void requestSendMessage(QString message);
     void changeSettings(QString username, bool ready);
 signals:
 	void joinStatusChanged(QString s);

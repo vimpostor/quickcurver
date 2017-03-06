@@ -347,7 +347,7 @@ void Game::requestSendMessage(QString message) {
     if (isHost) {
         server->broadcastChatMessage(username, message);
     } else {
-        client->requestSendMessage(username, message);
+        client->requestSendMessage(message);
     }
 }
 
