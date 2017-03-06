@@ -276,6 +276,7 @@ void Game::startNextRound() {
 
 void Game::setName(int index, QString newName) {
 	names[index] = newName;
+    server->setName(index, newName);
 }
 
 void Game::setRoundTimeout(int seconds) {

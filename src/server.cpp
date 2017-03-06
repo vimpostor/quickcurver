@@ -384,3 +384,7 @@ void Server::updateServerSettings() {
         serverSettings.colors[i] = curver[i]->getColor();
     }
 }
+
+void Server::setName(int index, QString username) {
+    serverSettings.clientSettings[index].username = username;
+}

@@ -27,6 +27,7 @@ public:
     void useItem(int index);
     void cleanInstall();
     void curverDied(int index);
+    void setName(int index, QString username);
 signals:
     void playerStatusChanged(int index, QString s);
     void sendMessage(QString username, QString message);
