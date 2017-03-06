@@ -89,68 +89,70 @@ void Game::setColor(int index, QColor color) {
 void Game::progress() {
 	//calculate time since last progress()
     float deltat = (float) lastTime.msecsTo(QTime::currentTime())/1000 * effectiveTimeMultiplier;
-    lastTime = QTime::currentTime();
-    if (itemSpawnrate != 0 && lastItemSpawn.msecsTo(lastTime) > nextItemSpawn) { // try spawning item
-        int i;
-        for (i = 0; i < MAXITEMCOUNT && items[i] != NULL; i++) { //find first free item slot
-        }
-        if (i == MAXITEMCOUNT) { // no free slot
-            qDebug() << "No free slot for a new item, will try spawning later...";
-            nextItemSpawn = segment::randInt(100000/itemSpawnrate,1000000/itemSpawnrate); // dont worry this is only entered, when itemSpawnrate != 0
-        } else { // free slot at i
-            int r = segment::randInt(1, itemPrioritySum);
-            int itemSelector = 0;
-            for (itemSelector = 0; r > 0; r -= itemPriority[itemSelector], itemSelector++) {};
-            itemSelector--;
-            switch (itemSelector) {
-            case 0:
-                items[i] = new FastItem(node, &textureGenerator, fieldsize);
-                break;
-            case 1:
-    //			items[i] = new SlowItem(node);
-                break;
-            case 2:
-                items[i] = new CleaninstallItem(node, &textureGenerator, fieldsize, server);
-                break;
-            case 3:
-                //global wall hack
-                break;
-            case 4:
-                //invisibility
-                break;
-            case 5:
-                items[i] = new FatterItem(node, &textureGenerator, fieldsize);
-                break;
-            default:
-                qDebug() << "(EE) This should not happen, the algorithm should always be able to decide what item to spawn";
-                break;
+    if (deltat != 0) {
+        lastTime = QTime::currentTime();
+        if (itemSpawnrate != 0 && lastItemSpawn.msecsTo(lastTime) > nextItemSpawn) { // try spawning item
+            int i;
+            for (i = 0; i < MAXITEMCOUNT && items[i] != NULL; i++) { //find first free item slot
             }
-            items[i]->setRound(roundCount);
-            server->transmitNewItem(items[i]->getIconName(), items[i]->getColor(), items[i]->getPos(), i);
-            nextItemSpawn = segment::randInt(10000/itemSpawnrate,100000/itemSpawnrate); // dont worry this is only entered, when itemSpawnrate != 0
-        }
-        lastItemSpawn = lastTime;
-    }
-    for (int i = 0; i < playercount; i++) {
-        if (curver[i]->alive) {
-            //check for item collision
-            for (int j = 0; j < MAXITEMCOUNT; j++) {
-                if (items[j] != NULL && items[j]->testCollision(curver[i]->getPos())) {
-                    //use item
-                    items[j]->useItem(playercount, curver, curver[i]);
-                    items[j] = NULL; //dont worry it will delete it by its own
-                    server->useItem(j);
+            if (i == MAXITEMCOUNT) { // no free slot
+                qDebug() << "No free slot for a new item, will try spawning later...";
+                nextItemSpawn = segment::randInt(100000/itemSpawnrate,1000000/itemSpawnrate); // dont worry this is only entered, when itemSpawnrate != 0
+            } else { // free slot at i
+                int r = segment::randInt(1, itemPrioritySum);
+                int itemSelector = 0;
+                for (itemSelector = 0; r > 0; r -= itemPriority[itemSelector], itemSelector++) {};
+                itemSelector--;
+                switch (itemSelector) {
+                case 0:
+                    items[i] = new FastItem(node, &textureGenerator, fieldsize);
+                    break;
+                case 1:
+        //			items[i] = new SlowItem(node);
+                    break;
+                case 2:
+                    items[i] = new CleaninstallItem(node, &textureGenerator, fieldsize, server);
+                    break;
+                case 3:
+                    //global wall hack
+                    break;
+                case 4:
+                    //invisibility
+                    break;
+                case 5:
+                    items[i] = new FatterItem(node, &textureGenerator, fieldsize);
+                    break;
+                default:
+                    qDebug() << "(EE) This should not happen, the algorithm should always be able to decide what item to spawn";
+                    break;
                 }
+                items[i]->setRound(roundCount);
+                server->transmitNewItem(items[i]->getIconName(), items[i]->getColor(), items[i]->getPos(), i);
+                nextItemSpawn = segment::randInt(10000/itemSpawnrate,100000/itemSpawnrate); // dont worry this is only entered, when itemSpawnrate != 0
             }
-            //let the AI make its move now
-            if (controlledByAI[i] && ((frameCount+i) % AIINTERVAL == 0)) {
-                ai[i]->makeMove(deltat);
-            }
-            curver[i]->progress(deltat);
+            lastItemSpawn = lastTime;
         }
+        for (int i = 0; i < playercount; i++) {
+            if (curver[i]->alive) {
+                //check for item collision
+                for (int j = 0; j < MAXITEMCOUNT; j++) {
+                    if (items[j] != NULL && items[j]->testCollision(curver[i]->getPos())) {
+                        //use item
+                        items[j]->useItem(playercount, curver, curver[i]);
+                        items[j] = NULL; //dont worry it will delete it by its own
+                        server->useItem(j);
+                    }
+                }
+                //let the AI make its move now
+                if (controlledByAI[i] && ((frameCount+i) % AIINTERVAL == 0)) {
+                    ai[i]->makeMove(deltat);
+                }
+                curver[i]->progress(deltat);
+            }
+        }
+        frameCount++;
+        update();
     }
-    frameCount++;
-    update();
 }
 
 void Game::sendKey(Qt::Key k) {
@@ -244,7 +246,6 @@ void Game::checkforIntersection(QPointF a, QPointF b) {
 
 void Game::setControls(int index, Qt::Key k, bool isRight) {
 	controls[index][isRight] = k;
-//	qDebug() << "Assigned key to player "<< index <<": " + QKeySequence(k).toString();
 }
 
 void Game::nextRound() {

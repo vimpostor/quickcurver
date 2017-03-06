@@ -117,7 +117,7 @@ bool QCurver::wallCollision() {
 }
 
 int QCurver::playerCollision() {
-	short int p = -1;
+    int p = -1;
 //	emit requestIntersectionChecking(segments[segmentcount-1]->pos[segments[segmentcount-1]->poscount-2], lastPoint);
     emit requestIntersectionChecking(segments[segmentcount-1]->pos[segments[segmentcount-1]->poscount-2], lastPoint);
     emit requestIntersectionChecking(segments[segmentcount-1]->pos[segments[segmentcount-1]->poscount-4], lastPoint);

@@ -119,7 +119,7 @@ void Client::udpReadPendingDatagrams() {
 }
 
 void Client::udpSocketError(QAbstractSocket::SocketError socketError) {
-    qDebug() << "A UDP socket error occured!\n" << socketError << udpSocket->errorString();
+    qDebug() << "An UDP socket error occured!\n" << socketError << udpSocket->errorString();
 }
 
 void Client::join() {
