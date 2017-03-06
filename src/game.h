@@ -112,7 +112,7 @@ private:
     int fieldsize = 800;
     int timeMultiplier = 1;
     int effectiveTimeMultiplier = 1;
-    QString username = "me";
+    QString username = "";
     bool sendWinnerMessages = false;
     QQuickView textureGenerator; // used to generate QSGTextures for the item icons
 };

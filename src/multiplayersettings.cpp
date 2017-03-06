@@ -20,14 +20,14 @@ QDataStream &operator >>(QDataStream &in, ClientSettings &clientSettings) {
 }
 
 ServerSettings::ServerSettings() {
-    usernames[0] = "Player 0";
-    usernames[1] = "Bot 1";
+    clientSettings[0].username = "Player 0";
+    clientSettings[1].username = "Bot 1";
 }
 
 QDataStream &operator <<(QDataStream &out, const ServerSettings &serverSettings) {
     out << serverSettings.playerCount;
     for (int i = 0; i < serverSettings.playerCount; ++i) {
-        out << serverSettings.usernames[i] << serverSettings.colors[i];
+        out << serverSettings.clientSettings[i] << serverSettings.colors[i];
     }
     return out;
 }
@@ -36,11 +36,11 @@ QDataStream &operator >>(QDataStream &in, ServerSettings &serverSettings) {
     int playerCount;
     in >> playerCount;
     serverSettings.playerCount = playerCount;
-    QString u;
+    ClientSettings s;
     QColor c;
     for (int i = 0; i < playerCount; ++i) {
-        in >> u >> c;
-        serverSettings.usernames[i] = u;
+        in >> s >> c;
+        serverSettings.clientSettings[i] = s;
         serverSettings.colors[i] = c;
     }
     return in;

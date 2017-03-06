@@ -23,8 +23,8 @@ class ServerSettings {
 public:
     explicit ServerSettings();
     int playerCount = 2;
-    QString usernames[MAXPLAYERCOUNT];
-    QColor colors[MAXPLAYERCOUNT];
+    ClientSettings clientSettings[MAXPLAYERCOUNT];
+    QColor colors[MAXPLAYERCOUNT]; // this should be in client settings too
 };
 
 QDataStream &operator <<(QDataStream &out, const ServerSettings &serverSettings);

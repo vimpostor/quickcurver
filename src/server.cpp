@@ -9,8 +9,6 @@ Server::Server(QCurver **curver, quint16 port, QObject *parent) : QObject(parent
         available[i] = false;
         clientsUdp[i] = NULL;
         clientsTcp[i] = NULL;
-        clientSettings[i].username = "";
-        clientSettings[i].ready = false;
     }
     setServerIp();
     initUdpSocket();
@@ -200,6 +198,9 @@ void Server::newRound() {
 }
 
 void Server::broadcastChatMessage(QString username, QString message) {
+    if (username == "") {
+        username = serverSettings.clientSettings[0].username;
+    }
     emit sendMessage(username, message); // send to server itself
     // and send to others
     QString msgData[3];
@@ -280,13 +281,9 @@ void Server::tcpReadyRead(int i) {
         in[i] >> username >> message;
         broadcastChatMessage(username, message);
     } else if (message == "[SETTINGS]") {
-        QString username;
-        bool ready;
-        in[i] >> username >> ready;
-        clientSettings[i].username = username;
-        clientSettings[i].ready = ready;
-        emit playerStatusChanged(i, ready ? "READY" : "UNREADY");
-        emit playerStatusChanged(i, "USERNAME" + username);
+        in[i] >> serverSettings.clientSettings[i];
+        emit playerStatusChanged(i, serverSettings.clientSettings[i].ready ? "READY" : "UNREADY");
+        emit playerStatusChanged(i, "USERNAME" + serverSettings.clientSettings[i].username);
     } else if (message == "[LEFT]") {
         disconnectClient(clientsTcp[i]);
     } else {
@@ -310,13 +307,13 @@ void Server::disconnectClient(QTcpSocket *client, QString reason) {
             clientsUdp[i] = NULL; // remove udp
             in[i].setDevice(NULL); // reset datastream
             in[i].resetStatus();
-            QString msg = clientSettings[i].username + " left the match";
+            QString msg = serverSettings.clientSettings[i].username + " left the match";
             if (started) {
                 broadcastChatMessage("Chat Bot", msg);
             } else {
                 notifyGUI(msg, "SNACKBAR");
             }
-            clientSettings[i].reset();
+            serverSettings.clientSettings[i].reset();
             emit playerStatusChanged(i, "LEFT");
         }
     }
@@ -344,10 +341,10 @@ bool Server::isReady() {
             } else if (clientsUdp[i] == NULL) {
                 emit notifyGUI("One of the clients has not successfully joined yet!", "SNACKBAR");
                 return false;
-            } else if (!clientSettings[i].ready) {
+            } else if (!serverSettings.clientSettings[i].ready) {
                 emit notifyGUI("One of the clients is not ready yet!", "SNACKBAR");
                 return false;
-            } else if (clientSettings[i].username == "") {
+            } else if (serverSettings.clientSettings[i].username == "") {
                 emit notifyGUI("One of the clients hasn't set the username", "SNACKBAR");
                 return false;
             }
@@ -384,7 +381,6 @@ void Server::curverDied(int index) {
 void Server::updateServerSettings() {
     serverSettings.playerCount = this->playercount;
     for (int i = 0; i < playercount; ++i) {
-        serverSettings.usernames[i] = clientSettings[i].username;
         serverSettings.colors[i] = curver[i]->getColor();
     }
 }
