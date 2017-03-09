@@ -105,10 +105,10 @@ private:
 	int baseSpeed = 128;
 	int frameCount = 0;
 	QObject *qmlobject;
-	void increaseScore(int index);
-	int itemPriority[ITEMVARIETY] = {3, 0, 1, 0, 0, 2};
+    void increaseScore(int index);
+    int itemPriority[ITEMVARIETY] = {8, 0, 3, 0, 0, 1};
 	int itemPrioritySum = 0; //a for loop will set this in the start() method
-    int itemSpawnrate = 10;
+    int itemSpawnrate = 20;
     int fieldsize = 800;
     int timeMultiplier = 1;
     int effectiveTimeMultiplier = 1;

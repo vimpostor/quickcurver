@@ -105,13 +105,13 @@ TabbedPage {
                 ListElement {
                     name: "Header"
                     description: "General item spawn rate"
-                    defaultValue: 10
+                    defaultValue: 20
                     eIconName: "content/speedometer"
                 }
                 ListElement {
                     name: "Faster Item"
                     description: "Makes you faster for some time"
-                    defaultValue: 3
+                    defaultValue: 8
                     eIconName: "action/clock_fast"
                 }
                 ListElement {
@@ -123,7 +123,7 @@ TabbedPage {
                 ListElement {
                     name: "Cleaninstall"
                     description: "Deletes every line drawn to this point"
-                    defaultValue: 1
+                    defaultValue: 3
                     eIconName: "communication/clear_all"
                 }
                 ListElement {
@@ -141,7 +141,7 @@ TabbedPage {
                 ListElement {
                     name: "Fatter Item"
                     description: "Makes the enemy fatter"
-                    defaultValue: 2
+                    defaultValue: 1
                     eIconName: "action/arrow_expand"
                 }
             }
