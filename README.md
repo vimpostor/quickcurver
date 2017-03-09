@@ -21,13 +21,16 @@ First make sure, that you have the required dependencies of QuickCurver installe
 * g++ (You may use an alternative C++ compiler, but things will get slightly more difficult)
 * make
 * At least Qt 5.7
-* The following Qt Modules (package name depends on distribution, Note: These modules are typically distributed in 3 different packages which are probably called something like qtbase, qtdeclarative and qtsvg):
-	- Qt5Core
-	- Qt5Gui
-	- Qt5Quick
-	- Qt5Qml
-	- Qt5Svg
-	- Qt5Network
+* The following Qt Modules (in the parantheses there is an example how the package could be called for your distro (this depends on the distro!)):
+	- Qt Core (qt5-base)
+	- Qt GUI (qt5-base)
+	- Qt Quick (qt5-declarative)
+	- Qt QML (qt5-declarative)
+	- Qt SVG (qt5-svg)
+	- Qt Network (qt5-base)
+	- Qt Quick Controls (qt5-quickcontrols)
+	- Qt Quick Controls 2 (qt5-quickcontrols2)
+	- Qt Graphical Effects (qt5-graphicaleffects)
 
 ###Build instructions
 ####Cloning using SSH
