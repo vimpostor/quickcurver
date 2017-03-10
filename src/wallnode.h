@@ -11,7 +11,7 @@
 
 class wallNode : public QSGGeometryNode {
 public:
-    wallNode(QSGNode *node, int fieldsize);
+	wallNode(QSGNode *node, int fieldsize);
 private:
 	QSGGeometry *geometry;
 };

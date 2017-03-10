@@ -17,9 +17,9 @@ public:
 	segment(QColor color, int thickness, QSGNode *node, QSGFlatColorMaterial* material);
 	~segment();
 	QPointF pos[MAXPOSSIZE];
-    int poscount = 0;
+	int poscount = 0;
 	void appendPoint(QPointF addedPoint, float angle);
-    void clientappendPoint(QPointF p);
+	void clientappendPoint(QPointF p);
 	QPointF getLastPoint(int offset = 0);
 	bool checkforIntersection(QPointF a, QPointF b);
 	static int randInt(int min, int max);

@@ -30,13 +30,13 @@
 
 class Game : public QQuickItem
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    explicit Game(QQuickItem *parent = 0);
+	explicit Game(QQuickItem *parent = 0);
 	Q_INVOKABLE void sendKey(Qt::Key k);
 	Q_INVOKABLE void releaseKey(Qt::Key k);
 	Q_INVOKABLE void start();
-    Q_INVOKABLE void leaveGame(); // sends [LEFT] to the server if client
+	Q_INVOKABLE void leaveGame(); // sends [LEFT] to the server if client
 	Q_INVOKABLE void clientStart(QString ip, int port);
 	Q_INVOKABLE void setColor(int index, QColor color);
 	Q_INVOKABLE void setControls(int index, Qt::Key k, bool isRight);
@@ -45,20 +45,20 @@ public:
 	Q_INVOKABLE void setBaseSpeed(int baseSpeed);
 	Q_INVOKABLE void setController(int index, int newControllerState);
 	Q_INVOKABLE void setItemPriority(int index, int newPriority);
-    Q_INVOKABLE void setItemSpawnrate(int value);
-    Q_INVOKABLE void setFieldSize(int s);
-    Q_INVOKABLE void setTimeMultiplier(int t);
+	Q_INVOKABLE void setItemSpawnrate(int value);
+	Q_INVOKABLE void setFieldSize(int s);
+	Q_INVOKABLE void setTimeMultiplier(int t);
 	Q_INVOKABLE void close();
-    Q_INVOKABLE void requestSendMessage(QString message);
+	Q_INVOKABLE void requestSendMessage(QString message);
 	QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *);
-    ~Game();
+	~Game();
 	Q_INVOKABLE void addPlayer();
-    Q_INVOKABLE void setSendWinnerMessages(bool checked);
-    Q_INVOKABLE bool isReady(); // checks if all players are ready, also sends an error message itself if someone is not ready
-    Q_INVOKABLE void changeClientSettings(QString username, bool ready);
-    Q_INVOKABLE QString getClipboardContent();
-    Q_INVOKABLE QString copyIp();
-    Q_INVOKABLE int getFieldSize();
+	Q_INVOKABLE void setSendWinnerMessages(bool checked);
+	Q_INVOKABLE bool isReady(); // checks if all players are ready, also sends an error message itself if someone is not ready
+	Q_INVOKABLE void changeClientSettings(QString username, bool ready);
+	Q_INVOKABLE QString getClipboardContent();
+	Q_INVOKABLE QString copyIp();
+	Q_INVOKABLE int getFieldSize();
 	short int playercount = 2;
 	void setQmlObject(QObject *o);
 
@@ -70,15 +70,15 @@ public slots:
 private slots:
 	void startNextRound();
 	void setJoinStatus(QString s);
-    void setPlayerStatus(int index, QString s);
-    void updateGUI();
-    void sendMessageToQml(QString sender, QString message);
-    void notifyGUI(QString msg, QString mode);
-    void clientSpawnItem(QString iconName, QColor color, QPointF pos, int index);
-    void clientDeleteItem(int index);
-    void clientDeleteAllItems();
+	void setPlayerStatus(int index, QString s);
+	void updateGUI();
+	void sendMessageToQml(QString sender, QString message);
+	void notifyGUI(QString msg, QString mode);
+	void clientSpawnItem(QString iconName, QColor color, QPointF pos, int index);
+	void clientDeleteItem(int index);
+	void clientDeleteAllItems();
 private:
-    QCurver* curver[MAXPLAYERCOUNT];
+	QCurver* curver[MAXPLAYERCOUNT];
 	QColor colors[MAXPLAYERCOUNT];
 	Qt::Key controls[MAXPLAYERCOUNT][2]; //first one is left key, second one is right key
 	bool controlledByAI[MAXPLAYERCOUNT];
@@ -86,7 +86,7 @@ private:
 	AIController* ai[MAXPLAYERCOUNT];
 	Server *server;
 	Client *client;
-    bool isHost = true;
+	bool isHost = true;
 	int score[MAXPLAYERCOUNT];
 	CurveItem* items[MAXITEMCOUNT];
 	QString names[MAXITEMCOUNT];
@@ -100,21 +100,21 @@ private:
 	int nextItemSpawn; //time in milliseconds
 	QTime lastItemSpawn;
 	wallNode *wall;
-    int timerInterval = 16;
+	int timerInterval = 16;
 	int roundTimeout = 2000; //milliseconds
 	int baseSpeed = 128;
 	int frameCount = 0;
 	QObject *qmlobject;
-    void increaseScore(int index);
-    int itemPriority[ITEMVARIETY] = {8, 0, 3, 0, 0, 1};
+	void increaseScore(int index);
+	int itemPriority[ITEMVARIETY] = {8, 0, 3, 0, 0, 1};
 	int itemPrioritySum = 0; //a for loop will set this in the start() method
-    int itemSpawnrate = 20;
-    int fieldsize = 800;
-    int timeMultiplier = 1;
-    int effectiveTimeMultiplier = 1;
-    QString username = "";
-    bool sendWinnerMessages = false;
-    QQuickView textureGenerator; // used to generate QSGTextures for the item icons
+	int itemSpawnrate = 20;
+	int fieldsize = 800;
+	int timeMultiplier = 1;
+	int effectiveTimeMultiplier = 1;
+	QString username = "";
+	bool sendWinnerMessages = false;
+	QQuickView textureGenerator; // used to generate QSGTextures for the item icons
 };
 
 #endif // GAME_H

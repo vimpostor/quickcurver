@@ -17,13 +17,13 @@ class AIController : public QObject
 {
 	Q_OBJECT
 public:
-    explicit AIController(QCurver* curver, QCurver** player, int playerCount, int fieldsize);
+	explicit AIController(QCurver* curver, QCurver** player, int playerCount, int fieldsize);
 	void makeMove(float deltat);
 private:
 	QCurver* curver;
 	QCurver** player;
 	int playerCount;
-    int fieldsize;
+	int fieldsize;
 public slots:
 };
 

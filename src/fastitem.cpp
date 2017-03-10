@@ -19,5 +19,5 @@ void FastItem::deuse(QCurver *curver) {
 }
 
 QString FastItem::getIconName() {
-    return FASTERICON;
+	return FASTERICON;
 }

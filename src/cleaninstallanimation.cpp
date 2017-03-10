@@ -15,20 +15,20 @@ CleanInstallAnimation::CleanInstallAnimation(QSGNode *node, QSGMaterial *materia
 }
 
 CleanInstallAnimation::~CleanInstallAnimation() {
-    timer->stop();
-    node->removeChildNode(onode);
-    onode->removeChildNode(gnode);
-    gnode->setFlag(QSGNode::OwnsGeometry, false);
-    delete geometry;
-    gnode->setFlag(QSGNode::OwnsMaterial, false);
-    delete gnode;
-    delete onode;
+	timer->stop();
+	node->removeChildNode(onode);
+	onode->removeChildNode(gnode);
+	gnode->setFlag(QSGNode::OwnsGeometry, false);
+	delete geometry;
+	gnode->setFlag(QSGNode::OwnsMaterial, false);
+	delete gnode;
+	delete onode;
 }
 
 void CleanInstallAnimation::progress() {
 	float timeSinceStart = initialTime.msecsTo(QTime::currentTime());
 	if (timeSinceStart >= ANIMATIONDURATION) {
-        delete this;
+		delete this;
 	} else {
 		lastTime = QTime::currentTime();
 		progress(timeSinceStart);

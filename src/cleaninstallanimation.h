@@ -19,7 +19,7 @@ class CleanInstallAnimation : public QObject
 	Q_OBJECT
 public:
 	CleanInstallAnimation(QSGNode *node, QSGMaterial *material, QObject *parent = 0);
-    ~CleanInstallAnimation();
+	~CleanInstallAnimation();
 	void addSegment(segment *s);
 	void fireAnimation();
 signals:

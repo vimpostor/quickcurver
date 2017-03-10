@@ -6,7 +6,7 @@ segment::segment(QColor color, int thickness, QSGNode *node, QSGFlatColorMateria
 	this->thickness = thickness;
 	nodeMutex.lock();
 	gnode = new QSGGeometryNode;
-    geometry = new QSGGeometry(QSGGeometry::defaultAttributes_Point2D(), 0);
+	geometry = new QSGGeometry(QSGGeometry::defaultAttributes_Point2D(), 0);
 	geometry->setLineWidth(1);
 	geometry->setDrawingMode(GL_TRIANGLE_STRIP);
 	gnode->setGeometry(geometry);
@@ -20,10 +20,10 @@ segment::segment(QColor color, int thickness, QSGNode *node, QSGFlatColorMateria
 
 segment::~segment() {
 	node->removeChildNode(gnode);
-    gnode->setFlag(QSGNode::OwnsGeometry, false);
+	gnode->setFlag(QSGNode::OwnsGeometry, false);
 	delete geometry;
-    gnode->setFlag(QSGNode::OwnsMaterial, false);
-    delete gnode;
+	gnode->setFlag(QSGNode::OwnsMaterial, false);
+	delete gnode;
 }
 
 void segment::initRand() {
@@ -33,7 +33,6 @@ void segment::initRand() {
 void segment::appendPoint(QPointF addedPoint, float angle) {
 	nodeMutex.lock();
 	if (poscount != 0) { //general case
-
 		QPointF lastPoint = getLastPoint();
 		float normalAngle = angle+M_PI/2;
 		QPointF thicknessVector = thickness * QPointF(cos(normalAngle), sin(normalAngle));
@@ -52,12 +51,11 @@ void segment::appendPoint(QPointF addedPoint, float angle) {
 	//	for (int i = 1; i < poscount; i+=2) {
 	//		vertices[(i-1)/2].set(pos[i].x(), pos[i].y());
 	//	}
-        geometry->allocate(poscount);
+		geometry->allocate(poscount);
 		QSGGeometry::Point2D *vertices = geometry->vertexDataAsPoint2D();
-        for (int i = 0; i < poscount; i++) {
+		for (int i = 0; i < poscount; i++) {
 			vertices[i].set(pos[i].x(), pos[i].y());
 		}
-
 		gnode->markDirty(QSGNode::DirtyGeometry);
 	} else { //poscount == 0
 		pos[0] = addedPoint;
@@ -67,14 +65,14 @@ void segment::appendPoint(QPointF addedPoint, float angle) {
 }
 
 void segment::clientappendPoint(QPointF p) {
-    pos[poscount] = p;
-    poscount++;
-    geometry->allocate(poscount);
-    QSGGeometry::Point2D *vertices = geometry->vertexDataAsPoint2D();
-    for (int i = 0; i < poscount; i++) {
-        vertices[i].set(pos[i].x(), pos[i].y());
-    }
-    gnode->markDirty(QSGNode::DirtyGeometry);
+	pos[poscount] = p;
+	poscount++;
+	geometry->allocate(poscount);
+	QSGGeometry::Point2D *vertices = geometry->vertexDataAsPoint2D();
+	for (int i = 0; i < poscount; i++) {
+		vertices[i].set(pos[i].x(), pos[i].y());
+	}
+	gnode->markDirty(QSGNode::DirtyGeometry);
 }
 
 QPointF segment::getLastPoint(int offset) {

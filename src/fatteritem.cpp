@@ -18,5 +18,5 @@ void FatterItem::deuse(QCurver *curver) {
 }
 
 QString FatterItem::getIconName() {
-    return FATTERICON;
+	return FATTERICON;
 }

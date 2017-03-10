@@ -8,8 +8,8 @@
 class FastItem : public CurveItem
 {
 public:
-    FastItem(QSGNode* node, QQuickView *view, int fieldsize);
-    QString getIconName();
+	FastItem(QSGNode* node, QQuickView *view, int fieldsize);
+	QString getIconName();
 private:
 	void use(QCurver *curver);
 	void deuse(QCurver *curver);

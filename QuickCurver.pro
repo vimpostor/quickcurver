@@ -11,7 +11,6 @@ SOURCES += src/curveitem.cpp \
 	src/main.cpp \
 	src/qcurver.cpp \
 	src/segment.cpp \
-	src/slowitem.cpp \
 	src/wallnode.cpp \
     src/aicontroller.cpp \
     src/cleaninstallitem.cpp \
@@ -46,7 +45,6 @@ HEADERS += src/curveitem.h \
 	src/headnode.h \
 	src/qcurver.h \
 	src/segment.h \
-	src/slowitem.h \
 	src/wallnode.h \
     src/aicontroller.h \
     src/cleaninstallitem.h \

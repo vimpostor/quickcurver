@@ -17,8 +17,8 @@ class DieAnimation : public QObject
 {
 	Q_OBJECT
 public:
-    explicit DieAnimation(QPointF p, QSGNode* node, QSGMaterial* material, QObject *parent = 0);
-    ~DieAnimation();
+	explicit DieAnimation(QPointF p, QSGNode* node, QSGMaterial* material, QObject *parent = 0);
+	~DieAnimation();
 signals:
 private:
 	QSGNode* node;

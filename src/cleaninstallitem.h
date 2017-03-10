@@ -8,11 +8,11 @@
 
 class CleaninstallItem : public CurveItem {
 public:
-    CleaninstallItem(QSGNode *node, QQuickView *view, int fieldsize, Server *server);
-    QString getIconName();
+	CleaninstallItem(QSGNode *node, QQuickView *view, int fieldsize, Server *server);
+	QString getIconName();
 private:
 	void use(QCurver *curver);
-    Server *server;
+	Server *server;
 };
 
 #endif // CLEANINSTALLITEM_H

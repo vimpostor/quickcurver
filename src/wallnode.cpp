@@ -13,9 +13,9 @@ wallNode::wallNode(QSGNode *node, int fieldsize) {
 	geometry->allocate(4);
 	QSGGeometry::Point2D* vertices = geometry->vertexDataAsPoint2D();
 	vertices[0].set(0,0);
-    vertices[1].set(0,fieldsize);
-    vertices[2].set(fieldsize,fieldsize);
-    vertices[3].set(fieldsize,0);
+	vertices[1].set(0,fieldsize);
+	vertices[2].set(fieldsize,fieldsize);
+	vertices[3].set(fieldsize,0);
 	this->markDirty(QSGNode::DirtyGeometry);
 	node->appendChildNode(this);
 }

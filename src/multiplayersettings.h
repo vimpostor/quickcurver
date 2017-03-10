@@ -9,10 +9,10 @@
 
 class ClientSettings {
 public:
-    QString username = "";
-    bool ready = false;
+	QString username = "";
+	bool ready = false;
 
-    void reset();
+	void reset();
 };
 
 
@@ -21,10 +21,10 @@ QDataStream &operator >>(QDataStream &in, ClientSettings &clientSettings);
 
 class ServerSettings {
 public:
-    explicit ServerSettings();
-    int playerCount = 2;
-    ClientSettings clientSettings[MAXPLAYERCOUNT];
-    QColor colors[MAXPLAYERCOUNT]; // this should be in client settings too
+	explicit ServerSettings();
+	int playerCount = 2;
+	ClientSettings clientSettings[MAXPLAYERCOUNT];
+	QColor colors[MAXPLAYERCOUNT]; // this should be in client settings too
 };
 
 QDataStream &operator <<(QDataStream &out, const ServerSettings &serverSettings);

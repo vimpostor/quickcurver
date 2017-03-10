@@ -9,9 +9,9 @@
 int main(int argc, char *argv[])
 {
 	//TODO: Fix Anti Aliasing!!!
-    if (!qputenv("QSG_RENDER_LOOP", "basic")) {  //threaded render_loop, which is default on non-mesa drivers, breaks drawing
-        qDebug() << "Failed to set QSG_RENDER_LOOP=basic";
-    }
+	if (!qputenv("QSG_RENDER_LOOP", "basic")) {  //threaded render_loop, which is default on non-mesa drivers, breaks drawing
+		qDebug() << "Failed to set QSG_RENDER_LOOP=basic";
+	}
 
 	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 	QGuiApplication app(argc, argv);
@@ -24,5 +24,5 @@ int main(int argc, char *argv[])
 	Game* game = object->findChild<Game*>("game");
 	game->setQmlObject(object);
 
-    return app.exec();
+	return app.exec();
 }

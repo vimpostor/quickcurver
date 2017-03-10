@@ -21,13 +21,13 @@ enum rotation {
 };
 
 class QCurver : public QObject {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    explicit QCurver(QSGNode* node, QColor color, int baseSpeed, int fieldsize);
-    explicit QCurver(QSGNode* node, QColor color);
-    ~QCurver();
+	explicit QCurver(QSGNode* node, QColor color, int baseSpeed, int fieldsize);
+	explicit QCurver(QSGNode* node, QColor color);
+	~QCurver();
 	segment* segments[MAXSEGMENTCOUNT];
-    int segmentcount = 0;
+	int segmentcount = 0;
 	enum rotation rotating = ROTATE_NONE;
 	bool checkforIntersection(QPointF a, QPointF b);
 	void reset(); //completely resets for next round
@@ -40,17 +40,17 @@ public:
 	float getAngle();
 	void doubleThickness();
 	void halfThickness();
-    QColor getColor();
-    bool hasUnsyncedSegPoints();
-    QPointF readUnsyncedSegPoint();
-    bool moveToNextSegment(); // attempts to move to next segment, returns true on success, false on failure
-    void clientNewSegment();
-    void clientAddPoint(QPointF p);
-    void clientReset();
+	QColor getColor();
+	bool hasUnsyncedSegPoints();
+	QPointF readUnsyncedSegPoint();
+	bool moveToNextSegment(); // attempts to move to next segment, returns true on success, false on failure
+	void clientNewSegment();
+	void clientAddPoint(QPointF p);
+	void clientReset();
 	QPointF getDirectionRotatedBy(float angle);
 	int thickness = 4;
-    bool alive = true;
-    void die();
+	bool alive = true;
+	void die();
 signals:
 	void died(QCurver* who);
 	void requestIntersectionChecking(QPointF a, QPointF b);
@@ -71,8 +71,8 @@ private:
 	void rotateDirection(float radians);
 	float rotateVelocity = M_PI;
 	QTime lastnewSegment;
-    int segmentchangeTime = 2000; //amount of time in milliseconds that you produce no line between segments
-    int nextSegmentTime = 2000; //amount of time that you produce a line
+	int segmentchangeTime = 2000; //amount of time in milliseconds that you produce no line between segments
+	int nextSegmentTime = 2000; //amount of time that you produce a line
 	QSGNode* node;
 	QMutex progressMutex;
 	bool changingSegment = true;
@@ -82,9 +82,9 @@ private:
 	bool wallCollision();
 	int roundCount = 0;
 	int playerCollision(); //returns -1  if no collision, else returns the number of the player with whom we are colliding
-    int clientSegment = -1; //last segment synchronized
-    int clientPoscount = -1; //last pos synchronized
-    int fieldsize = 1000;
+	int clientSegment = -1; //last segment synchronized
+	int clientPoscount = -1; //last pos synchronized
+	int fieldsize = 1000;
 };
 
 #endif // QCURVER_H

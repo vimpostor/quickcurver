@@ -24,8 +24,8 @@ class CurveItem : public QObject
 {
 	Q_OBJECT
 public:
-    explicit CurveItem(QSGNode *node, QQuickView *view, int fieldsize, QString iconPath, bool redAllowed, bool greenAllowed, bool blueAllowed, QPointF *pos = NULL);
-    explicit CurveItem(QSGNode *node, QQuickView *view, QString iconPath, QColor color, QPointF pos);
+	explicit CurveItem(QSGNode *node, QQuickView *view, int fieldsize, QString iconPath, bool redAllowed, bool greenAllowed, bool blueAllowed, QPointF *pos = NULL);
+	explicit CurveItem(QSGNode *node, QQuickView *view, QString iconPath, QColor color, QPointF pos);
 	~CurveItem();
 	int getSize();
 	QPointF getPos();
@@ -33,7 +33,7 @@ public:
 	QColor getColor();
 	void useItem(int playerCount, QCurver** curver, QCurver* collector);
 	void setRound(int round);
-    virtual QString getIconName();
+	virtual QString getIconName();
 public slots:
 //	void renderUseless();
 protected slots:
@@ -54,16 +54,16 @@ protected:
 	QCurver *collector;
 	QPointF pos;
 	QSGNode* node;
-    QSGTextureMaterial* material;
+	QSGTextureMaterial* material;
 	QSGGeometry* geometry;
 	QSGGeometryNode* gnode;
-    QSGGeometry::TexturedPoint2D *vertices;
+	QSGGeometry::TexturedPoint2D *vertices;
 	QSGTexture* texture;
 	QColor color;
 	QTimer* timer;
 	bool invisible = false;
 	int round = -1;
-    void initCurveItem(QQuickView *view, QString iconPath);
+	void initCurveItem(QQuickView *view, QString iconPath);
 };
 
 #endif // CURVEITEM_H
