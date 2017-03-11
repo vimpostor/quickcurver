@@ -12,27 +12,22 @@ Flickable {
 		anchors.margins: dp(70)
 		LicenseCard {
 			cardTitle: "Qt"
-			cardDescription: "Various different licenses, click for more information"
-			cardLink: "http://doc.qt.io/qt-5/licensing.html"
-		}
-		LicenseCard {
-			cardTitle: "Qt Creator"
-			cardDescription: "Licensed under GNU LGPL"
-			cardLink: "http://doc.qt.io/qt-5/opensourcelicense.html"
+			cardDescription: "C++ Framework. Licensed under GNU GPL v. 3.0"
+			cardLink: "http://code.qt.io"
 		}
 		LicenseCard {
 			cardTitle: "QML Material"
-			cardDescription: "Beatiful Material library\nLicensed under GNU LGPL"
-			cardLink: "https://github.com/papyros/qml-material/tree/master"
+			cardDescription: "Beatiful Material design library. Licensed under GNU LGPL v. 2.1"
+			cardLink: "https://github.com/papyros/qml-material"
 		}
 		LicenseCard {
 			cardTitle: "Google Material Icons"
-			cardDescription: "Material Icons, kindly open sourced by Google\nLicensed under Apache License Version 2.0"
+			cardDescription: "Material Icons. Licensed under Apache License Version 2.0"
 			cardLink: "https://design.google.com/icons/"
 		}
 		LicenseCard {
 			cardTitle: "Quick Curver"
-			cardDescription: "This software is licensed under GNU GPL v3.0"
+			cardDescription: "Quick Curver is free software, licensed under GNU GPL v. 3.0"
 			cardLink: "https://github.com/Magnus2552/quickcurver"
 		}
 	}
