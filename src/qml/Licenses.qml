@@ -31,6 +31,6 @@ ColumnLayout {
 	LicenseCard {
 		cardTitle: "Quick Curver"
 		cardDescription: "Quick Curver is free software, licensed under GNU GPL v. 3.0"
-		cardLink: "https://github.com/Magnus2552/quickcurver"
+		cardLink: "https://github.com/magnus-gross/quickcurver"
 	}
 }

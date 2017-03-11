@@ -36,7 +36,7 @@ First make sure, that you have the required dependencies of QuickCurver installe
 ####Cloning using SSH
 This is the preferred way, simply execute:
 ```{r, engine='bash', count_lines}
-git clone --recursive git@github.com:Magnus2552/quickcurver.git
+git clone --recursive git@github.com:magnus-gross/quickcurver.git
 cd quickcurver
 ./build.sh
 ```
@@ -44,7 +44,7 @@ cd quickcurver
 ####Cloning using HTTPS
 If you do not have setup SSH keys on your machine, you can alternatively run the following commands:
 ```{r, engine='bash', count_lines}
-git clone https://github.com/Magnus2552/quickcurver.git
+git clone https://github.com/magnus-gross/quickcurver.git
 cd quickcurver
 ./httpsClonePatch.sh
 ./build.sh
