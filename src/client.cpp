@@ -88,13 +88,9 @@ void Client::udpReadPendingDatagrams() {
 			if (title == "HEAD") {
 				int i;
 				QPointF pos;
-				QColor color;
-				in >> i >> pos >> color; //index of curver and position of its head and color
+				in >> i >> pos; //index of curver and position of its head
 				if (headnodes[i] == NULL) { //create new curver
-					QSGFlatColorMaterial *material = new QSGFlatColorMaterial;
-					material->setColor(color);
-					headnodes[i] = new headNode(pos, material, node);
-					curver[i] = new QCurver(node, color);
+					qDebug() << "This should not happen! Headnode is NULL!";
 				} else {
 					headnodes[i]->updatePosition(pos);
 				}

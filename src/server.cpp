@@ -141,7 +141,7 @@ void Server::broadcast() {
 		QCurver *c = curver[i];
 		QByteArray datagram;
 		QDataStream out(&datagram, QIODevice::WriteOnly);
-		out << QString("HEAD") << i << c->getPos() << c->getColor();
+		out << QString("HEAD") << i << c->getPos();
 		sendToAllUdp(&datagram);
 		datagram.clear();
 		out.device()->reset();
