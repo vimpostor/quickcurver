@@ -58,6 +58,14 @@ ApplicationWindow {
 			playerselector.mysnackbar.open(s);
 		}
 	}
+	function clientEditPlayer(index,name) {
+		if (index > playerListModel.count - 1) {
+			// add player
+			playerListModel.append({ename: name})
+		} else {
+			playerListModel.setProperty(index, "ename", name);
+		}
+	}
 
 	id: root
 	width: 1200

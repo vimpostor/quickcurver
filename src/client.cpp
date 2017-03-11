@@ -182,6 +182,7 @@ void Client::tcpReadyRead() {
 			in >> serverSettings;
 			// create curvers
 			for (int i = 0; i < serverSettings.playerCount; ++i) {
+				emit editPlayer(i, serverSettings.clientSettings[i].username);
 				QSGFlatColorMaterial *material = new QSGFlatColorMaterial;
 				material->setColor(serverSettings.colors[i]);
 				headnodes[i] = new headNode(QPointF(), material, node);

@@ -13,11 +13,9 @@ Page {
 	backgroundColor: "#31363b"
 	focus: false
 	canGoBack: false
-//    onGoBack: pageStack.push(this) //as of now, canGoBack = false does not work, this disables it manually
 	onGoBack: close()
 	onParentChanged: fieldsize = game.getFieldSize()
 	PageSidebar {
-//        mode: "right"
 		width: parent.width - fieldsize
 		backgroundColor: Theme.backgroundColor
 		Card {

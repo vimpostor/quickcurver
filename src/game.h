@@ -77,6 +77,7 @@ private slots:
 	void clientSpawnItem(QString iconName, QColor color, QPointF pos, int index);
 	void clientDeleteItem(int index);
 	void clientDeleteAllItems();
+	void clientEditPlayer(int index, QString name);
 private:
 	QCurver* curver[MAXPLAYERCOUNT];
 	QColor colors[MAXPLAYERCOUNT];

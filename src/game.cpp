@@ -12,6 +12,7 @@ Game::Game(QQuickItem *parent) : QQuickItem(parent) {
 	client = new Client(this);
 	connect(server, SIGNAL(notifyGUI(QString,QString)), this, SLOT(notifyGUI(QString,QString)));
 	connect(server, SIGNAL(playerStatusChanged(int,QString)), this, SLOT(setPlayerStatus(int,QString)));
+	connect(client, SIGNAL(editPlayer(int,QString)), this, SLOT(clientEditPlayer(int,QString)));
 }
 
 Game::~Game() {
@@ -415,4 +416,9 @@ void Game::clientDeleteAllItems() {
 
 int Game::getFieldSize() {
 	return this->fieldsize;
+}
+
+void Game::clientEditPlayer(int index, QString name) {
+	QVariant returnedValue;
+	QMetaObject::invokeMethod(qmlobject, "clientEditPlayer", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, index), Q_ARG(QVariant, name));
 }
