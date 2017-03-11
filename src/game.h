@@ -18,6 +18,7 @@
 #include "aicontroller.h"
 #include "cleaninstallitem.h"
 #include "fatteritem.h"
+#include "invisibleitem.h"
 #include "server.h"
 #include "client.h"
 #include <QGuiApplication>
@@ -107,7 +108,7 @@ private:
 	int frameCount = 0;
 	QObject *qmlobject;
 	void increaseScore(int index);
-	int itemPriority[ITEMVARIETY] = {8, 0, 3, 0, 0, 1};
+	int itemPriority[ITEMVARIETY] = {8, 0, 3, 0, 4, 1};
 	int itemPrioritySum = 0; //a for loop will set this in the start() method
 	int itemSpawnrate = 20;
 	int fieldsize = 800;

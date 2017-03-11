@@ -109,7 +109,7 @@ void Game::progress() {
 					items[i] = new FastItem(node, &textureGenerator, fieldsize);
 					break;
 				case 1:
-		//			items[i] = new SlowItem(node);
+					// slow item
 					break;
 				case 2:
 					items[i] = new CleaninstallItem(node, &textureGenerator, fieldsize, server);
@@ -118,7 +118,7 @@ void Game::progress() {
 					//global wall hack
 					break;
 				case 4:
-					//invisibility
+					items[i] = new InvisibleItem(node, &textureGenerator, fieldsize);
 					break;
 				case 5:
 					items[i] = new FatterItem(node, &textureGenerator, fieldsize);

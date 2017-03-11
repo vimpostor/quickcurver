@@ -70,7 +70,7 @@ void QCurver::progress(float deltat) {
 			segmentcount++;
 			lastnewSegment = QTime::currentTime();
 			changingSegment = false;
-			segmentchangeTime = 128;
+			segmentchangeTime = defaultSegmentChangeTime;
 		}
 	}
 	headnode->updatePosition(newPoint);
@@ -280,4 +280,11 @@ void QCurver::clientAddPoint(QPointF p) {
 void QCurver::die() {
 	alive = false;
 	(void) new DieAnimation(lastPoint, node, material, this); // deletes itself after the animation is finished
+}
+
+void QCurver::goInvisible(int duration) {
+	lastnewSegment = QTime::currentTime();
+	nextSegmentTime = segment::randInt(1000,5000);;
+	changingSegment = true;
+	segmentchangeTime = duration;
 }

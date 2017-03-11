@@ -51,6 +51,7 @@ public:
 	int thickness = 4;
 	bool alive = true;
 	void die();
+	void goInvisible(int duration);
 signals:
 	void died(QCurver* who);
 	void requestIntersectionChecking(QPointF a, QPointF b);
@@ -71,6 +72,7 @@ private:
 	void rotateDirection(float radians);
 	float rotateVelocity = M_PI;
 	QTime lastnewSegment;
+	int defaultSegmentChangeTime = 128;
 	int segmentchangeTime = 2000; //amount of time in milliseconds that you produce no line between segments
 	int nextSegmentTime = 2000; //amount of time that you produce a line
 	QSGNode* node;

@@ -18,7 +18,8 @@ SOURCES += src/curveitem.cpp \
     src/cleaninstallanimation.cpp \
     src/server.cpp \
     src/client.cpp \
-    src/multiplayersettings.cpp
+    src/multiplayersettings.cpp \
+    src/invisibleitem.cpp
 
 
 RESOURCES += \
@@ -52,4 +53,5 @@ HEADERS += src/curveitem.h \
     src/cleaninstallanimation.h \
     src/server.h \
     src/client.h \
-    src/multiplayersettings.h
+    src/multiplayersettings.h \
+    src/invisibleitem.h

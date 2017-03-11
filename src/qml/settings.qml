@@ -135,7 +135,7 @@ TabbedPage {
 				ListElement {
 					name: "Invisibility"
 					description: "Disables collisions for you"
-					defaultValue: 0
+					defaultValue: 4
 					eIconName: "action/visibility_off"
 				}
 				ListElement {
