@@ -5,13 +5,11 @@ import Material.Extras 0.1
 import QtQuick.Layouts 1.1
 
 Card {
-	property variant cardTitle
-	property variant cardDescription
-	property variant cardLink
+	property string cardTitle
+	property string cardDescription
+	property string cardLink
 	Layout.fillWidth: true
 	Layout.fillHeight: true
-	Layout.minimumHeight: column.height + dp(80)
-	Layout.minimumWidth: column.width + dp(80)
 	Ink {
 		anchors.fill: parent
 		onClicked: Qt.openUrlExternally(cardLink)

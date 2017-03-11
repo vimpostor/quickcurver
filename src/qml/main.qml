@@ -73,6 +73,7 @@ ApplicationWindow {
 	}
 
 	initialPage: Page {
+		id: initialPage
 		title: "Quick Curver"
 		actionBar.maxActionCount: 5
 		actions: [
@@ -101,7 +102,7 @@ ApplicationWindow {
 			},
 			Action {
 				name: "Licenses"
-				onTriggered: licensesDialog.open()
+				onTriggered: licensesOverlay.open(initialPage.actionBar)
 			},
 			Action {
 				name: "Quit"
@@ -197,11 +198,10 @@ ApplicationWindow {
 			eReady: false
 		}
 	}
-	Dialog {
-		id: licensesDialog
-		hasActions: false
-		anchors.fill: parent
-		anchors.margins: dp(80)
+	OverlayView {
+		id: licensesOverlay
+		width: parent.width/2
+		height: parent.height/2
 		Licenses {
 		}
 	}
