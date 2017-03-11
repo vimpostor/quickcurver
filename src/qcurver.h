@@ -52,6 +52,9 @@ public:
 	bool alive = true;
 	void die();
 	void goInvisible(int duration);
+	int score = 0;
+	int roundScore = 0;
+	void increaseScore();
 signals:
 	void died(QCurver* who);
 	void requestIntersectionChecking(QPointF a, QPointF b);

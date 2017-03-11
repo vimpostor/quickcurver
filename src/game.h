@@ -89,10 +89,8 @@ private:
 	Server *server;
 	Client *client;
 	bool isHost = true;
-	int score[MAXPLAYERCOUNT];
 	CurveItem* items[MAXITEMCOUNT];
 	QString names[MAXITEMCOUNT];
-	int roundScore[MAXITEMCOUNT];
 	QTimer* timer;
 	QTimer* nextRoundTimer;
 	QTime lastTime;

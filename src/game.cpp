@@ -46,8 +46,6 @@ void Game::start() {
 		itemPrioritySum += itemPriority[i];
 	}
 	for (int i = 0; i < playercount; i++) {
-		score[i] = 0;
-		roundScore[i] = 0;
 		curver[i] = new QCurver(node, colors[i], baseSpeed, fieldsize);
 		if (controlledByAI[i]) {
 			ai[i] = new AIController(curver[i], curver, playercount, fieldsize);
@@ -260,10 +258,9 @@ void Game::startNextRound() {
 	server->newRound();
 	roundCount++;
 	for (int i = 0; i < playercount; i++) {
-		roundScore[i] = 0;
-		QVariant returnedValue;
-		QMetaObject::invokeMethod(qmlobject, "changeScore", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, i) , Q_ARG(QVariant, score[i]), Q_ARG(QVariant, roundScore[i]));
 		curver[i]->reset();
+		QVariant returnedValue;
+		QMetaObject::invokeMethod(qmlobject, "changeScore", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, i) , Q_ARG(QVariant, curver[i]->score), Q_ARG(QVariant, curver[i]->roundScore));
 	}
 	for (int i = 0; i < MAXITEMCOUNT; i++) {
 		if (items[i] != NULL) {
@@ -293,10 +290,9 @@ void Game::setQmlObject(QObject *o) {
 }
 
 void Game::increaseScore(int index) {
-	score[index]++;
-	roundScore[index]++;
+	curver[index]->increaseScore();
 	QVariant returnedValue;
-	QMetaObject::invokeMethod(qmlobject, "changeScore", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, index) , Q_ARG(QVariant, score[index]), Q_ARG(QVariant, roundScore[index]));
+	QMetaObject::invokeMethod(qmlobject, "changeScore", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, index) , Q_ARG(QVariant, curver[index]->score), Q_ARG(QVariant, curver[index]->roundScore));
 }
 
 void Game::sendMessageToQml(QString sender, QString message) {

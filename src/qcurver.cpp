@@ -161,6 +161,7 @@ void QCurver::reset() {
 	clientSegment = -1;
 	clientPoscount = -1;
 	alive = true;
+	roundScore = 0;
 }
 
 void QCurver::clientReset() {
@@ -287,4 +288,9 @@ void QCurver::goInvisible(int duration) {
 	nextSegmentTime = segment::randInt(1000,5000);;
 	changingSegment = true;
 	segmentchangeTime = duration;
+}
+
+void QCurver::increaseScore() {
+	++score;
+	++roundScore;
 }
