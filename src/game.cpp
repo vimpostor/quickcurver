@@ -71,7 +71,6 @@ void Game::clientStart(QString ip, int port) {
 	isHost = false;
 	node = new QSGNode;
 	wall = new wallNode(node, fieldsize);
-	connect(client, SIGNAL(updateGUI()), this, SLOT(updateGUI()));
 	connect(client, SIGNAL(sendMessage(QString,QString)), this, SLOT(sendMessageToQml(QString,QString)));
 	connect(client, SIGNAL(spawnItem(QString,QColor,QPointF,int)), this, SLOT(clientSpawnItem(QString,QColor,QPointF,int)));
 	connect(client, SIGNAL(deleteItem(int)), this, SLOT(clientDeleteItem(int)));
@@ -316,10 +315,6 @@ void Game::setItemSpawnrate(int value) {
 
 void Game::close() {
 	delete this;
-}
-
-void Game::updateGUI() {
-	update();
 }
 
 void Game::setFieldSize(int s) {

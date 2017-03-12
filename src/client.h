@@ -14,7 +14,7 @@ class Client : public QObject
 {
 	Q_OBJECT
 public:
-	explicit Client(QObject *parent = 0);
+	explicit Client(QQuickItem *parent);
 	~Client();
 	void sendKey(Qt::Key k);
 	void releaseKey(Qt::Key k);
@@ -23,7 +23,6 @@ public:
 	void requestSendMessage(QString message);
 	void changeSettings(QString username, bool ready);
 signals:
-	void updateGUI();
 	void sendMessage(QString username, QString message);
 	void spawnItem(QString iconName, QColor color, QPointF pos, int index);
 	void deleteItem(int index);
@@ -39,6 +38,7 @@ private slots:
 private:
 	void initUdpSocket();
 	void initTcpSocket();
+	QQuickItem *parent = NULL;
 	QUdpSocket *udpSocket = NULL;
 	QTcpSocket *tcpSocket = NULL;
 	QHostAddress *ip;

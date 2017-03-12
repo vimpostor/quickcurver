@@ -71,7 +71,6 @@ public slots:
 private slots:
 	void startNextRound();
 	void setPlayerStatus(int index, QString s);
-	void updateGUI();
 	void sendMessageToQml(QString sender, QString message);
 	void notifyGUI(QString msg, QString mode);
 	void clientSpawnItem(QString iconName, QColor color, QPointF pos, int index);

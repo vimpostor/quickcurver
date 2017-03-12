@@ -1,6 +1,7 @@
 #include "client.h"
 
-Client::Client(QObject *parent) : QObject(parent) {
+Client::Client(QQuickItem *parent) : QObject(parent) {
+	this->parent = parent;
 	timeoutTimer = new QTimer;
 	for (int i = 0; i < MAXPLAYERCOUNT; i++) {
 		headnodes[i] = NULL;
@@ -95,7 +96,7 @@ void Client::udpReadPendingDatagrams() {
 				} else {
 					headnodes[i]->updatePosition(pos);
 				}
-				emit updateGUI();
+				parent->update();
 			} else if (title == "POS") {
 				int i;
 				bool newSegment;
