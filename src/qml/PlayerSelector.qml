@@ -72,7 +72,7 @@ Item {
 				}
 				text: ename
 				subText: playerController.selectedIndex == 2  ? (eJoined ? "Joined" : "Waiting for player to join...") : "Change color, controls etc..."
-				iconName: playerController.selectedIndex == 0 ? "action/account_circle" : (playerController.selectedIndex == 1 ? "communication/robot" : (!eJoined ? "social/account_off" : (eReady ? "social/account_check" : "social/account")))
+				iconName: playerController.selectedIndex == 0 ? "device/controller" : (playerController.selectedIndex == 1 ? "communication/robot" : (!eJoined ? "social/account_off" : (eReady ? "social/account_check" : "social/account")))
 
 				secondaryItem: IconButton {
 					iconName: "editor/mode_edit"
@@ -236,6 +236,7 @@ Item {
 				if (playerListModel.count >= 16) {
 					snackbar.open("Sorry, you have reached maximum player capacity!");
 				} else {
+					game.addPlayer();
 					snackbar.open("Sry, this is not yet implemented, pls manually edit a player");
 				}
 			}
