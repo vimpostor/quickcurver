@@ -3,7 +3,7 @@
 #define INVISIBLEICON ":/icons/action/visibility_off.svg"
 #define REDALLOWED false
 #define GREENALLOWED true
-#define BLUEALLOWED true
+#define BLUEALLOWED false
 
 InvisibleItem::InvisibleItem(QSGNode *node, QQuickView *view, int fieldsize) : CurveItem(node, view, fieldsize, INVISIBLEICON, REDALLOWED, GREENALLOWED, BLUEALLOWED) {
 }
