@@ -198,15 +198,126 @@ Item {
 			}
 		}
 	}
+
 	ActionButton {
-		anchors {
-			right: parent.right
-			bottom: snackbar.top
-			margins: dp(64)
+		id: onlineButton
+		iconName: "action/language"
+		y: addPlayerButton.y
+		visible: false
+		anchors.left: addPlayerButton.left
+		anchors.right: addPlayerButton.right
+		anchors.margins: dp(6)
+		height: addPlayerButton.height - dp(12)
+		state: "hidden"
+		states: [
+			State {
+				name: "hidden"
+				PropertyChanges {
+					target: onlineButton
+					y: addPlayerButton.y
+					visible: true
+				}
+			},
+			State {
+				name: "visible"
+				PropertyChanges {
+					target: onlineButton
+					y: botButton.y - dp(52)
+					visible: true
+				}
+			}
+		]
+		Behavior on y {
+			PropertyAnimation {easing.type: Easing.InOutQuad; duration: 150}
+		}
+		action: Action {
+			shortcut: "Ctrl+Shift+Alt+N"
+			onTriggered: {
+				if (playerListModel.count >= 16) {
+					snackbar.open("Sorry, you have reached maximum player capacity!");
+				} else {
+					snackbar.open("Sry, this is not yet implemented, pls manually edit a player");
+				}
+			}
+		}
+	}
+	ActionButton {
+		id: botButton
+		iconName: "communication/robot"
+		y: addPlayerButton.y
+		visible: false
+		anchors.left: addPlayerButton.left
+		anchors.right: addPlayerButton.right
+		anchors.margins: dp(6)
+		height: addPlayerButton.height - dp(12)
+		state: "hidden"
+		states: [
+			State {
+				name: "hidden"
+				PropertyChanges {
+					target: botButton
+					y: addPlayerButton.y
+					visible: true
+				}
+			},
+			State {
+				name: "visible"
+				PropertyChanges {
+					target: botButton
+					y: playerButton.y - dp(52)
+					visible: true
+				}
+			}
+		]
+		Behavior on y {
+			PropertyAnimation {easing.type: Easing.InOutQuad; duration: 150}
+		}
+		action: Action {
+			shortcut: "Ctrl+Shift+N"
+			onTriggered: {
+				if (playerListModel.count >= 16) {
+					snackbar.open("Sorry, you have reached maximum player capacity!");
+				} else {
+					game.addPlayer();
+					playerListModel.append({eBot: true});
+				}
+			}
+		}
+	}
+	ActionButton {
+		id: playerButton
+		iconName: "device/controller"
+		y: addPlayerButton.y
+		visible: false
+		anchors.left: addPlayerButton.left
+		anchors.right: addPlayerButton.right
+		anchors.margins: dp(6)
+		height: addPlayerButton.height - dp(12)
+		state: "hidden"
+		states: [
+			State {
+				name: "hidden"
+				PropertyChanges {
+					target: playerButton
+					y: addPlayerButton.y
+					visible: true
+				}
+			},
+			State {
+				name: "visible"
+				PropertyChanges {
+					target: playerButton
+					y: addPlayerButton.y - dp(52)
+					visible: true
+				}
+			}
+		]
+		Behavior on y {
+			PropertyAnimation {easing.type: Easing.InOutQuad; duration: 150}
 		}
 		action: Action {
 			id: addPlayer
-			text: "&Add"
+			hoverAnimation: true
 			shortcut: "Ctrl+N"
 			onTriggered: {
 				if (playerListModel.count >= 16) {
@@ -217,20 +328,34 @@ Item {
 				}
 			}
 		}
-		iconName: "content/add"
 	}
-	Action {
-		shortcut: "Ctrl+Shift+N"
-		onTriggered: {
-			if (playerListModel.count >= 16) {
-				snackbar.open("Sorry, you have reached maximum player capacity!");
-			} else {
-				game.addPlayer();
-				playerListModel.append({eBot: true});
+	ActionButton {
+		id: addPlayerButton
+		anchors {
+			right: parent.right
+			bottom: snackbar.top
+			margins: dp(64)
+		}
+		IconButton {
+			anchors.fill: parent
+			action: Action {
+				text: "Add Player"
+				hoverAnimation: true
+				iconName: "content/add"
+				onTriggered: {
+					if (playerButton.state === "visible") {
+						playerButton.state = "hidden";
+						botButton.state = "hidden";
+						onlineButton.state = "hidden";
+					} else {
+						playerButton.state = "visible";
+						botButton.state = "visible";
+						onlineButton.state = "visible";
+					}
+				}
 			}
 		}
 	}
-
 	Snackbar {
 		id: snackbar
 		anchors.left: parent.left

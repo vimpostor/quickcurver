@@ -27,6 +27,7 @@
     </qresource>
     <qresource prefix="/icons/device">
         <file alias="access_alarm.svg">device_access_alarm.svg</file>
+        <file alias="controller.svg">device_controller.svg</file>
     </qresource>
     <qresource prefix="/icons/file">
         <file alias="file_download.svg">file_file_download.svg</file>
