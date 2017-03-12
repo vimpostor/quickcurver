@@ -18,12 +18,11 @@ public:
 	~Client();
 	void sendKey(Qt::Key k);
 	void releaseKey(Qt::Key k);
-	void start(QSGNode *node, QString ip, int port = 52552);
+	void start(QSGNode *node, QObject *qmlobject, QString ip, int port = 52552);
 	void shutdown(); // also sends [LEFT] to the server if already joined
 	void requestSendMessage(QString message);
 	void changeSettings(QString username, bool ready);
 signals:
-	void joinStatusChanged(QString s);
 	void updateGUI();
 	void sendMessage(QString username, QString message);
 	void spawnItem(QString iconName, QColor color, QPointF pos, int index);
@@ -56,6 +55,9 @@ private:
 	void sendTcpMessage(QString msg);
 	ClientSettings settings;
 	ServerSettings serverSettings;
+	QObject *qmlobject = NULL;
+	// GUI methods
+	void setJoinStatus(QString s);
 };
 
 #endif // CLIENT_H

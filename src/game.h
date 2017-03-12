@@ -70,7 +70,6 @@ public slots:
 	void checkforIntersection(QPointF a, QPointF b);
 private slots:
 	void startNextRound();
-	void setJoinStatus(QString s);
 	void setPlayerStatus(int index, QString s);
 	void updateGUI();
 	void sendMessageToQml(QString sender, QString message);

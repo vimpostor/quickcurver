@@ -71,13 +71,12 @@ void Game::clientStart(QString ip, int port) {
 	isHost = false;
 	node = new QSGNode;
 	wall = new wallNode(node, fieldsize);
-	connect(client, SIGNAL(joinStatusChanged(QString)), this, SLOT(setJoinStatus(QString)));
 	connect(client, SIGNAL(updateGUI()), this, SLOT(updateGUI()));
 	connect(client, SIGNAL(sendMessage(QString,QString)), this, SLOT(sendMessageToQml(QString,QString)));
 	connect(client, SIGNAL(spawnItem(QString,QColor,QPointF,int)), this, SLOT(clientSpawnItem(QString,QColor,QPointF,int)));
 	connect(client, SIGNAL(deleteItem(int)), this, SLOT(clientDeleteItem(int)));
 	connect(client, SIGNAL(deleteAllItems()), this, SLOT(clientDeleteAllItems()));
-	client->start(node, ip, port);
+	client->start(node, qmlobject, ip, port);
 	setFlag(ItemHasContents);
 }
 
@@ -313,11 +312,6 @@ void Game::setItemPriority(int index, int newPriority) {
 
 void Game::setItemSpawnrate(int value) {
 	itemSpawnrate = value;
-}
-
-void Game::setJoinStatus(QString s) {
-	QVariant returnedValue;
-	QMetaObject::invokeMethod(qmlobject, "setJoinStatus", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, s));
 }
 
 void Game::close() {
