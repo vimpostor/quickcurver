@@ -147,9 +147,11 @@ Item {
 									id: playerController
 									model: ["Local Player", "Bot", "Online Player"]
 									width: dp(160)
-									selectedIndex: eBot ? 1 : 0
+									selectedIndex: eBot? 1 : eOnline? 2 : 0
 									Layout.fillWidth: true
-									onSelectedIndexChanged: game.setController(index, selectedIndex)
+									onSelectedIndexChanged: {
+										game.setController(index, selectedIndex);
+									}
 								}
 
 								GridLayout {
@@ -237,7 +239,7 @@ Item {
 					snackbar.open("Sorry, you have reached maximum player capacity!");
 				} else {
 					game.addPlayer();
-					snackbar.open("Sry, this is not yet implemented, pls manually edit a player");
+					playerListModel.append({eOnline: true});
 				}
 			}
 		}

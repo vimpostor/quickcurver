@@ -194,6 +194,7 @@ ApplicationWindow {
 			escore: 0
 			eroundScore: 0
 			eBot: false
+			eOnline: false
 			eJoined: false
 			eReady: false
 		}
@@ -202,6 +203,7 @@ ApplicationWindow {
 			escore: 0
 			eroundScore: 0
 			eBot: true
+			eOnline: false
 			eJoined: false
 			eReady: false
 		}
