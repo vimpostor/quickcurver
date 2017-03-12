@@ -24,6 +24,7 @@
         <file alias="timer_sand.svg">content_timer_sand.svg</file>
         <file alias="paste.svg">content_paste.svg</file>
         <file alias="copy.svg">content_copy.svg</file>
+        <file alias="book_open_page_variant.svg">content_book_open_page_variant.svg</file>
     </qresource>
     <qresource prefix="/icons/device">
         <file alias="access_alarm.svg">device_access_alarm.svg</file>
@@ -50,6 +51,7 @@
         <file alias="clock_fast.svg">action_clock_fast.svg</file>
         <file alias="visibility_off.svg">action_visibility_off.svg</file>
         <file alias="search_web.svg">action_search_web.svg</file>
+        <file alias="help.svg">action_help.svg</file>
     </qresource>
     <qresource prefix="/icons/navigation">
         <file alias="arrow_drop_down.svg">navigation_arrow_drop_down.svg</file>

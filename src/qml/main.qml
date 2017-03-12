@@ -109,10 +109,17 @@ ApplicationWindow {
 				onTriggered: pageStack.push(Qt.resolvedUrl("settings.qml"))
 			},
 			Action {
+				iconName: "content/book_open_page_variant"
 				name: "Licenses"
 				onTriggered: licensesOverlay.open(initialPage.actionBar)
 			},
 			Action {
+				iconName: "action/help"
+				name: "Help"
+				onTriggered: playerselector.mysnackbar.open("Not implemented yet")
+			},
+			Action {
+				iconName: "navigation/close"
 				name: "Quit"
 				onTriggered: close()
 			}
