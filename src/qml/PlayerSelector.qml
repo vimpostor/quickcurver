@@ -230,7 +230,7 @@ Item {
 			}
 		]
 		Behavior on y {
-			PropertyAnimation {easing.type: Easing.InOutQuad; duration: 150}
+			PropertyAnimation {easing.type: Easing.InOutQuad; duration: 50}
 		}
 		action: Action {
 			shortcut: "Ctrl+Shift+Alt+N"
@@ -273,7 +273,7 @@ Item {
 			}
 		]
 		Behavior on y {
-			PropertyAnimation {easing.type: Easing.InOutQuad; duration: 150}
+			PropertyAnimation {easing.type: Easing.InOutQuad; duration: 100}
 		}
 		action: Action {
 			shortcut: "Ctrl+Shift+N"
