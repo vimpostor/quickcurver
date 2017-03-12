@@ -56,7 +56,7 @@ private:
 	ClientSettings settings;
 	ServerSettings serverSettings;
 	QObject *qmlobject = NULL;
-	// GUI methods
+	Gui gui;
 	void setJoinStatus(QString s);
 };
 

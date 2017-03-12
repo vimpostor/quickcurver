@@ -1,5 +1,8 @@
 #include "network.h"
 
+
+// ClientSettings
+
 void ClientSettings::reset() {
 	username = "";
 	ready = false;
@@ -18,6 +21,9 @@ QDataStream &operator >>(QDataStream &in, ClientSettings &clientSettings) {
 	clientSettings.ready = ready;
 	return in;
 }
+
+
+// ServerSettings
 
 ServerSettings::ServerSettings() {
 	clientSettings[0].username = "Player 0";
@@ -46,6 +52,9 @@ QDataStream &operator >>(QDataStream &in, ServerSettings &serverSettings) {
 	return in;
 }
 
+
+// Network
+
 QHostAddress Network::getLocalIpAddress() {
 	QList<QHostAddress> ipAddressesList = QNetworkInterface::allAddresses();
 	// use the first non-localhost IPv4 address
@@ -56,4 +65,16 @@ QHostAddress Network::getLocalIpAddress() {
 	}
 	// if we did not find one, use IPv4 localhost
 	return QHostAddress(QHostAddress::LocalHost);
+}
+
+
+// Gui
+
+void Gui::setQmlObject(QObject *qmlobject) {
+	this->qmlobject = qmlobject;
+}
+
+void Gui::sendChatMessage(QString username, QString message) {
+	QVariant returnedValue;
+	QMetaObject::invokeMethod(qmlobject, "sendMessage", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, username), Q_ARG(QVariant, message));
 }

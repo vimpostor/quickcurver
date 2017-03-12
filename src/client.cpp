@@ -18,6 +18,7 @@ void Client::start(QSGNode *node, QObject *qmlobject, QString ip, int port) {
 	this->qmlobject = qmlobject;
 	this->ip = new QHostAddress(ip);
 	this->port = port;
+	gui.setQmlObject(qmlobject);
 	initTcpSocket();
 	initUdpSocket();
 	join();

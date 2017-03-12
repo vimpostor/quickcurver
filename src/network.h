@@ -36,4 +36,12 @@ public:
 	static QHostAddress getLocalIpAddress();
 };
 
+class Gui {
+public:
+	void setQmlObject(QObject *qmlobject);
+	void sendChatMessage(QString username, QString message);
+private:
+	QObject *qmlobject = NULL;
+};
+
 #endif // MULTIPLAYERSETTINGS_H
