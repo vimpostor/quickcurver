@@ -16,8 +16,8 @@ void Client::start(QSGNode *node, QString ip, int port) {
 	this->node = node;
 	this->ip = new QHostAddress(ip);
 	this->port = port;
-	initUdpSocket();
 	initTcpSocket();
+	initUdpSocket();
 	join();
 }
 
@@ -56,7 +56,7 @@ void Client::initUdpSocket() {
 	udpSocket = new QUdpSocket(this);
 	connect(udpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(udpSocketError(QAbstractSocket::SocketError)));
 	connect(udpSocket, SIGNAL(readyRead()), this, SLOT(udpReadPendingDatagrams()));
-	udpSocket->bind(*ip, myport);
+	udpSocket->bind(Network::getLocalIpAddress(), myport);
 }
 
 void Client::initTcpSocket() {

@@ -4,6 +4,7 @@
 #include <QString>
 #include <QDataStream>
 #include <QColor>
+#include <QtNetwork>
 
 #define MAXPLAYERCOUNT 16
 
@@ -29,5 +30,10 @@ public:
 
 QDataStream &operator <<(QDataStream &out, const ServerSettings &serverSettings);
 QDataStream &operator >>(QDataStream &in, ServerSettings &serverSettings);
+
+class Network {
+public:
+	static QHostAddress getLocalIpAddress();
+};
 
 #endif // MULTIPLAYERSETTINGS_H

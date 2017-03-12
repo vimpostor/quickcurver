@@ -45,3 +45,15 @@ QDataStream &operator >>(QDataStream &in, ServerSettings &serverSettings) {
 	}
 	return in;
 }
+
+QHostAddress Network::getLocalIpAddress() {
+	QList<QHostAddress> ipAddressesList = QNetworkInterface::allAddresses();
+	// use the first non-localhost IPv4 address
+	for (int i = 0; i < ipAddressesList.size(); ++i) {
+		if (ipAddressesList.at(i) != QHostAddress::LocalHost && ipAddressesList.at(i).toIPv4Address()) {
+			return ipAddressesList.at(i);
+		}
+	}
+	// if we did not find one, use IPv4 localhost
+	return QHostAddress(QHostAddress::LocalHost);
+}
