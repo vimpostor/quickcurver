@@ -1,4 +1,4 @@
-#include "multiplayersettings.h"
+#include "network.h"
 
 void ClientSettings::reset() {
 	username = "";

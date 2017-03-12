@@ -7,7 +7,7 @@
 #include <QSGNode>
 #include "headnode.h"
 #include <qsgflatcolormaterial.h>
-#include "multiplayersettings.h"
+#include "network.h"
 
 
 class Client : public QObject

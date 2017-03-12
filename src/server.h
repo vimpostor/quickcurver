@@ -4,7 +4,7 @@
 #include <QtNetwork>
 #include "qcurver.h"
 #include <QTimer>
-#include "multiplayersettings.h"
+#include "network.h"
 #include<QSignalMapper>
 #define BROADCASTINTERVAL 33
 
