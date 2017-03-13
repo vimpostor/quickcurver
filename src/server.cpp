@@ -1,7 +1,6 @@
 #include "server.h"
 
-Server::Server(QCurver **curver, quint16 port, QObject *parent) : QObject(parent) {
-	this->port = port;
+Server::Server(QCurver **curver, QObject *parent) : QObject(parent) {
 	this->curver = curver;
 	this->tcpReadyReadSignalMapper = new QSignalMapper(this); // create tcpReadyRead signal mapper
 	connect(tcpReadyReadSignalMapper, SIGNAL(mapped(int)), this, SLOT(tcpReadyRead(int)));
@@ -10,6 +9,10 @@ Server::Server(QCurver **curver, quint16 port, QObject *parent) : QObject(parent
 		clientsUdp[i] = NULL;
 		clientsTcp[i] = NULL;
 	}
+}
+
+void Server::init(quint16 port) {
+	this->port = port;
 	setServerIp();
 	initUdpSocket();
 	initTcpServer();

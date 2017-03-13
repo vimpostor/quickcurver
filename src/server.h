@@ -13,8 +13,9 @@ class Server : public QObject
 {
 	Q_OBJECT
 public:
-	explicit Server(QCurver **curver, quint16 port = 52552, QObject *parent = 0);
+	explicit Server(QCurver **curver, QObject *parent = 0);
 	~Server();
+	void init(quint16 port);
 	void shutdown();
 	void setAvailable(int index, bool newState);
 	void start();

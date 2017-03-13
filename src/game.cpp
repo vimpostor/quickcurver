@@ -8,7 +8,7 @@ Game::Game(QQuickItem *parent) : QQuickItem(parent) {
 		controlledByAI[i] = false;
 		controlledByNetwork[i] = false;
 	}
-	server = new Server(curver, 52552, this);
+	server = new Server(curver, this);
 	client = new Client(this);
 	connect(server, SIGNAL(notifyGUI(QString,QString)), this, SLOT(notifyGUI(QString,QString)));
 	connect(server, SIGNAL(playerStatusChanged(int,QString)), this, SLOT(setPlayerStatus(int,QString)));
@@ -399,4 +399,8 @@ void Game::clientDeleteAllItems() {
 
 int Game::getFieldSize() {
 	return this->fieldsize;
+}
+
+void Game::startServer(int port) {
+	server->init((quint16) port);
 }

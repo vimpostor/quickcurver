@@ -83,13 +83,19 @@ ApplicationWindow {
 	initialPage: Page {
 		id: initialPage
 		title: "Quick Curver"
-		actionBar.maxActionCount: 4
+		actionBar.maxActionCount: 5
 		actions: [
 			Action {
 				iconName: "action/search_web"
 				name: "Join an online game"
 				onTriggered: clientDialog.show()
 				shortcut: "Ctrl+J"
+			},
+			Action {
+				iconName: "file/cloud_upload"
+				name: "Host an online game"
+				onTriggered: serverDialog.show()
+				shortcut: "Ctrl+Shift+J"
 			},
 			Action {
 				iconName: "content/copy"
@@ -377,5 +383,28 @@ ApplicationWindow {
 				game.leaveGame();
 			}
 		}
+	}
+	Dialog {
+		id: serverDialog
+		width: dp(260)
+		height: dp(200)
+		title: "Host an online game"
+		ColumnLayout {
+			anchors.fill: parent
+			spacing: dp(16)
+			Item { // dummy element to create an height offset at the beginning
+				height: dp(0)
+				Layout.fillWidth: true
+			}
+			TextField {
+				id: myServerPort
+				Layout.fillWidth: true
+				focus: true
+				placeholderText: "Port"
+				floatingLabel: true
+				text: "52552"
+			}
+		}
+		onAccepted: game.startServer(myServerPort.text)
 	}
 }

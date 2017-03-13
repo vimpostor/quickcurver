@@ -62,14 +62,14 @@ make
 ###Updating
 If you built QuickCurver from source you can simply update by running the following script:
 ```{r, engine='bash', count_lines}
-./update.sh # You may have to fix the permissions first with chmod +x ./update.sh
+./update.sh
 ```
 
 ##Installing compiled binaries
 Coming soon!
 
 #Multiplayer
-To play multiplayer, the host has to make at least one player an "Online Player" by clicking on that player in the Playerselector screen and using the drop down menu. Once a slot is open to join, the host has to publish his IP to the client. Note that the program automatically prints out the IP, assuming you have started it CLI. If you are not in the same local network, the host has to use [Port Forwarding](https://en.wikipedia.org/wiki/Port_forwarding) to make his device available to the internet. When the client receives the host's IP, he has to start the program, click on the "Join" Icon on the top right and enter the IP. If the join request was successfull, you will see "Joined, waiting for host to start...", otherwise the connection will timeout after a few seconds.
+To play multiplayer, the host first has to start a server by clicking the icon on the top, then he has to make at least one player an "Online Player" by clicking on that player in the Playerselector screen and using the drop down menu. Once a slot is open to join, the host has to publish his IP to the client. Note that the program automatically prints out the IP, assuming you have started it CLI. If you are not in the same local network, the host has to use [Port Forwarding](https://en.wikipedia.org/wiki/Port_forwarding) to make his device available to the internet. When the client receives the host's IP, he has to start the program, click on the "Join" Icon on the top right and enter the IP. If the join request was successfull, you will see "Joined, waiting for host to start...", otherwise the connection will timeout after a few seconds.
 
 #Troubleshooting
 ##The drawing does not get updated, or only rarely
