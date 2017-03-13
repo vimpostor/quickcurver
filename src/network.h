@@ -40,6 +40,7 @@ class Gui {
 public:
 	void setQmlObject(QObject *qmlobject);
 	void sendChatMessage(QString username, QString message);
+	void editUsername(int index, QString username);
 private:
 	QObject *qmlobject = NULL;
 };

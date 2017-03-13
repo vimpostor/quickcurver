@@ -78,3 +78,8 @@ void Gui::sendChatMessage(QString username, QString message) {
 	QVariant returnedValue;
 	QMetaObject::invokeMethod(qmlobject, "sendMessage", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, username), Q_ARG(QVariant, message));
 }
+
+void Gui::editUsername(int index, QString username) {
+	QVariant returnedValue;
+	QMetaObject::invokeMethod(qmlobject, "clientEditPlayer", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, index), Q_ARG(QVariant, username));
+}
