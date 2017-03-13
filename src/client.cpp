@@ -150,7 +150,7 @@ void Client::tcpReadyRead() {
 		} else if (message == "[MESSAGE]") {
 			QString username, message;
 			in >> username >> message;
-			emit sendMessage(username, message);
+			gui.sendChatMessage(username, message);
 		} else if (message == "[STARTED]") {
 			emit setJoinStatus("STARTED");
 		} else if (message == "[ITEM]") {
