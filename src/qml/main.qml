@@ -116,7 +116,8 @@ ApplicationWindow {
 			Action {
 				iconName: "action/help"
 				name: "Help"
-				onTriggered: playerselector.mysnackbar.open("Not implemented yet")
+				onTriggered: pageStack.push(Qt.resolvedUrl("help.qml"))
+				shortcut: "Ctrl+H"
 			},
 			Action {
 				iconName: "navigation/close"

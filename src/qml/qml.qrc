@@ -6,5 +6,6 @@
         <file>settings.qml</file>
         <file>Licenses.qml</file>
         <file>LicenseCard.qml</file>
+        <file>help.qml</file>
     </qresource>
 </RCC>
