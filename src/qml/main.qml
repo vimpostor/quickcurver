@@ -83,7 +83,7 @@ ApplicationWindow {
 	initialPage: Page {
 		id: initialPage
 		title: "Quick Curver"
-		actionBar.maxActionCount: 5
+		actionBar.maxActionCount: 4
 		actions: [
 			Action {
 				iconName: "action/search_web"
@@ -92,15 +92,17 @@ ApplicationWindow {
 				shortcut: "Ctrl+J"
 			},
 			Action {
-				iconName: "file/cloud_upload"
-				name: "Host an online game"
-				onTriggered: serverDialog.show()
-				shortcut: "Ctrl+Shift+J"
-			},
-			Action {
-				iconName: "content/copy"
-				name: "Copy IP address"
-				onTriggered: playerselector.mysnackbar.open("Copied IP address " + game.copyIp())
+				id: startServerAction
+				property bool serverStarted: false
+				iconName: serverStarted? "content/copy" : "file/cloud_upload"
+				name: serverStarted? "Copy IP address" : "Host an online game"
+				onTriggered: {
+					if (serverStarted) {
+						playerselector.mysnackbar.open("Copied IP address " + game.copyIp())
+					} else {
+						serverDialog.show();
+					}
+				}
 				shortcut: "Ctrl+C"
 			},
 			Action {
@@ -387,7 +389,7 @@ ApplicationWindow {
 	Dialog {
 		id: serverDialog
 		width: dp(260)
-		height: dp(200)
+		height: dp(170)
 		title: "Host an online game"
 		ColumnLayout {
 			anchors.fill: parent
@@ -405,6 +407,9 @@ ApplicationWindow {
 				text: "52552"
 			}
 		}
-		onAccepted: game.startServer(myServerPort.text)
+		onAccepted: {
+			game.startServer(myServerPort.text)
+			startServerAction.serverStarted = true;
+		}
 	}
 }
