@@ -83,7 +83,7 @@ ApplicationWindow {
 	initialPage: Page {
 		id: initialPage
 		title: "Quick Curver"
-		actionBar.maxActionCount: 5
+		actionBar.maxActionCount: 4
 		actions: [
 			Action {
 				iconName: "action/search_web"
@@ -98,15 +98,15 @@ ApplicationWindow {
 				shortcut: "Ctrl+C"
 			},
 			Action {
-				iconName: "image/color_lens"
-				name: "Colors"
-				onTriggered: colorPicker.show()
-			},
-			Action {
 				iconName: "action/settings"
 				name: "Settings"
 				hoverAnimation: true
 				onTriggered: pageStack.push(Qt.resolvedUrl("settings.qml"))
+			},
+			Action {
+				iconName: "image/color_lens"
+				name: "Colors"
+				onTriggered: colorPicker.show()
 			},
 			Action {
 				iconName: "content/book_open_page_variant"
