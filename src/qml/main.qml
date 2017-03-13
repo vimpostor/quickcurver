@@ -123,6 +123,7 @@ ApplicationWindow {
 				iconName: "navigation/close"
 				name: "Quit"
 				onTriggered: close()
+				shortcut: "Ctrl+Q"
 			}
 
 		]
