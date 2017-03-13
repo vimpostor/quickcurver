@@ -18,7 +18,7 @@ fi
 ./QuickCurver 2>&1 | xargs -0 echo -e '\e[0;32m' & # Start server (colored green)
 sleep $ANIMATIONDURATION # Wait for application to start
 SWID=$(xdotool search 'Quick Curver'| head -1) # Window ID of server
-xdotool key 'Ctrl+Shift+j' key Tab key Tab key space # start the server
+xdotool key 'Ctrl+c' key Tab key Tab key space # start the server
 xdotool key 'Ctrl+c' # Copy ip address
 
 # Choose one player to be an online player

@@ -11,8 +11,10 @@ Server::Server(QCurver **curver, QObject *parent) : QObject(parent) {
 	}
 }
 
-void Server::init(quint16 port) {
+void Server::init(quint16 port, QObject *qmlobject) {
 	this->port = port;
+	this->qmlobject = qmlobject;
+	gui.setQmlObject(qmlobject);
 	setServerIp();
 	initUdpSocket();
 	initTcpServer();

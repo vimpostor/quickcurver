@@ -15,7 +15,7 @@ class Server : public QObject
 public:
 	explicit Server(QCurver **curver, QObject *parent = 0);
 	~Server();
-	void init(quint16 port);
+	void init(quint16 port, QObject *qmlobject);
 	void shutdown();
 	void setAvailable(int index, bool newState);
 	void start();
@@ -70,6 +70,8 @@ private:
 	QSignalMapper *tcpReadyReadSignalMapper;
 	ServerSettings serverSettings;
 	void updateServerSettings();
+	QObject *qmlobject = NULL;
+	Gui gui;
 };
 
 #endif // SERVER_H

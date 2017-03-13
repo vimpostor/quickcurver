@@ -402,5 +402,5 @@ int Game::getFieldSize() {
 }
 
 void Game::startServer(int port) {
-	server->init((quint16) port);
+	server->init((quint16) port, qmlobject);
 }
