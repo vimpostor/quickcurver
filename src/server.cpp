@@ -58,8 +58,8 @@ void Server::readPendingDatagrams() {
 				clientsUdp[i] = sender;
 				answer = "[JOINED]";
 				qDebug() << sender->toString() + " joined ";
-				emit notifyGUI(sender->toString() + " joined", "SNACKBAR");
-				emit playerStatusChanged(i, "JOINED");
+				gui.notifyGUI(sender->toString() + " joined", "SNACKBAR");
+				gui.setPlayerStatus(i, "JOINED");
 			} else {
 				answer = "[REJECTED]";
 			}
@@ -194,7 +194,7 @@ void Server::broadcastChatMessage(QString username, QString message) {
 	if (username == "") {
 		username = serverSettings.clientSettings[0].username;
 	}
-	emit sendMessage(username, message); // send to server itself
+	gui.sendChatMessage(username, message); // send to server itself
 	// and send to others
 	QString msgData[3];
 	msgData[0] = "[MESSAGE]";
@@ -275,8 +275,8 @@ void Server::tcpReadyRead(int i) {
 		broadcastChatMessage(username, message);
 	} else if (message == "[SETTINGS]") {
 		in[i] >> serverSettings.clientSettings[i];
-		emit playerStatusChanged(i, serverSettings.clientSettings[i].ready ? "READY" : "UNREADY");
-		emit playerStatusChanged(i, "USERNAME" + serverSettings.clientSettings[i].username);
+		gui.setPlayerStatus(i, serverSettings.clientSettings[i].ready ? "READY" : "UNREADY");
+		gui.setPlayerStatus(i, "USERNAME" + serverSettings.clientSettings[i].username);
 	} else if (message == "[LEFT]") {
 		disconnectClient(clientsTcp[i]);
 	} else {
@@ -304,10 +304,10 @@ void Server::disconnectClient(QTcpSocket *client, QString reason) {
 			if (started) {
 				broadcastChatMessage("Chat Bot", msg);
 			} else {
-				notifyGUI(msg, "SNACKBAR");
+				gui.notifyGUI(msg, "SNACKBAR");
 			}
 			serverSettings.clientSettings[i].reset();
-			emit playerStatusChanged(i, "LEFT");
+			gui.setPlayerStatus(i, "LEFT");
 		}
 	}
 }
@@ -329,16 +329,16 @@ bool Server::isReady() {
 	for (int i = 0; i < MAXPLAYERCOUNT; ++i) {
 		if (available[i]) {
 			if (clientsTcp[i] == NULL) {
-				emit notifyGUI("There is an unused online slot! Please remove it or let someone join.", "SNACKBAR");
+				gui.notifyGUI("There is an unused online slot! Please remove it or let someone join.", "SNACKBAR");
 				return false;
 			} else if (clientsUdp[i] == NULL) {
-				emit notifyGUI("One of the clients has not successfully joined yet!", "SNACKBAR");
+				gui.notifyGUI("One of the clients has not successfully joined yet!", "SNACKBAR");
 				return false;
 			} else if (!serverSettings.clientSettings[i].ready) {
-				emit notifyGUI("One of the clients is not ready yet!", "SNACKBAR");
+				gui.notifyGUI("One of the clients is not ready yet!", "SNACKBAR");
 				return false;
 			} else if (serverSettings.clientSettings[i].username == "") {
-				emit notifyGUI("One of the clients hasn't set the username", "SNACKBAR");
+				gui.notifyGUI("One of the clients hasn't set the username", "SNACKBAR");
 				return false;
 			}
 		}

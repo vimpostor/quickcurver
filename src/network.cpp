@@ -83,3 +83,13 @@ void Gui::editUsername(int index, QString username) {
 	QVariant returnedValue;
 	QMetaObject::invokeMethod(qmlobject, "clientEditPlayer", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, index), Q_ARG(QVariant, username));
 }
+
+void Gui::notifyGUI(QString msg, QString mode) {
+	QVariant returnedValue;
+	QMetaObject::invokeMethod(qmlobject, "notifyGUI", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, msg), Q_ARG(QVariant, mode));
+}
+
+void Gui::setPlayerStatus(int index, QString s) {
+	QVariant returnedValue;
+	QMetaObject::invokeMethod(qmlobject, "setPlayerStatus", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, index), Q_ARG(QVariant, s));
+}

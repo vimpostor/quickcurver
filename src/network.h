@@ -41,6 +41,8 @@ public:
 	void setQmlObject(QObject *qmlobject);
 	void sendChatMessage(QString username, QString message);
 	void editUsername(int index, QString username);
+	void notifyGUI(QString msg, QString mode);
+	void setPlayerStatus(int index, QString s);
 private:
 	QObject *qmlobject = NULL;
 };

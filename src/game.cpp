@@ -10,8 +10,6 @@ Game::Game(QQuickItem *parent) : QQuickItem(parent) {
 	}
 	server = new Server(curver, this);
 	client = new Client(this);
-	connect(server, SIGNAL(notifyGUI(QString,QString)), this, SLOT(notifyGUI(QString,QString)));
-	connect(server, SIGNAL(playerStatusChanged(int,QString)), this, SLOT(setPlayerStatus(int,QString)));
 }
 
 Game::~Game() {
@@ -60,7 +58,6 @@ void Game::start() {
 	lastItemSpawn = lastTime;
 	nextItemSpawn = segment::randInt(5000,10000);
 	server->setPlayerCount(playercount);
-	connect(server, SIGNAL(sendMessage(QString,QString)), this, SLOT(sendMessageToQml(QString,QString)));
 	server->start();
 	timer->start(timerInterval);
 }
@@ -291,12 +288,6 @@ void Game::increaseScore(int index) {
 	QMetaObject::invokeMethod(qmlobject, "changeScore", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, index) , Q_ARG(QVariant, curver[index]->score), Q_ARG(QVariant, curver[index]->roundScore));
 }
 
-void Game::sendMessageToQml(QString sender, QString message) {
-	QVariant returnedValue;
-	QMetaObject::invokeMethod(qmlobject, "sendMessage", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, sender), Q_ARG(QVariant, message));
-}
-
-
 void Game::setController(int index, int newControllerState) {
 	controlledByAI[index] = (newControllerState == 1);
 	controlledByNetwork[index] = (newControllerState == 2);
@@ -317,11 +308,6 @@ void Game::close() {
 
 void Game::setFieldSize(int s) {
 	fieldsize = s;
-}
-
-void Game::setPlayerStatus(int index, QString s) {
-	QVariant returnedValue;
-	QMetaObject::invokeMethod(qmlobject, "setPlayerStatus", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, index), Q_ARG(QVariant, s));
 }
 
 void Game::setTimeMultiplier(int t) {

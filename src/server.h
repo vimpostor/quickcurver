@@ -30,9 +30,6 @@ public:
 	void curverDied(int index);
 	void setName(int index, QString username);
 signals:
-	void playerStatusChanged(int index, QString s);
-	void sendMessage(QString username, QString message);
-	void notifyGUI(QString msg, QString mode);
 private slots:
 	void readPendingDatagrams();
 	void udpSocketError(QAbstractSocket::SocketError socketError);

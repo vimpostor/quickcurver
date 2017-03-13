@@ -71,8 +71,6 @@ public slots:
 	void checkforIntersection(QPointF a, QPointF b);
 private slots:
 	void startNextRound();
-	void setPlayerStatus(int index, QString s);
-	void sendMessageToQml(QString sender, QString message);
 	void notifyGUI(QString msg, QString mode);
 	void clientSpawnItem(QString iconName, QColor color, QPointF pos, int index);
 	void clientDeleteItem(int index);
