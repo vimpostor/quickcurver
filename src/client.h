@@ -26,7 +26,6 @@ signals:
 	void spawnItem(QString iconName, QColor color, QPointF pos, int index);
 	void deleteItem(int index);
 	void deleteAllItems();
-	void editPlayer(int index, QString name);
 
 private slots:
 	void udpReadPendingDatagrams();
