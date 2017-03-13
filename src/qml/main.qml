@@ -9,6 +9,7 @@ import QtQuick.Layouts 1.1
 ApplicationWindow {
 	onClosing: game.close()
 	property bool clientInGame: false;
+	property bool serverStarted: false;
 	function sendMessage(username, message) {
 		pageStack.currentItem.sendMessage(username, message);
 	}
@@ -93,7 +94,6 @@ ApplicationWindow {
 			},
 			Action {
 				id: startServerAction
-				property bool serverStarted: false
 				iconName: serverStarted? "content/copy" : "file/cloud_upload"
 				name: serverStarted? "Copy IP address" : "Host an online game"
 				onTriggered: {
@@ -409,7 +409,7 @@ ApplicationWindow {
 		}
 		onAccepted: {
 			game.startServer(myServerPort.text)
-			startServerAction.serverStarted = true;
+			serverStarted = true;
 		}
 	}
 }

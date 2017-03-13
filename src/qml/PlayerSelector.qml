@@ -150,6 +150,10 @@ Item {
 									selectedIndex: eBot? 1 : eOnline? 2 : 0
 									Layout.fillWidth: true
 									onSelectedIndexChanged: {
+										if (selectedIndex == 2 && !root.serverStarted) {
+											snackbar.open("You first need to start the server before adding an online slot");
+											selectedIndex = 0;
+										}
 										game.setController(index, selectedIndex);
 									}
 								}
@@ -235,11 +239,15 @@ Item {
 		action: Action {
 			shortcut: "Ctrl+Shift+Alt+N"
 			onTriggered: {
-				if (playerListModel.count >= 16) {
-					snackbar.open("Sorry, you have reached maximum player capacity!");
+				if (root.serverStarted) {
+					if (playerListModel.count >= 16) {
+						snackbar.open("Sorry, you have reached maximum player capacity!");
+					} else {
+						game.addPlayer();
+						playerListModel.append({eOnline: true});
+					}
 				} else {
-					game.addPlayer();
-					playerListModel.append({eOnline: true});
+					snackbar.open("You first need to start the server before adding an online slot");
 				}
 			}
 		}

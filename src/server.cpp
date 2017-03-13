@@ -176,6 +176,7 @@ void Server::setServerIp() {
 	QString ipAddress = Network::getLocalIpAddress().toString();
 	serverIp = new QHostAddress(ipAddress);
 	qDebug() << "Server set up on " + ipAddress;
+	gui.notifyGUI("Server set up on " + ipAddress, "SNACKBAR");
 }
 
 
