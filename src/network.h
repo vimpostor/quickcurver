@@ -36,6 +36,7 @@ public:
 	static QHostAddress getLocalIpAddress();
 };
 
+
 class Gui {
 public:
 	void setQmlObject(QObject *qmlobject);

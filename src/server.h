@@ -5,8 +5,10 @@
 #include "qcurver.h"
 #include <QTimer>
 #include "network.h"
-#include<QSignalMapper>
+#include <QSignalMapper>
+#include <qmath.h>
 #define BROADCASTINTERVAL 33
+#define MAXPOINTSSENTATONCE 16
 
 
 class Server : public QObject

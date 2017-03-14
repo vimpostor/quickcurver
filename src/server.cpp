@@ -152,8 +152,9 @@ void Server::broadcast() {
 		out.device()->reset();
 		//now send curver data
 		bool newSegment = c->moveToNextSegment(); //tries moving to next segment if all data was read from the last one
-		out << QString("POS") << i << newSegment;
-		for (int sentPoints = 0; sentPoints < 16 && c->hasUnsyncedSegPoints(); ++sentPoints) { //add points
+		int amount = qMin(c->getUnsyncedSegPointsAmount(), MAXPOINTSSENTATONCE);
+		out << QString("POS") << i << newSegment << amount;
+		for (int sentPoints = 0; sentPoints < amount && c->hasUnsyncedSegPoints(); ++sentPoints) { //add points
 			out << c->readUnsyncedSegPoint();
 		}
 		sendToAllUdp(&datagram);

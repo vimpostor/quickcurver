@@ -267,6 +267,14 @@ bool QCurver::moveToNextSegment() {
 	}
 }
 
+int QCurver::getUnsyncedSegPointsAmount() {
+	if (clientSegment != -1) {
+		return segments[clientSegment]->poscount - 1 - clientPoscount;
+	} else {
+		return 0;
+	}
+}
+
 void QCurver::clientNewSegment() {
 	segments[segmentcount] = new segment(color, thickness, node, material);
 	++segmentcount;

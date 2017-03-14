@@ -44,6 +44,7 @@ public:
 	bool hasUnsyncedSegPoints();
 	QPointF readUnsyncedSegPoint();
 	bool moveToNextSegment(); // attempts to move to next segment, returns true on success, false on failure
+	int getUnsyncedSegPointsAmount(); // returns how many points could be read from the current segment
 	void clientNewSegment();
 	void clientAddPoint(QPointF p);
 	void clientReset();

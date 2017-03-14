@@ -99,14 +99,14 @@ void Client::udpReadPendingDatagrams() {
 				}
 				parent->update();
 			} else if (title == "POS") {
-				int i;
+				int i, amount;
 				bool newSegment;
 				QPointF pos;
-				in >> i >> newSegment;
+				in >> i >> newSegment >> amount;
 				if (newSegment) {
 					curver[i]->clientNewSegment();
 				}
-				while (!in.atEnd()) {
+				for (int receivedPoints = 0; receivedPoints < amount; ++receivedPoints) {
 					in >> pos;
 					curver[i]->clientAddPoint(pos);
 				}
