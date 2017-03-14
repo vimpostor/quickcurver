@@ -171,6 +171,7 @@ void QCurver::clientReset() {
 	}
 	segmentcount = 0;
 	alive = true;
+	roundScore = 0;
 }
 
 void QCurver::cleanInstall() {

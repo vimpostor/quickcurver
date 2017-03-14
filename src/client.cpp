@@ -164,6 +164,7 @@ void Client::tcpReadyRead() {
 			for (int i = 0; i < MAXPLAYERCOUNT; ++i) {
 				if (curver[i] != NULL) {
 					curver[i]->clientReset();
+					gui.setPlayerScore(i, curver[i]->score, curver[i]->roundScore);
 				}
 			}
 			emit deleteAllItems();
@@ -181,6 +182,12 @@ void Client::tcpReadyRead() {
 			int index;
 			in >> index;
 			curver[index]->die();
+			for (int i = 0; i < MAXPLAYERCOUNT; ++i) {
+				if (curver[i] != NULL && curver[i]->alive) {
+					curver[i]->increaseScore();
+					gui.setPlayerScore(i, curver[i]->score, curver[i]->roundScore);
+				}
+			}
 		} else if (message == "[SETTINGS]") {
 			in >> serverSettings;
 			// create curvers

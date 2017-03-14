@@ -43,6 +43,7 @@ public:
 	void editUsername(int index, QString username);
 	void notifyGUI(QString msg, QString mode);
 	void setPlayerStatus(int index, QString s);
+	void setPlayerScore(int index, int score, int roundScore);
 private:
 	QObject *qmlobject = NULL;
 };
