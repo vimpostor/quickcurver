@@ -61,6 +61,7 @@ public:
 	Q_INVOKABLE QString copyIp();
 	Q_INVOKABLE int getFieldSize();
 	Q_INVOKABLE void startServer(int port);
+	Q_INVOKABLE void setScoreToFinish(int newScoreToFinish);
 	short int playercount = 2;
 	void setQmlObject(QObject *o);
 
@@ -111,6 +112,9 @@ private:
 	QString username = "";
 	bool sendWinnerMessages = false;
 	QQuickView textureGenerator; // used to generate QSGTextures for the item icons
+	int scoreToFinish = 0; // if 0, the game will continue endlessly
+	int getMaxScore();
+	int getMaxScorerIndex();
 };
 
 #endif // GAME_H

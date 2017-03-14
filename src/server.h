@@ -31,6 +31,7 @@ public:
 	void cleanInstall();
 	void curverDied(int index);
 	void setName(int index, QString username);
+	ServerSettings serverSettings;
 signals:
 private slots:
 	void readPendingDatagrams();
@@ -67,7 +68,6 @@ private:
 	void disconnectClient(QTcpSocket *client, QString reason = ""); // if reason is specified, the client will be notified about the disconnection
 	QDataStream in[MAXPLAYERCOUNT];
 	QSignalMapper *tcpReadyReadSignalMapper;
-	ServerSettings serverSettings;
 	void updateServerSettings();
 	QObject *qmlobject = NULL;
 	Gui gui;

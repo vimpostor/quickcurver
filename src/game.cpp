@@ -216,7 +216,7 @@ void Game::curverDied(QCurver *who) {
 		}
 		if (stillAlive == 1) {
 			if (sendWinnerMessages) {
-				server->broadcastChatMessage("Chat Bot", names[alivePlayer] + " has won!");
+				server->broadcastChatMessage("Chat Bot", server->serverSettings.clientSettings[alivePlayer].username + " has won the round!");
 			}
 			nextRound();
 		}
@@ -247,22 +247,28 @@ void Game::nextRound() {
 
 void Game::startNextRound() {
 	effectiveTimeMultiplier = 1;
-	timer->stop();
-	server->newRound();
-	roundCount++;
-	for (int i = 0; i < playercount; i++) {
-		curver[i]->reset();
-		QVariant returnedValue;
-		QMetaObject::invokeMethod(qmlobject, "changeScore", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, i) , Q_ARG(QVariant, curver[i]->score), Q_ARG(QVariant, curver[i]->roundScore));
-	}
-	for (int i = 0; i < MAXITEMCOUNT; i++) {
-		if (items[i] != NULL) {
-			delete items[i];
-			items[i] = NULL;
+	if (scoreToFinish == 0 || scoreToFinish > getMaxScore()) {
+		timer->stop();
+		server->newRound();
+		roundCount++;
+		for (int i = 0; i < playercount; i++) {
+			curver[i]->reset();
+			QVariant returnedValue;
+			QMetaObject::invokeMethod(qmlobject, "changeScore", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, i) , Q_ARG(QVariant, curver[i]->score), Q_ARG(QVariant, curver[i]->roundScore));
+		}
+		for (int i = 0; i < MAXITEMCOUNT; i++) {
+			if (items[i] != NULL) {
+				delete items[i];
+				items[i] = NULL;
+			}
+		}
+		lastItemSpawn = QTime::currentTime();
+		timer->start();
+	} else { // someone got the score needed to win
+		if (sendWinnerMessages) {
+			server->broadcastChatMessage("Chat Bot", server->serverSettings.clientSettings[getMaxScorerIndex()].username + " has won the game!");
 		}
 	}
-	lastItemSpawn = QTime::currentTime();
-	timer->start();
 }
 
 void Game::setName(int index, QString newName) {
@@ -389,4 +395,26 @@ int Game::getFieldSize() {
 
 void Game::startServer(int port) {
 	server->init((quint16) port, qmlobject);
+}
+
+void Game::setScoreToFinish(int newScoreToFinish) {
+	this->scoreToFinish = newScoreToFinish;
+}
+
+int Game::getMaxScore() {
+	int currentMax = 0;
+	for (int i = 0; i < playercount; ++i) {
+		currentMax = qMax(currentMax, curver[i]->score);
+	}
+	return currentMax;
+}
+
+int Game::getMaxScorerIndex() {
+	int maxValue = getMaxScore();
+	for (int i = 0; i < playercount; ++i) {
+		if (maxValue == curver[i]->score) {
+			return i;
+		}
+	}
+	return -1;
 }

@@ -33,6 +33,7 @@ TabbedPage {
 						color: Theme.dark.textColor
 					}
 					Slider {
+						id: timeoutSlider
 						value: 2
 						tickmarksEnabled: true
 						stepSize: 1
@@ -92,6 +93,34 @@ TabbedPage {
 						checked: false
 						darkBackground: true
 						onCheckedChanged: game.setSendWinnerMessages(checked)
+					}
+					Label {
+						text: "Endless game"
+						color: Theme.dark.textColor
+					}
+					Card {
+						height: dp(50)
+						anchors.left: timeoutSlider.left
+						anchors.right: timeoutSlider.right
+						Row {
+							anchors.fill: parent
+							anchors.margins: dp(16)
+							spacing: dp(16)
+							Switch {
+								id: endlessGameSwitch
+								checked: true
+								onCheckedChanged: game.setScoreToFinish(checked? 0 : scoreToFinishTextField.text)
+							}
+							TextField {
+								id: scoreToFinishTextField
+								enabled: !endlessGameSwitch.checked
+								text: ""
+								placeholderText: "Score to finish"
+								floatingLabel: true
+								Layout.fillWidth: true
+								onTextChanged: game.setScoreToFinish(text)
+							}
+						}
 					}
 				}
 			}

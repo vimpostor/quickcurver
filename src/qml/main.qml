@@ -110,6 +110,7 @@ ApplicationWindow {
 				name: "Settings"
 				hoverAnimation: true
 				onTriggered: pageStack.push(Qt.resolvedUrl("settings.qml"))
+				shortcut: "Ctrl+I"
 			},
 			Action {
 				iconName: "image/color_lens"
