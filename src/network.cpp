@@ -98,3 +98,8 @@ void Gui::setPlayerScore(int index, int score, int roundScore) {
 	QVariant returnedValue;
 	QMetaObject::invokeMethod(qmlobject, "changeScore", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, index) , Q_ARG(QVariant, score), Q_ARG(QVariant, roundScore));
 }
+
+void Gui::setJoinStatus(QString s) {
+	QVariant returnedValue;
+	QMetaObject::invokeMethod(qmlobject, "setJoinStatus", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, s));
+}

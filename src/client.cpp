@@ -81,7 +81,7 @@ void Client::udpReadPendingDatagrams() {
 
 		if (msg == "[JOINED]") { //we successfully joined
 			joined = true;
-			emit setJoinStatus("JOINED");
+			gui.setJoinStatus("JOINED");
 			changeSettings(settings.username, settings.ready); // send settings to server
 		} else {
 			//try reading stream
@@ -128,7 +128,7 @@ void Client::join() {
 
 void Client::timeout() {
 	if (!joined) {
-		emit setJoinStatus("TIMEOUT");
+		gui.setJoinStatus("TIMEOUT");
 		shutdown();
 	}
 }
@@ -144,15 +144,15 @@ void Client::tcpReadyRead() {
 
 		if (message == "[ACCEPTED]") {
 			sendUdpMessage("[JOIN]"); // test udp connection as well
-			emit setJoinStatus("TCPACK");
+			gui.setJoinStatus("TCPACK");
 		} else if (message == "[REJECTED]") {
-			emit setJoinStatus("REJECTED");
+			gui.setJoinStatus("REJECTED");
 		} else if (message == "[MESSAGE]") {
 			QString username, message;
 			in >> username >> message;
 			gui.sendChatMessage(username, message);
 		} else if (message == "[STARTED]") {
-			emit setJoinStatus("STARTED");
+			gui.setJoinStatus("STARTED");
 		} else if (message == "[ITEM]") {
 			QString iconName;
 			QColor color;
@@ -209,7 +209,7 @@ void Client::tcpSocketError(QAbstractSocket::SocketError socketError) {
 		// leave the game then
 		tcpSocket->close();
 		qDebug() << "Terminating, because the server closed the connection";
-		emit setJoinStatus("TERMINATE"); // TODO: this should be handled more gracefully
+		gui.setJoinStatus("TERMINATE"); // TODO: this should be handled more gracefully
 	} else {
 		qDebug() << "An unhandled TCP socket error occured!\n" << socketError << tcpSocket->errorString();
 	}
@@ -244,9 +244,4 @@ void Client::changeSettings(QString username, bool ready) {
 		out << QString("[SETTINGS]") << settings;
 		tcpSocket->write(block);
 	}
-}
-
-void Client::setJoinStatus(QString s) {
-	QVariant returnedValue;
-	QMetaObject::invokeMethod(qmlobject, "setJoinStatus", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, s));
 }

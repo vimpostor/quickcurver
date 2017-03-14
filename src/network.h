@@ -45,6 +45,7 @@ public:
 	void notifyGUI(QString msg, QString mode);
 	void setPlayerStatus(int index, QString s);
 	void setPlayerScore(int index, int score, int roundScore);
+	void setJoinStatus(QString s);
 private:
 	QObject *qmlobject = NULL;
 };
