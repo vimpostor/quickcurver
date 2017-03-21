@@ -210,6 +210,12 @@ void Client::tcpSocketError(QAbstractSocket::SocketError socketError) {
 		tcpSocket->close();
 		qDebug() << "Terminating, because the server closed the connection";
 		gui.setJoinStatus("TERMINATE"); // TODO: this should be handled more gracefully
+	} else if (socketError == QAbstractSocket::ConnectionRefusedError) {
+		tcpSocket->close();
+		gui.setJoinStatus("REJECTED");
+	} else if (socketError == QAbstractSocket::HostNotFoundError) {
+		tcpSocket->close();
+		gui.setJoinStatus("REJECTED");
 	} else {
 		qDebug() << "An unhandled TCP socket error occured!\n" << socketError << tcpSocket->errorString();
 	}
