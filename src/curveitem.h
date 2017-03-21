@@ -19,6 +19,7 @@
 #define ITEMREDCOLOR QColor(245, 0, 87)
 #define ITEMGREENCOLOR QColor(118, 255, 3)
 #define ITEMBLUECOLOR QColor(61, 90, 254)
+#define FADEDURATION 500
 
 class CurveItem : public QObject
 {
@@ -40,6 +41,7 @@ protected slots:
 	void deuseMyself();
 	void deuseAll();
 	void deuseOthers();
+	void fade();
 
 protected:
 	virtual void use(QCurver* curver);
@@ -60,10 +62,13 @@ protected:
 	QSGGeometry::TexturedPoint2D *vertices;
 	QSGTexture* texture;
 	QColor color;
-	QTimer* deuseTimer;
+	QTimer *deuseTimer;
+	QTimer *fadeTimer;
 	bool invisible = false;
 	int round = -1;
 	void initCurveItem(QQuickView *view, QString iconPath);
+	QTime fadeStart;
+	bool fadeIn = true;
 };
 
 #endif // CURVEITEM_H

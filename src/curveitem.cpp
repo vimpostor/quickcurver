@@ -61,12 +61,12 @@ void CurveItem::initCurveItem(QQuickView *view, QString iconPath) {
 	gnode->setMaterial(material);
 	gnode->setFlag(QSGNode::OwnsMaterial);
 	geometry->allocate(4);
-	vertices = geometry->vertexDataAsTexturedPoint2D();
-	vertices[0].set(this->pos.x()-SIZE,this->pos.y()-SIZE,0,0);
-	vertices[1].set(this->pos.x()+SIZE,this->pos.y()-SIZE,1,0);
-	vertices[2].set(this->pos.x()-SIZE,this->pos.y()+SIZE,0,1);
-	vertices[3].set(this->pos.x()+SIZE,this->pos.y()+SIZE,1,1);
+	fadeTimer = new QTimer();
+	connect(fadeTimer, SIGNAL(timeout()), this, SLOT(fade()));
+	fadeStart = QTime::currentTime();
+	fade();
 	node->appendChildNode(gnode);
+	fadeTimer->start(16);
 }
 
 CurveItem::~CurveItem() {
@@ -181,6 +181,22 @@ void CurveItem::setRound(int round) {
 	this->round = round;
 }
 
+void CurveItem::fade() {
+	float factor = (float) fadeStart.msecsTo(QTime::currentTime()) / FADEDURATION;
+	if (factor > 1) {
+		factor = 1;
+	}
+	vertices = geometry->vertexDataAsTexturedPoint2D();
+	vertices[0].set(this->pos.x()-SIZE*factor,this->pos.y()-SIZE*factor,0,0);
+	vertices[1].set(this->pos.x()+SIZE*factor,this->pos.y()-SIZE*factor,1,0);
+	vertices[2].set(this->pos.x()-SIZE*factor,this->pos.y()+SIZE*factor,0,1);
+	vertices[3].set(this->pos.x()+SIZE*factor,this->pos.y()+SIZE*factor,1,1);
+	gnode->markDirty(QSGNode::DirtyGeometry);
+	if (factor == 1) {
+		fadeTimer->stop();
+	}
+}
+
 //the following methods are implemented later in subclasses
 void CurveItem::use(QCurver *curver) {
 	(void) curver; //suppresses unused variable warning
@@ -193,3 +209,4 @@ void CurveItem::deuse(QCurver *curver) {
 QString CurveItem::getIconName() {
 	return "";
 }
+
