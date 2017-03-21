@@ -165,13 +165,13 @@ void CurveItem::deuseOthers() {
 }
 
 void CurveItem::deuseIn() {
-	timer = new QTimer;
+	deuseTimer = new QTimer;
 	if (color == ITEMGREENCOLOR) {
-		timer->singleShot(deUseTime, this, SLOT(deuseMyself()));
+		deuseTimer->singleShot(deUseTime, this, SLOT(deuseMyself()));
 	} else if (color == ITEMREDCOLOR) {
-		timer->singleShot(deUseTime, this, SLOT(deuseOthers()));
+		deuseTimer->singleShot(deUseTime, this, SLOT(deuseOthers()));
 	} else if (color == ITEMBLUECOLOR) {
-		timer->singleShot(deUseTime, this, SLOT(deuseAll()));
+		deuseTimer->singleShot(deUseTime, this, SLOT(deuseAll()));
 	} else {
 		qDebug() << "Unexpected color in deuseIn()";
 	}

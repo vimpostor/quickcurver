@@ -219,7 +219,6 @@ void Client::tcpSocketError(QAbstractSocket::SocketError socketError) {
 	} else if (socketError == QAbstractSocket::SocketTimeoutError) {
 		tcpSocket->close();
 		gui.setJoinStatus("TIMEOUT");
-	}
 	} else {
 		qDebug() << "An unhandled TCP socket error occured!\n" << socketError << tcpSocket->errorString();
 	}

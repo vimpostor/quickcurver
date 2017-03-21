@@ -60,7 +60,7 @@ protected:
 	QSGGeometry::TexturedPoint2D *vertices;
 	QSGTexture* texture;
 	QColor color;
-	QTimer* timer;
+	QTimer* deuseTimer;
 	bool invisible = false;
 	int round = -1;
 	void initCurveItem(QQuickView *view, QString iconPath);
