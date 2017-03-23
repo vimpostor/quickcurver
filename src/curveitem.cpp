@@ -70,10 +70,7 @@ void CurveItem::initCurveItem(QQuickView *view, QString iconPath) {
 }
 
 CurveItem::~CurveItem() {
-	if (invisible == false) { //fixes an issue where simultaneously using an item and starting a new round would render the whole screen black
-		node->removeChildNode(gnode);
-		invisible = true;
-	}
+	node->removeChildNode(gnode);
 }
 
 int CurveItem::getSize() {
@@ -110,13 +107,10 @@ void CurveItem::useItem(int playerCount, QCurver **curver, QCurver *collector) {
 	} else  {
 		qDebug() << "Unexpected color in useItem()";
 	}
-	node->removeChildNode(gnode);
-	invisible = true;
 	if (deUseTime != 0) {
 		deuseIn();
-	} else {
-		delete this;
 	}
+	fadeOut();
 }
 
 void CurveItem::useMyself() {
@@ -182,19 +176,27 @@ void CurveItem::setRound(int round) {
 }
 
 void CurveItem::fade() {
-	float factor = (float) fadeStart.msecsTo(QTime::currentTime()) / FADEDURATION;
-	if (factor > 1) {
-		factor = 1;
-	}
+	// factor = 0: completely invisible, factor = 1: completely visible
+	float factor = !fadeIn + (fadeIn - !fadeIn) * (float) fadeStart.msecsTo(QTime::currentTime()) / FADEDURATION;
+	factor = qMin((float) 1,qMax((float) 0,factor)); // 0 <= factor <= 1
 	vertices = geometry->vertexDataAsTexturedPoint2D();
 	vertices[0].set(this->pos.x()-SIZE*factor,this->pos.y()-SIZE*factor,0,0);
 	vertices[1].set(this->pos.x()+SIZE*factor,this->pos.y()-SIZE*factor,1,0);
 	vertices[2].set(this->pos.x()-SIZE*factor,this->pos.y()+SIZE*factor,0,1);
 	vertices[3].set(this->pos.x()+SIZE*factor,this->pos.y()+SIZE*factor,1,1);
 	gnode->markDirty(QSGNode::DirtyGeometry);
-	if (factor == 1) {
+	if ((factor == 1 && fadeIn) || (factor == 0 && !fadeIn)) {
 		fadeTimer->stop();
+		if (!fadeIn && deUseTime == 0) { // if item fades out and does not have to wait for deuse, delete it
+			delete this;
+		}
 	}
+}
+
+void CurveItem::fadeOut() {
+	fadeIn = false;
+	fadeStart = QTime::currentTime();
+	fadeTimer->start();
 }
 
 //the following methods are implemented later in subclasses

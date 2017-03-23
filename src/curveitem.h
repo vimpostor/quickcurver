@@ -14,12 +14,13 @@
 #include <QTimer>
 #include <QImage>
 #include <QQuickView>
+#include <qmath.h>
 
 #define SIZE 12
 #define ITEMREDCOLOR QColor(245, 0, 87)
 #define ITEMGREENCOLOR QColor(118, 255, 3)
 #define ITEMBLUECOLOR QColor(61, 90, 254)
-#define FADEDURATION 500
+#define FADEDURATION 256
 
 class CurveItem : public QObject
 {
@@ -64,11 +65,11 @@ protected:
 	QColor color;
 	QTimer *deuseTimer;
 	QTimer *fadeTimer;
-	bool invisible = false;
 	int round = -1;
 	void initCurveItem(QQuickView *view, QString iconPath);
 	QTime fadeStart;
 	bool fadeIn = true;
+	void fadeOut();
 };
 
 #endif // CURVEITEM_H
