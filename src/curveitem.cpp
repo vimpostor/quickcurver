@@ -70,7 +70,18 @@ void CurveItem::initCurveItem(QQuickView *view, QString iconPath) {
 }
 
 CurveItem::~CurveItem() {
+	fadeTimer->stop();
+	delete fadeTimer;
+	if (deuseTimer != NULL) {
+		deuseTimer->stop();
+		delete deuseTimer;
+	}
 	node->removeChildNode(gnode);
+	gnode->setFlag(QSGNode::OwnsGeometry, false);
+	delete geometry;
+	gnode->setFlag(QSGNode::OwnsMaterial, false);
+	delete material;
+	delete gnode;
 }
 
 int CurveItem::getSize() {

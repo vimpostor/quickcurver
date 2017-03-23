@@ -63,8 +63,8 @@ protected:
 	QSGGeometry::TexturedPoint2D *vertices;
 	QSGTexture* texture;
 	QColor color;
-	QTimer *deuseTimer;
-	QTimer *fadeTimer;
+	QTimer *deuseTimer = NULL;
+	QTimer *fadeTimer = NULL;
 	int round = -1;
 	void initCurveItem(QQuickView *view, QString iconPath);
 	QTime fadeStart;
