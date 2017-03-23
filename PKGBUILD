@@ -11,7 +11,8 @@ depends=(qt5-base qt5-declarative qt5-svg qt5-quickcontrols qt5-quickcontrols2 q
 makedepends=(git)
 source=("git+https://github.com/magnus-gross/$_pkgname.git"
 		"git+https://github.com/magnus-gross/qml-material")
-md5sums=('SKIP') #autofill using updpkgsums
+md5sums=('SKIP'
+		'SKIP')
 
 pkgver() {
   cd "$_pkgname"
