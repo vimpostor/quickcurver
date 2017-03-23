@@ -15,6 +15,14 @@ Please note that this project is still in development. This means that you could
 
 # Installation
 ## Compiling from source
+
+Hint: Arch users can simply install [quickcurver-git](https://aur.archlinux.org/packages/quickcurver-git) from the AUR:
+
+```bash
+pacaur -S quickcurver-git
+quickcurver
+```
+
 ### Dependencies
 First make sure, that you have the required dependencies of QuickCurver installed. These are:
 

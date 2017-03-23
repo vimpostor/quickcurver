@@ -1,4 +1,4 @@
-# Maintainer: Magnus Groß magnus.gross21@gmail.com
+# Maintainer: Magnus Groß magnus dot gross 21 at gmail dot com
 _pkgname=quickcurver
 pkgname="$_pkgname"-git
 pkgver=VERSION
