@@ -15,6 +15,8 @@ md5sums=('SKIP') #autofill using updpkgsums
 
 build() {
   cd "$srcdir/$_pkgname"
+  git submodule init
+  git submodule update
   ./build.sh
 }
 
@@ -27,9 +29,9 @@ pkgver() {
 }
 
 check() {
-  ls "$srcdir/_pkgname/build/QuickCurver"
+  ls "$srcdir/$_pkgname/build/QuickCurver"
 }
 
 package() {
-  cp "$srcdir/_pkgname/build/QuickCurver" "$pkgdir/usr/bin/_pkgname"
+  install -D "$srcdir/$_pkgname/build/QuickCurver" "$pkgdir/usr/bin/$_pkgname"
 }
