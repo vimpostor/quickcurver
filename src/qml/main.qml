@@ -69,10 +69,10 @@ ApplicationWindow {
 	}
 
 	id: root
-	width: 1200
-	height: 900
-	minimumWidth: 1200
-	minimumHeight: 900
+	width: dp(1200)
+	height: dp(900)
+	minimumWidth: dp(1200)
+	minimumHeight: dp(900)
 	title: "Quick Curver"
 	visible: true
 	theme {
