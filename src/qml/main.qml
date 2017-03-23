@@ -389,8 +389,8 @@ ApplicationWindow {
 	}
 	Dialog {
 		id: serverDialog
-		width: dp(260)
-		height: dp(170)
+		width: dp(460)
+		height: dp(190)
 		title: "Host an online game"
 		ColumnLayout {
 			anchors.fill: parent
