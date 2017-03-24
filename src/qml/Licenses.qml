@@ -8,6 +8,11 @@ ColumnLayout {
 	anchors.fill: parent
 	anchors.margins: dp(16)
 	spacing: dp(10)
+	Label {
+		style: "title"
+		text: "Quick Curver uses the following software:"
+	}
+
 	LicenseCard {
 		cardTitle: "Qt"
 		cardDescription: "C++ Framework. Licensed under GNU GPL v. 3.0"

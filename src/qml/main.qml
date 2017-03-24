@@ -119,7 +119,7 @@ ApplicationWindow {
 			},
 			Action {
 				iconName: "content/book_open_page_variant"
-				name: "Licenses"
+				name: "About"
 				onTriggered: licensesOverlay.open(initialPage.actionBar)
 			},
 			Action {
