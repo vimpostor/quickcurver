@@ -35,6 +35,7 @@ public:
 	QColor getColor();
 	void useItem(int playerCount, QCurver** curver, QCurver* collector);
 	void setRound(int round);
+	void fadeOut();
 	virtual QString getIconName();
 public slots:
 //	void renderUseless();
@@ -69,7 +70,6 @@ protected:
 	void initCurveItem(QQuickView *view, QString iconPath);
 	QTime fadeStart;
 	bool fadeIn = true;
-	void fadeOut();
 };
 
 #endif // CURVEITEM_H

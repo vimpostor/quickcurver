@@ -46,7 +46,7 @@ sleep $ANIMATIONDURATION # wait for the join request to process
 
 xdotool windowactivate $SWID # Switch back to server
 xdotool key Tab # Tab to the start button
-xdotool key space # and start the game
+# xdotool key space # and start the game
 
 echo 'Finished!'
 exit 0

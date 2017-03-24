@@ -375,7 +375,7 @@ void Game::clientDeleteItem(int index) {
 	if (items[index] == NULL) {
 		qDebug() << "Item not spawned in the first place";
 	} else {
-		delete items[index];
+		items[index]->fadeOut();
 		items[index] = NULL;
 	}
 }
@@ -383,8 +383,7 @@ void Game::clientDeleteItem(int index) {
 void Game::clientDeleteAllItems() {
 	for (int i = 0; i < MAXITEMCOUNT; ++i) {
 		if (items[i] != NULL) {
-			delete items[i];
-			items[i] = NULL;
+			clientDeleteItem(i);
 		}
 	}
 }
