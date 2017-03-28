@@ -25,11 +25,10 @@ Server::~Server() {
 }
 
 void Server::initUdpSocket() {
-	const QHostAddress &h = *serverIp;
 	udpSocket = new QUdpSocket(this);
 	connect(udpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(udpSocketError(QAbstractSocket::SocketError)));
 	connect(udpSocket, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));
-	udpSocket->bind(h, port);
+	udpSocket->bind(QHostAddress::AnyIPv4, port);
 }
 
 void Server::initTcpServer() {
