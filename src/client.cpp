@@ -59,7 +59,7 @@ void Client::initUdpSocket() {
 	udpSocket = new QUdpSocket(this);
 	connect(udpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(udpSocketError(QAbstractSocket::SocketError)));
 	connect(udpSocket, SIGNAL(readyRead()), this, SLOT(udpReadPendingDatagrams()));
-	udpSocket->bind(Network::getLocalIpAddress(), myport);
+	udpSocket->bind(QHostAddress::AnyIPv4, myport);
 }
 
 void Client::initTcpSocket() {
