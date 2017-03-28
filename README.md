@@ -16,7 +16,7 @@ Please note that this project is still in development. This means that you could
 # Installation
 ## Compiling from source
 
-Hint: Arch users can simply install [quickcurver-git](https://aur.archlinux.org/packages/quickcurver-git) from the AUR:
+Note: Arch Linux users can simply install [quickcurver-git](https://aur.archlinux.org/packages/quickcurver-git) from the AUR:
 
 ```bash
 pacaur -S quickcurver-git

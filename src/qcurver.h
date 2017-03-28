@@ -56,6 +56,7 @@ public:
 	int score = 0;
 	int roundScore = 0;
 	void increaseScore();
+	QPointF translateWithThickness(QPointF p, float angle, float factor);
 signals:
 	void died(QCurver* who);
 	void requestIntersectionChecking(QPointF a, QPointF b);

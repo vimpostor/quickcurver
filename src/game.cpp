@@ -137,7 +137,7 @@ void Game::progress() {
 				}
 				//let the AI make its move now
 				if (controlledByAI[i] && ((frameCount+i) % AIINTERVAL == 0)) {
-					ai[i]->makeMove(deltat);
+					ai[i]->makeMove();
 				}
 				curver[i]->progress(deltat);
 			}

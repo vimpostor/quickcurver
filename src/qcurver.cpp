@@ -303,3 +303,8 @@ void QCurver::increaseScore() {
 	++score;
 	++roundScore;
 }
+
+QPointF QCurver::translateWithThickness(QPointF p, float angle, float factor) {
+	float a = angle + M_PI/2; // normal direction
+	return p + factor * thickness * QPointF(cos(a), sin(a));
+}
