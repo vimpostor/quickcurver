@@ -2,7 +2,6 @@
 #define SERVER_H
 #include <QObject>
 #include <QtNetwork>
-#include "qcurver.h"
 #include <QTimer>
 #include "network.h"
 #include <QSignalMapper>

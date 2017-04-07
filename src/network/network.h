@@ -5,6 +5,7 @@
 #include <QDataStream>
 #include <QColor>
 #include <QtNetwork>
+#include "../qcurver.h"
 
 #define MAXPLAYERCOUNT 16
 

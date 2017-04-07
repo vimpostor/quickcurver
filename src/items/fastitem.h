@@ -2,7 +2,6 @@
 #define FASTITEM_H
 #include "curveitem.h"
 #include <QSGNode>
-#include "qcurver.h"
 #include <QQuickView>
 
 class FastItem : public CurveItem

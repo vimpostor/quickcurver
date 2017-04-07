@@ -2,10 +2,9 @@
 #define CLIENT_H
 #include <QObject>
 #include <QtNetwork>
-#include "qcurver.h"
 #include <QTimer>
 #include <QSGNode>
-#include "headnode.h"
+#include "../headnode.h"
 #include <qsgflatcolormaterial.h>
 #include "network.h"
 

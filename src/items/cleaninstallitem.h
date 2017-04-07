@@ -2,9 +2,9 @@
 #define CLEANINSTALLITEM_H
 #include "curveitem.h"
 #include <QSGNode>
-#include "qcurver.h"
+#include "../qcurver.h"
 #include <QQuickView>
-#include "server.h"
+#include "../network/server.h"
 
 class CleaninstallItem : public CurveItem {
 public:

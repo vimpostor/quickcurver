@@ -10,17 +10,16 @@
 #include <QObject>
 #include "qcurver.h"
 #include <QSGGeometry>
-#include "curveitem.h"
-#include "fastitem.h"
+#include "items/fastitem.h"
 #include <QQuickView>
 #include "wallnode.h"
 #include <QObject>
 #include "aicontroller.h"
-#include "cleaninstallitem.h"
-#include "fatteritem.h"
-#include "invisibleitem.h"
-#include "server.h"
-#include "client.h"
+#include "items/cleaninstallitem.h"
+#include "items/fatteritem.h"
+#include "items/invisibleitem.h"
+#include "network/server.h"
+#include "network/client.h"
 #include <QGuiApplication>
 #include <QClipboard>
 // maxplayercount is defined in multiplayersettings.h

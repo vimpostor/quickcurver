@@ -4,13 +4,12 @@
 #include <QtQuick/qsgnode.h>
 #include <QtQuick/qsgtexturematerial.h>
 #include <QObject>
-#include "segment.h"
+#include "../segment.h"
 #include <QQuickWindow>
 #include <QOpenGLTexture>
 #include <QQuickWindow>
 #include <QtMath>
-#include "qcurver.h"
-#include "segment.h"
+#include "../qcurver.h"
 #include <QTimer>
 #include <QImage>
 #include <QQuickView>
