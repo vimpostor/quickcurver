@@ -3,9 +3,9 @@ TEMPLATE = app
 QT += qml quick svg
 CONFIG += c++11
 
-SOURCES += src/curveitem.cpp \
+SOURCES += src/items/curveitem.cpp \
 	src/dieanimation.cpp \
-	src/fastitem.cpp \
+	src/items/fastitem.cpp \
 	src/game.cpp \
 	src/headnode.cpp \
 	src/main.cpp \
@@ -13,13 +13,13 @@ SOURCES += src/curveitem.cpp \
 	src/segment.cpp \
 	src/wallnode.cpp \
     src/aicontroller.cpp \
-    src/cleaninstallitem.cpp \
-    src/fatteritem.cpp \
+    src/items/cleaninstallitem.cpp \
+    src/items/fatteritem.cpp \
     src/cleaninstallanimation.cpp \
-    src/server.cpp \
-    src/client.cpp \
-    src/invisibleitem.cpp \
-    src/network.cpp
+    src/network/server.cpp \
+    src/network/client.cpp \
+    src/network/network.cpp \
+    src/items/invisibleitem.cpp
 
 
 RESOURCES += \
@@ -39,19 +39,19 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-HEADERS += src/curveitem.h \
+HEADERS += src/items/curveitem.h \
 	src/dieanimation.h \
-	src/fastitem.h \
+	src/items/fastitem.h \
 	src/game.h \
 	src/headnode.h \
 	src/qcurver.h \
 	src/segment.h \
 	src/wallnode.h \
     src/aicontroller.h \
-    src/cleaninstallitem.h \
-    src/fatteritem.h \
+    src/items/cleaninstallitem.h \
+    src/items/fatteritem.h \
     src/cleaninstallanimation.h \
-    src/server.h \
-    src/client.h \
-    src/invisibleitem.h \
-    src/network.h
+    src/network/server.h \
+    src/network/client.h \
+    src/network/network.h \
+    src/items/invisibleitem.h
