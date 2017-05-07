@@ -18,7 +18,6 @@ int main(int argc, char *argv[])
 
 	qmlRegisterType<Game>("Game", 1, 0, "Game");
 	QQmlApplicationEngine engine;
-	QPM_INIT(engine) // qml-material
 	QQmlComponent component(&engine, QUrl(QLatin1String("qrc:/main.qml")));
 	QObject *object = component.create();
 	Game* game = object->findChild<Game*>("game");

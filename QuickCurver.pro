@@ -26,11 +26,6 @@ RESOURCES += \
     src/qml/qml.qrc \
     icons/icons.qrc
 
-
-# qml-material
-DEFINES += QPM_INIT\\(E\\)=\"E.addImportPath(QStringLiteral(\\\"qrc:/\\\"));\"
-include(material/material.pri)
-
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
 
