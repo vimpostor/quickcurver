@@ -6,6 +6,10 @@
 #include "game.h"
 #include "segment.h"
 
+// fluid
+#include "iconsimageprovider.h"
+#include "iconthemeimageprovider.h"
+
 int main(int argc, char *argv[])
 {
 	//TODO: Fix Anti Aliasing!!!
@@ -18,6 +22,9 @@ int main(int argc, char *argv[])
 
 	qmlRegisterType<Game>("Game", 1, 0, "Game");
 	QQmlApplicationEngine engine;
+	engine.addImportPath(QLatin1String("qrc:/"));
+	engine.addImageProvider(QLatin1String("fluidicons"), new IconsImageProvider());
+	engine.addImageProvider(QLatin1String("fluidicontheme"), new IconThemeImageProvider());
 	QQmlComponent component(&engine, QUrl(QLatin1String("qrc:/main.qml")));
 	QObject *object = component.create();
 	Game* game = object->findChild<Game*>("game");
