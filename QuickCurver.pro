@@ -23,8 +23,7 @@ SOURCES += src/items/curveitem.cpp \
 
 
 RESOURCES += \
-    src/qml/qml.qrc \
-    icons/icons.qrc
+	src/qml/qml.qrc
 
 include(fluid/fluid.pri)
 
