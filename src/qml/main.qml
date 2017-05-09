@@ -1,9 +1,9 @@
 import QtQuick 2.7
-import Material 0.3
-import Material.ListItems 0.1 as ListItem
-import Material.Extras 0.1
-
 import Game 1.0
+import QtQuick.Controls 2.1
+import QtQuick.Controls.Material 2.1
+import Fluid.Controls 1.0
+import Fluid.Material 1.0
 import QtQuick.Layouts 1.1
 
 ApplicationWindow {
@@ -69,66 +69,55 @@ ApplicationWindow {
 	}
 
 	id: root
-	width: dp(1200)
-	height: dp(900)
+	width: 1200
+	height: 900
 	title: "Quick Curver"
+	Material.primary: Material.Yellow
+	Material.accent: Material.Blue
 	visible: true
-	theme {
-		primaryColor: "blue"
-		accentColor: "red"
-		tabHighlightColor: "white"
-	}
-
+	appBar.maxActionCount: 3
 	initialPage: Page {
 		id: initialPage
 		title: "Quick Curver"
-		actionBar.maxActionCount: 4
 		actions: [
 			Action {
-				iconName: "action/search_web"
-				name: "Join an online game"
-				onTriggered: clientDialog.show()
+				iconName: "action/search"
+				text: "Join an online game"
+				onTriggered: clientDialog.open()
 				shortcut: "Ctrl+J"
 			},
 			Action {
 				id: startServerAction
-				iconName: serverStarted? "content/copy" : "file/cloud_upload"
-				name: serverStarted? "Copy IP address" : "Host an online game"
+				iconName: serverStarted? "content/content_copy" : "file/cloud_upload"
+				text: serverStarted? "Copy IP address" : "Host an online game"
 				onTriggered: {
 					if (serverStarted) {
 						playerselector.mysnackbar.open("Copied IP address " + game.copyIp())
 					} else {
-						serverDialog.show();
+						serverDialog.open();
 					}
 				}
 				shortcut: "Ctrl+C"
 			},
 			Action {
 				iconName: "action/settings"
-				name: "Settings"
-				hoverAnimation: true
+				text: "Settings"
 				onTriggered: pageStack.push(Qt.resolvedUrl("settings.qml"))
 				shortcut: "Ctrl+I"
 			},
 			Action {
-				iconName: "image/color_lens"
-				name: "Colors"
-				onTriggered: colorPicker.show()
-			},
-			Action {
-				iconName: "content/book_open_page_variant"
-				name: "About"
+				iconName: "action/info"
+				text: "About"
 				onTriggered: licensesOverlay.open(initialPage.actionBar)
 			},
 			Action {
 				iconName: "action/help"
-				name: "Help"
+				text: "Help"
 				onTriggered: pageStack.push(Qt.resolvedUrl("help.qml"))
-				shortcut: "Ctrl+H"
 			},
 			Action {
 				iconName: "navigation/close"
-				name: "Quit"
+				text: "Quit"
 				onTriggered: close()
 				shortcut: "Ctrl+Q"
 			}
@@ -139,62 +128,15 @@ ApplicationWindow {
 			anchors.fill: parent
 		}
 	}
-	Dialog {
-		id: colorPicker
-		title: "Pick color"
-		positiveButtonText: "Done"
-		MenuField {
-			id: selection
-			model: ["Primary color", "Accent color", "Background color"]
-			width: dp(160)
-		}
-		Grid {
-			columns: 7
-			spacing: dp(8)
-			Repeater {
-				model: [
-					"red", "pink", "purple", "deepPurple", "indigo",
-					"blue", "lightBlue", "cyan", "teal", "green",
-					"lightGreen", "lime", "yellow", "amber", "orange",
-					"deepOrange", "grey", "blueGrey", "brown", "black",
-					"white"
-				]
-				Rectangle {
-					width: dp(30)
-					height: dp(30)
-					radius: dp(2)
-					color: Palette.colors[modelData]["500"]
-					border.width: modelData === "white" ? dp(2) : 0
-					border.color: Theme.alpha("#000", 0.26)
-					Ink {
-						anchors.fill: parent
-						onPressed: {
-							switch(selection.selectedIndex) {
-							case 0:
-								theme.primaryColor = parent.color
-								break;
-							case 1:
-								theme.accentColor = parent.color
-								break;
-							case 2:
-								theme.backgroundColor = parent.color
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
-
-	}
 	Item {
-		y: 55
-		x: parent.width - 800
+		anchors.top: parent.top
+		anchors.right: parent.right
+		anchors.margins: 16
+		width: 800
 		Game {
 			id: game
 			objectName: "game"
 			anchors.fill: parent
-
 			Keys.onPressed:  {
 				game.sendKey(event.key);
 			}
@@ -224,8 +166,10 @@ ApplicationWindow {
 			eReady: false
 		}
 	}
-	OverlayView {
+	Dialog {
 		id: licensesOverlay
+		x: (parent.width-width) / 2
+		y: (parent.height-height) / 2
 		width: parent.width/2
 		height: parent.height/2
 		Licenses {
@@ -234,18 +178,17 @@ ApplicationWindow {
 	Dialog {
 		id: clientDialog
 		title: "Join Online Game"
-		hasActions: false
+		x: (parent.width - width) / 2;
+		y: (parent.height - height) / 2;
 		ColumnLayout {
-			width: dp(360)
-			spacing: dp(16)
-			Item { // dummy element to create an height offset at the beginning
-				height: dp(0)
-				Layout.fillHeight: true
-			}
+			anchors.left: parent.left
+			anchors.right: parent.right
 			RowLayout {
+				anchors.left: parent.left
+				anchors.right: parent.right
 				Layout.fillWidth: true
 				IconButton {
-					iconName: "content/paste"
+					iconName: "content/content_paste"
 					onClicked: {
 						var c = game.getClipboardContent();
 						if (c === "") {
@@ -259,7 +202,6 @@ ApplicationWindow {
 					id: serverIp
 					Layout.fillWidth: true
 					placeholderText: "Server IP Adress"
-					floatingLabel: true
 					Keys.onReturnPressed: {
 						joinButton.clicked();
 					}
@@ -267,147 +209,71 @@ ApplicationWindow {
 				Label {
 					text: ":"
 				}
-
 				TextField {
 					id: serverPort
 					Layout.fillWidth: true
 					placeholderText: "Port"
-					floatingLabel: true
 					text: "52552"
 				}
-			}
-			Card {
-				height: joinDialogDataLayout.height + dp(32)
-//                width: joinDialogDataLayout.width + dp(64)
-//                Layout.fillHeight: true
-				Layout.fillWidth: true
-				anchors.margins: dp(16)
-				ColumnLayout {
-					id: joinDialogDataLayout
-					spacing: dp(16)
-					anchors.left: parent.left
-					anchors.right: parent.right
-					anchors.verticalCenter: parent.verticalCenter
-					anchors.margins: dp(16)
-					ListItem.Standard {
-						text: "Username"
-						iconName: "action/account_circle"
-						secondaryItem: TextField {
-							id: clientUserNameTextField
-							anchors.centerIn: parent
-							placeholderText: "Username"
-							floatingLabel: true
-							onTextChanged: game.changeClientSettings(text, clientReadyCheckBox.checked)
-						}
-					}
-					ListItem.Standard {
-						text: "Ready"
-						iconName: "action/check_circle"
-						secondaryItem: CheckBox {
-							id: clientReadyCheckBox
-							anchors.centerIn: parent
-							checked: false
-							onCheckedChanged: game.changeClientSettings(clientUserNameTextField.text, checked)
-						}
-						onClicked: clientReadyCheckBox.checked = !clientReadyCheckBox.checked
-					}
-				}
-			}
-			RowLayout {
-				ProgressCircle {
+				BusyIndicator {
 					id: cyclicColorProgress
-					visible: false
-					SequentialAnimation {
-						id: animation
-						running: true
-						loops: Animation.Infinite
-						ColorAnimation {
-							from: "red"
-							to: "blue"
-							target: cyclicColorProgress
-							properties: "color"
-							easing.type: Easing.InOutQuad
-							duration: 2400
-						}
-
-						ColorAnimation {
-							from: "blue"
-							to: "green"
-							target: cyclicColorProgress
-							properties: "color"
-							easing.type: Easing.InOutQuad
-							duration: 1560
-						}
-
-						ColorAnimation {
-							from: "green"
-							to: "#FFCC00"
-							target: cyclicColorProgress
-							properties: "color"
-							easing.type: Easing.InOutQuad
-							duration:  840
-						}
-
-						ColorAnimation {
-							from: "#FFCC00"
-							to: "red"
-							target: cyclicColorProgress
-							properties: "color"
-							easing.type: Easing.InOutQuad
-							duration:  1200
-						}
-					}
+					visible: running
 				}
-				Button {
-					id: joinButton
-					Layout.fillWidth: true
-					elevation: 1
-					text: "Join"
-					backgroundColor: Theme.accentColor
-					onClicked: {
-						enabled = false;
-						cyclicColorProgress.visible = true;
-						text = "Waiting for server response...";
-						game.clientStart(serverIp.text, serverPort.text);
-					}
+			}
+			ListItem {
+				text: "Username"
+				iconName: "action/account_circle"
+				rightItem: TextField {
+					id: clientUserNameTextField
+					placeholderText: "Username"
+					onTextChanged: game.changeClientSettings(text, clientReadyCheckBox.checked)
+				}
+			}
+			ListItem {
+				text: "Ready"
+				iconName: "action/check_circle"
+				rightItem: CheckBox {
+					id: clientReadyCheckBox
+					checked: false
+					onCheckedChanged: game.changeClientSettings(clientUserNameTextField.text, checked)
+				}
+				onClicked: clientReadyCheckBox.checked = !clientReadyCheckBox.checked
+			}
+			Button {
+				id: joinButton
+				Layout.fillWidth: true
+				text: "Join"
+				highlighted: true
+				onClicked: {
+					enabled = false;
+					cyclicColorProgress.running = true;
+					text = "Waiting for server response...";
+					game.clientStart(serverIp.text, serverPort.text);
 				}
 			}
 		}
 		onOpened: {
-			serverIp.focus = true;
-			cyclicColorProgress.visible = false;
+			serverIp.forceActiveFocus();
+			cyclicColorProgress.running = false;
 			joinButton.enabled = true;
 			joinButton.text = "Join";
 		}
 		onClosed: {
 			if (!clientInGame) {
-				game.leaveGame();
+//				game.leaveGame();
 			}
 		}
 	}
-	Dialog {
+	InputDialog {
 		id: serverDialog
-		width: dp(460)
-		height: dp(190)
 		title: "Host an online game"
-		ColumnLayout {
-			anchors.fill: parent
-			spacing: dp(16)
-			Item { // dummy element to create an height offset at the beginning
-				height: dp(0)
-				Layout.fillWidth: true
-			}
-			TextField {
-				id: myServerPort
-				Layout.fillWidth: true
-				focus: true
-				placeholderText: "Port"
-				floatingLabel: true
-				text: "52552"
-			}
-		}
+		x: (parent.width - width) / 2;
+		y: (parent.height - height) / 2;
+		text: "On what port do you want the server to run?"
+		textField.text: "52552"
+		textField.inputMask: "99999"
 		onAccepted: {
-			game.startServer(myServerPort.text)
+			game.startServer(textField.text)
 			serverStarted = true;
 		}
 	}

@@ -1,6 +1,6 @@
 #include "cleaninstallitem.h"
 
-#define CLEANINSTALLICON ":/icons/communication/clear_all.svg"
+#define CLEANINSTALLICON ":/Fluid/Controls/communication/clear_all.svg"
 #define REDALLOWED false
 #define GREENALLOWED false
 #define BLUEALLOWED true

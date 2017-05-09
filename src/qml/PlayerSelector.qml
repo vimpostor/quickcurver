@@ -1,32 +1,27 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.1
-import Material 0.3
-import Material.ListItems 0.1 as ListItem
-import Material.Extras 0.1
+import QtQuick.Controls 2.1
+import Fluid.Controls 1.0
+import Fluid.Material 1.0
 import QtQuick.Controls.Material 2.0
 
 Item {
 	property var mysnackbar: snackbar
-	View {
+	Flickable {
 		anchors.fill: parent
-		anchors.margins: dp(32)
-		elevation: 1
-		ListItem.Subheader {
-			id: playerListHeader
-			text: "Players"
-			anchors.bottom: playerList.top
-		}
-
-		View {
+		anchors.margins: 16
+		Card {
 			id: playerList
-			anchors.top: playerListHeader.bottom
-			anchors.bottom: parent.bottom
-			anchors.bottomMargin: dp(50)
-			anchors.left: parent.left
-			anchors.right: parent.right
+			anchors.fill: parent
+			anchors.margins: 32
+			anchors.bottomMargin: 72
 			ListView {
 				id: playerListView
+				clip: true
 				anchors.fill: parent
+				header: Subheader {
+					text: "Players"
+				}
 				model: playerListModel
 				delegate: playerDelegate
 				add: Transition {
@@ -36,14 +31,12 @@ Item {
 		}
 		Button {
 			id: startButton
-			focus: true
 			anchors.top: playerList.bottom
 			anchors.right: parent.right
 			anchors.left: parent.left
 			anchors.bottom: parent.bottom
 			text: "Start!"
-			elevation: 1
-			backgroundColor: Theme.primaryColor
+			highlighted: true
 			onClicked: {
 				if (game.isReady()) {
 					pageStack.push(Qt.resolvedUrl("gamePage.qml"));
@@ -56,7 +49,7 @@ Item {
 
 		Component {
 			id: playerDelegate
-			ListItem.Subtitled {
+			ListItem {
 				property string name: (eBot ? "Bot " : "Player ") + index
 				property color mycolor:  Material.color(Math.random()*19)
 				onNameChanged: {
@@ -68,133 +61,92 @@ Item {
 				}
 				onClicked: {
 					playerListView.currentIndex = index;
-					playerEditOverlay.open(playerListView.currentItem);
+					playerEditOverlay.open();
 				}
 				text: ename
-				subText: playerController.selectedIndex == 2  ? (eJoined ? "Joined" : "Waiting for player to join...") : "Change color, controls etc..."
-				iconName: playerController.selectedIndex == 0 ? "device/controller" : (playerController.selectedIndex == 1 ? "communication/robot" : (!eJoined ? "social/account_off" : (eReady ? "social/account_check" : "social/account")))
-
-				secondaryItem: IconButton {
-					iconName: "editor/mode_edit"
-					anchors.verticalCenter: parent.verticalCenter
-					color: mycolor
-					onClicked: mycolorPicker.show()
-					Dialog {
-						id: mycolorPicker
-						title: "Pick color"
-						positiveButtonText: "Done"
-						Grid {
-							columns: 7
-							spacing: dp(8)
-							Repeater {
-								model: [
-									"red", "pink", "purple", "deepPurple", "indigo",
-									"blue", "lightBlue", "cyan", "teal", "green",
-									"lightGreen", "lime", "yellow", "amber", "orange",
-									"deepOrange", "grey", "blueGrey", "brown", "black",
-									"white"
-								]
-								Rectangle {
-									width: dp(30)
-									height: dp(30)
-									radius: dp(2)
-									color: Palette.colors[modelData]["500"]
-									border.width: modelData === "white" ? dp(2) : 0
-									border.color: Theme.alpha("#000", 0.26)
-									Ink {
-										anchors.fill: parent
-										onPressed: mycolor = parent.color
-									}
-								}
-							}
-						}
-					}
-				}
-				OverlayView {
+				subText: radioButtonOnlinePlayer.checked ? (eJoined ? "Joined" : "Waiting for player to join...") : ""
+				iconName: radioButtonLocalPlayer.checked ? "av/games" : (radioButtonBot.checked ? "action/android" : (!eJoined ? "action/language" : (eReady ? "action/check_circle" : "action/account_circle")))
+				Dialog {
 					id: playerEditOverlay
-					width: dp(300)
-					height: dp(300)
-					ColumnLayout {
-						id: playerEditDialog
+					x: (parent.width - width) / 2;
+					width: 400
+					height: 360
+					title: "Edit player"
+					Card {
 						anchors.fill: parent
-						anchors.margins: dp(16)
-						Label {
-							id: editHeader
-							text: "Edit player"
-							width: parent.width
-							font.pixelSize: dp(22)
-							Layout.alignment: Qt.AlignCenter
-						}
-
-						Card {
-							Layout.fillHeight: true
-							Layout.fillWidth: true
-							ColumnLayout {
-								anchors.fill: parent
-								anchors.margins: dp(32)
-								TextField {
-									id: nameTextField
-									enabled: playerController.selectedIndex != 2
-									focus: true
-									width: parent.width
-									placeholderText: "Name"
-									floatingLabel: true
-									onTextChanged: name = this.text
-									Layout.fillWidth: true
-								}
-
-								MenuField {
-									id: playerController
-									model: ["Local Player", "Bot", "Online Player"]
-									width: dp(160)
-									selectedIndex: eBot? 1 : eOnline? 2 : 0
-									Layout.fillWidth: true
-									onSelectedIndexChanged: {
-										if (selectedIndex == 2 && !root.serverStarted) {
-											snackbar.open("You first need to start the server before adding an online slot");
-											selectedIndex = 0;
-										}
-										game.setController(index, selectedIndex);
+						Column {
+							anchors.fill: parent
+							anchors.margins: 32
+							TextField {
+								id: nameTextField
+								enabled: radioButtonOnlinePlayer.checked === false
+								focus: true
+								width: parent.width
+								placeholderText: "Name"
+								onTextChanged: name = this.text
+								Layout.fillWidth: true
+							}
+							RadioButton {
+								id: radioButtonLocalPlayer
+								checked: !eBot && !eOnline
+								text: "Local Player"
+								onCheckedChanged: {
+									if (checked) {
+										game.setController(index, 0);
 									}
 								}
-
-								GridLayout {
-									id: editPlayerGrid
-									rowSpacing: dp(20)
-									columnSpacing: dp(10)
-									columns: 2
-									Layout.fillWidth: true
-									Layout.alignment: Qt.AlignCenter
-
-									Button {
-										id: buttonLeft
-										enabled: playerController.selectedIndex == 0
-										text: "Left"
-										elevation: 1
-										activeFocusOnPress: true
-										Keys.onPressed: {
-											if (event.text === "") {
-												this.text = "No key description available";
-											} else {
-												this.text = event.text;
-											}
-											game.setControls(index, event.key, false);
-										}
+							}
+							RadioButton {
+								id: radioButtonBot
+								text: "Bot"
+								checked: eBot
+								onCheckedChanged: {
+									if (checked) {
+										game.setController(index, 1);
 									}
-									Button {
-										id: buttonRight
-										enabled: buttonLeft.enabled
-										text: "Right"
-										elevation: 1
-										activeFocusOnPress: true
-										Keys.onPressed: {
-											if (event.text === "") {
-												this.text = "No key description available";
-											} else {
-												this.text = event.text;
-											}
-											game.setControls(index, event.key, true);
+								}
+							}
+							RadioButton {
+								id: radioButtonOnlinePlayer
+								text: "Online Player"
+								checked: eOnline
+								onCheckedChanged: {
+									if (checked) {
+										game.setController(index, 2);
+									}
+								}
+							}
+							RowLayout {
+								id: editPlayerGrid
+								spacing: 16
+								anchors.left: parent.left
+								anchors.right: parent.right
+								Button {
+									id: buttonLeft
+									enabled: radioButtonLocalPlayer.checked
+									text: "Left"
+									Layout.fillWidth: true
+									Keys.onPressed: {
+										if (event.text === "") {
+											this.text = "No key description available";
+										} else {
+											this.text = event.text;
 										}
+										game.setControls(index, event.key, false);
+									}
+								}
+								Button {
+									id: buttonRight
+									enabled: buttonLeft.enabled
+									text: "Right"
+									Layout.fillWidth: true
+									Keys.onPressed: {
+										if (event.text === "") {
+											this.text = "No key description available";
+										} else {
+											this.text = event.text;
+										}
+										game.setControls(index, event.key, true);
 									}
 								}
 							}
@@ -205,173 +157,29 @@ Item {
 		}
 	}
 
-	ActionButton {
-		id: onlineButton
-		iconName: "action/language"
-		y: addPlayerButton.y
-		visible: false
-		anchors.left: addPlayerButton.left
-		anchors.right: addPlayerButton.right
-		anchors.margins: dp(6)
-		height: addPlayerButton.height - dp(12)
-		state: "hidden"
-		states: [
-			State {
-				name: "hidden"
-				PropertyChanges {
-					target: onlineButton
-					y: addPlayerButton.y
-					visible: true
-				}
-			},
-			State {
-				name: "visible"
-				PropertyChanges {
-					target: onlineButton
-					y: botButton.y - dp(52)
-					visible: true
-				}
-			}
-		]
-		Behavior on y {
-			PropertyAnimation {easing.type: Easing.OutCubic; duration: 50}
-		}
-		action: Action {
-			shortcut: "Ctrl+Shift+Alt+N"
-			onTriggered: {
-				if (root.serverStarted) {
-					if (playerListModel.count >= 16) {
-						snackbar.open("Sorry, you have reached maximum player capacity!");
-					} else {
-						game.addPlayer();
-						playerListModel.append({eOnline: true});
-					}
-				} else {
-					snackbar.open("You first need to start the server before adding an online slot");
-				}
-			}
-		}
-	}
-	ActionButton {
-		id: botButton
-		iconName: "communication/robot"
-		y: addPlayerButton.y
-		visible: false
-		anchors.left: addPlayerButton.left
-		anchors.right: addPlayerButton.right
-		anchors.margins: dp(6)
-		height: addPlayerButton.height - dp(12)
-		state: "hidden"
-		states: [
-			State {
-				name: "hidden"
-				PropertyChanges {
-					target: botButton
-					y: addPlayerButton.y
-					visible: true
-				}
-			},
-			State {
-				name: "visible"
-				PropertyChanges {
-					target: botButton
-					y: playerButton.y - dp(52)
-					visible: true
-				}
-			}
-		]
-		Behavior on y {
-			PropertyAnimation {easing.type: Easing.OutCubic; duration: 100}
-		}
-		action: Action {
-			shortcut: "Ctrl+Shift+N"
-			onTriggered: {
-				if (playerListModel.count >= 16) {
-					snackbar.open("Sorry, you have reached maximum player capacity!");
-				} else {
-					game.addPlayer();
-					playerListModel.append({eBot: true});
-				}
-			}
-		}
-	}
-	ActionButton {
-		id: playerButton
-		iconName: "device/controller"
-		y: addPlayerButton.y
-		visible: false
-		anchors.left: addPlayerButton.left
-		anchors.right: addPlayerButton.right
-		anchors.margins: dp(6)
-		height: addPlayerButton.height - dp(12)
-		state: "hidden"
-		states: [
-			State {
-				name: "hidden"
-				PropertyChanges {
-					target: playerButton
-					y: addPlayerButton.y
-					visible: true
-				}
-			},
-			State {
-				name: "visible"
-				PropertyChanges {
-					target: playerButton
-					y: addPlayerButton.y - dp(52)
-					visible: true
-				}
-			}
-		]
-		Behavior on y {
-			PropertyAnimation {easing.type: Easing.OutCubic; duration: 150}
-		}
-		action: Action {
-			id: addPlayer
-			hoverAnimation: true
-			shortcut: "Ctrl+N"
-			onTriggered: {
-				if (playerListModel.count >= 16) {
-					snackbar.open("Sorry, you have reached maximum player capacity!");
-				} else {
-					game.addPlayer();
-					playerListModel.append({});
-				}
-			}
-		}
-	}
 	ActionButton {
 		id: addPlayerButton
 		anchors {
 			right: parent.right
 			bottom: snackbar.top
-			margins: dp(64)
+			margins: 56
 		}
-		IconButton {
-			anchors.fill: parent
-			action: Action {
-				text: "Add Player"
-				hoverAnimation: true
-				iconName: "content/add"
-				onTriggered: {
-					if (playerButton.state === "visible") {
-						playerButton.state = "hidden";
-						botButton.state = "hidden";
-						onlineButton.state = "hidden";
-					} else {
-						playerButton.state = "visible";
-						botButton.state = "visible";
-						onlineButton.state = "visible";
-					}
-				}
+		iconName: "content/add"
+		Material.background: Material.primary
+		onClicked: {
+			if (playerListModel.count >= 16) {
+				snackbar.open("Sorry, you have reached maximum player capacity!");
+			} else {
+				game.addPlayer();
+				playerListModel.append({});
 			}
 		}
 	}
-	Snackbar {
+	InfoBar {
 		id: snackbar
 		anchors.left: parent.left
 		anchors.right: parent.right
-		anchors.margins: dp(70)
+		anchors.margins: 70
 		duration: buttonText == "" ? 2000 : 3000 // duration is longer if the notification comes with a button to press
 		onClicked: snackbar.open("Clicking the snackbar button is not implemented yet")
 	}

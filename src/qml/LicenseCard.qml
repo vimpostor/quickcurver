@@ -1,7 +1,7 @@
 import QtQuick 2.7
-import Material 0.3
-import Material.ListItems 0.1 as ListItem
-import Material.Extras 0.1
+import QtQuick.Controls 2.1
+import Fluid.Controls 1.0
+import Fluid.Material 1.0
 import QtQuick.Layouts 1.1
 
 Card {
@@ -9,21 +9,26 @@ Card {
 	property string cardDescription
 	property string cardLink
 	Layout.fillWidth: true
-	Layout.fillHeight: true
-	Ink {
-		anchors.fill: parent
+	height: openExternallyButton.height + 16
+	ActionButton {
+		id: openExternallyButton
+		anchors.right: parent.right
+		anchors.top: parent.top
+		anchors.margins: 8
+		iconName: "action/open_in_browser"
 		onClicked: Qt.openUrlExternally(cardLink)
 	}
-
 	ColumnLayout {
 		id: column
-		anchors.centerIn: parent
-		Label {
+		anchors.left: parent.left
+		anchors.right: openExternallyButton.left
+		anchors.top: parent.top
+		anchors.bottom: parent.bottom
+		TitleLabel {
 			Layout.alignment: Qt.AlignHCenter
 			text: cardTitle
-			style: "title"
 		}
-		Label {
+		BodyLabel {
 			Layout.alignment: Qt.AlignHCenter
 			text: cardDescription
 		}

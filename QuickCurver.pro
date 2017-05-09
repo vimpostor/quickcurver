@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-QT += qml quick svg
+QT += gui qml quick svg quickcontrols2
 CONFIG += c++11
 
 SOURCES += src/items/curveitem.cpp \
@@ -22,8 +22,7 @@ SOURCES += src/items/curveitem.cpp \
     src/items/invisibleitem.cpp
 
 
-RESOURCES += \
-	src/qml/qml.qrc
+RESOURCES += src/qml/qml.qrc
 
 include(fluid/fluid.pri)
 

@@ -1,18 +1,16 @@
 import QtQuick 2.7
-import Material 0.3
-import Material.ListItems 0.1 as ListItem
-import Material.Extras 0.1
+import Fluid.Controls 1.0
 import QtQuick.Layouts 1.1
 
 Page {
 	Card {
 		anchors.fill: parent
-		anchors.margins: dp(32)
+		anchors.margins: 32
 		GridLayout {
 			anchors.fill: parent
-			anchors.margins: dp(16)
-			columnSpacing: dp(32)
-			rowSpacing: dp(32)
+			anchors.margins: 16
+			columnSpacing: 32
+			rowSpacing: 32
 			columns: 3
 			LicenseCard {
 				cardTitle: "Help"

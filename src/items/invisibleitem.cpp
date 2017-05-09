@@ -1,6 +1,6 @@
 #include "invisibleitem.h"
 
-#define INVISIBLEICON ":/icons/action/visibility_off.svg"
+#define INVISIBLEICON ":/Fluid/Controls/action/visibility_off.svg"
 #define REDALLOWED false
 #define GREENALLOWED true
 #define BLUEALLOWED false

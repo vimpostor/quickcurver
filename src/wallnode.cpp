@@ -3,7 +3,7 @@
 wallNode::wallNode(QSGNode *node, int fieldsize) {
 	geometry = new QSGGeometry(QSGGeometry::defaultAttributes_Point2D(), 0);
 	geometry->setLineWidth(WALLTHICKNESS);
-	geometry->setDrawingMode(GL_LINE_STRIP);
+	geometry->setDrawingMode(GL_LINE_LOOP);
 	this->setGeometry(geometry);
 	this->setFlag(QSGNode::OwnsGeometry);
 	QSGFlatColorMaterial *material = new QSGFlatColorMaterial;

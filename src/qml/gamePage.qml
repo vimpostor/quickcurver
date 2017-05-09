@@ -1,8 +1,9 @@
 import QtQuick 2.7
-import Material 0.3
-import Material.ListItems 0.1 as ListItem
-import Material.Extras 0.1
+import QtQuick.Controls 2.1
+import Fluid.Controls 1.0
+import Fluid.Material 1.0
 import QtQuick.Layouts 1.1
+import QtQuick.Controls.Material 2.1
 
 Page {
 	function sendMessage(username, message) { // called by cpp when a message was sent
@@ -10,41 +11,30 @@ Page {
 		chatListView.positionViewAtEnd();
 	}
 	property int fieldsize: 800
-	backgroundColor: "#31363b"
-	focus: false
-	canGoBack: false
 	onGoBack: close()
 	onParentChanged: fieldsize = game.getFieldSize()
-	PageSidebar {
-		width: parent.width - fieldsize
-		backgroundColor: Theme.backgroundColor
+	Pane {
+		anchors.left: parent.left
+		anchors.top: parent.top
+		anchors.bottom: parent.bottom
+		anchors.right: gameRectangle.left
 		Card {
 			id: statsCard
 			anchors.top: parent.top
 			anchors.left: parent.left
 			anchors.right: parent.right
-			anchors.margins: dp(32)
-			ListItem.Subheader {
-				id: scoreListHeader
-				text: "Players"
-				anchors.top: parent.top
-			}
-			View {
-				anchors.top: scoreListHeader.bottom
-				anchors.left: parent.left
-				anchors.right: parent.right
-				anchors.bottom: parent.bottom
-				ListView {
-					anchors.fill: parent
-					model: playerListModel
-					delegate: scoreListDelegate
+			anchors.margins: 32
+			height: parent.height/3
+			ListView {
+				clip: true
+				anchors.fill: parent
+				header: Subheader {
+					text: "Players"
 				}
-			}
-			Component {
-				id: scoreListDelegate
-				ListItem.Standard {
+				model: playerListModel
+				delegate: ListItem {
 					text: ename
-					secondaryItem: Label {
+					rightItem: Label {
 						anchors.verticalCenter: parent.verticalCenter
 						text: escore + " (+" +  eroundScore + ")"
 					}
@@ -57,41 +47,30 @@ Page {
 			anchors.bottom: parent.bottom
 			anchors.left: parent.left
 			anchors.right: parent.right
-			anchors.margins: dp(32)
-			ListItem.Subheader {
-				id: chatHeader
-				text: "Chat"
-				anchors.top: parent.top
+			anchors.margins: 32
+			ListModel {
+				id: chatModel
 			}
-			View {
-				anchors.top: chatHeader.bottom
+			ListView {
+				id: chatListView
+				clip: true
+				anchors.top: parent.top
 				anchors.bottom: messageRowLayout.top
 				anchors.left: parent.left
 				anchors.right: parent.right
-				ListModel {
-					id: chatModel
-//                    ListElement {
-//                        username: "Alice"
-//                        message: "Test message"
-//                    }
+				header: Subheader {
+					text: "Chat"
 				}
-				ListView {
-					id: chatListView
-					anchors.fill: parent
-					model: chatModel
-					delegate: chatDelegate
-					add: Transition {
-						NumberAnimation { properties: "y"; from: messageRowLayout.y; duration: 150}
-					}
+
+				model: chatModel
+				delegate: ListItem {
+					text: username
+					subText: message
+					valueText: new Date().toLocaleTimeString("hh:mm");
+					iconName: username == "Chat Bot"? "action/android" : "action/account_circle"
 				}
-				Component {
-					id: chatDelegate
-					ListItem.Subtitled {
-						text: username
-						subText: message
-						valueText: new Date().toLocaleTimeString("hh:mm");
-						iconName: username == "Chat Bot"? "communication/robot" : "action/account_circle"
-					}
+				add: Transition {
+					NumberAnimation { properties: "y"; from: messageRowLayout.y; duration: 150}
 				}
 			}
 			RowLayout {
@@ -99,27 +78,34 @@ Page {
 				anchors.left: parent.left
 				anchors.right: parent.right
 				anchors.bottom: parent.bottom
-				anchors.margins: dp(16)
+				anchors.margins: 16
 				TextField {
 					id: chatTextField
-					characterLimit: 32
 					Layout.fillWidth: true
 					placeholderText: "Send messages..."
-					floatingLabel: true
-					onAccepted: sendMessageAction.trigger()
+					Keys.onReturnPressed: {
+						// TODO: wait for upstream to expose click function of actionbutton
+					}
 				}
 				ActionButton {
+					id: sendMessageAction
 					iconName: "content/send"
-					action: Action {
-						id: sendMessageAction
-						onTriggered: {
-							game.requestSendMessage(chatTextField.text);
-							chatTextField.text = "";
-							game.focus = true;
-						}
+					Material.background: Material.primary
+					onClicked: {
+						game.requestSendMessage(chatTextField.text);
+						chatTextField.text = "";
+						game.focus = true;
 					}
 				}
 			}
 		}
+	}
+	Rectangle {
+		id: gameRectangle
+		anchors.right: parent.right
+		anchors.top: parent.top
+		anchors.bottom: parent.bottom
+		width: fieldsize + 32
+		color: Material.color(Material.BlueGrey, Material.Shade900);
 	}
 }

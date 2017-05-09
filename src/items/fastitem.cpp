@@ -1,6 +1,6 @@
 #include "fastitem.h"
 
-#define FASTERICON ":/icons/action/clock_fast.svg"
+#define FASTERICON ":/Fluid/Controls/maps/directions_bike.svg"
 #define REDALLOWED true
 #define GREENALLOWED true
 #define BLUEALLOWED true

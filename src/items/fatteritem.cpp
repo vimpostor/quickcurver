@@ -1,6 +1,6 @@
 #include "fatteritem.h"
 
-#define FATTERICON ":/icons/action/arrow_expand.svg"
+#define FATTERICON ":/Fluid/Controls/maps/local_dining.svg"
 #define REDALLOWED true
 #define GREENALLOWED false
 #define BLUEALLOWED false

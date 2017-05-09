@@ -28,7 +28,7 @@ First make sure, that you have the required dependencies of QuickCurver installe
 
 * g++ (You may use an alternative C++ compiler, but things will get slightly more difficult)
 * make
-* At least Qt 5.7
+* At least Qt 5.8
 * The following Qt Modules (in the parantheses there is an example how the package could be called for your distro (this depends on the distro!)):
 	- Qt Core (qt5-base)
 	- Qt GUI (qt5-base)
@@ -36,7 +36,6 @@ First make sure, that you have the required dependencies of QuickCurver installe
 	- Qt QML (qt5-declarative)
 	- Qt SVG (qt5-svg)
 	- Qt Network (qt5-base)
-	- Qt Quick Controls (qt5-quickcontrols)
 	- Qt Quick Controls 2 (qt5-quickcontrols2)
 	- Qt Graphical Effects (qt5-graphicaleffects)
 
@@ -79,4 +78,4 @@ QSG_RENDER_LOOP=windows ./QuickCurver #alternatively use this command
 ```
 
 # Acknowledgements
-QuickCurver uses [qml-material](https://github.com/papyros/qml-material), which is a nice QML Material Design library.
+QuickCurver uses [fluid](https://github.com/lirios/fluid), which is a neat QML Material Design library.

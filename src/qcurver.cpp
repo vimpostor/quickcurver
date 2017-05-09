@@ -103,7 +103,7 @@ bool QCurver::wallCollision() {
 		c = true;
 	} else if (lastPoint.x() > fieldsize-5) { //right
 		c = true;
-	} else if (lastPoint.y() < -7) { //top
+	} else if (lastPoint.y() < 2) { //top
 		c = true;
 	} else if (lastPoint.y() > fieldsize-5) { //bottom
 		c = true;

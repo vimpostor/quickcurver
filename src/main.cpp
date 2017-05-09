@@ -1,7 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QtGui>
-#include <QtQuick>
+#include <QQuickStyle>
+#include <QQmlContext>
 #include "qcurver.h"
 #include "game.h"
 #include "segment.h"
@@ -10,15 +10,12 @@
 #include "iconsimageprovider.h"
 #include "iconthemeimageprovider.h"
 
-int main(int argc, char *argv[])
-{
-	//TODO: Fix Anti Aliasing!!!
-	if (!qputenv("QSG_RENDER_LOOP", "basic")) {  //threaded render_loop, which is default on non-mesa drivers, breaks drawing
-		qDebug() << "Failed to set QSG_RENDER_LOOP=basic";
-	}
-
+int main(int argc, char *argv[]) {
+	qputenv("QSG_RENDER_LOOP", "basic");  //threaded render_loop, which is default on non-mesa drivers, breaks drawing
 	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 	QGuiApplication app(argc, argv);
+
+	QQuickStyle::setStyle(QLatin1String("Material"));
 
 	qmlRegisterType<Game>("Game", 1, 0, "Game");
 	QQmlApplicationEngine engine;
