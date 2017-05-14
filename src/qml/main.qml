@@ -106,14 +106,14 @@ ApplicationWindow {
 				shortcut: "Ctrl+I"
 			},
 			Action {
-				iconName: "action/info"
-				text: "About"
-				onTriggered: licensesOverlay.open(initialPage.actionBar)
-			},
-			Action {
 				iconName: "action/help"
 				text: "Help"
 				onTriggered: pageStack.push(Qt.resolvedUrl("help.qml"))
+			},
+			Action {
+				iconName: "action/info"
+				text: "About"
+				onTriggered: licensesOverlay.open(initialPage.actionBar)
 			},
 			Action {
 				iconName: "navigation/close"
