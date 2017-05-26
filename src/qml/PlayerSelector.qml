@@ -46,7 +46,6 @@ Item {
 				}
 			}
 		}
-
 		Component {
 			id: playerDelegate
 			ListItem {
@@ -70,11 +69,12 @@ Item {
 					id: playerEditOverlay
 					x: (parent.width - width) / 2;
 					width: 400
-					height: 360
+					height: playerColumn.implicitHeight + 128
 					title: "Edit player"
 					Card {
 						anchors.fill: parent
 						Column {
+							id: playerColumn
 							anchors.fill: parent
 							anchors.margins: 32
 							TextField {
@@ -148,6 +148,27 @@ Item {
 										}
 										game.setControls(index, event.key, true);
 									}
+								}
+							}
+							Button {
+								anchors.left: parent.left
+								anchors.right: parent.right
+								text: "Remove player"
+								highlighted: true
+								onClicked: {
+									if (radioButtonOnlinePlayer.checked) {
+										alertDialogKick.open();
+									} else {
+										removePlayer(index);
+									}
+								}
+								AlertDialog {
+									id: alertDialogKick
+									width: 300
+									title: "Remove player"
+									text: "Are you sure, you want to remove this player?"
+									standardButtons: Dialog.Ok | Dialog.Cancel
+									onAccepted: removePlayer(index);
 								}
 							}
 						}

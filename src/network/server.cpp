@@ -127,6 +127,24 @@ void Server::setAvailable(int index, bool newState) {
 	available[index] = newState;
 }
 
+void Server::deletePlayer(int index) {
+	// when a player was removed, we have to move every entry after that player up one position
+	this->setAvailable(index, false);
+	for (int i = index; i < playercount-1; ++i) {
+		clientsUdp[index] = clientsUdp[index+1];
+		clientsTcp[index] = clientsTcp[index+1];
+		available[index] = available[index+1];
+//		this->in[index] = this->in[index+1];
+		clientConnections[index] = clientConnections[index+1];
+	}
+	this->playercount--;
+	clientsUdp[playercount] = NULL;
+	clientsTcp[playercount] = NULL;
+	available[playercount] = false;
+//	in[playercount] = NULL;
+	clientConnections[playercount] = NULL;
+}
+
 void Server::start() {
 	started = true;
 	updateServerSettings();

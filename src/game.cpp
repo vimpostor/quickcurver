@@ -272,8 +272,10 @@ void Game::startNextRound() {
 }
 
 void Game::setName(int index, QString newName) {
-	names[index] = newName;
-	server->setName(index, newName);
+	if (index != -1) {
+		names[index] = newName;
+		server->setName(index, newName);
+	}
 }
 
 void Game::setRoundTimeout(int seconds) {
@@ -416,4 +418,13 @@ int Game::getMaxScorerIndex() {
 		}
 	}
 	return -1;
+}
+
+void Game::deletePlayer(int index) {
+	if (index < 0 || index >= playercount) {
+		qDebug() << "Cannot remove player, because this player does not exist anymore";
+		return;
+	}
+	server->deletePlayer(index);
+	--playercount;
 }

@@ -61,6 +61,7 @@ public:
 	Q_INVOKABLE int getFieldSize();
 	Q_INVOKABLE void startServer(int port);
 	Q_INVOKABLE void setScoreToFinish(int newScoreToFinish);
+	Q_INVOKABLE void deletePlayer(int index);
 	short int playercount = 2;
 	void setQmlObject(QObject *o);
 

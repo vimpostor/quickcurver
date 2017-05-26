@@ -30,6 +30,7 @@ public:
 	void cleanInstall();
 	void curverDied(int index);
 	void setName(int index, QString username);
+	void deletePlayer(int index);
 	ServerSettings serverSettings;
 signals:
 private slots:

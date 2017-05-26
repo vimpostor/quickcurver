@@ -67,6 +67,10 @@ ApplicationWindow {
 			playerListModel.setProperty(index, "ename", name);
 		}
 	}
+	function removePlayer(index) {
+		game.deletePlayer(index);
+		playerListModel.remove(index);
+	}
 
 	id: root
 	width: 1200
