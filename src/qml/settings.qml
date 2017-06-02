@@ -23,7 +23,6 @@ TabbedPage {
 				GridLayout {
 					id: settingsGrid
 					rowSpacing: 20
-					columnSpacing: 10
 					columns: 2
 					Label {
 						text: "Round timeout"
@@ -57,7 +56,7 @@ TabbedPage {
 						onValueChanged: game.setFieldSize(value)
 					}
 					Label {
-						text: "Time Multiplier when only bots are alive (Experimental)"
+						text: "Fast forward at death"
 					}
 					Slider {
 						value: 1
@@ -67,7 +66,7 @@ TabbedPage {
 						onValueChanged: game.setTimeMultiplier(value)
 					}
 					Label {
-						text: "Show winner as chat message"
+						text: "Show winner in chat"
 					}
 					Switch {
 						checked: false
@@ -101,68 +100,71 @@ TabbedPage {
 	}
 	Tab {
 		title: "Item Spawn Probabilities"
+		ListItem {
+			id: spawnRate
+			text: settings.width > 380 ? "General item Spawn Rate" : ""
+			iconName: "action/timeline"
+			rightItem: Slider {
+				value: 20
+				from: 0
+				to: 100
+				onValueChanged: game.setItemSpawnrate(value)
+			}
+		}
 		ListView {
-			anchors.fill: parent
+			anchors.top: spawnRate.bottom
+			anchors.left: parent.left
+			anchors.right: parent.right
+			anchors.bottom: parent.bottom
+			clip: true
 			model: ListModel {
 				ListElement {
-					name: "Header"
-					description: "General item spawn rate"
-					defaultValue: 20
-					eIconName: "action/timeline"
-				}
-				ListElement {
 					name: "Faster Item"
-					description: "Makes you faster for some time"
+					description: "Makes you faster"
 					defaultValue: 8
 					eIconName: "maps/directions_bike"
 				}
 				ListElement {
 					name: "Slower Item"
-					description: "Makes you slower for some time"
+					description: "Makes you slower"
 					defaultValue: 0
 					eIconName: "action/bug_report"
 				}
 				ListElement {
 					name: "Cleaninstall"
-					description: "Deletes every line drawn to this point"
+					description: "Deletes every line"
 					defaultValue: 3
 					eIconName: "communication/clear_all"
 				}
 				ListElement {
 					name: "Wall Hack"
-					description: "Opens the wall for every player"
+					description: "Opens the wall"
 					defaultValue: 0
 					eIconName: "editor/border_clear"
 				}
 				ListElement {
 					name: "Invisibility"
-					description: "Disables collisions for you"
+					description: "Disables collisions"
 					defaultValue: 4
 					eIconName: "action/visibility_off"
 				}
 				ListElement {
 					name: "Fatter Item"
-					description: "Makes the enemy fatter"
+					description: "Increases the line width"
 					defaultValue: 1
 					eIconName: "maps/local_dining"
 				}
 			}
 			delegate: ListItem {
-				text: name == "Header" ? "Item Spawn Rate" : name
-				subText: description
+				text: settings.width > 380 ? name : ""
+				subText: settings.width > 450 ? description : ""
 				enabled: defaultValue != 0 //some items are not implemented yet
 				iconName: eIconName
 				rightItem: Slider {
 					value: defaultValue
 					from: 0
-					to: name == "Header" ? 100 : 10
-					onValueChanged: {
-						if (name == "Header") {
-							game.setItemSpawnrate(value);
-						} else {
-							game.setItemPriority(index-1, value);
-						}
-					}
+					to: 10
+					onValueChanged: game.setItemPriority(index-1, value);
 				}
 			}
 		}
