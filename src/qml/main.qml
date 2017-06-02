@@ -117,7 +117,7 @@ ApplicationWindow {
 			Action {
 				iconName: "action/info"
 				text: "About"
-				onTriggered: licensesOverlay.open(initialPage.actionBar)
+				onTriggered: pageStack.push(Qt.resolvedUrl("About.qml"))
 			},
 			Action {
 				iconName: "navigation/close"
@@ -168,15 +168,6 @@ ApplicationWindow {
 			eOnline: false
 			eJoined: false
 			eReady: false
-		}
-	}
-	Dialog {
-		id: licensesOverlay
-		x: (parent.width-width) / 2
-		y: (parent.height-height) / 2
-		width: parent.width/2
-		height: parent.height/2
-		Licenses {
 		}
 	}
 	Dialog {
