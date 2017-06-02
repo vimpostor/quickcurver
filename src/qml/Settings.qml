@@ -164,7 +164,7 @@ TabbedPage {
 					value: defaultValue
 					from: 0
 					to: 10
-					onValueChanged: game.setItemPriority(index-1, value);
+					onValueChanged: game.setItemPriority(index, value);
 				}
 			}
 		}
