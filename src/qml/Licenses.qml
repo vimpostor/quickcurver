@@ -12,8 +12,8 @@ Flickable {
 	AutomaticGrid {
 		id: licensesLayout
 		anchors.fill: parent
-		anchors.margins: 16
-		cellWidth: Device.isMobile ? parent.width : 400
+		anchors.margins: Units.smallSpacing
+		cellWidth: Device.isMobile ? parent.width - 2*Units.smallSpacing : 400
 		cellHeight: 200
 		model: ListModel {
 			ListElement {
@@ -69,20 +69,20 @@ Flickable {
 						anchors.right: parent.right
 						spacing: Units.smallSpacing
 						Button {
-							text: qsTr("Open website")
+							text: qsTr("Website")
 							flat: true
 							highlighted: true
 							Layout.fillWidth: true
 							onClicked: Qt.openUrlExternally(cardHomepage)
 						}
 						Button {
-							text: qsTr("Get source code")
+							text: qsTr("Source code")
 							flat: true
 							Layout.fillWidth: true
 							onClicked: Qt.openUrlExternally(cardSource)
 						}
 						Button {
-							text: qsTr("View license")
+							text: qsTr("License")
 							flat: true
 							Layout.fillWidth: true
 							onClicked: Qt.openUrlExternally(cardLicense)
