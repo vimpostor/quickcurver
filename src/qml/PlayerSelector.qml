@@ -39,7 +39,7 @@ Item {
 			highlighted: true
 			onClicked: {
 				if (game.isReady()) {
-					pageStack.push(Qt.resolvedUrl("gamePage.qml"));
+					pageStack.push(Qt.resolvedUrl("GamePage.qml"));
 					game.parent.x = game.parent.parent.width - game.getFieldSize();
 					game.start();
 					game.focus = true;

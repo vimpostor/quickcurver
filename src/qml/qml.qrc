@@ -2,10 +2,10 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>PlayerSelector.qml</file>
-        <file>gamePage.qml</file>
-        <file>settings.qml</file>
+        <file>GamePage.qml</file>
+        <file>Settings.qml</file>
         <file>Licenses.qml</file>
-        <file>help.qml</file>
+        <file>Help.qml</file>
         <file>About.qml</file>
     </qresource>
 </RCC>

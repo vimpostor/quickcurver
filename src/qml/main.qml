@@ -31,7 +31,7 @@ ApplicationWindow {
 		} else if (s === "STARTED") {
 			clientInGame = true;
 			clientDialog.close();
-			pageStack.push(Qt.resolvedUrl("gamePage.qml"));
+			pageStack.push(Qt.resolvedUrl("GamePage.qml"));
 			game.focus = true;
 		} else if (s === "KICKED") {
 			clientDialog.close();
@@ -106,13 +106,13 @@ ApplicationWindow {
 			Action {
 				iconName: "action/settings"
 				text: "Settings"
-				onTriggered: pageStack.push(Qt.resolvedUrl("settings.qml"))
+				onTriggered: pageStack.push(Qt.resolvedUrl("Settings.qml"))
 				shortcut: "Ctrl+I"
 			},
 			Action {
 				iconName: "action/help"
 				text: "Help"
-				onTriggered: pageStack.push(Qt.resolvedUrl("help.qml"))
+				onTriggered: pageStack.push(Qt.resolvedUrl("Help.qml"))
 			},
 			Action {
 				iconName: "action/info"
