@@ -8,13 +8,13 @@ import Fluid.Core 1.0
 
 Flickable {
 	anchors.fill: parent
-	contentHeight: Math.max(licensesLayout.implicitHeight, height)
+	contentHeight: Math.max(licensesLayout.implicitHeight, height) + Units.mediumSpacing
 	AutomaticGrid {
 		id: licensesLayout
 		anchors.fill: parent
 		anchors.margins: Units.smallSpacing
 		cellWidth: Device.isMobile ? parent.width - 2*Units.smallSpacing : 400
-		cellHeight: 200
+		cellHeight: 156
 		model: ListModel {
 			ListElement {
 				cardTitle: "Qt"
@@ -64,29 +64,31 @@ Flickable {
 						wrapMode: Text.WordWrap
 						width: parent.width
 					}
-					RowLayout {
-						anchors.left: parent.left
-						anchors.right: parent.right
-						spacing: Units.smallSpacing
-						Button {
-							text: qsTr("Website")
-							flat: true
-							highlighted: true
-							Layout.fillWidth: true
-							onClicked: Qt.openUrlExternally(cardHomepage)
-						}
-						Button {
-							text: qsTr("Source code")
-							flat: true
-							Layout.fillWidth: true
-							onClicked: Qt.openUrlExternally(cardSource)
-						}
-						Button {
-							text: qsTr("License")
-							flat: true
-							Layout.fillWidth: true
-							onClicked: Qt.openUrlExternally(cardLicense)
-						}
+				}
+				RowLayout {
+					anchors.left: parent.left
+					anchors.right: parent.right
+					anchors.bottom: parent.bottom
+					anchors.margins: Units.smallSpacing
+					spacing: Units.smallSpacing
+					Button {
+						text: qsTr("Website")
+						flat: true
+						highlighted: true
+						Layout.fillWidth: true
+						onClicked: Qt.openUrlExternally(cardHomepage)
+					}
+					Button {
+						text: qsTr("Source code")
+						flat: true
+						Layout.fillWidth: true
+						onClicked: Qt.openUrlExternally(cardSource)
+					}
+					Button {
+						text: qsTr("License")
+						flat: true
+						Layout.fillWidth: true
+						onClicked: Qt.openUrlExternally(cardLicense)
 					}
 				}
 			}
