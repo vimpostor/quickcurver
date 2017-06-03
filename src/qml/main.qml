@@ -129,7 +129,6 @@ ApplicationWindow {
 		]
 		PlayerSelector {
 			id: playerselector
-			anchors.fill: parent
 		}
 	}
 	Item {
