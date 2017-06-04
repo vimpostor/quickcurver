@@ -16,12 +16,13 @@ Page {
 		anchors.top: parent.top
 		anchors.bottom: parent.bottom
 		anchors.right: gameRectangle.left
+		visible: width > 216
 		Card {
 			id: statsCard
 			anchors.top: parent.top
 			anchors.left: parent.left
 			anchors.right: parent.right
-			anchors.margins: 32
+			anchors.margins: Units.smallSpacing
 			height: parent.height/3
 			ListView {
 				clip: true
@@ -41,11 +42,16 @@ Page {
 		}
 		Card {
 			id: chatCard
-			anchors.top: statsCard.bottom
-			anchors.bottom: parent.bottom
-			anchors.left: parent.left
-			anchors.right: parent.right
-			anchors.margins: 32
+			anchors {
+				top: statsCard.bottom
+				topMargin: Units.mediumSpacing
+				left: parent.left
+				leftMargin: Units.smallSpacing
+				right: parent.right
+				rightMargin: Units.smallSpacing
+				bottom: parent.bottom
+				bottomMargin: Units.smallSpacing
+			}
 			ListModel {
 				id: chatModel
 			}
