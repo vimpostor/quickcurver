@@ -177,6 +177,44 @@ void Game::releaseKey(Qt::Key k) {
 	}
 }
 
+void Game::sendTouchPress(bool pressed, int x, int y) {
+	// first find out, to what player this event belongs to
+	float relX = (float) x / fieldsize;
+	float relY = (float) y / fieldsize;
+	float minimumDistance = std::numeric_limits<int>::max();
+	float distance;
+	float xDistance, yDistance;
+	int minIndex = -1;
+	bool left;
+	for (auto it = touchControlPoints.begin(); it != touchControlPoints.end(); ++it) {
+		xDistance = it->second.left.x() - relX;
+		yDistance = it->second.left.y() - relY;
+		distance = sqrt(xDistance*xDistance + yDistance*yDistance);
+		if (distance < minimumDistance) {
+			minimumDistance = distance;
+			minIndex = it->first;
+			left = true;
+		}
+		xDistance = it->second.right.x() - relX;
+		yDistance = it->second.right.y() - relY;
+		distance = sqrt(xDistance*xDistance + yDistance*yDistance);
+		if (distance < minimumDistance) {
+			minimumDistance = distance;
+			minIndex = it->first;
+			left = false;
+		}
+	}
+	if (minIndex != -1) {
+		if (!pressed) {
+			curver[minIndex]->rotating = ROTATE_NONE;
+		} else if (left) {
+			curver[minIndex]->rotating = ROTATE_LEFT;
+		} else {
+			curver[minIndex]->rotating = ROTATE_RIGHT;
+		}
+	}
+}
+
 void Game::addPlayer() {
 	playercount++;
 }
@@ -427,4 +465,19 @@ void Game::deletePlayer(int index) {
 	}
 	server->deletePlayer(index);
 	--playercount;
+}
+
+void Game::setCurrentTouchEditor(int index) {
+	currentTouchEditor = index;
+}
+
+void Game::setTouchPoint(float leftX, float leftY, float rightX, float rightY) {
+	Quadruple *controls = new Quadruple;
+	controls->left = QPointF(leftX, leftY);
+	controls->right = QPointF(rightX, rightY);
+	touchControlPoints[currentTouchEditor] = *controls;
+}
+
+void Game::disableTouch(int index) {
+	touchControlPoints.erase(index);
 }

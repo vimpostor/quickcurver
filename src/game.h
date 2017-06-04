@@ -62,6 +62,10 @@ public:
 	Q_INVOKABLE void startServer(int port);
 	Q_INVOKABLE void setScoreToFinish(int newScoreToFinish);
 	Q_INVOKABLE void deletePlayer(int index);
+	Q_INVOKABLE void setCurrentTouchEditor(int index);
+	Q_INVOKABLE void setTouchPoint(float leftX, float leftY, float rightX, float rightY);
+	Q_INVOKABLE void sendTouchPress(bool pressed, int x, int y);
+	Q_INVOKABLE void disableTouch(int index);
 	short int playercount = 2;
 	void setQmlObject(QObject *o);
 
@@ -77,9 +81,11 @@ private slots:
 	void clientDeleteItem(int index);
 	void clientDeleteAllItems();
 private:
+	struct Quadruple{ QPointF left; QPointF right;};
 	QCurver* curver[MAXPLAYERCOUNT];
 	QColor colors[MAXPLAYERCOUNT];
 	Qt::Key controls[MAXPLAYERCOUNT][2]; //first one is left key, second one is right key
+	std::map<int, Quadruple> touchControlPoints;
 	bool controlledByAI[MAXPLAYERCOUNT];
 	bool controlledByNetwork[MAXPLAYERCOUNT];
 	AIController* ai[MAXPLAYERCOUNT];
@@ -115,6 +121,7 @@ private:
 	int scoreToFinish = 0; // if 0, the game will continue endlessly
 	int getMaxScore();
 	int getMaxScorerIndex();
+	int currentTouchEditor = -1;
 };
 
 #endif // GAME_H

@@ -110,6 +110,11 @@ Page {
 		anchors.top: parent.top
 		anchors.bottom: parent.bottom
 		width: gameWidth + 32
-		color: Material.color(Material.BlueGrey, Material.Shade900);
+		color: Material.color(Material.BlueGrey, Material.Shade900)
+		MultiPointTouchArea {
+			anchors.fill: parent
+			onPressed: game.sendTouchPress(true, touchPoints[touchPoints.length-1].x, touchPoints[touchPoints.length-1].y);
+			onReleased: game.sendTouchPress(false, touchPoints[touchPoints.length-1].x, touchPoints[touchPoints.length-1].y);
+		}
 	}
 }

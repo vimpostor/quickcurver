@@ -7,5 +7,6 @@
         <file>Licenses.qml</file>
         <file>Help.qml</file>
         <file>About.qml</file>
+        <file>TouchController.qml</file>
     </qresource>
 </RCC>

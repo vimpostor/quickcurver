@@ -64,6 +64,23 @@ Item {
 								onCurrentIndexChanged: game.setController(index, currentIndex)
 							}
 						}
+						ListItem {
+							enabled: Device.hasTouchScreen && playerComboBox.currentIndex === 0
+							text: "Use touchscreen"
+							iconName: "action/touch_app"
+							rightItem: CheckBox {
+								id: useTouchCheckbox
+								onCheckedChanged: {
+									if (checked) {
+										game.setCurrentTouchEditor(index);
+										pageStack.push(Qt.resolvedUrl("TouchController.qml"));
+									} else {
+										game.disableTouch(index);
+									}
+								}
+							}
+							onClicked: useTouchCheckbox.checked = !useTouchCheckbox.checked
+						}
 						RowLayout {
 							anchors.left: parent.left
 							anchors.right: parent.right
@@ -72,7 +89,7 @@ Item {
 								Button {
 									text: index ? "Right" : "Left"
 									Layout.fillWidth: true
-									enabled: playerComboBox.currentIndex === 0
+									enabled: playerComboBox.currentIndex === 0 && !useTouchCheckbox.checked
 									Keys.onPressed: {
 										if (event.text === "") {
 											this.text = "No key description";
