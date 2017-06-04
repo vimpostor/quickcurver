@@ -63,10 +63,6 @@ Item {
 								}
 								onCurrentIndexChanged: game.setController(index, currentIndex)
 							}
-							secondaryItem: BusyIndicator {
-								running: playerComboBox.currentIndex === 2 && !eJoined
-								visible: running
-							}
 						}
 						RowLayout {
 							anchors.left: parent.left
