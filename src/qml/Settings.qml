@@ -53,7 +53,10 @@ TabbedPage {
 						stepSize: 50
 						from: 300
 						to: 1000
-						onValueChanged: game.setFieldSize(value)
+						onValueChanged: {
+							game.setFieldSize(value);
+							gameWidth = value;
+						}
 					}
 					Label {
 						text: "Fast forward at death"

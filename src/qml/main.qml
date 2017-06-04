@@ -10,6 +10,7 @@ ApplicationWindow {
 	onClosing: game.close()
 	property bool clientInGame: false;
 	property bool serverStarted: false;
+	property int gameWidth: 800
 	function sendMessage(username, message) {
 		pageStack.currentItem.sendMessage(username, message);
 	}
@@ -125,7 +126,6 @@ ApplicationWindow {
 				onTriggered: close()
 				shortcut: "Ctrl+Q"
 			}
-
 		]
 		PlayerSelector {
 			id: playerselector
@@ -135,7 +135,7 @@ ApplicationWindow {
 		anchors.top: parent.top
 		anchors.right: parent.right
 		anchors.margins: 16
-		width: 800
+		width: gameWidth
 		Game {
 			id: game
 			objectName: "game"

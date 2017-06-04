@@ -10,9 +10,7 @@ Page {
 		chatModel.append({username: username, message: message});
 		chatListView.positionViewAtEnd();
 	}
-	property int fieldsize: 800
 	onGoBack: close()
-	onParentChanged: fieldsize = game.getFieldSize()
 	Pane {
 		anchors.left: parent.left
 		anchors.top: parent.top
@@ -105,7 +103,7 @@ Page {
 		anchors.right: parent.right
 		anchors.top: parent.top
 		anchors.bottom: parent.bottom
-		width: fieldsize + 32
+		width: gameWidth + 32
 		color: Material.color(Material.BlueGrey, Material.Shade900);
 	}
 }
