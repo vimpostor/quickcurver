@@ -1,119 +1,56 @@
 import QtQuick 2.7
-import Game 1.0
+import Qt.labs.platform 1.0 as Platform
 import QtQuick.Controls 2.1
 import QtQuick.Controls.Material 2.1
 import Fluid.Controls 1.0
-import Fluid.Material 1.0
 import QtQuick.Layouts 1.1
 
-ApplicationWindow {
-	onClosing: game.close()
-	property bool clientInGame: false;
-	property bool serverStarted: false;
-	property int gameWidth: 800
-	function sendMessage(username, message) {
-		pageStack.currentItem.sendMessage(username, message);
-	}
-	function changeScore(index, newScore, roundScore) {
-		playerListModel.setProperty(index, "escore", newScore);
-		playerListModel.setProperty(index, "eroundScore", roundScore);
-	}
-	function setJoinStatus(s) {
-		if (s === "TCPACK") {
-			joinButton.text = "Testing UDP connection...";
-		} else if (s === "JOINED") {
-			joinButton.text = "Joined, waiting for host to start...";
-		} else if (s === "REJECTED") {
-			clientDialog.close();
-			playerselector.mysnackbar.open("Join request was rejected :(");
-		} else if (s === "TIMEOUT") {
-			clientDialog.close();
-			playerselector.mysnackbar.open("Join request timed out! :(");
-		} else if (s === "STARTED") {
-			clientInGame = true;
-			clientDialog.close();
-			pageStack.push(Qt.resolvedUrl("GamePage.qml"));
-			game.focus = true;
-		} else if (s === "KICKED") {
-			clientDialog.close();
-			playerselector.mysnackbar.open("You got kicked from the game!");
-		} else if (s === "TERMINATE") {
-			close();
-		}
-	}
-	function setPlayerStatus(index,s) {
-		if (s === "JOINED") {
-			playerListModel.setProperty(index, "eJoined", true);
-		} else if (s === "LEFT") {
-			playerListModel.setProperty(index, "eJoined", false);
-			playerListModel.setProperty(index, "eReady", false);
-		} else if (s === "READY") {
-			playerListModel.setProperty(index, "eReady", true);
-		} else if (s === "UNREADY") {
-			playerListModel.setProperty(index, "eReady", false);
-		} else if (s.substring(0, 8) === "USERNAME") {
-			playerListModel.setProperty(index, "ename", s.substring(8));
-		}
-	}
-	function notifyGUI(s, mode) {
-		if (mode === "SNACKBAR") {
-			playerselector.mysnackbar.open(s);
-		}
-	}
-	function clientEditPlayer(index,name) {
-		if (index > playerListModel.count - 1) {
-			// add player
-			playerListModel.append({ename: name})
-		} else {
-			playerListModel.setProperty(index, "ename", name);
-		}
-	}
-	function removePlayer(index) {
-		game.deletePlayer(index);
-		playerListModel.remove(index);
-	}
+import Game 1.0
 
+ApplicationWindow {
+	onClosing: {
+		game.destroy();
+	}
 	id: root
+	visible: true
 	width: 1200
 	height: 900
 	title: "Quick Curver"
 	Material.primary: Material.Yellow
 	Material.accent: Material.Blue
-	visible: true
-	appBar.maxActionCount: 3
 	initialPage: Page {
 		id: initialPage
 		title: "Quick Curver"
+		appBar.maxActionCount: 5
 		actions: [
 			Action {
-				iconName: "action/search"
-				text: "Join an online game"
-				onTriggered: clientDialog.open()
+				iconName: "av/hearing"
+				text: "Server listen"
+				onTriggered: listenDialog.open();
+			},
+			Action {
+				iconName: "file/cloud_upload"
+				text: "Join game"
+				onTriggered: clientDialog.open();
 				shortcut: "Ctrl+J"
 			},
 			Action {
-				id: startServerAction
-				iconName: serverStarted? "content/content_copy" : "file/cloud_upload"
-				text: serverStarted? "Copy IP address" : "Host an online game"
-				onTriggered: {
-					if (serverStarted) {
-						playerselector.mysnackbar.open("Copied IP address " + game.copyIp())
-					} else {
-						serverDialog.open();
-					}
-				}
-				shortcut: "Ctrl+C"
+				iconName: "editor/border_left"
+				text: "Left"
+				onTriggered: gameWave.width += 20
+				shortcut: "Ctrl+H"
+			},
+			Action {
+				iconName: "editor/border_right"
+				text: "Right"
+				onTriggered: gameWave.width -= 20
+				shortcut: "Ctrl+L"
 			},
 			Action {
 				iconName: "action/settings"
 				text: "Settings"
 				onTriggered: pageStack.push(Qt.resolvedUrl("Settings.qml"))
 				shortcut: "Ctrl+I"
-			},
-			Action {
-				iconName: "action/help"
-				text: "Help"
-				onTriggered: pageStack.push(Qt.resolvedUrl("Help.qml"))
 			},
 			Action {
 				iconName: "action/info"
@@ -123,152 +60,109 @@ ApplicationWindow {
 			Action {
 				iconName: "navigation/close"
 				text: "Quit"
-				onTriggered: close()
+				onTriggered: close();
 				shortcut: "Ctrl+Q"
 			}
 		]
-		PlayerSelector {
-			id: playerselector
+		Chat {
+			id: chat
+			anchors {top: parent.top; left: parent.left; right: gameWave.left; margins: Units.smallSpacing}
+			height: parent.height / 3
 		}
-	}
-	Item {
-		anchors.top: parent.top
-		anchors.right: parent.right
-		anchors.margins: 16
-		width: gameWidth
-		Game {
-			id: game
-			objectName: "game"
-			anchors.fill: parent
-			Keys.onPressed:  {
-				game.sendKey(event.key);
-			}
-			Keys.onReleased: {
-				game.releaseKey(event.key);
-			}
+		Players {
+			id: players
+			anchors {top: chat.bottom; left: parent.left; right: gameWave.left; bottom: parent.bottom; margins: Units.smallSpacing}
 		}
-	}
-	ListModel {
-		id: playerListModel
-		ListElement {
-			ename: "Player 0"
-			escore: 0
-			eroundScore: 0
-			eBot: false
-			eOnline: false
-			eJoined: false
-			eReady: false
-		}
-		ListElement {
-			ename: "Player 1"
-			escore: 0
-			eroundScore: 0
-			eBot: true
-			eOnline: false
-			eJoined: false
-			eReady: false
-		}
-	}
-	Dialog {
-		id: clientDialog
-		title: "Join Online Game"
-		x: (parent.width - width) / 2;
-		y: (parent.height - height) / 2;
-		ColumnLayout {
-			anchors.left: parent.left
-			anchors.right: parent.right
-			RowLayout {
-				anchors.left: parent.left
-				anchors.right: parent.right
-				Layout.fillWidth: true
-				IconButton {
-					iconName: "content/content_paste"
-					onClicked: {
-						var c = game.getClipboardContent();
-						if (c === "") {
-							playerselector.mysnackbar.open("No text in clipboard!");
-						} else {
-							serverIp.text = c;
-						}
-					}
+		Wave {
+			id: gameWave
+			anchors {top: parent.top; right: parent.right; bottom: parent.bottom; margins: Units.smallSpacing}
+			width: 0
+			Behavior on width {
+				NumberAnimation {
+					easing.type: Easing.OutCubic
 				}
+			}
+			Rectangle {
+				anchors.fill: parent
+				color: Material.color(Material.BlueGrey, Material.Shade900)
+			}
+			Game {
+				id: game
+				anchors.fill: parent
+				onPostInfoBar: infoBar.open(msg);
+				onWidthChanged: c_settings.setWidth(width);
+				onHeightChanged: c_settings.setHeight(height);
+				Keys.onPressed: {
+					game.processKey(event.key, false);
+				}
+				Keys.onReleased: {
+					game.processKey(event.key, true);
+				}
+				onGameStarted: {
+					game.forceActiveFocus();
+					gameWave.width = 700;
+					gameWave.openWave();
+					players.startButton.visible = false;
+				}
+				Ripple {
+					anchors.fill: parent
+					onClicked: game.forceActiveFocus();
+				}
+			}
+		}
+		InfoBar {
+			id: infoBar
+			anchors {
+				left: parent.left
+				bottom: parent.bottom
+				right: parent.right
+			}
+		}
+		InputDialog {
+			id: listenDialog
+			x: (parent.width - width)/2
+			y: (parent.height - height)/2
+			title: "Listen on which port"
+			onAccepted: game.serverReListen(textField.text);
+		}
+		Dialog {
+			id: clientDialog
+			title: "Join game"
+			x: (parent.width - width)/2
+			y: (parent.height - height)/2
+			Column {
 				TextField {
-					id: serverIp
-					Layout.fillWidth: true
-					placeholderText: "Server IP Adress"
-					Keys.onReturnPressed: {
-						joinButton.clicked();
-					}
-				}
-				Label {
-					text: ":"
-				}
-				TextField {
-					id: serverPort
-					Layout.fillWidth: true
-					placeholderText: "Port"
-					text: "52552"
-				}
-				BusyIndicator {
-					id: cyclicColorProgress
-					visible: running
-				}
-			}
-			ListItem {
-				text: "Username"
-				iconName: "action/account_circle"
-				rightItem: TextField {
-					id: clientUserNameTextField
+					id: nameTextField
 					placeholderText: "Username"
-					onTextChanged: game.changeClientSettings(text, clientReadyCheckBox.checked)
+					text: "Client"
+				}
+				IconButton {
+					iconName: "editor/format_color_fill"
+					iconColor: clientColorDialog.color
+					onClicked: clientColorDialog.open();
+					Platform.ColorDialog {
+						id: clientColorDialog
+						color: Material.accent
+					}
+				}
+				TextField {
+					id: ipTextField
+					placeholderText: "IP (IPv4 or IPv6)"
+					text: "127.0.0.1"
+				}
+				TextField {
+					id: portTextField
+					placeholderText: "Port"
+					onAccepted: clientDialog.accept();
 				}
 			}
-			ListItem {
-				text: "Ready"
-				iconName: "action/check_circle"
-				rightItem: CheckBox {
-					id: clientReadyCheckBox
-					checked: false
-					onCheckedChanged: game.changeClientSettings(clientUserNameTextField.text, checked)
-				}
-				onClicked: clientReadyCheckBox.checked = !clientReadyCheckBox.checked
+			standardButtons: Dialog.Cancel | Dialog.Ok
+			onAccepted: {
+				c_settings.setClientName(nameTextField.text);
+				c_settings.setClientColor(clientColorDialog.color);
+				game.connectToHost(ipTextField.text, portTextField.text);
 			}
-			Button {
-				id: joinButton
-				Layout.fillWidth: true
-				text: "Join"
-				highlighted: true
-				onClicked: {
-					enabled = false;
-					cyclicColorProgress.running = true;
-					text = "Waiting for server response...";
-					game.clientStart(serverIp.text, serverPort.text);
-				}
-			}
-		}
-		onOpened: {
-			serverIp.forceActiveFocus();
-			cyclicColorProgress.running = false;
-			joinButton.enabled = true;
-			joinButton.text = "Join";
-		}
-		onClosed: {
-			if (!clientInGame) {
-//				game.leaveGame();
-			}
-		}
-	}
-	InputDialog {
-		id: serverDialog
-		title: "Host an online game"
-		x: (parent.width - width) / 2;
-		y: (parent.height - height) / 2;
-		text: "On what port do you want the server to run?"
-		textField.text: "52552"
-		textField.inputMask: "99999"
-		onAccepted: {
-			game.startServer(textField.text)
-			serverStarted = true;
+			onOpened: portTextField.forceActiveFocus();
 		}
 	}
 }

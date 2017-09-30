@@ -1,12 +1,10 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>PlayerSelector.qml</file>
-        <file>GamePage.qml</file>
+        <file>Players.qml</file>
         <file>Settings.qml</file>
         <file>Licenses.qml</file>
-        <file>Help.qml</file>
         <file>About.qml</file>
-        <file>TouchController.qml</file>
+        <file>Chat.qml</file>
     </qresource>
 </RCC>

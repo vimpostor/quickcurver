@@ -3,9 +3,7 @@
 #include <QObject>
 #include <QtNetwork>
 #include <QTimer>
-#include <QSGNode>
-#include "../headnode.h"
-#include <qsgflatcolormaterial.h>
+
 #include "network.h"
 
 
@@ -13,47 +11,24 @@ class Client : public QObject
 {
 	Q_OBJECT
 public:
-	explicit Client(QQuickItem *parent);
-	~Client();
-	void sendKey(Qt::Key k);
-	void releaseKey(Qt::Key k);
-	void start(QSGNode *node, QObject *qmlobject, QString ip, int port = 52552);
-	void shutdown(); // also sends [LEFT] to the server if already joined
-	void requestSendMessage(QString message);
-	void changeSettings(QString username, bool ready);
+	Client();
+	void connectToHost(QHostAddress &addr, quint16 port);
+	void sendChatMessage(QString msg);
+	void sendPlayerModel();
+	void processKey(Qt::Key key, bool release);
 signals:
-	void spawnItem(QString iconName, QColor color, QPointF pos, int index);
-	void deleteItem(int index);
-	void deleteAllItems();
-
+	void connectedToServerChanged(bool connected);
+	void integrateItem(bool spawned, unsigned int sequenceNumber, int which, QPointF pos, Item::AllowedUsers allowedUsers, int collectorIndex);
+	void resetRound();
 private slots:
-	void udpReadPendingDatagrams();
-	void udpSocketError(QAbstractSocket::SocketError socketError);
-	void timeout();
-	void tcpReadyRead();
-	void tcpSocketError(QAbstractSocket::SocketError socketError);
+	void socketError(QAbstractSocket::SocketError);
+	void socketConnected();
+	void socketDisconnected();
+	void socketReadyRead();
 private:
-	void initUdpSocket();
-	void initTcpSocket();
-	QQuickItem *parent = NULL;
-	QUdpSocket *udpSocket = NULL;
-	QTcpSocket *tcpSocket = NULL;
-	QHostAddress *ip;
-	quint16 port;
-	quint16 myport = 55225;
-	void join();
-	QTimer *timeoutTimer;
-	bool joined = false;
-	QSGNode *node;
-	headNode *headnodes[MAXPLAYERCOUNT];
-	QCurver *curver[MAXPLAYERCOUNT];
+	void handlePacket(std::unique_ptr<Packet::AbstractPacket> &p);
+	QTcpSocket socket;
 	QDataStream in;
-	void sendUdpMessage(QString msg);
-	void sendTcpMessage(QString msg);
-	ClientSettings settings;
-	ServerSettings serverSettings;
-	QObject *qmlobject = NULL;
-	Gui gui;
 };
 
 #endif // CLIENT_H

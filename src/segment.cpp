@@ -1,119 +1,84 @@
 #include "segment.h"
 
-segment::segment(QColor color, int thickness, QSGNode *node, QSGFlatColorMaterial *material) {
-	this->node = node;
-	this->color = color;
+Segment::Segment(QSGNode *parentNode, QSGFlatColorMaterial *material, const float thickness)
+{
+	this->parentNode = parentNode;
 	this->thickness = thickness;
-	nodeMutex.lock();
-	gnode = new QSGGeometryNode;
-	geometry = new QSGGeometry(QSGGeometry::defaultAttributes_Point2D(), 0);
-	geometry->setLineWidth(1);
-	geometry->setDrawingMode(GL_TRIANGLE_STRIP);
-	gnode->setGeometry(geometry);
-	gnode->setFlag(QSGNode::OwnsGeometry);
-	gnode->setMaterial(material);
-	gnode->setFlag(QSGNode::OwnsMaterial);
-	geometry->allocate(1);
-	node->appendChildNode(gnode);
-	nodeMutex.unlock();
+
+	geometry.setLineWidth(thickness);
+	geometry.setDrawingMode(GL_QUAD_STRIP);
+	geoNode.setGeometry(&geometry);
+	geoNode.setMaterial(material);
+	geometry.allocate(1);
+	parentNode->appendChildNode(&geoNode);
 }
 
-segment::~segment() {
-	node->removeChildNode(gnode);
-	gnode->setFlag(QSGNode::OwnsGeometry, false);
-	delete geometry;
-	gnode->setFlag(QSGNode::OwnsMaterial, false);
-	delete gnode;
+Segment::~Segment()
+{
+	parentNode->removeChildNode(&geoNode);
 }
 
-void segment::initRand() {
-	qsrand(QTime::currentTime().msecsSinceStartOfDay());
-}
-
-void segment::appendPoint(QPointF addedPoint, float angle) {
-	nodeMutex.lock();
-	if (poscount != 0) { //general case
-		QPointF lastPoint = getLastPoint();
-		float normalAngle = angle+M_PI/2;
-		QPointF thicknessVector = thickness * QPointF(cos(normalAngle), sin(normalAngle));
-		pos[poscount] = lastPoint + thicknessVector;
-		poscount++;
-		pos[poscount] = addedPoint + thicknessVector;
-		poscount++;
-		pos[poscount] = lastPoint - thicknessVector;
-		poscount++;
-		pos[poscount] = addedPoint - thicknessVector;
-		poscount++;
-		pos[poscount] = addedPoint;
-		poscount++;
-	//	geometry->allocate(poscount/2);
-	//	QSGGeometry::Point2D *vertices = geometry->vertexDataAsPoint2D();
-	//	for (int i = 1; i < poscount; i+=2) {
-	//		vertices[(i-1)/2].set(pos[i].x(), pos[i].y());
-	//	}
-		geometry->allocate(poscount);
-		QSGGeometry::Point2D *vertices = geometry->vertexDataAsPoint2D();
-		for (int i = 0; i < poscount; i++) {
-			vertices[i].set(pos[i].x(), pos[i].y());
-		}
-		gnode->markDirty(QSGNode::DirtyGeometry);
-	} else { //poscount == 0
-		pos[0] = addedPoint;
-		poscount = 1;
-	}
-	nodeMutex.unlock();
-}
-
-void segment::clientappendPoint(QPointF p) {
-	pos[poscount] = p;
-	poscount++;
-	geometry->allocate(poscount);
-	QSGGeometry::Point2D *vertices = geometry->vertexDataAsPoint2D();
-	for (int i = 0; i < poscount; i++) {
+void Segment::appendPoint(const QPointF newPoint, const float angle)
+{
+	const float normalAngle = angle + M_PI/2;
+	const QPointF normalVector = thickness * QPointF(cos(normalAngle), sin(normalAngle));
+	pos.push_back(newPoint + normalVector);
+	pos.push_back(newPoint - normalVector);
+	geometry.allocate(pos.size());
+	QSGGeometry::Point2D *vertices = geometry.vertexDataAsPoint2D();
+	for (int i = 0; i < static_cast<int>(pos.size()); ++i) {
 		vertices[i].set(pos[i].x(), pos[i].y());
 	}
-	gnode->markDirty(QSGNode::DirtyGeometry);
+	geoNode.markDirty(QSGNode::DirtyGeometry);
+
+	lastPoint = newPoint;
 }
 
-QPointF segment::getLastPoint(int offset) {
-	if (poscount + offset > 0 && offset <= 0) {
-		return pos[poscount-1-offset];
-	} else {
-		return QPointF(-1,-1);
-	}
-}
-
-int segment::randInt(int min, int max) {
-	return ((qrand() % ((max + 1) - min)) + min);
-}
-
-float segment::randFloat() {
-	return (float) randInt(0,10000)/10000;
-}
-
-bool segment::checkforIntersection(QPointF a, QPointF b) {
-	float bax, dcx, acy, dcy, bay, baxdcy, s, t;
-	for (int i = 1; i < poscount-5; i+=2) { //we dont check with the last line, because that could be the same line, as the one that emited intersection checking
-		QPointF c = pos[i];
-		QPointF d = pos[i+1];
-		bax = b.x()-a.x();
-		dcx = d.x()-c.x();
-		acy = a.y()-c.y();
-		dcy = d.y()-c.y();
-		bay = b.y()-a.y();
-		baxdcy = bax*dcy;
-		if (!(bax == 0 || dcy == 0 || dcx*bay == 1)) { //normal situation
-			s = ((c.x()-a.x())/bax+dcx*acy/baxdcy)/(1-dcx*bay/(baxdcy));
-			if (s < 0 || s > 1) {
-				continue;
-			} else {
-				t = acy/dcy+s*bay/dcy;
-				if (t >= 0 && t <= 1) {
-					return true;
-				}
+bool Segment::checkForIntersection(QPointF a, QPointF b) const
+{
+	/* Given a line (a -- b) and (c -- d), we find an intersection as follows:
+	 *
+	 * First compute the equation A*x + B*y = C for both lines
+	 * A = b.y - a.y
+	 * B = a.x - b.x
+	 * C = A*a.x + B*a.y
+	 *
+	 * Then for two lines 1 and 2 in this form, first check if
+	 * det := A1*B2 - A2*B1 == 0 => Lines are parallel
+	 * If this is the case, check if the lines intersect using a bounding rectangle
+	 *
+	 * Otherwise compute the location of the intersection as follows:
+	 * x := (B2*C1 - B1*C2)/det
+	 * y := (A1*C2 - A2*C1)/det
+	 *
+	 * Finally check if this intersection location is contained in both lines
+	*/
+	// epsilon is needed, because floating point operations are not that nice, when it comes to comparing them
+	const float epsilon = 0.015625;
+	const float firstA = b.y() - a.y();
+	const float firstB = a.x() - b.x();
+	const float firstC = firstA * a.x() + firstB * a.y();
+	const float minX = std::min(a.x(), b.x()) - epsilon;
+	const float maxX = std::max(a.x(), b.x()) + epsilon;
+	const float minY = std::min(a.y(), b.y()) - epsilon;
+	const float maxY = std::max(a.y(), b.y()) + epsilon;
+	for (int i = 2; i < static_cast<int>(pos.size() - 1); ++i) {
+		const QPointF c = pos[i-2];
+		const QPointF d = pos[i];
+		const float secondA = d.y() - c.y();
+		const float secondB = c.x() - d.x();
+		const float secondC = secondA * c.x() + secondB * c.y();
+		const float det = firstA * secondB - secondA * firstB;
+		if (static_cast<bool>(det)) {
+			// not parallel
+			const float x = (secondB * firstC - firstB * secondC) / det;
+			const float y = (firstA * secondC - secondA * firstC) / det;
+			// is the intersection location contained in both lines?
+			if (minX <= x && x <= maxX && minY <= y && y <= maxY && \
+					(std::min(c.x(), d.x()) - epsilon) <= x && (x <= std::max(c.x(), d.x()) + epsilon) && \
+					(std::min(c.y(), d.y()) - epsilon) <= y && (y <= std::max(c.y(), d.y()) + epsilon)) {
+				return true;
 			}
-		} else { //zero division
-			return false; //we return false for safety, ignoring possible false negatives
 		}
 	}
 	return false;

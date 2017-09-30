@@ -3,74 +3,42 @@
 #include <QObject>
 #include <QtNetwork>
 #include <QTimer>
-#include "network.h"
 #include <QSignalMapper>
-#include <qmath.h>
-#define BROADCASTINTERVAL 33
-#define MAXPOINTSSENTATONCE 16
+#include <memory>
 
+#include "network.h"
+
+#define ADMIN_NAME "Chat Bot"
 
 class Server : public QObject
 {
 	Q_OBJECT
 public:
-	explicit Server(QCurver **curver, QObject *parent = 0);
+	explicit Server();
 	~Server();
-	void init(quint16 port, QObject *qmlobject);
-	void shutdown();
-	void setAvailable(int index, bool newState);
-	void start();
-	void setPlayerCount(int playercount);
-	void newRound();
+
+	void broadcastCurverData();
 	void broadcastChatMessage(QString username, QString message);
-	QHostAddress *getServerIp();
-	bool isReady();
-	void transmitNewItem(QString iconName, QColor color, QPointF pos, int index);
-	void useItem(int index);
-	void cleanInstall();
-	void curverDied(int index);
-	void setName(int index, QString username);
-	void deletePlayer(int index);
-	ServerSettings serverSettings;
-signals:
+	void broadcastChatMessage(QString msg);
+	void resetRound();
+	void reListen(quint16 port);
+public slots:
+	void broadcastPlayerModel();
+	void broadcastItemData(bool spawned, unsigned int sequenceNumber, int which, QPointF pos, Item::AllowedUsers allowedUsers, int collectorIndex);
 private slots:
-	void readPendingDatagrams();
-	void udpSocketError(QAbstractSocket::SocketError socketError);
-	void tcpSocketError(QAbstractSocket::SocketError socketError);
-	void broadcast();
+	void acceptError(QAbstractSocket::SocketError);
 	void newConnection();
-	void tcpReadyRead(int i);
+	void socketError(QAbstractSocket::SocketError);
+	void socketDisconnect();
+	void socketReadyRead();
 private:
-	QTcpSocket *clientConnections[MAXPLAYERCOUNT];
-	void initUdpSocket();
-	void initTcpServer();
-	QUdpSocket *udpSocket;
-	QTcpServer *tcpServer;
-	quint16 port;
-	bool available[MAXPLAYERCOUNT]; // determines if curver[i] is an Online player. if it already is used is determined by clientsTcp
-	QHostAddress *clientsUdp[MAXPLAYERCOUNT]; // is NULL if not connected, otherwise holds client information
-	QTcpSocket *clientsTcp[MAXPLAYERCOUNT]; // is NULL if not connected, otherwise holds an active tcp socket to client
-	int isValidInput(QHostAddress *sender); // returns -1 on error, else returns the index of the curver that sender is in control of
-	QCurver **curver;
-	void turn(QHostAddress *sender, rotation r);
-	bool started = false;
-	QTimer *broadcastTimer;
-	void sendToAllUdp(QByteArray *datagram);
-	int playercount = 0;
-	QHostAddress *serverIp;
-	void setServerIp();
-	int getFreePlace(); // returns index of first free slot. Returns -1, if no slot is free
-	void sendToAllTcp(QByteArray *block); // sends block to all
-	void transmitTcpMessage(QString message, QTcpSocket *s = NULL); // if s is not specified, sends to all
-	void transmitTcpMessages(QString *messages, int length, QTcpSocket *s = NULL);
-	void connectClient(QTcpSocket *client, int index);
-	bool tryConnectingClient(QTcpSocket *client); // returns true on success, also sends ACCEPTED OR REJECTED to the client
-	void disconnectClient(QTcpSocket *client, QString reason = ""); // if reason is specified, the client will be notified about the disconnection
-	QDataStream in[MAXPLAYERCOUNT];
-	QSignalMapper *tcpReadyReadSignalMapper;
-	void updateServerSettings();
-	QObject *qmlobject = NULL;
-	Gui gui;
+	void removePlayer(const QTcpSocket *s);
+	void handlePacket(std::unique_ptr<Packet::AbstractPacket> &p, const QTcpSocket *s);
+	void broadcastPacket(Packet::AbstractPacket &p);
+	QTcpServer tcpServer;
+	std::map<std::unique_ptr<QTcpSocket>, Curver *> clients;
+	Curver *curverFromSocket(const QTcpSocket *s) const;
+	bool resetDue = false;
 };
 
 #endif // SERVER_H

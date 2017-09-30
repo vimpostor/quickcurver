@@ -1,29 +1,26 @@
 #include "headnode.h"
 
-headNode::headNode(QPointF startPos, QSGFlatColorMaterial* material, QSGNode *node) {
-	pos = startPos;
-	geometry = new QSGGeometry(QSGGeometry::defaultAttributes_Point2D(), 0);
-	geometry->setLineWidth(thickness);
-	geometry->setDrawingMode(GL_POINTS);
-	this->setGeometry(geometry);
-	this->setFlag(QSGNode::OwnsGeometry);
+HeadNode::HeadNode(QSGNode *parentNode, QSGFlatColorMaterial *material) : QSGGeometryNode ()
+{
+	this->parentNode = parentNode;
+
+	geometry.setLineWidth(6);
+	geometry.setDrawingMode(GL_POINTS);
+	this->setGeometry(&geometry);
 	this->setMaterial(material);
-	this->setFlag(QSGNode::OwnsMaterial);
-	geometry->allocate(1);
-	QSGGeometry::Point2D* vertices = geometry->vertexDataAsPoint2D();
-	vertices[0].set(pos.x(),pos.y());
-	this->markDirty(QSGNode::DirtyGeometry);
-	node->appendChildNode(this);
+	geometry.allocate(1);
+	parentNode->appendChildNode(this);
 }
 
-void headNode::updatePosition(QPointF newPos) {
-	pos = newPos;
-	QSGGeometry::Point2D* vertices = geometry->vertexDataAsPoint2D();
-	vertices[0].set(pos.x(),pos.y());
-	this->markDirty(QSGNode::DirtyGeometry);
+HeadNode::~HeadNode()
+{
+	parentNode->removeChildNode(this);
 }
 
-void headNode::setThickness(int newThickness) {
-	thickness = 2*newThickness - 2;
-	geometry->setLineWidth(thickness);
+void HeadNode::setPosition(const QPointF newPos)
+{
+	this->pos = newPos;
+	QSGGeometry::Point2D *vertices = geometry.vertexDataAsPoint2D();
+	vertices[0].set(pos.x(), pos.y());
+	this->markDirty(QSGNode::DirtyGeometry);
 }

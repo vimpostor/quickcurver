@@ -2,53 +2,147 @@
 #define MULTIPLAYERSETTINGS_H
 
 #include <QString>
-#include <QDataStream>
-#include <QColor>
 #include <QtNetwork>
-#include "../qcurver.h"
 
-#define MAXPLAYERCOUNT 16
+#include "gui.h"
+#include "curver.h"
+#include "models/playermodel.h"
+#include "models/chatmodel.h"
+#include "util.h"
+#include "items/item.h"
 
-class ClientSettings {
-public:
-	QString username = "";
-	bool ready = false;
-
-	void reset();
+enum class InstanceType : bool {
+	Server,
+	Client
 };
 
+namespace Packet {
 
-QDataStream &operator <<(QDataStream &out, const ClientSettings &clientSettings);
-QDataStream &operator >>(QDataStream &in, ClientSettings &clientSettings);
 
-class ServerSettings {
-public:
-	explicit ServerSettings();
-	int playerCount = 2;
-	ClientSettings clientSettings[MAXPLAYERCOUNT];
-	QColor colors[MAXPLAYERCOUNT]; // this should be in client settings too
+using PacketType = uint8_t;
+
+enum class ServerTypes : PacketType {
+	Chat_Message,
+	PlayerModelEdit,
+	CurverData,
+	ItemData
 };
 
-QDataStream &operator <<(QDataStream &out, const ServerSettings &serverSettings);
-QDataStream &operator >>(QDataStream &in, ServerSettings &serverSettings);
-
-class Network {
-public:
-	static QHostAddress getLocalIpAddress();
+enum class ClientTypes : PacketType {
+	Chat_Message,
+	PlayerModelEdit,
+	CurverRotation
 };
 
-
-class Gui {
+class AbstractPacket
+{
 public:
-	void setQmlObject(QObject *qmlobject);
-	void sendChatMessage(QString username, QString message);
-	void editUsername(int index, QString username);
-	void notifyGUI(QString msg, QString mode);
-	void setPlayerStatus(int index, QString s);
-	void setPlayerScore(int index, int score, int roundScore);
-	void setJoinStatus(QString s);
-private:
-	QObject *qmlobject = NULL;
+	explicit AbstractPacket(PacketType type);
+	virtual ~AbstractPacket();
+	void sendPacket(QTcpSocket *s) const;
+	static std::unique_ptr<AbstractPacket> receivePacket(QDataStream &in, InstanceType from);
+	PacketType type;
+	bool start = false;
+	bool reset = false;
+protected:
+	virtual void serialize(QDataStream &out) const = 0;
+	virtual void parse(QDataStream &in) = 0;
 };
+
+class ServerChatMsg : public AbstractPacket
+{
+public:
+	ServerChatMsg();
+	QString username;
+	QString message;
+protected:
+	virtual void serialize(QDataStream &out) const override;
+	virtual void parse(QDataStream &in) override;
+};
+
+class ClientChatMsg : public AbstractPacket
+{
+public:
+	ClientChatMsg();
+	QString message;
+protected:
+	virtual void serialize(QDataStream &out) const override;
+	virtual void parse(QDataStream &in) override;
+};
+
+struct Player
+{
+	QString userName;
+	QColor color;
+	int roundScore;
+	int totalScore;
+	Curver::Controller controller;
+};
+
+QDataStream &operator <<(QDataStream &out, const Player &p);
+QDataStream &operator >>(QDataStream &in, Player &p);
+
+class ServerPlayerModel : public AbstractPacket
+{
+public:
+	ServerPlayerModel();
+	void fill();
+	void extract();
+	std::vector<Player> data;
+protected:
+	virtual void serialize(QDataStream &out) const override;
+	virtual void parse(QDataStream &in) override;
+};
+
+class ClientPlayerModel : public AbstractPacket
+{
+public:
+	ClientPlayerModel();
+	QString username;
+	QColor color;
+protected:
+	virtual void serialize(QDataStream &out) const override;
+	virtual void parse(QDataStream &in) override;
+};
+
+class ServerCurverData : public AbstractPacket
+{
+public:
+	ServerCurverData();
+	void fill();
+	void extract();
+	std::vector<QPointF> pos;
+	std::vector<bool> changingSegment;
+protected:
+	virtual void serialize(QDataStream &out) const override;
+	virtual void parse(QDataStream &in) override;
+};
+
+class ClientCurverRotation : public AbstractPacket
+{
+public:
+	ClientCurverRotation();
+	Curver::Rotation rotation;
+protected:
+	virtual void serialize(QDataStream &out) const override;
+	virtual void parse(QDataStream &in) override;
+};
+
+class ServerItemData : public AbstractPacket
+{
+public:
+	ServerItemData();
+	bool spawned = true;
+	unsigned int sequenceNumber = 0;
+	int which = 0;
+	QPointF pos;
+	Item::AllowedUsers allowedUsers = Item::ALLOW_ALL;
+	int collectorIndex = -1;
+protected:
+	virtual void serialize(QDataStream &out) const override;
+	virtual void parse(QDataStream &in) override;
+};
+
+}
 
 #endif // MULTIPLAYERSETTINGS_H

@@ -1,19 +1,10 @@
 #include "cleaninstallitem.h"
 
-#define CLEANINSTALLICON ":/Fluid/Controls/communication/clear_all.svg"
-#define REDALLOWED false
-#define GREENALLOWED false
-#define BLUEALLOWED true
-
-CleaninstallItem::CleaninstallItem(QSGNode *node, QQuickView *view, int fieldsize, Server *server) : CurveItem(node, view, fieldsize, CLEANINSTALLICON, REDALLOWED, GREENALLOWED, BLUEALLOWED) {
-	this->server = server;
+CleanInstallItem::CleanInstallItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos) : Item(parentNode, iconName, allowedUsers, pos)
+{
 }
 
-void CleaninstallItem::use(QCurver *curver) {
+void CleanInstallItem::use(Curver *curver)
+{
 	curver->cleanInstall();
-	server->cleanInstall();
-}
-
-QString CleaninstallItem::getIconName() {
-	return CLEANINSTALLICON;
 }

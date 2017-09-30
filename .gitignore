@@ -45,3 +45,5 @@ CMakeLists.txt.user
 *.kdev4
 /.kdev4/*
 .directory
+# vim
+*.swp

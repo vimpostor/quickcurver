@@ -1,41 +1,28 @@
 #ifndef SEGMENT_H
 #define SEGMENT_H
-#include <QtQuick/QQuickItem>
-#include <QtQuick/qsgnode.h>
-#include <QtQuick/qsgflatcolormaterial.h>
-#include <QSGGeometry>
-#include <QMutex>
+
+#include <QQuickItem>
+#include <QSGNode>
+#include <QSGFlatColorMaterial>
+#include <memory>
 #include <QtMath>
-#include <QTime>
-#define MAXPOSSIZE 2048
 
-
-class segment : public QObject
+class Segment : public QObject
 {
 	Q_OBJECT
 public:
-	segment(QColor color, int thickness, QSGNode *node, QSGFlatColorMaterial* material);
-	~segment();
-	QPointF pos[MAXPOSSIZE];
-	int poscount = 0;
-	void appendPoint(QPointF addedPoint, float angle);
-	void clientappendPoint(QPointF p);
-	QPointF getLastPoint(int offset = 0);
-	bool checkforIntersection(QPointF a, QPointF b);
-	static int randInt(int min, int max);
-	static float randFloat();
-	static void initRand();
-signals:
+	explicit Segment(QSGNode *parentNode, QSGFlatColorMaterial *material, const float thickness);
+	~Segment();
 
-public slots:
-
+	void appendPoint(const QPointF newPoint, const float angle);
+	bool checkForIntersection(QPointF a, QPointF b) const;
 private:
-	QColor color;
-	QSGGeometryNode* gnode;
-	QSGGeometry* geometry;
-	QMutex nodeMutex;
-	int thickness;
-	QSGNode* node;
+	QSGNode *parentNode;
+	float thickness;
+	QSGGeometryNode geoNode;
+	QSGGeometry geometry = QSGGeometry(QSGGeometry::defaultAttributes_Point2D(), 0);
+	std::vector<QPointF> pos;
+	QPointF lastPoint;
 };
 
 #endif // SEGMENT_H

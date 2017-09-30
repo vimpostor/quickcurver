@@ -1,483 +1,139 @@
 #include "game.h"
 
-Game::Game(QQuickItem *parent) : QQuickItem(parent) {
-	segment::initRand();
-	for (int i = 0; i < MAXPLAYERCOUNT; i++) {
-		controls[i][0] = Qt::Key_Left;
-		controls[i][1] = Qt::Key_Right;
-		controlledByAI[i] = false;
-		controlledByNetwork[i] = false;
-	}
-	server = new Server(curver, this);
-	client = new Client(this);
+Game::Game(QQuickItem *parent) : QQuickItem(parent)
+{
+	/* Create a new root node. No, this does not leak memory, the Qt scene graph automatically deletes this node at the end.
+	 * The scene graph knows this root node from updatePaintNode and will destroy it, when the window closes.
+	 * Do NOT under any circumstances delete this node, or otherwise Qt will try to double free it,
+	 * which will result in a big Qt backtrace when the window closes.
+	 * Trust me, you do not want to debug this again.
+	*/
+	rootNode = new QSGNode();
+	itemFactory = std::make_unique<ItemFactory>(rootNode);
+	// tell the playermodel, what the root node is, so that it can tell its curvers
+	PlayerModel::getSingleton().setRootNode(this->rootNode);
+	connect(&PlayerModel::getSingleton(), SIGNAL(curverDied()), this, SLOT(curverDied()));
+	connect(&PlayerModel::getSingleton(), SIGNAL(playerModelChanged()), &server, SLOT(broadcastPlayerModel()));
+	connect(&ItemModel::getSingleton(), SIGNAL(itemSpawned(bool,uint,int,QPointF,Item::AllowedUsers,int)), &server, SLOT(broadcastItemData(bool,uint,int,QPointF,Item::AllowedUsers,int)));
+	wall.setParentNode(rootNode);
+	connect(&client, SIGNAL(integrateItem(bool,uint,int,QPointF,Item::AllowedUsers,int)), itemFactory.get(), SLOT(integrateItem(bool,uint,int,QPointF,Item::AllowedUsers,int)));
+	connect(&client, SIGNAL(resetRound()), this, SLOT(resetRound()));
+	connect(&Settings::getSingleton(), SIGNAL(dimensionChanged()), this, SLOT(dimensionChanged()));
+	// GUI signals
+	connect(&Gui::getSingleton(), SIGNAL(postInfoBar(QString)), this, SIGNAL(postInfoBar(QString)));
+	connect(&Gui::getSingleton(), SIGNAL(startGame()), this, SLOT(tryStartGame()));
+
+	// client signals
+	connect(&client, SIGNAL(connectedToServerChanged(bool)), this, SLOT(connectedToServerChanged(bool)));
+
+	connect(&gameTimer, SIGNAL(timeout()), this, SLOT(progress()));
+	// tell QtQuick, that this component wants to draw stuff
+	setFlag(ItemHasContents);
 }
 
 Game::~Game() {
-	if (timer != NULL) {
-		timer->stop();
-	}
-	if (node != NULL) {
-		node->removeAllChildNodes();
-		delete node;
-	}
-	if (server != NULL) {
-		delete server;
-	}
-	if (client != NULL) {
-		delete client;
-	}
+	// we do manual memory management with every child node, so we have to remove every child node to prevent a double free
+	rootNode->removeAllChildNodes();
 }
 
-QSGNode *Game::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *) {
-	(void) oldNode; //suppresses unused variable warning
-	return node;
+void Game::startGame()
+{
+	tryStartGame();
+	lastProgressTime = QTime::currentTime();
+	Util::for_each(getCurvers(), [](const std::unique_ptr<Curver> &c){ c->start(); });
+	itemFactory->resetRound();
+	// 60 FPS = 16 ms interval
+	gameTimer.start(16);
 }
 
-void Game::start() {
-	timer = new QTimer(this);
-	nextRoundTimer = new QTimer(this);
-	node = new QSGNode;
-	setFlag(ItemHasContents);
-	wall = new wallNode(node, fieldsize);
-	for (int i = 0; i < ITEMVARIETY; i++) {
-		itemPrioritySum += itemPriority[i];
-	}
-	for (int i = 0; i < playercount; i++) {
-		curver[i] = new QCurver(node, colors[i], baseSpeed, fieldsize);
-		if (controlledByAI[i]) {
-			ai[i] = new AIController(curver[i], curver, playercount, fieldsize);
-		}
-		connect(curver[i], SIGNAL(died(QCurver*)), this, SLOT(curverDied(QCurver*)));
-		connect(curver[i], SIGNAL(requestIntersectionChecking(QPointF,QPointF)), this, SLOT(checkforIntersection(QPointF,QPointF)));
-	}
-	for (int i = 0; i < MAXITEMCOUNT; i++) {
-		items[i] = NULL;
-	}
-	connect(timer, SIGNAL(timeout()), this, SLOT(progress()));
-	lastTime = QTime::currentTime();
-	lastItemSpawn = lastTime;
-	nextItemSpawn = segment::randInt(5000,10000);
-	server->setPlayerCount(playercount);
-	server->start();
-	timer->start(timerInterval);
-}
-
-void Game::clientStart(QString ip, int port) {
-	server->shutdown();
-	isHost = false;
-	node = new QSGNode;
-	wall = new wallNode(node, fieldsize);
-	connect(client, SIGNAL(spawnItem(QString,QColor,QPointF,int)), this, SLOT(clientSpawnItem(QString,QColor,QPointF,int)));
-	connect(client, SIGNAL(deleteItem(int)), this, SLOT(clientDeleteItem(int)));
-	connect(client, SIGNAL(deleteAllItems()), this, SLOT(clientDeleteAllItems()));
-	client->start(node, qmlobject, ip, port);
-	setFlag(ItemHasContents);
-}
-
-void Game::setColor(int index, QColor color) {
-	colors[index] = color;
-}
-
-void Game::progress() {
-	//calculate time since last progress()
-	float deltat = (float) lastTime.msecsTo(QTime::currentTime())/1000 * effectiveTimeMultiplier;
-	if (deltat != 0) {
-		lastTime = QTime::currentTime();
-		if (itemSpawnrate != 0 && lastItemSpawn.msecsTo(lastTime) > nextItemSpawn) { // try spawning item
-			int i;
-			for (i = 0; i < MAXITEMCOUNT && items[i] != NULL; i++) { //find first free item slot
-			}
-			if (i == MAXITEMCOUNT) { // no free slot
-				qDebug() << "No free slot for a new item, will try spawning later...";
-				nextItemSpawn = segment::randInt(100000/itemSpawnrate,1000000/itemSpawnrate); // dont worry this is only entered, when itemSpawnrate != 0
-			} else { // free slot at i
-				int r = segment::randInt(1, itemPrioritySum);
-				int itemSelector = 0;
-				for (itemSelector = 0; r > 0; r -= itemPriority[itemSelector], itemSelector++) {};
-				itemSelector--;
-				switch (itemSelector) {
-				case 0:
-					items[i] = new FastItem(node, &textureGenerator, fieldsize);
-					break;
-				case 1:
-					// slow item
-					break;
-				case 2:
-					items[i] = new CleaninstallItem(node, &textureGenerator, fieldsize, server);
-					break;
-				case 3:
-					//global wall hack
-					break;
-				case 4:
-					items[i] = new InvisibleItem(node, &textureGenerator, fieldsize);
-					break;
-				case 5:
-					items[i] = new FatterItem(node, &textureGenerator, fieldsize);
-					break;
-				default:
-					qDebug() << "(EE) This should not happen, the algorithm should always be able to decide what item to spawn";
-					break;
-				}
-				items[i]->setRound(roundCount);
-				server->transmitNewItem(items[i]->getIconName(), items[i]->getColor(), items[i]->getPos(), i);
-				nextItemSpawn = segment::randInt(10000/itemSpawnrate,100000/itemSpawnrate); // dont worry this is only entered, when itemSpawnrate != 0
-			}
-			lastItemSpawn = lastTime;
-		}
-		for (int i = 0; i < playercount; i++) {
-			if (curver[i]->alive) {
-				//check for item collision
-				for (int j = 0; j < MAXITEMCOUNT; j++) {
-					if (items[j] != NULL && items[j]->testCollision(curver[i]->getPos())) {
-						//use item
-						items[j]->useItem(playercount, curver, curver[i]);
-						items[j] = NULL; //dont worry it will delete it by its own
-						server->useItem(j);
-					}
-				}
-				//let the AI make its move now
-				if (controlledByAI[i] && ((frameCount+i) % AIINTERVAL == 0)) {
-					ai[i]->makeMove();
-				}
-				curver[i]->progress(deltat);
-			}
-		}
-		frameCount++;
-		update();
+void Game::processKey(Qt::Key key, bool release)
+{
+	Util::for_each(getCurvers(), [&](std::unique_ptr<Curver> &c){ c->processKey(key, release); });
+	if (connectedToServer) {
+		client.processKey(key, release);
 	}
 }
 
-void Game::sendKey(Qt::Key k) {
-	if (isHost) {
-		for (int i = 0; i < playercount; i++) {
-			if (!controlledByAI[i] && !controlledByNetwork[i]) {
-				if (controls[i][0] == k) {
-					curver[i]->rotating = ROTATE_LEFT;
-				} else if (controls[i][1] == k) {
-					curver[i]->rotating = ROTATE_RIGHT;
-				}
-			}
-		}
-	} else { //client
-		client->sendKey(k);
-	}
+void Game::connectToHost(QString ip, int port)
+{
+	QHostAddress addr = QHostAddress(ip);
+	client.connectToHost(addr, port);
 }
 
-void Game::releaseKey(Qt::Key k) {
-	if (isHost) {
-		for (int i = 0; i < playercount; i++) {
-			if (!controlledByAI[i] && !controlledByNetwork[i]) {
-				if (controls[i][0] == k || controls[i][1] == k) {
-					curver[i]->rotating = ROTATE_NONE;
-				}
-			}
-		}
-	} else { //client
-		client->releaseKey(k);
-	}
-}
-
-void Game::sendTouchPress(bool pressed, int x, int y) {
-	// first find out, to what player this event belongs to
-	float relX = (float) x / fieldsize;
-	float relY = (float) y / fieldsize;
-	float minimumDistance = std::numeric_limits<int>::max();
-	float distance;
-	float xDistance, yDistance;
-	int minIndex = -1;
-	bool left;
-	for (auto it = touchControlPoints.begin(); it != touchControlPoints.end(); ++it) {
-		xDistance = it->second.left.x() - relX;
-		yDistance = it->second.left.y() - relY;
-		distance = sqrt(xDistance*xDistance + yDistance*yDistance);
-		if (distance < minimumDistance) {
-			minimumDistance = distance;
-			minIndex = it->first;
-			left = true;
-		}
-		xDistance = it->second.right.x() - relX;
-		yDistance = it->second.right.y() - relY;
-		distance = sqrt(xDistance*xDistance + yDistance*yDistance);
-		if (distance < minimumDistance) {
-			minimumDistance = distance;
-			minIndex = it->first;
-			left = false;
-		}
-	}
-	if (minIndex != -1) {
-		if (!pressed) {
-			curver[minIndex]->rotating = ROTATE_NONE;
-		} else if (left) {
-			curver[minIndex]->rotating = ROTATE_LEFT;
-		} else {
-			curver[minIndex]->rotating = ROTATE_RIGHT;
-		}
-	}
-}
-
-void Game::addPlayer() {
-	playercount++;
-}
-
-void Game::curverDied(QCurver *who) {
-	int index; // first get the index of the curver that died
-	for (index = 0; index < playercount && curver[index] != who; ++index) {
-	}
-	if (curver[index]->alive) { // todo: fix "curverDied" being called multiple times
-		int i;
-		bool onlyBotsAlive = true;
-		server->curverDied(index);
-		for (i = 0; curver[i] != who; i++) {
-			if (curver[i]->alive) //if he is still alive, increase his score
-				increaseScore(i);
-		}
-		curver[i]->alive = false;
-//        server->broadcastChatMessage("Chat Bot", names[i] + " died");
-		i++;
-		for (; i < playercount; ++i) {
-			if (curver[i]->alive)
-				increaseScore(i);
-		}
-		int stillAlive = 0;
-		int alivePlayer;
-		for (i = 0; i < playercount; i++) {
-			if (curver[i]->alive) {
-				stillAlive++;
-				alivePlayer = i;
-				if (!controlledByAI[i]) {
-					onlyBotsAlive = false;
-				}
-			}
-		}
-		if (onlyBotsAlive) {
-			effectiveTimeMultiplier = timeMultiplier;
-		}
-		if (stillAlive == 1) {
-			if (sendWinnerMessages) {
-				server->broadcastChatMessage("Chat Bot", server->serverSettings.clientSettings[alivePlayer].username + " has won the round!");
-			}
-			nextRound();
-		}
-	}
-}
-
-void Game::checkforIntersection(QPointF a, QPointF b) {
-	QCurver* who = (QCurver*) QObject::sender();
-	bool c = false;
-	for (int i = 0; i < playercount && !c; i++) {
-		c = curver[i]->checkforIntersection(a, b);
-	}
-	if (c) {
-		emit who->died(who);
-	}
-}
-
-
-
-void Game::setControls(int index, Qt::Key k, bool isRight) {
-	controls[index][isRight] = k;
-}
-
-void Game::nextRound() {
-	effectiveTimeMultiplier = 1;
-	nextRoundTimer->singleShot(roundTimeout, this, SLOT(startNextRound()));
-}
-
-void Game::startNextRound() {
-	effectiveTimeMultiplier = 1;
-	if (scoreToFinish == 0 || scoreToFinish > getMaxScore()) {
-		timer->stop();
-		server->newRound();
-		roundCount++;
-		for (int i = 0; i < playercount; i++) {
-			curver[i]->reset();
-			QVariant returnedValue;
-			QMetaObject::invokeMethod(qmlobject, "changeScore", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, i) , Q_ARG(QVariant, curver[i]->score), Q_ARG(QVariant, curver[i]->roundScore));
-		}
-		for (int i = 0; i < MAXITEMCOUNT; i++) {
-			if (items[i] != NULL) {
-				delete items[i];
-				items[i] = NULL;
-			}
-		}
-		lastItemSpawn = QTime::currentTime();
-		timer->start();
-	} else { // someone got the score needed to win
-		if (sendWinnerMessages) {
-			server->broadcastChatMessage("Chat Bot", server->serverSettings.clientSettings[getMaxScorerIndex()].username + " has won the game!");
-		}
-	}
-}
-
-void Game::setName(int index, QString newName) {
-	if (index != -1) {
-		names[index] = newName;
-		server->setName(index, newName);
-	}
-}
-
-void Game::setRoundTimeout(int seconds) {
-	roundTimeout = 1000*seconds;
-}
-
-void Game::setBaseSpeed(int baseSpeed) {
-	this->baseSpeed = baseSpeed;
-}
-
-void Game::setQmlObject(QObject *o) {
-	qmlobject = o;
-}
-
-void Game::increaseScore(int index) {
-	curver[index]->increaseScore();
-	QVariant returnedValue;
-	QMetaObject::invokeMethod(qmlobject, "changeScore", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, index) , Q_ARG(QVariant, curver[index]->score), Q_ARG(QVariant, curver[index]->roundScore));
-}
-
-void Game::setController(int index, int newControllerState) {
-	controlledByAI[index] = (newControllerState == 1);
-	controlledByNetwork[index] = (newControllerState == 2);
-	server->setAvailable(index, controlledByNetwork[index]);
-}
-
-void Game::setItemPriority(int index, int newPriority) {
-	itemPriority[index] = newPriority;
-}
-
-void Game::setItemSpawnrate(int value) {
-	itemSpawnrate = value;
-}
-
-void Game::close() {
-	delete this;
-}
-
-void Game::setFieldSize(int s) {
-	fieldsize = s;
-}
-
-void Game::setTimeMultiplier(int t) {
-	timeMultiplier = t;
-}
-
-void Game::requestSendMessage(QString message) {
-	if (isHost) {
-		server->broadcastChatMessage(username, message);
+void Game::sendChatMessage(QString msg)
+{
+	if (connectedToServer) {
+		client.sendChatMessage(msg);
 	} else {
-		client->requestSendMessage(message);
+		server.broadcastChatMessage(msg);
 	}
 }
 
-void Game::setSendWinnerMessages(bool checked) {
-	sendWinnerMessages = checked;
+void Game::serverReListen(quint16 port)
+{
+	server.reListen(port);
 }
 
-void Game::notifyGUI(QString msg, QString mode) {
-	QVariant returnedValue;
-	QMetaObject::invokeMethod(qmlobject, "notifyGUI", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, msg), Q_ARG(QVariant, mode));
+QSGNode *Game::updatePaintNode(QSGNode *, QQuickItem::UpdatePaintNodeData *)
+{
+	return rootNode;
 }
 
-bool Game::isReady() {
-	return server->isReady();
-}
-
-void Game::changeClientSettings(QString username, bool ready) {
-	client->changeSettings(username, ready);
-}
-
-void Game::leaveGame() {
-	if (!isHost) {
-		client->shutdown();
-		notifyGUI("You left the game!", "SNACKBAR");
-		isHost = true;
-	}
-}
-
-void Game::clientSpawnItem(QString iconName, QColor color, QPointF pos, int index) {
-	if (items[index] != NULL) {
-		qDebug() << "Item is not NULL in clientSpawnItem()";
-	} else {
-		items[index] = new CurveItem(node, &textureGenerator, iconName, color, pos);
-	}
-}
-
-QString Game::getClipboardContent() {
-	return QGuiApplication::clipboard()->text();
-}
-
-QString Game::copyIp() {
-	QString ip = server->getServerIp()->toString();
-	QGuiApplication::clipboard()->setText(ip);
-	return ip;
-}
-
-void Game::clientDeleteItem(int index) {
-	if (items[index] == NULL) {
-		qDebug() << "Item not spawned in the first place";
-	} else {
-		items[index]->fadeOut();
-		items[index] = NULL;
-	}
-}
-
-void Game::clientDeleteAllItems() {
-	for (int i = 0; i < MAXITEMCOUNT; ++i) {
-		if (items[i] != NULL) {
-			clientDeleteItem(i);
+void Game::progress()
+{
+	QTime currentTime = QTime::currentTime();
+	int deltat = lastProgressTime.msecsTo(currentTime);
+	lastProgressTime = currentTime;
+	for (auto &c : getCurvers()) {
+		if (c->isAlive()) {
+			if (c->controller == Curver::CONTROLLER_BOT) {
+				Bot::makeMove(c.get());
+			}
+			c->progress(deltat, getCurvers());
+			c->checkForWall();
 		}
 	}
+	itemFactory->update();
+
+	update();
+	server.broadcastCurverData();
 }
 
-int Game::getFieldSize() {
-	return this->fieldsize;
-}
-
-void Game::startServer(int port) {
-	server->init((quint16) port, qmlobject);
-}
-
-void Game::setScoreToFinish(int newScoreToFinish) {
-	this->scoreToFinish = newScoreToFinish;
-}
-
-int Game::getMaxScore() {
-	int currentMax = 0;
-	for (int i = 0; i < playercount; ++i) {
-		currentMax = qMax(currentMax, curver[i]->score);
+void Game::curverDied()
+{
+	Util::for_each(getCurvers(), [](const auto &c){ if (c->isAlive()) c->increaseScore(); });
+	// check if only one player is remaining
+	if (Util::count_if(getCurvers(), [](const auto &c){ return c->isAlive(); }) == 1) {
+		resetRoundTimer.singleShot(Settings::getSingleton().getRoundTimeOut(), this, SLOT(resetRound()));
 	}
-	return currentMax;
 }
 
-int Game::getMaxScorerIndex() {
-	int maxValue = getMaxScore();
-	for (int i = 0; i < playercount; ++i) {
-		if (maxValue == curver[i]->score) {
-			return i;
-		}
+void Game::resetRound()
+{
+	itemFactory->resetRound();
+	Util::for_each(getCurvers(), [](const auto &c){ c->resetRound(); });
+	server.resetRound();
+}
+
+void Game::dimensionChanged()
+{
+	wall.updateDimension();
+}
+
+void Game::connectedToServerChanged(bool connected)
+{
+	this->connectedToServer = connected;
+}
+
+void Game::tryStartGame()
+{
+	if (!started) {
+		started = true;
+		emit gameStarted();
 	}
-	return -1;
 }
 
-void Game::deletePlayer(int index) {
-	if (index < 0 || index >= playercount) {
-		qDebug() << "Cannot remove player, because this player does not exist anymore";
-		return;
-	}
-	server->deletePlayer(index);
-	--playercount;
-}
-
-void Game::setCurrentTouchEditor(int index) {
-	currentTouchEditor = index;
-}
-
-void Game::setTouchPoint(float leftX, float leftY, float rightX, float rightY) {
-	Quadruple *controls = new Quadruple;
-	controls->left = QPointF(leftX, leftY);
-	controls->right = QPointF(rightX, rightY);
-	touchControlPoints[currentTouchEditor] = *controls;
-}
-
-void Game::disableTouch(int index) {
-	touchControlPoints.erase(index);
+std::vector<std::unique_ptr<Curver> > &Game::getCurvers()
+{
+	return PlayerModel::getSingleton().getCurvers();
 }

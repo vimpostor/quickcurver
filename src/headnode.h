@@ -5,17 +5,17 @@
 #include <QSGGeometry>
 #include <QSGFlatColorMaterial>
 
-
-class headNode : public QSGGeometryNode
+class HeadNode : public QSGGeometryNode
 {
 public:
-	headNode(QPointF startPos, QSGFlatColorMaterial* material, QSGNode* node);
-	void updatePosition(QPointF newPos);
-	void setThickness(int newThickness);
+	HeadNode(QSGNode *parentNode, QSGFlatColorMaterial *material);
+	~HeadNode();
+
+	void setPosition(const QPointF newPos);
 private:
+	QSGNode *parentNode;
+	QSGGeometry geometry = QSGGeometry(QSGGeometry::defaultAttributes_Point2D(), 0);
 	QPointF pos;
-	QSGGeometry* geometry;
-	short int thickness = 6;
 };
 
 #endif // HEADNODE_H

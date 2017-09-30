@@ -1,17 +1,12 @@
 #include "invisibleitem.h"
 
-#define INVISIBLEICON ":/Fluid/Controls/action/visibility_off.svg"
-#define REDALLOWED false
-#define GREENALLOWED true
-#define BLUEALLOWED false
+#define INVISIBLE_TIME 3000
 
-InvisibleItem::InvisibleItem(QSGNode *node, QQuickView *view, int fieldsize) : CurveItem(node, view, fieldsize, INVISIBLEICON, REDALLOWED, GREENALLOWED, BLUEALLOWED) {
+InvisibleItem::InvisibleItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos) : Item(parentNode, iconName, allowedUsers, pos)
+{
 }
 
-void InvisibleItem::use(QCurver *curver) {
-	curver->goInvisible(4000);
-}
-
-QString InvisibleItem::getIconName() {
-	return INVISIBLEICON;
+void InvisibleItem::use(Curver *curver)
+{
+	curver->prepareSegmentEvent(true, INVISIBLE_TIME, INVISIBLE_TIME);
 }

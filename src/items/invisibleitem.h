@@ -1,14 +1,14 @@
 #ifndef INVISIBLEITEM_H
 #define INVISIBLEITEM_H
 
-#include "curveitem.h"
+#include "item.h"
 
-class InvisibleItem : public CurveItem {
+class InvisibleItem : public Item
+{
 public:
-	InvisibleItem(QSGNode *node, QQuickView *view, int fieldsize);
-	QString getIconName();
+	InvisibleItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos);
 private:
-	void use(QCurver *curver);
+	virtual void use(Curver *curver) override;
 };
 
 #endif // INVISIBLEITEM_H

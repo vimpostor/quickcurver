@@ -1,402 +1,179 @@
 #include "server.h"
 
-Server::Server(QCurver **curver, QObject *parent) : QObject(parent) {
-	this->curver = curver;
-	this->tcpReadyReadSignalMapper = new QSignalMapper(this); // create tcpReadyRead signal mapper
-	connect(tcpReadyReadSignalMapper, SIGNAL(mapped(int)), this, SLOT(tcpReadyRead(int)));
-	for (int i = 0; i < MAXPLAYERCOUNT; i++) {
-		available[i] = false;
-		clientsUdp[i] = NULL;
-		clientsTcp[i] = NULL;
+Server::Server()
+{
+	connect(&tcpServer, SIGNAL(acceptError(QAbstractSocket::SocketError)), this, SLOT(acceptError(QAbstractSocket::SocketError)));
+	connect(&tcpServer, SIGNAL(newConnection()), this, SLOT(newConnection()));
+	reListen(0);
+}
+
+Server::~Server()
+{
+	clients.clear();
+}
+
+void Server::broadcastCurverData()
+{
+	Packet::ServerCurverData p;
+	p.fill();
+	p.start = true;
+	// if reset is due, send reset and reset the reset flag
+	p.reset = resetDue;
+	resetDue = false;
+	broadcastPacket(p);
+}
+
+void Server::broadcastChatMessage(QString username, QString message)
+{
+	Packet::ServerChatMsg p;
+	p.username = username;
+	p.message = message;
+	ChatModel::getSingleton().appendMessage(username, message);
+	broadcastPacket(p);
+}
+
+void Server::broadcastChatMessage(QString msg)
+{
+	broadcastChatMessage(ADMIN_NAME, msg);
+}
+
+void Server::resetRound()
+{
+	resetDue = true;
+}
+
+void Server::reListen(quint16 port)
+{
+	tcpServer.close();
+	tcpServer.listen(QHostAddress::Any, port);
+	qDebug() << "Running on port " << tcpServer.serverPort();
+}
+
+void Server::broadcastPlayerModel()
+{
+	Packet::ServerPlayerModel p;
+	p.fill();
+	broadcastPacket(p);
+}
+
+void Server::broadcastItemData(bool spawned, unsigned int sequenceNumber, int which, QPointF pos, Item::AllowedUsers allowedUsers, int collectorIndex)
+{
+	Packet::ServerItemData p;
+	p.spawned = spawned;
+	p.sequenceNumber = sequenceNumber;
+	p.which = which;
+	p.pos = pos;
+	p.allowedUsers = allowedUsers;
+	p.collectorIndex = collectorIndex;
+	broadcastPacket(p);
+}
+
+void Server::acceptError(QAbstractSocket::SocketError)
+{
+	Gui::getSingleton().postInfoBar(tcpServer.errorString());
+}
+
+void Server::newConnection()
+{
+	QTcpSocket *s = tcpServer.nextPendingConnection();
+	// socket must not be NULL
+	if (s) {
+		auto *curver = PlayerModel::getSingleton().getNewPlayer();
+		curver->controller = Curver::CONTROLLER_REMOTE;
+		clients[std::unique_ptr<QTcpSocket>(s)] = curver;
+		connect(s, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError(QAbstractSocket::SocketError)));
+		connect(s, SIGNAL(disconnected()), this, SLOT(socketDisconnect()));
+		connect(s, SIGNAL(readyRead()), this, SLOT(socketReadyRead()));
+		broadcastChatMessage(s->peerAddress().toString() + " joined");
 	}
 }
 
-void Server::init(quint16 port, QObject *qmlobject) {
-	this->port = port;
-	this->qmlobject = qmlobject;
-	gui.setQmlObject(qmlobject);
-	setServerIp();
-	initUdpSocket();
-	initTcpServer();
+void Server::socketError(QAbstractSocket::SocketError)
+{
+	QTcpSocket *s = static_cast<QTcpSocket *>(sender());
+	Gui::getSingleton().postInfoBar(s->errorString());
+	removePlayer(s);
 }
 
-Server::~Server() {
-	shutdown();
+void Server::socketDisconnect()
+{
+	QTcpSocket *s = static_cast<QTcpSocket *>(sender());
+	removePlayer(s);
 }
 
-void Server::initUdpSocket() {
-	udpSocket = new QUdpSocket(this);
-	connect(udpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(udpSocketError(QAbstractSocket::SocketError)));
-	connect(udpSocket, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));
-	udpSocket->bind(QHostAddress::Any, port);
-}
-
-void Server::initTcpServer() {
-	tcpServer = new QTcpServer(this);
-	if (!tcpServer->listen(QHostAddress::Any, port)) {
-		qDebug() << "Unable to start the Tcp Server";
-		return;
-	}
-	connect(tcpServer, SIGNAL(newConnection()), this, SLOT(newConnection()));
-}
-
-void Server::readPendingDatagrams() {
-	while (udpSocket->hasPendingDatagrams()) {
-		QByteArray datagram;
-		datagram.resize(udpSocket->pendingDatagramSize());
-		QHostAddress *sender = new QHostAddress();
-		quint16 senderPort;
-		udpSocket->readDatagram(datagram.data(), datagram.size(), sender, &senderPort);
-		QString msg = datagram;
-		QString answer = "";
-
-		if (msg == "[JOIN]") { //a player wants to join
-			int i;
-			for (i = 0; i < MAXPLAYERCOUNT && !(available[i] && clientsTcp[i] != NULL && clientsUdp[i] == NULL); ++i) {};
-			if (i < MAXPLAYERCOUNT) {
-				clientsUdp[i] = sender;
-				answer = "[JOINED]";
-				qDebug() << sender->toString() + " joined ";
-				gui.notifyGUI(sender->toString() + " joined", "SNACKBAR");
-				gui.setPlayerStatus(i, "JOINED");
-			} else {
-				answer = "[REJECTED]";
-			}
-		} else if (msg == "[LEFT]") {
-			turn(sender, ROTATE_LEFT);
-		} else if (msg == "[NONE]") {
-			turn(sender, ROTATE_NONE);
-		} else if (msg == "[RIGHT]") {
-			turn(sender, ROTATE_RIGHT);
+void Server::socketReadyRead()
+{
+	QTcpSocket *s = static_cast<QTcpSocket *>(sender());
+	QDataStream in(s);
+	bool illformedPacket = false;
+	while (s->bytesAvailable() && !illformedPacket) {
+		in.startTransaction();
+		auto packet = Packet::AbstractPacket::receivePacket(in, InstanceType::Client);
+		if (in.commitTransaction()) {
+			handlePacket(packet, s);
 		} else {
-			qDebug() << "Unsupported datagram arrived from " << sender->toString();
-		}
-		if (answer != "") {
-			QByteArray answerDatagram;
-			answerDatagram.append(answer);
-			udpSocket->writeDatagram(answerDatagram, *sender, senderPort);
+			qDebug() << "received ill-formed packet";
+			illformedPacket = true;
 		}
 	}
 }
 
-void Server::shutdown() {
-	if (udpSocket != NULL) {
-		udpSocket->close();
-		disconnect(udpSocket, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));
+void Server::removePlayer(const QTcpSocket *s)
+{
+	// TODO: Reconsider, whether Server should remove the Curver from the player model as well
+	// TODO: Actually delete something here: Note, deleting here results in a segfault, because after this method was called in socketError()
+	// or in socketDisconnect(), the TcpSocket seems to be still in use until after those methods are completely finished.
+
+//	auto it = Util::find_if(clients, [=](const auto &c){ return c.first.get() == s; });
+//	if (it != clients.end()) {
+//		clients.erase(it);
+	//	}
+	broadcastChatMessage(s->peerAddress().toString() + " left the game");
+}
+
+void Server::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p, const QTcpSocket *s)
+{
+	Curver *curver = curverFromSocket(s);
+	// TODO: Deal with flags
+	switch (static_cast<Packet::ClientTypes>(p->type)) {
+	case Packet::ClientTypes::Chat_Message:
+	{
+		QString msg = ((Packet::ClientChatMsg *)p.get())->message;
+		broadcastChatMessage(curver->userName, msg);
+		break;
 	}
-	if (tcpServer != NULL) {
-		tcpServer->close();
+	case Packet::ClientTypes::PlayerModelEdit:
+	{
+		auto *playerData = (Packet::ClientPlayerModel *)p.get();
+		curver->userName = playerData->username;
+		curver->setColor(playerData->color);
+		PlayerModel::getSingleton().forceRefresh();
+		break;
 	}
-	for (int i = 0; i < MAXPLAYERCOUNT; ++i) {
-		if (clientsTcp[i] != NULL) {
-			clientsTcp[i]->close();
-			disconnect(clientsTcp[i], SIGNAL(readyRead()), tcpReadyReadSignalMapper, SLOT(map()));
+	case Packet::ClientTypes::CurverRotation:
+	{
+		if (curver) {
+			curver->rotation = ((Packet::ClientCurverRotation *)p.get())->rotation;
 		}
+		break;
+	}
+	default:
+		qDebug() << "Unsupported package type";
+		break;
 	}
 }
 
-void Server::udpSocketError(QAbstractSocket::SocketError socketError) {
-	if (socketError == QAbstractSocket::AddressInUseError) {
-		qDebug() << "Cannot start the server, because the UDP socket is already used";
+void Server::broadcastPacket(Packet::AbstractPacket &p)
+{
+	Util::for_each(clients, [&](auto &c){ p.sendPacket(c.first.get()); });
+}
+
+Curver *Server::curverFromSocket(const QTcpSocket *s) const
+{
+	auto it = Util::find_if(clients, [&](auto &c){ return c.first.get() == s; });
+	if (it != clients.end()) {
+		return it->second;
 	} else {
-		qDebug() << "An unhandled Udp socket error occured!\n" << socketError << udpSocket->errorString();
+		return nullptr;
 	}
-}
-
-int Server::isValidInput(QHostAddress *sender) {
-	int i;
-	for (i = 0; i < MAXPLAYERCOUNT && !(clientsUdp[i] != NULL && sender->toString() == clientsUdp[i]->toString()); ++i){}; //increment until out of boundaries or sender found
-	return i < MAXPLAYERCOUNT ? i : -1;
-}
-
-void Server::turn(QHostAddress *sender, rotation r) {
-	int i = isValidInput(sender);
-	if (i != -1 && curver[i] != NULL) {
-		curver[i]->rotating = r;
-	}
-}
-
-void Server::setAvailable(int index, bool newState) {
-	if (newState == false && clientsUdp[index] != NULL) {
-		//kick player
-		QByteArray datagram;
-		datagram.append("KICKED");
-		udpSocket->writeDatagram(datagram, *clientsUdp[index], 55225);
-		clientsUdp[index] = NULL;
-	}
-	available[index] = newState;
-}
-
-void Server::deletePlayer(int index) {
-	// when a player was removed, we have to move every entry after that player up one position
-	this->setAvailable(index, false);
-	for (int i = index; i < playercount-1; ++i) {
-		clientsUdp[index] = clientsUdp[index+1];
-		clientsTcp[index] = clientsTcp[index+1];
-		available[index] = available[index+1];
-//		this->in[index] = this->in[index+1];
-		clientConnections[index] = clientConnections[index+1];
-	}
-	this->playercount--;
-	clientsUdp[playercount] = NULL;
-	clientsTcp[playercount] = NULL;
-	available[playercount] = false;
-//	in[playercount] = NULL;
-	clientConnections[playercount] = NULL;
-}
-
-void Server::start() {
-	started = true;
-	updateServerSettings();
-	QByteArray block;
-	QDataStream out(&block, QIODevice::WriteOnly);
-	out << QString("[SETTINGS]") << serverSettings;
-	sendToAllTcp(&block);
-	transmitTcpMessage("[STARTED]");
-	broadcastTimer = new QTimer(this);
-	connect(broadcastTimer, SIGNAL(timeout()), this, SLOT(broadcast()));
-	broadcastTimer->start(BROADCASTINTERVAL);
-}
-
-void Server::broadcast() {
-	for (int i = 0; i < playercount; i++) {
-		QCurver *c = curver[i];
-		QByteArray datagram;
-		QDataStream out(&datagram, QIODevice::WriteOnly);
-		out << QString("HEAD") << i << c->getPos();
-		sendToAllUdp(&datagram);
-		datagram.clear();
-		out.device()->reset();
-		//now send curver data
-		bool newSegment = c->moveToNextSegment(); //tries moving to next segment if all data was read from the last one
-		int amount = qMin(c->getUnsyncedSegPointsAmount(), MAXPOINTSSENTATONCE);
-		out << QString("POS") << i << newSegment << amount;
-		for (int sentPoints = 0; sentPoints < amount && c->hasUnsyncedSegPoints(); ++sentPoints) { //add points
-			out << c->readUnsyncedSegPoint();
-		}
-		sendToAllUdp(&datagram);
-	}
-}
-
-void Server::sendToAllUdp(QByteArray *datagram) {
-	for (int i = 0; i < MAXPLAYERCOUNT; ++i) {
-		if (clientsUdp[i] != NULL) {
-			udpSocket->writeDatagram(*datagram, *clientsUdp[i], 55225);
-		}
-	}
-}
-
-void Server::setPlayerCount(int playercount) {
-	this->playercount = playercount;
-}
-
-void Server::setServerIp() {
-	QString ipAddress = Network::getLocalIpAddress().toString();
-	serverIp = new QHostAddress(ipAddress);
-	qDebug() << "Server set up on " + ipAddress;
-	gui.notifyGUI("Server set up on " + ipAddress, "SNACKBAR");
-}
-
-
-void Server::newConnection() {
-	QTcpSocket *clientConnection = tcpServer->nextPendingConnection();
-	connect(clientConnection, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(tcpSocketError(QAbstractSocket::SocketError)));
-	connect(clientConnection, SIGNAL(disconnected()), clientConnection, SLOT(deleteLater()));
-	(void) tryConnectingClient(clientConnection);
-}
-
-void Server::newRound() {
-	transmitTcpMessage("[RESET]");
-}
-
-void Server::broadcastChatMessage(QString username, QString message) {
-	if (username == "") {
-		username = serverSettings.clientSettings[0].username;
-	}
-	gui.sendChatMessage(username, message); // send to server itself
-	// and send to others
-	QString msgData[3];
-	msgData[0] = "[MESSAGE]";
-	msgData[1] = username;
-	msgData[2] = message;
-	transmitTcpMessages(msgData, 3);
-}
-
-int Server::getFreePlace() {
-	int i;
-	for (i = 0; i < MAXPLAYERCOUNT && !(available[i] && clientsUdp[i] == NULL); ++i) {} //increase counter until we find a suitable place
-	return i < MAXPLAYERCOUNT ? i : -1;
-}
-
-void Server::transmitTcpMessage(QString message, QTcpSocket *s) {
-	QByteArray block;
-	QDataStream out(&block, QIODevice::WriteOnly);
-	out << message;
-	if (s == NULL) { // send to all
-		sendToAllTcp(&block);
-	} else { // send only to s
-		s->write(block);
-	}
-}
-
-void Server::transmitTcpMessages(QString *messages, int length, QTcpSocket *s) {
-	QByteArray block;
-	QDataStream out(&block, QIODevice::WriteOnly);
-	for (int i = 0; i < length; ++i) {
-		out << messages[i];
-	}
-	if (s == NULL) { // send to all
-		sendToAllTcp(&block);
-	} else {
-		s->write(block); // send only to s
-	}
-}
-
-void Server::sendToAllTcp(QByteArray *block) {
-	for (int i = 0; i < MAXPLAYERCOUNT; ++i) {
-		if (clientsTcp[i] != NULL) {
-			clientsTcp[i]->write(*block);
-		}
-	}
-}
-
-bool Server::tryConnectingClient(QTcpSocket *client) {
-	int index = getFreePlace();
-	if (index != -1) {
-		connectClient(client, index);
-		transmitTcpMessage("[ACCEPTED]", client);
-		return true;
-	} else {
-		transmitTcpMessage("[REJECTED]", client);
-		return false;
-	}
-}
-
-void Server::connectClient(QTcpSocket *client, int index) {
-	clientsTcp[index] = client;
-	connect(client, SIGNAL(readyRead()), tcpReadyReadSignalMapper, SLOT(map()));
-	tcpReadyReadSignalMapper->setMapping(client, index);
-//    in[index].abortTransaction();
-	in[index].setDevice(client);
-}
-
-void Server::tcpReadyRead(int i) {
-	in[i].startTransaction();
-	QString message;
-	in[i] >> message;
-	if (!in[i].commitTransaction()) {
-		return;
-	}
-
-	if (message == "[MESSAGE]") {
-		QString username, message;
-		in[i] >> username >> message;
-		broadcastChatMessage(username, message);
-	} else if (message == "[SETTINGS]") {
-		in[i] >> serverSettings.clientSettings[i];
-		gui.setPlayerStatus(i, serverSettings.clientSettings[i].ready ? "READY" : "UNREADY");
-		gui.setPlayerStatus(i, "USERNAME" + serverSettings.clientSettings[i].username);
-	} else if (message == "[LEFT]") {
-		disconnectClient(clientsTcp[i]);
-	} else {
-		qDebug() << "Unsupported tcp message arrived on server";
-		qDebug() << message;
-	}
-}
-
-void Server::disconnectClient(QTcpSocket *client, QString reason) {
-	for (int i = 0; i < MAXPLAYERCOUNT; ++i) {
-		if (clientsTcp[i] != NULL && clientsTcp[i]->peerAddress().isEqual(client->peerAddress())) {
-			// remove tcp
-			if (reason != "") { // notify if reason is specified
-				transmitTcpMessage(reason, clientsTcp[i]);
-			}
-			disconnect(client, SIGNAL(readyRead()), tcpReadyReadSignalMapper, SLOT(map()));
-			clientsTcp[i]->close();
-			disconnect(clientsTcp[i], SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(tcpSocketError(QAbstractSocket::SocketError)));
-//            delete clientsTcp[i]; // do not delete, the socket will be automatically deleted using deleteLater signal-slot
-			clientsTcp[i] = NULL;
-			clientsUdp[i] = NULL; // remove udp
-			in[i].setDevice(NULL); // reset datastream
-			in[i].resetStatus();
-			QString msg = serverSettings.clientSettings[i].username + " left the match";
-			if (started) {
-				broadcastChatMessage("Chat Bot", msg);
-			} else {
-				gui.notifyGUI(msg, "SNACKBAR");
-			}
-			serverSettings.clientSettings[i].reset();
-			gui.setPlayerStatus(i, "LEFT");
-		}
-	}
-}
-
-void Server::tcpSocketError(QAbstractSocket::SocketError socketError) {
-	QTcpSocket *s = (QTcpSocket *) sender();
-	if (socketError == QAbstractSocket::RemoteHostClosedError) {
-		disconnectClient(s); // disconnect client then if the connection was closed
-	} else {
-		qDebug() << "An unhandled Tcp socket error occured!\n" << socketError;
-	}
-}
-
-QHostAddress *Server::getServerIp() {
-	return serverIp;
-}
-
-bool Server::isReady() {
-	for (int i = 0; i < MAXPLAYERCOUNT; ++i) {
-		if (available[i]) {
-			if (clientsTcp[i] == NULL) {
-				gui.notifyGUI("There is an unused online slot! Please remove it or let someone join.", "SNACKBAR");
-				return false;
-			} else if (clientsUdp[i] == NULL) {
-				gui.notifyGUI("One of the clients has not successfully joined yet!", "SNACKBAR");
-				return false;
-			} else if (!serverSettings.clientSettings[i].ready) {
-				gui.notifyGUI("One of the clients is not ready yet!", "SNACKBAR");
-				return false;
-			} else if (serverSettings.clientSettings[i].username == "") {
-				gui.notifyGUI("One of the clients hasn't set the username", "SNACKBAR");
-				return false;
-			}
-		}
-	}
-	return true;
-}
-
-void Server::transmitNewItem(QString iconName, QColor color, QPointF pos, int index) {
-	QByteArray block;
-	QDataStream out(&block, QIODevice::WriteOnly);
-	out << QString("[ITEM]") << iconName << color << pos << index;
-	sendToAllTcp(&block);
-}
-
-void Server::useItem(int index) {
-	QByteArray block;
-	QDataStream out(&block, QIODevice::WriteOnly);
-	out << QString("[ITEMUSED]") << index;
-	sendToAllTcp(&block);
-}
-
-void Server::cleanInstall() {
-	transmitTcpMessage("[CLEANINSTALL]");
-}
-
-void Server::curverDied(int index) {
-	QByteArray block;
-	QDataStream out(&block, QIODevice::WriteOnly);
-	out << QString("[DEATH]") << index;
-	sendToAllTcp(&block);
-}
-
-void Server::updateServerSettings() {
-	serverSettings.playerCount = this->playercount;
-	for (int i = 0; i < playercount; ++i) {
-		serverSettings.colors[i] = curver[i]->getColor();
-	}
-}
-
-void Server::setName(int index, QString username) {
-	serverSettings.clientSettings[index].username = username;
 }

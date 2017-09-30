@@ -1,18 +1,14 @@
 #ifndef CLEANINSTALLITEM_H
 #define CLEANINSTALLITEM_H
-#include "curveitem.h"
-#include <QSGNode>
-#include "../qcurver.h"
-#include <QQuickView>
-#include "../network/server.h"
 
-class CleaninstallItem : public CurveItem {
+#include "item.h"
+
+class CleanInstallItem : public Item
+{
 public:
-	CleaninstallItem(QSGNode *node, QQuickView *view, int fieldsize, Server *server);
-	QString getIconName();
+	CleanInstallItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos);
 private:
-	void use(QCurver *curver);
-	Server *server;
+	virtual void use(Curver *curver) override;
 };
 
 #endif // CLEANINSTALLITEM_H
