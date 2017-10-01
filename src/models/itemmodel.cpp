@@ -104,6 +104,11 @@ Item *ItemModel::makeSlowItem(QSGNode *parentNode, QString iconName, Item::Allow
 	return new SlowItem(parentNode, iconName, allowedUsers, pos);
 }
 
+Item *ItemModel::makeGhostItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos)
+{
+	return new GhostItem(parentNode, iconName, allowedUsers, pos);
+}
+
 float operator +(const float &a, const ItemModel::ItemConfig &b)
 {
 	return a + b.probability;

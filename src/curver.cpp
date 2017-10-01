@@ -191,7 +191,9 @@ void Curver::progress(int deltat, std::vector<std::unique_ptr<Curver> > &curvers
 		rotate(deltat * rotateVelocity);
 	}
 	lastPos += deltat * velocity * direction;
-	headNode->setPosition(lastPos);
+	if (headVisible) {
+		headNode->setPosition(lastPos);
+	}
 	if (!changingSegment) {
 		segments.back()->appendPoint(lastPos, angle);
 		// check for collision

@@ -11,6 +11,7 @@
 #include "items/agileitem.h"
 #include "items/flashitem.h"
 #include "items/slowitem.h"
+#include "items/ghostitem.h"
 
 class ItemModel : public QAbstractListModel
 {
@@ -55,6 +56,7 @@ private:
 		{&ItemModel::makeAgileItem, "Agile", "Turn around faster", 0.2, Item::ALLOW_COLLECTOR, "image/rotate_90_degrees_ccw"},
 		{&ItemModel::makeFlashItem, "Flash", "The fastest man alive", 0.2, Item::ALLOW_COLLECTOR, "image/flash_on"},
 		{&ItemModel::makeSlowItem, "Freeze", "Decreases speed", 0.1, Item::ALLOW_OTHERS, "action/trending_down"},
+		{&ItemModel::makeGhostItem, "Ghost", "Booh!", 0.2, Item::ALLOW_COLLECTOR, "social/sentiment_very_satisfied"},
 	};
 	unsigned int sequenceNumber = 0;
 
@@ -65,6 +67,7 @@ private:
 	Item *makeAgileItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos);
 	Item *makeFlashItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos);
 	Item *makeSlowItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos);
+	Item *makeGhostItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos);
 };
 
 float operator +(const float &a, const ItemModel::ItemConfig &b);

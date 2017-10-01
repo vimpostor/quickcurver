@@ -27,7 +27,8 @@ SOURCES += src/game.cpp \
     src/bot.cpp \
     src/items/agileitem.cpp \
     src/items/flashitem.cpp \
-    src/items/slowitem.cpp
+    src/items/slowitem.cpp \
+    src/items/ghostitem.cpp
 
 RESOURCES += src/qml/qml.qrc
 
@@ -66,4 +67,5 @@ HEADERS += src/game.h \
     src/bot.h \
     src/items/agileitem.h \
     src/items/flashitem.h \
-    src/items/slowitem.h
+    src/items/slowitem.h \
+    src/items/ghostitem.h

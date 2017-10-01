@@ -58,6 +58,7 @@ public:
 	enum Controller controller = CONTROLLER_LOCAL;
 	float velocity = 0.125;
 	float rotateVelocity = 0.0039062f;
+	bool headVisible = true;
 signals:
 	void died();
 public slots:
