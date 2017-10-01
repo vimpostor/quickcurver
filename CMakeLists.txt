@@ -38,6 +38,7 @@ set(SOURCES
 	"src/network/client.cpp"
 	"src/network/server.cpp"
 	"src/models/chatmodel.cpp"
+	"src/items/ghostitem.cpp"
 )
 
 set(VENDOR_SOURCES
