@@ -1,6 +1,6 @@
 #include "ghostitem.h"
 
-#define GHOST_TIME 3000
+#define GHOST_TIME 2000
 
 GhostItem::GhostItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos) : Item(parentNode, iconName, allowedUsers, pos)
 {

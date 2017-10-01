@@ -193,6 +193,12 @@ void Curver::progress(int deltat, std::vector<std::unique_ptr<Curver> > &curvers
 	lastPos += deltat * velocity * direction;
 	if (headVisible) {
 		headNode->setPosition(lastPos);
+	} else {
+		// it is not possible to have both head invisible and not changing segment
+		// check for collision
+		if (checkForIntersection(curvers, secondLastPos, lastPos)) {
+			die();
+		}
 	}
 	if (!changingSegment) {
 		segments.back()->appendPoint(lastPos, angle);
