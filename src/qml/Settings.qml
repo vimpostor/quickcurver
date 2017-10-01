@@ -39,7 +39,7 @@ TabbedPage {
 				rightItem: TextField {
 					text: c_settings.getTargetScore()
 					inputMethodHints: Qt.ImhDigitsOnly
-					onAccepted: c_settings.setTargetScore(text);
+					onTextChanged: c_settings.setTargetScore(text);
 				}
 			}
 		}

@@ -21,8 +21,13 @@ ApplicationWindow {
 	initialPage: Page {
 		id: initialPage
 		title: "Quick Curver"
-		appBar.maxActionCount: 5
+		appBar.maxActionCount: 6
 		actions: [
+			Action {
+				iconName: "content/undo"
+				text: "Reset game"
+				onTriggered: game.resetGame();
+			},
 			Action {
 				iconName: "av/hearing"
 				text: "Server listen"

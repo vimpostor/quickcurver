@@ -30,6 +30,7 @@ public:
 	Q_INVOKABLE void connectToHost(QString ip, int port);
 	Q_INVOKABLE void sendChatMessage(QString msg);
 	Q_INVOKABLE void serverReListen(quint16 port);
+	Q_INVOKABLE void resetGame();
 
 	QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *);
 public slots:

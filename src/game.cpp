@@ -74,6 +74,12 @@ void Game::serverReListen(quint16 port)
 	server.reListen(port);
 }
 
+void Game::resetGame()
+{
+	resetRound();
+	Util::for_each(getCurvers(), [](const auto &c){ c->totalScore = 0; });
+}
+
 QSGNode *Game::updatePaintNode(QSGNode *, QQuickItem::UpdatePaintNodeData *)
 {
 	return rootNode;
