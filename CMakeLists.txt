@@ -40,12 +40,18 @@ set(SOURCES
 	"src/models/chatmodel.cpp"
 )
 
+set(VENDOR_SOURCES
+	"fluid/src/imports/core/iconsimageprovider.cpp"
+	"fluid/src/imports/controls/iconthemeimageprovider.cpp"
+	"fluid/icons/icons.qrc"
+)
+
 include_directories(
 	"fluid/src/imports/core"
 	"fluid/src/imports/controls"
 	"src"
 )
 
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES} ${VENDOR_SOURCES})
 
 target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Svg Qt5::Quick Qt5::QuickControls2)
