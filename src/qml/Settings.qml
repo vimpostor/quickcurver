@@ -34,6 +34,14 @@ TabbedPage {
 					second.onValueChanged: c_settings.setItemSpawnIntervalMax(second.value);
 				}
 			}
+			ListItem {
+				text: "Score to win"
+				rightItem: TextField {
+					text: c_settings.getTargetScore()
+					inputMethodHints: Qt.ImhDigitsOnly
+					onAccepted: c_settings.setTargetScore(text);
+				}
+			}
 		}
 	}
 	Tab {

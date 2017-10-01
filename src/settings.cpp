@@ -82,3 +82,13 @@ QColor Settings::getClientColor() const
 {
 	return clientColor;
 }
+
+void Settings::setTargetScore(const int score)
+{
+	targetScore = score;
+}
+
+int Settings::getTargetScore() const
+{
+	return targetScore;
+}

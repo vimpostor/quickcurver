@@ -219,3 +219,8 @@ void Curver::die()
 	(void) new Explosion(lastPos, parentNode, &material, this);
 	emit died();
 }
+
+bool operator <(const std::unique_ptr<Curver> &l, const std::unique_ptr<Curver> &r)
+{
+	return l->totalScore < r->totalScore;
+}

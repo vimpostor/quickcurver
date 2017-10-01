@@ -25,6 +25,8 @@ public:
 	QString getClientName() const;
 	Q_INVOKABLE void setClientColor(const QColor color);
 	QColor getClientColor() const;
+	Q_INVOKABLE void setTargetScore(const int score);
+	Q_INVOKABLE int getTargetScore() const;
 signals:
 	void dimensionChanged();
 private:
@@ -34,6 +36,7 @@ private:
 	int roundTimeOut = 1000;
 	int itemSpawnIntervalMin = 1000;
 	int itemSpawnIntervalMax = 5000;
+	int targetScore = 15;
 };
 
 #endif // SETTINGS_H

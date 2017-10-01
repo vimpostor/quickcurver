@@ -85,4 +85,6 @@ private:
 	bool oldChangingSegment = true;
 };
 
+bool operator <(const std::unique_ptr<Curver> &l, const std::unique_ptr<Curver> &r);
+
 #endif // QCURVER_H

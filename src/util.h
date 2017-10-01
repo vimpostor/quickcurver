@@ -67,6 +67,10 @@ namespace Util {
 		return std::count_if(std::begin(cnt), std::end(cnt), p);
 	}
 
+	template<typename Cnt_T>
+	auto max_element(Cnt_T &cnt) {
+		return std::max_element(std::begin(cnt), std::end(cnt));
+	}
 
 	// container serialization
 

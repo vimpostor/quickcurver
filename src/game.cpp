@@ -102,6 +102,11 @@ void Game::progress()
 void Game::curverDied()
 {
 	Util::for_each(getCurvers(), [](const auto &c){ if (c->isAlive()) c->increaseScore(); });
+	auto maxScorer = Util::max_element(getCurvers());
+	if ((*maxScorer)->totalScore >= Settings::getSingleton().getTargetScore()) {
+		// we have a winner
+		server.broadcastChatMessage((*maxScorer)->userName + " won!");
+	}
 	// check if only one player is remaining
 	if (Util::count_if(getCurvers(), [](const auto &c){ return c->isAlive(); }) == 1) {
 		resetRoundTimer.singleShot(Settings::getSingleton().getRoundTimeOut(), this, SLOT(resetRound()));
