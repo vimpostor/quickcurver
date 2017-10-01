@@ -3,10 +3,6 @@
 #include <QQuickStyle>
 #include <QQmlContext>
 
-// fluid
-#include "iconsimageprovider.h"
-#include "iconthemeimageprovider.h"
-
 #include "models/playermodel.h"
 #include "game.h"
 #include "utility"
@@ -27,8 +23,6 @@ int main(int argc, char *argv[]) {
 
 	QQmlApplicationEngine engine;
 	engine.addImportPath(QLatin1String("qrc:/"));
-	engine.addImageProvider(QLatin1String("fluidicons"), new IconsImageProvider());
-	engine.addImageProvider(QLatin1String("fluidicontheme"), new IconThemeImageProvider());
 
 	// context properties
 	engine.rootContext()->setContextProperty("c_playerModel", &PlayerModel::getSingleton());
