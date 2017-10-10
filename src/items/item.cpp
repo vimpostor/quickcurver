@@ -86,9 +86,9 @@ void Item::unUse(Curver *)
 QColor Item::getColor() const
 {
 	switch (allowedUsers) {
-	case ALLOW_ALL:
+	case AllowedUsers::ALLOW_ALL:
 		return Util::getColor("Blue");
-	case ALLOW_OTHERS:
+	case AllowedUsers::ALLOW_OTHERS:
 		return Util::getColor("Red");
 	default:
 		return Util::getColor("Green");
@@ -131,13 +131,13 @@ void Item::startFade(bool in)
 void Item::applyToAffected(void (Item::*method)(Curver *))
 {
 	switch (allowedUsers) {
-	case ALLOW_ALL:
+	case AllowedUsers::ALLOW_ALL:
 		Util::for_each(PlayerModel::getSingleton().getCurvers(), [&](auto &curver){ (this->*method)(curver.get()); });
 		break;
-	case ALLOW_OTHERS:
+	case AllowedUsers::ALLOW_OTHERS:
 		Util::for_each(PlayerModel::getSingleton().getCurvers(), [&](auto &curver){ if (curver.get() != this->collector) (this->*method)(curver.get()); });
 		break;
-	case ALLOW_COLLECTOR:
+	case AllowedUsers::ALLOW_COLLECTOR:
 		(this->*method)(collector);
 		break;
 	}

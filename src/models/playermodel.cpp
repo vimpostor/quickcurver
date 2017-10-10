@@ -34,7 +34,7 @@ QVariant PlayerModel::data(const QModelIndex &index, int role) const
 	case TotalScoreRole:
 		return curver->totalScore;
 	case ControllerRole:
-		return curver->controller;
+		return static_cast<int>(curver->controller);
 	default:
 		return "Unknown role";
 	}

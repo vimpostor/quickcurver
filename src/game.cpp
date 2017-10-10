@@ -92,7 +92,7 @@ void Game::progress()
 	lastProgressTime = currentTime;
 	for (auto &c : getCurvers()) {
 		if (c->isAlive()) {
-			if (c->controller == Curver::CONTROLLER_BOT) {
+			if (c->controller == Curver::Controller::CONTROLLER_BOT) {
 				Bot::makeMove(c.get());
 			}
 			c->progress(deltat, getCurvers());

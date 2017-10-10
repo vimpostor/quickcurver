@@ -59,7 +59,7 @@ void ItemFactory::checkCollisions()
 		auto curverIt = Util::find_if(PlayerModel::getSingleton().getCurvers(), [&itemIt](auto &curver){ return (*itemIt)->isInRange(curver->getPos()); });
 		if (curverIt != PlayerModel::getSingleton().getCurvers().end()) {
 			// trigger item
-			emit ItemModel::getSingleton().itemSpawned(false, (*itemIt)->sequenceNumber, 0, QPointF(), Item::ALLOW_ALL, curverIt - PlayerModel::getSingleton().getCurvers().begin());
+			emit ItemModel::getSingleton().itemSpawned(false, (*itemIt)->sequenceNumber, 0, QPointF(), Item::AllowedUsers::ALLOW_ALL, curverIt - PlayerModel::getSingleton().getCurvers().begin());
 			(*itemIt)->trigger(*curverIt);
 			usedItems.emplace_back(std::move(*itemIt));
 			itemIt = items.erase(itemIt);

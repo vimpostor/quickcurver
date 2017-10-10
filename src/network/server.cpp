@@ -79,7 +79,7 @@ void Server::newConnection()
 	// socket must not be NULL
 	if (s) {
 		auto *curver = PlayerModel::getSingleton().getNewPlayer();
-		curver->controller = Curver::CONTROLLER_REMOTE;
+		curver->controller = Curver::Controller::CONTROLLER_REMOTE;
 		clients[std::unique_ptr<QTcpSocket>(s)] = curver;
 		connect(s, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError(QAbstractSocket::SocketError)));
 		connect(s, SIGNAL(disconnected()), this, SLOT(socketDisconnect()));

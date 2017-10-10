@@ -18,12 +18,12 @@
 class Curver : public QObject {
 	Q_OBJECT
 public:
-	enum Rotation {
+	enum class Rotation {
 		ROTATE_LEFT,
 		ROTATE_NONE,
 		ROTATE_RIGHT
 	};
-	enum Controller {
+	enum class Controller {
 		CONTROLLER_LOCAL,
 		CONTROLLER_REMOTE,
 		CONTROLLER_BOT
@@ -58,8 +58,8 @@ public:
 	QString userName = "Player";
 	int roundScore = 0;
 	int totalScore = 0;
-	enum Rotation rotation = ROTATE_NONE;
-	enum Controller controller = CONTROLLER_LOCAL;
+	Rotation rotation = Rotation::ROTATE_NONE;
+	Controller controller = Controller::CONTROLLER_LOCAL;
 	float velocity = 0.125;
 	float rotateVelocity = 0.0039062f;
 	bool headVisible = true;

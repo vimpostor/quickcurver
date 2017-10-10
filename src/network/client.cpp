@@ -33,13 +33,13 @@ void Client::processKey(Qt::Key key, bool release)
 {
 	Packet::ClientCurverRotation p;
 	if (release) {
-		p.rotation = Curver::ROTATE_NONE;
+		p.rotation = Curver::Rotation::ROTATE_NONE;
 	} else {
 		// TODO: Allow custom keys
 		if (key == Qt::Key_Left)
-			p.rotation = Curver::ROTATE_LEFT;
+			p.rotation = Curver::Rotation::ROTATE_LEFT;
 		else
-			p.rotation = Curver::ROTATE_RIGHT;
+			p.rotation = Curver::Rotation::ROTATE_RIGHT;
 	}
 	p.sendPacket(&socket);
 }

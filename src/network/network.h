@@ -136,7 +136,7 @@ public:
 	unsigned int sequenceNumber = 0;
 	int which = 0;
 	QPointF pos;
-	Item::AllowedUsers allowedUsers = Item::ALLOW_ALL;
+	Item::AllowedUsers allowedUsers = Item::AllowedUsers::ALLOW_ALL;
 	int collectorIndex = -1;
 protected:
 	virtual void serialize(QDataStream &out) const override;

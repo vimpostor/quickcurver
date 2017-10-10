@@ -139,16 +139,16 @@ bool Curver::isChangingSegment() const
  */
 void Curver::processKey(Qt::Key key, bool release)
 {
-	if (controller != CONTROLLER_LOCAL) {
+	if (controller != Controller::CONTROLLER_LOCAL) {
 		return;
 	}
 	if (release) {
-		rotation = ROTATE_NONE;
+		rotation = Rotation::ROTATE_NONE;
 	} else {
 		if (key == leftKey) {
-			rotation = ROTATE_LEFT;
+			rotation = Rotation::ROTATE_LEFT;
 		} else if (key == rightKey) {
-			rotation = ROTATE_RIGHT;
+			rotation = Rotation::ROTATE_RIGHT;
 		}
 	}
 }
@@ -292,9 +292,9 @@ void Curver::progress(int deltat, std::vector<std::unique_ptr<Curver> > &curvers
 		}
 	}
 	secondLastPos = lastPos;
-	if (rotation == ROTATE_LEFT) {
+	if (rotation == Rotation::ROTATE_LEFT) {
 		rotate(-deltat * rotateVelocity);
-	} else if (rotation == ROTATE_RIGHT) {
+	} else if (rotation == Rotation::ROTATE_RIGHT) {
 		rotate(deltat * rotateVelocity);
 	}
 	lastPos += deltat * velocity * direction;

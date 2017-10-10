@@ -19,7 +19,7 @@ class Item : public QObject
 {
 	Q_OBJECT
 public:
-	enum AllowedUsers {
+	enum class AllowedUsers {
 		ALLOW_ALL, // blue
 		ALLOW_OTHERS, // red
 		ALLOW_COLLECTOR // green
