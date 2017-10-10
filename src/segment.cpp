@@ -1,5 +1,11 @@
 #include "segment.h"
 
+/**
+ * @brief Constructs a Segment with the given parent node, material and thickness
+ * @param parentNode The parent node in the scene graph
+ * @param material The material to use for all drawing calls
+ * @param thickness The thickness of the segment
+ */
 Segment::Segment(QSGNode *parentNode, QSGFlatColorMaterial *material, const float thickness)
 {
 	this->parentNode = parentNode;
@@ -18,6 +24,11 @@ Segment::~Segment()
 	parentNode->removeChildNode(&geoNode);
 }
 
+/**
+ * @brief Appends a new point to the segment
+ * @param newPoint The point to append
+ * @param angle The angle to append the point with. The thickness of the line spreads orthogonal relative to the angle
+ */
 void Segment::appendPoint(const QPointF newPoint, const float angle)
 {
 	const float normalAngle = angle + M_PI/2;
@@ -34,6 +45,12 @@ void Segment::appendPoint(const QPointF newPoint, const float angle)
 	lastPoint = newPoint;
 }
 
+/**
+ * @brief Checks if this segment collides with a line from a to b
+ * @param a The start point of the line
+ * @param b The end point of the line
+ * @return \c True, iif this segment intersects with the line a -> b
+ */
 bool Segment::checkForIntersection(QPointF a, QPointF b) const
 {
 	/* Given a line (a -- b) and (c -- d), we find an intersection as follows:

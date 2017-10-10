@@ -47,3 +47,7 @@ CMakeLists.txt.user
 .directory
 # vim
 *.swp
+
+# documentation
+html/
+latex/

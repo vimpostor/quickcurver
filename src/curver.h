@@ -10,7 +10,11 @@
 #include "headnode.h"
 #include "settings.h"
 
-
+/**
+ * @brief The Curver class represents a player and all the segments belonging to the player
+ *
+ * This class stores every data of a player including all segments.
+ */
 class Curver : public QObject {
 	Q_OBJECT
 public:
