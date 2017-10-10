@@ -1,5 +1,12 @@
 #include "explosion.h"
 
+/**
+ * @brief Creates an explosion
+ * @param location The location to spawn at
+ * @param parentNode The parent node in the scene graph
+ * @param material The material to use for drawing calls
+ * @param parent The parent object
+ */
 Explosion::Explosion(QPointF location, QSGNode *parentNode, QSGFlatColorMaterial *material, QObject *parent) : QObject(parent)
 {
 	this->location = location;
@@ -28,6 +35,9 @@ Explosion::~Explosion()
 	parentNode->removeChildNode(opacityNode.get());
 }
 
+/**
+ * @brief Updates the explosion each frame
+ */
 void Explosion::progress()
 {
 	float timeSinceStart = initialTime.msecsTo(QTime::currentTime());

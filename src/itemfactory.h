@@ -12,6 +12,9 @@
 #include "models/itemmodel.h"
 #include "settings.h"
 
+/**
+ * @brief This class plans and manages all Item spawns
+ */
 class ItemFactory : public QObject
 {
 	Q_OBJECT
@@ -28,9 +31,21 @@ private:
 	void spawnItem();
 	void checkCollisions();
 
+	/**
+	 * @brief The parent node in the scene graph
+	 */
 	QSGNode *parentNode;
+	/**
+	 * @brief The time of the next Item spawn
+	 */
 	QTime nextItemSpawn;
+	/**
+	 * @brief All currently available visible Item instances
+	 */
 	std::vector<std::unique_ptr<Item>> items;
+	/**
+	 * @brief All used Item instances waiting to be deleted
+	 */
 	std::vector<std::unique_ptr<Item>> usedItems;
 };
 

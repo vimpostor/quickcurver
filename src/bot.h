@@ -4,6 +4,9 @@
 #include "models/playermodel.h"
 #include "settings.h"
 
+/**
+ * @brief A class representing an AI that controls a Curver
+ */
 class Bot
 {
 public:

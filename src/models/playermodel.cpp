@@ -1,5 +1,9 @@
 #include "playermodel.h"
 
+/**
+ * @brief Constructs a PlayerModel
+ * @param parent The parent object
+ */
 PlayerModel::PlayerModel(QObject *parent) : QAbstractListModel(parent)
 {
 	// role names
@@ -12,11 +16,21 @@ PlayerModel::PlayerModel(QObject *parent) : QAbstractListModel(parent)
 	m_roleNames[ControllerRole] = "controller";
 }
 
+/**
+ * @brief Returns the number of rows in this model
+ * @return The row count
+ */
 int PlayerModel::rowCount(const QModelIndex &) const
 {
 	return static_cast<int>(m_data.size());
 }
 
+/**
+ * @brief Returns data in this model
+ * @param index The index of the data to return
+ * @param role The data in question
+ * @return The data
+ */
 QVariant PlayerModel::data(const QModelIndex &index, int role) const
 {
 	const std::unique_ptr<Curver> &curver = m_data[static_cast<unsigned long>(index.row())];
@@ -40,17 +54,28 @@ QVariant PlayerModel::data(const QModelIndex &index, int role) const
 	}
 }
 
+/**
+ * @brief Returns the role names
+ * @return Role names
+ */
 QHash<int, QByteArray> PlayerModel::roleNames() const
 {
 	return m_roleNames;
 }
 
+/**
+ * @brief Returns a singleton instance of PlayerModel
+ * @return The singleton
+ */
 PlayerModel &PlayerModel::getSingleton()
 {
 	static PlayerModel singleton;
 	return singleton;
 }
 
+/**
+ * @brief Appends a new player to this model
+ */
 void PlayerModel::appendPlayer()
 {
 	beginResetModel();
@@ -61,6 +86,10 @@ void PlayerModel::appendPlayer()
 	emit playerModelChanged();
 }
 
+/**
+ * @brief Removes a player from this model
+ * @param row The index of the player
+ */
 void PlayerModel::removePlayer(int row)
 {
 	beginResetModel();
@@ -69,24 +98,44 @@ void PlayerModel::removePlayer(int row)
 	emit playerModelChanged();
 }
 
+/**
+ * @brief Sets the color of a player
+ * @param row The index of the player
+ * @param color The new color
+ */
 void PlayerModel::setColor(int row, QColor color)
 {
 	m_data[static_cast<unsigned long>(row)]->setColor(color);
 	emit playerModelChanged();
 }
 
+/**
+ * @brief Sets the left key of a player
+ * @param row The index of the player
+ * @param key The new key
+ */
 void PlayerModel::setLeftKey(int row, Qt::Key key)
 {
 	m_data[static_cast<unsigned long>(row)]->setLeftKey(key);
 	emit Gui::getSingleton().postInfoBar("Set left key to " + QKeySequence(key).toString());
 }
 
+/**
+ * @brief Sets the right key of a player
+ * @param row The index of the player
+ * @param key The new key
+ */
 void PlayerModel::setRightKey(int row, Qt::Key key)
 {
 	m_data[static_cast<unsigned long>(row)]->setRightKey(key);
 	emit Gui::getSingleton().postInfoBar("Set right key to " + QKeySequence(key).toString());
 }
 
+/**
+ * @brief Sets the username of a player
+ * @param row The index of the player
+ * @param username The new username
+ */
 void PlayerModel::setUserName(int row, QString username)
 {
 	m_data[static_cast<unsigned long>(row)]->userName = username;
@@ -94,6 +143,11 @@ void PlayerModel::setUserName(int row, QString username)
 	emit playerModelChanged();
 }
 
+/**
+ * @brief Sets the controller of a player
+ * @param row The index of the player
+ * @param ctrl The new controller
+ */
 void PlayerModel::setController(int row, int ctrl)
 {
 	m_data[static_cast<unsigned long>(row)]->controller = static_cast<Curver::Controller>(ctrl);
@@ -101,16 +155,28 @@ void PlayerModel::setController(int row, int ctrl)
 	emit playerModelChanged();
 }
 
+/**
+ * @brief Sets the root node of the scene graph
+ * @param rootNode The new root node
+ */
 void PlayerModel::setRootNode(QSGNode *rootNode)
 {
 	this->rootNode = rootNode;
 }
 
+/**
+ * @brief Returns all players as a Curver vector
+ * @return All players
+ */
 std::vector<std::unique_ptr<Curver> > &PlayerModel::getCurvers()
 {
 	return this->m_data;
 }
 
+/**
+ * @brief Serializes this PlayerModel
+ * @param out The stream to serialize into
+ */
 void PlayerModel::serialize(QDataStream &out) const
 {
 	out << static_cast<unsigned>(m_data.size());
@@ -120,6 +186,10 @@ void PlayerModel::serialize(QDataStream &out) const
 	}
 }
 
+/**
+ * @brief Parses a PlayerModel from a stream
+ * @param in The stream to parse from
+ */
 void PlayerModel::parse(QDataStream &in)
 {
 	emit beginResetModel();
@@ -139,12 +209,19 @@ void PlayerModel::parse(QDataStream &in)
 	emit endResetModel();
 }
 
+/**
+ * @brief Returns the last player added
+ * @return The last added Curver
+ */
 Curver *PlayerModel::getNewPlayer()
 {
 	appendPlayer();
 	return m_data.back().get();
 }
 
+/**
+ * @brief Forces a refresh of the GUI
+ */
 void PlayerModel::forceRefresh()
 {
 	emit beginResetModel();
@@ -152,6 +229,9 @@ void PlayerModel::forceRefresh()
 	emit playerModelChanged();
 }
 
+/**
+ * @brief Forces a refresh of the score roles in the GUI
+ */
 void PlayerModel::processDeath()
 {
 	emit curverDied();

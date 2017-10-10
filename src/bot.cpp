@@ -5,6 +5,10 @@
 #define ANGLE_STEP 0.125
 #define WALL_MARGIN 100
 
+/**
+ * @brief Asks the Bot to make a move for a given Curver
+ * @param c The Curver to make a move for
+ */
 void Bot::makeMove(Curver *c)
 {
 	// good default value, if we don't want to change anything, we can just return

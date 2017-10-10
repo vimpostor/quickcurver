@@ -1,5 +1,11 @@
 #include "game.h"
 
+/**
+ * @brief Constructs a Game with the given parent.
+ *
+ * \a parent is used to draw everything onto the GUI window.
+ * @param parent The parent to draw on
+ */
 Game::Game(QQuickItem *parent) : QQuickItem(parent)
 {
 	/* Create a new root node. No, this does not leak memory, the Qt scene graph automatically deletes this node at the end.
@@ -36,6 +42,9 @@ Game::~Game() {
 	rootNode->removeAllChildNodes();
 }
 
+/**
+ * @brief Starts the game
+ */
 void Game::startGame()
 {
 	tryStartGame();
@@ -46,6 +55,13 @@ void Game::startGame()
 	gameTimer.start(16);
 }
 
+/**
+ * @brief Processes a key
+ *
+ * Checks if this key was registered to trigger any rotation changes.
+ * @param key The key to process
+ * @param release Whether the key was pressed or released
+ */
 void Game::processKey(Qt::Key key, bool release)
 {
 	Util::for_each(getCurvers(), [&](std::unique_ptr<Curver> &c){ c->processKey(key, release); });
@@ -54,12 +70,23 @@ void Game::processKey(Qt::Key key, bool release)
 	}
 }
 
+/**
+ * @brief Connects as a client to the given host
+ * @param ip The IP address of the host
+ * @param port The port that the host is listening on
+ */
 void Game::connectToHost(QString ip, int port)
 {
 	QHostAddress addr = QHostAddress(ip);
 	client.connectToHost(addr, port);
 }
 
+/**
+ * @brief Sends a chat message
+ *
+ * If this instance is the Server of a game, the chat message will be broadcasted to all clients.
+ * @param msg The message to send
+ */
 void Game::sendChatMessage(QString msg)
 {
 	if (connectedToServer) {
@@ -69,22 +96,36 @@ void Game::sendChatMessage(QString msg)
 	}
 }
 
+/**
+ * @brief Reconfigures the server to listen on a different port
+ * @param port The port to listen on
+ */
 void Game::serverReListen(quint16 port)
 {
 	server.reListen(port);
 }
 
+/**
+ * @brief Resets the entire game
+ */
 void Game::resetGame()
 {
 	resetRound();
 	Util::for_each(getCurvers(), [](const auto &c){ c->totalScore = 0; });
 }
 
+/**
+ * @brief Called by the scene graph. This is called before the screen is redrawn.
+ * @return Always return Game::rootNode
+ */
 QSGNode *Game::updatePaintNode(QSGNode *, QQuickItem::UpdatePaintNodeData *)
 {
 	return rootNode;
 }
 
+/**
+ * @brief Updates the game's logic respecting how much time actually passed by
+ */
 void Game::progress()
 {
 	QTime currentTime = QTime::currentTime();
@@ -105,6 +146,11 @@ void Game::progress()
 	server.broadcastCurverData();
 }
 
+/**
+ * @brief Called, when a curver died
+ *
+ * This method taskes care of the score board and checks if a new round is due.
+ */
 void Game::curverDied()
 {
 	Util::for_each(getCurvers(), [](const auto &c){ if (c->isAlive()) c->increaseScore(); });
@@ -119,6 +165,9 @@ void Game::curverDied()
 	}
 }
 
+/**
+ * @brief Resets the round
+ */
 void Game::resetRound()
 {
 	itemFactory->resetRound();
@@ -126,16 +175,28 @@ void Game::resetRound()
 	server.resetRound();
 }
 
+/**
+ * @brief Called, when the game dimension changed
+ */
 void Game::dimensionChanged()
 {
 	wall.updateDimension();
 }
 
+/**
+ * @brief Called, when the connection status changed
+ * @param connected Whether the new state is connected
+ */
 void Game::connectedToServerChanged(bool connected)
 {
 	this->connectedToServer = connected;
 }
 
+/**
+ * @brief Tries to start the game.
+ *
+ * This method does nothing, if the game already started.
+ */
 void Game::tryStartGame()
 {
 	if (!started) {
@@ -144,6 +205,10 @@ void Game::tryStartGame()
 	}
 }
 
+/**
+ * @brief A helper method to get a vector of all curvers
+ * @return A vector containing all curvers
+ */
 std::vector<std::unique_ptr<Curver> > &Game::getCurvers()
 {
 	return PlayerModel::getSingleton().getCurvers();

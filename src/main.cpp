@@ -14,6 +14,15 @@
 #include "settings.h"
 #include "models/chatmodel.h"
 
+/**
+ * @mainpage Introduction
+ *
+ * This is the documentation for the Quickcurver project, a free and open-source implementation of Achtung die Kurve written with Qt.
+ *
+ * A good starting point for reading this documentation is the Game class.
+ */
+
+
 int main(int argc, char *argv[]) {
 	Util::init();
 	// threaded render_loop, which is default on non-mesa drivers, breaks drawing

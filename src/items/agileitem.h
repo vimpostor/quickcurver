@@ -3,6 +3,9 @@
 
 #include "item.h"
 
+/**
+ * @brief An Item that makes a Curver turn around faster
+ */
 class AgileItem : public Item
 {
 public:

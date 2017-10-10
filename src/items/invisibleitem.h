@@ -3,6 +3,9 @@
 
 #include "item.h"
 
+/**
+ * @brief Renders a Curver invisible and makes it immune to collisions
+ */
 class InvisibleItem : public Item
 {
 public:

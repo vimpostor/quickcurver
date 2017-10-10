@@ -13,17 +13,27 @@ Wall::Wall()
 	resize();
 }
 
+/**
+ * @brief Sets the parent node in the scene graph
+ * @param parentNode The new parent node
+ */
 void Wall::setParentNode(QSGNode *parentNode)
 {
 	parentNode->appendChildNode(&geoNode);
 }
 
+/**
+ * @brief Updates the dimension of the game
+ */
 void Wall::updateDimension()
 {
 	this->dimension = Settings::getSingleton().getDimension();
 	resize();
 }
 
+/**
+ * @brief Resizes the Wall according to the game's dimension
+ */
 void Wall::resize()
 {
 	QSGGeometry::Point2D *vertices = geometry.vertexDataAsPoint2D();

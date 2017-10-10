@@ -18,6 +18,11 @@
 #include "network/server.h"
 #include "network/client.h"
 
+/**
+ * @brief A class representing an entire game
+ *
+ * This class handles a game and manages all the things involved with it such as resetting rounds and updating the game each frame.
+ */
 class Game : public QQuickItem
 {
 	Q_OBJECT
@@ -35,7 +40,14 @@ public:
 	QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *);
 public slots:
 signals:
+	/**
+	 * @brief Emitted, when something wants to post the GUI infobar
+	 * @param msg The message to display
+	 */
 	void postInfoBar(QString msg);
+	/**
+	 * @brief Emitted, when the game started
+	 */
 	void gameStarted();
 private slots:
 	void progress();
@@ -47,15 +59,45 @@ private slots:
 private:
 	std::vector<std::unique_ptr<Curver> > &getCurvers();
 
+	/**
+	 * @brief The timer responsible for the game main loop
+	 */
 	QTimer gameTimer;
+	/**
+	 * @brief The time of the last game logic update
+	 */
 	QTime lastProgressTime;
+	/**
+	 * @brief The timer responsible for resetting the round after all players died
+	 */
 	QTimer resetRoundTimer;
+	/**
+	 * @brief The root node in the scene graph
+	 */
 	QSGNode *rootNode;
+	/**
+	 * @brief The item factory of this game
+	 */
 	std::unique_ptr<ItemFactory> itemFactory;
+	/**
+	 * @brief A node representing the wall
+	 */
 	Wall wall;
+	/**
+	 * @brief The server instance
+	 */
 	Server server;
+	/**
+	 * @brief The client instance
+	 */
 	Client client;
+	/**
+	 * @brief Whether this instance is connected to a server
+	 */
 	bool connectedToServer = false;
+	/**
+	 * @brief Whether the game already started
+	 */
 	bool started = false;
 };
 

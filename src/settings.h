@@ -5,6 +5,9 @@
 #include <QObject>
 #include <QColor>
 
+/**
+ * @brief This class represents settings that affect the game in any way
+ */
 class Settings : public QObject
 {
 	Q_OBJECT
@@ -28,14 +31,40 @@ public:
 	Q_INVOKABLE void setTargetScore(const int score);
 	Q_INVOKABLE int getTargetScore() const;
 signals:
+	/**
+	 * @brief Emitted, when the dimension of the game changed
+	 */
 	void dimensionChanged();
 private:
+	/**
+	 * @brief The username of the client
+	 */
 	QString clientName;
+	/**
+	 * @brief The color of the client
+	 */
 	QColor clientColor;
+	/**
+	 * @brief The dimension of the game
+	 */
 	QPoint dimension {100, 100};
+	/**
+	 * @brief The current round time out
+	 *
+	 * This is the amount of time that has to be waited for the next round, after the old one was finished
+	 */
 	int roundTimeOut = 1000;
+	/**
+	 * @brief The minimum amount of time between two item spawns
+	 */
 	int itemSpawnIntervalMin = 1000;
+	/**
+	 * @brief The maximum amount of time between two item spawns
+	 */
 	int itemSpawnIntervalMax = 5000;
+	/**
+	 * @brief The score to achieve to win the game
+	 */
 	int targetScore = 15;
 };
 

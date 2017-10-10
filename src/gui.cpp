@@ -1,9 +1,9 @@
 #include "gui.h"
 
-Gui::Gui(QObject *parent) : QObject(parent)
-{
-}
-
+/**
+ * @brief Returns the Gui singleton
+ * @return The Gui singleton
+ */
 const Gui &Gui::getSingleton()
 {
 	static Gui result;

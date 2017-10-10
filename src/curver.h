@@ -18,11 +18,17 @@
 class Curver : public QObject {
 	Q_OBJECT
 public:
+	/**
+	 * @brief Determines the rotation of a Curver object
+	 */
 	enum class Rotation {
 		ROTATE_LEFT,
 		ROTATE_NONE,
 		ROTATE_RIGHT
 	};
+	/**
+	 * @brief Determines the controller of a Curver object
+	 */
 	enum class Controller {
 		CONTROLLER_LOCAL,
 		CONTROLLER_REMOTE,
@@ -55,15 +61,42 @@ public:
 	void appendPoint(const QPointF pos, const bool changingSegment);
 	void prepareSegmentEvent(bool changingSegment, int lower, int upper);
 
+	/**
+	 * @brief The username of the Curver
+	 */
 	QString userName = "Player";
+	/**
+	 * @brief The amount of points gained during the current round
+	 */
 	int roundScore = 0;
+	/**
+	 * @brief The amount of total points gained
+	 */
 	int totalScore = 0;
+	/**
+	 * @brief The current rotation
+	 */
 	Rotation rotation = Rotation::ROTATE_NONE;
+	/**
+	 * @brief The current controller of this Curver
+	 */
 	Controller controller = Controller::CONTROLLER_LOCAL;
+	/**
+	 * @brief The current velocity in pixels per millisecond
+	 */
 	float velocity = 0.125;
+	/**
+	 * @brief The rotational velocity in radian per millisecond
+	 */
 	float rotateVelocity = 0.0039062f;
+	/**
+	 * @brief Determines if the head is visible at the moment
+	 */
 	bool headVisible = true;
 signals:
+	/**
+	 * @brief Emitted, when the Curver died due to collision
+	 */
 	void died();
 public slots:
 	void progress(int deltat, std::vector<std::unique_ptr<Curver> > &curvers);
@@ -72,21 +105,75 @@ private:
 	void rotate(float radians);
 	void die();
 
+	/**
+	 * @brief The parent node in the scene graph
+	 */
 	QSGNode *parentNode;
+	/**
+	 * @brief The color of this Curver
+	 */
 	QColor color = Qt::black;
+	/**
+	 * @brief The material in use with the color determined by Curver::color
+	 */
 	QSGFlatColorMaterial material;
+	/**
+	 * @brief A vector containing all segments of this Curver
+	 */
 	std::vector<std::unique_ptr<Segment>> segments;
+	/**
+	 * @brief The node representing the head of this Curver
+	 */
 	std::unique_ptr<HeadNode> headNode;
+	/**
+	 * @brief The current line thickness
+	 */
 	float thickness = 4;
+	/**
+	 * @brief The vector pointing at the direction that this Curver is heading at
+	 */
 	QPointF direction;
+	/**
+	 * @brief The angle of the current rotation in radian
+	 */
 	float angle = 0;
+	/**
+	 * @brief The current position
+	 */
 	QPointF lastPos = QPointF(0,0);
+	/**
+	 * @brief The position before Curver::lastPos
+	 */
 	QPointF secondLastPos;
+	/**
+	 * @brief The key triggering the counter clock-wise rotation
+	 */
 	Qt::Key leftKey = Qt::Key_Left;
+	/**
+	 * @brief The key triggering the clock-wise rotation
+	 */
 	Qt::Key rightKey = Qt::Key_Right;
+	/**
+	 * @brief Determines, whether the Curver is changing segments at the moment
+	 */
 	bool changingSegment = false;
+	/**
+	 * @brief The time of the next planned segment event
+	 *
+	 * A segment event can be the spawn of a new segment or leaving the current segment.
+	 */
 	QTime nextSegmentEvent;
+	/**
+	 * @brief Decides whether the Curver is alive at the moment
+	 */
 	bool alive = true;
+	/**
+	 * @brief Decides whether the Curver was previously changing the segment
+	 *
+	 * This property is used only by the Client to decide, when to trigger segment events
+	 *
+	 * Unused by Server.
+	 */
 	bool oldChangingSegment = true;
 };
 

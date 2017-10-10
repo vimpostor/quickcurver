@@ -3,6 +3,9 @@
 
 #include "item.h"
 
+/**
+ * @brief Decreases the velocity of a Curver
+ */
 class SlowItem : public Item
 {
 public:

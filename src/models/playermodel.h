@@ -9,6 +9,9 @@
 #include "curver.h"
 #include "gui.h"
 
+/**
+ * @brief A model containing all players
+ */
 class PlayerModel : public QAbstractListModel
 {
 	Q_OBJECT
@@ -38,11 +41,26 @@ public:
 public slots:
 	void processDeath();
 signals:
+	/**
+	 * @brief Emitted when a Curver died
+	 */
 	void curverDied();
+	/**
+	 * @brief Emitted when the model changed
+	 */
 	void playerModelChanged();
 private:
+	/**
+	 * @brief The model data
+	 */
 	std::vector<std::unique_ptr<Curver>> m_data;
+	/**
+	 * @brief The role name strings
+	 */
 	QHash<int, QByteArray> m_roleNames;
+	/**
+	 * @brief The role names
+	 */
 	enum RoleNames {
 		NameRole = Qt::UserRole,
 		ColorRole,
@@ -52,6 +70,9 @@ private:
 		TotalScoreRole,
 		ControllerRole,
 	};
+	/**
+	 * @brief The root node in the scene graph
+	 */
 	QSGNode *rootNode;
 };
 

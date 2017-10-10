@@ -3,6 +3,11 @@
 
 #include "item.h"
 
+/**
+ * @brief Cleaninstalls the entire round
+ *
+ * Erases every line
+ */
 class CleanInstallItem : public Item
 {
 public:

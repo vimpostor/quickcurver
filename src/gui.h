@@ -3,14 +3,23 @@
 
 #include <QObject>
 
+/**
+ * @brief A centralized place for notifying the GUI about something
+ */
 class Gui : public QObject
 {
 	Q_OBJECT
 public:
-	explicit Gui(QObject *parent = 0);
 	static const Gui &getSingleton();
 signals:
+	/**
+	 * @brief Emitted, when someone wants to post the infobar
+	 * @param msg The message to display
+	 */
 	void postInfoBar(QString msg) const;
+	/**
+	 * @brief Emitted, when the game started
+	 */
 	void startGame() const;
 };
 

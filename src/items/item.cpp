@@ -8,6 +8,13 @@
 
 QQuickView *Item::textureGenerator = NULL;
 
+/**
+ * @brief Constructs a new Item instance
+ * @param parentNode The parent node in the scene graph
+ * @param iconPath The path to the icon used as a texture
+ * @param allowedUsers The allowed users for this Item
+ * @param pos The location of this Item
+ */
 Item::Item(QSGNode *parentNode, QString iconPath, AllowedUsers allowedUsers, QPointF pos)
 {
 	this->parentNode = parentNode;
@@ -28,6 +35,9 @@ Item::Item(QSGNode *parentNode, QString iconPath, AllowedUsers allowedUsers, QPo
 	parentNode->appendChildNode(&geoNode);
 }
 
+/**
+ * @brief Renders the Item inactive
+ */
 void Item::defuse()
 {
 	if (active) {
@@ -36,6 +46,10 @@ void Item::defuse()
 	}
 }
 
+/**
+ * @brief Triggers the Item
+ * @param collector The collecting Curver
+ */
 void Item::trigger(std::unique_ptr<Curver> &collector)
 {
 	this->collector = collector.get();
@@ -49,6 +63,9 @@ void Item::trigger(std::unique_ptr<Curver> &collector)
 	startFade(false);
 }
 
+/**
+ * @brief Fades the Item in or out according to how much time passed by
+ */
 void Item::fade()
 {
 	float actualDuration = fadeStart.msecsTo(QTime::currentTime());
@@ -68,6 +85,11 @@ void Item::fade()
 	}
 }
 
+/**
+ * @brief Triggered, when the Item was used and a non permanent effect of the Item must be stopped.
+ *
+ * Calls Item::unUse() on all affected Curver instances
+ */
 void Item::deactivate()
 {
 	active = false;
@@ -75,14 +97,26 @@ void Item::deactivate()
 //	parentNode->removeChildNode(&geoNode);
 }
 
+/**
+ * @brief The immediate effect when the Item is triggered
+ */
 void Item::use(Curver *)
 {
 }
 
+/**
+ * @brief The antidote for Item::use().
+ *
+ * This is triggered, when the Item effect should be deactived again.
+ */
 void Item::unUse(Curver *)
 {
 }
 
+/**
+ * @brief Returns the color of the Item
+ * @return The color
+ */
 QColor Item::getColor() const
 {
 	switch (allowedUsers) {
@@ -95,6 +129,9 @@ QColor Item::getColor() const
 	}
 }
 
+/**
+ * @brief Initializes the texture of the Item
+ */
 void Item::initTexture()
 {
 	if (textureGenerator == NULL) {
@@ -112,6 +149,11 @@ void Item::initTexture()
 	texture->bind();
 }
 
+/**
+ * @brief Checks if a given point is in trigger range of the Item
+ * @param p The point to check for
+ * @return \c True, iif \a p is in range
+ */
 bool Item::isInRange(QPointF p) const
 {
 	QPointF diff = p - pos;
@@ -121,6 +163,10 @@ bool Item::isInRange(QPointF p) const
 	return false;
 }
 
+/**
+ * @brief Starts a visual fade of the Item
+ * @param in Whether to fade in or out
+ */
 void Item::startFade(bool in)
 {
 	fadeStart = QTime::currentTime();
@@ -128,6 +174,11 @@ void Item::startFade(bool in)
 	fadeTimer.start(16);
 }
 
+/**
+ * @brief Applies an effect to all affected Curver instances
+ *
+ * This can be the Item::use() or Item::unUse() routine.
+ */
 void Item::applyToAffected(void (Item::*method)(Curver *))
 {
 	switch (allowedUsers) {

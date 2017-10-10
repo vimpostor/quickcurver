@@ -12,6 +12,9 @@ Server::~Server()
 	clients.clear();
 }
 
+/**
+ * @brief Broadcasts new Curver data to every Client
+ */
 void Server::broadcastCurverData()
 {
 	Packet::ServerCurverData p;
@@ -23,6 +26,11 @@ void Server::broadcastCurverData()
 	broadcastPacket(p);
 }
 
+/**
+ * @brief Broadcasts a chat message to every Client
+ * @param username The author of the message
+ * @param message The chat message
+ */
 void Server::broadcastChatMessage(QString username, QString message)
 {
 	Packet::ServerChatMsg p;
@@ -32,16 +40,27 @@ void Server::broadcastChatMessage(QString username, QString message)
 	broadcastPacket(p);
 }
 
+/**
+ * @brief Broadcasts an admin chat message to every Client
+ * @param msg The chat message to broadcast
+ */
 void Server::broadcastChatMessage(QString msg)
 {
 	broadcastChatMessage(ADMIN_NAME, msg);
 }
 
+/**
+ * @brief Resets the current round
+ */
 void Server::resetRound()
 {
 	resetDue = true;
 }
 
+/**
+ * @brief Reconfigures the Server to listen on another port
+ * @param port The new port to listen on
+ */
 void Server::reListen(quint16 port)
 {
 	tcpServer.close();
@@ -49,6 +68,9 @@ void Server::reListen(quint16 port)
 	qDebug() << "Running on port " << tcpServer.serverPort();
 }
 
+/**
+ * @brief Broadcasts the PlayerModel to every Client
+ */
 void Server::broadcastPlayerModel()
 {
 	Packet::ServerPlayerModel p;
@@ -56,6 +78,15 @@ void Server::broadcastPlayerModel()
 	broadcastPacket(p);
 }
 
+/**
+ * @brief Broadcasts a new Item event to every Client
+ * @param spawned Whether the Item spawned or was triggered
+ * @param sequenceNumber The unique sequence number of the Item
+ * @param which The kind of Item
+ * @param pos The location of the Item
+ * @param allowedUsers The allowed users for the Item
+ * @param collectorIndex If \a spawned is \c false, this value defines which Curver collected the Item
+ */
 void Server::broadcastItemData(bool spawned, unsigned int sequenceNumber, int which, QPointF pos, Item::AllowedUsers allowedUsers, int collectorIndex)
 {
 	Packet::ServerItemData p;
@@ -68,11 +99,17 @@ void Server::broadcastItemData(bool spawned, unsigned int sequenceNumber, int wh
 	broadcastPacket(p);
 }
 
+/**
+ * @brief This function is called, when an error occurred during accepting an incoming connection
+ */
 void Server::acceptError(QAbstractSocket::SocketError)
 {
 	Gui::getSingleton().postInfoBar(tcpServer.errorString());
 }
 
+/**
+ * @brief This function is called when there is a new connection pending
+ */
 void Server::newConnection()
 {
 	QTcpSocket *s = tcpServer.nextPendingConnection();
@@ -88,6 +125,9 @@ void Server::newConnection()
 	}
 }
 
+/**
+ * @brief This function is called, when there was a socket error
+ */
 void Server::socketError(QAbstractSocket::SocketError)
 {
 	QTcpSocket *s = static_cast<QTcpSocket *>(sender());
@@ -95,12 +135,18 @@ void Server::socketError(QAbstractSocket::SocketError)
 	removePlayer(s);
 }
 
+/**
+ * @brief This function is called, when a socket disconnected
+ */
 void Server::socketDisconnect()
 {
 	QTcpSocket *s = static_cast<QTcpSocket *>(sender());
 	removePlayer(s);
 }
 
+/**
+ * @brief This function is called, when there is data available to read from a socket
+ */
 void Server::socketReadyRead()
 {
 	QTcpSocket *s = static_cast<QTcpSocket *>(sender());
@@ -118,6 +164,10 @@ void Server::socketReadyRead()
 	}
 }
 
+/**
+ * @brief Removes a player permanently
+ * @param s The socket that defines the Curver to remove
+ */
 void Server::removePlayer(const QTcpSocket *s)
 {
 	// TODO: Reconsider, whether Server should remove the Curver from the player model as well
@@ -131,6 +181,11 @@ void Server::removePlayer(const QTcpSocket *s)
 	broadcastChatMessage(s->peerAddress().toString() + " left the game");
 }
 
+/**
+ * @brief Processes an already received packet
+ * @param p The packet to process
+ * @param s The socket that the packet was received with
+ */
 void Server::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p, const QTcpSocket *s)
 {
 	Curver *curver = curverFromSocket(s);
@@ -163,11 +218,20 @@ void Server::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p, const QTcp
 	}
 }
 
+/**
+ * @brief Broadcasts a packet to every Client
+ * @param p The packet to broadcast
+ */
 void Server::broadcastPacket(Packet::AbstractPacket &p)
 {
 	Util::for_each(clients, [&](auto &c){ p.sendPacket(c.first.get()); });
 }
 
+/**
+ * @brief Returns the Curver connected to a given socket
+ * @param s The socket to return the Curver of
+ * @return The Curver that belongs to \a s
+ */
 Curver *Server::curverFromSocket(const QTcpSocket *s) const
 {
 	auto it = Util::find_if(clients, [&](auto &c){ return c.first.get() == s; });

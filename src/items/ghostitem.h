@@ -3,6 +3,9 @@
 
 #include "item.h"
 
+/**
+ * @brief Renders a Curver invisible while still being able to collide
+ */
 class GhostItem : public Item
 {
 public:

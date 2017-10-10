@@ -3,6 +3,9 @@
 
 #include "item.h"
 
+/**
+ * @brief Flashes a Curver forward depending on its velocity
+ */
 class FlashItem : public Item
 {
 public:

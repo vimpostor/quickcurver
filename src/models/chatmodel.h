@@ -4,6 +4,9 @@
 #include <QAbstractListModel>
 #include <vector>
 
+/**
+ * @brief A model managing all chat messages
+ */
 class ChatModel : public QAbstractListModel
 {
 	Q_OBJECT
@@ -17,12 +20,31 @@ public:
 	static ChatModel &getSingleton();
 	void appendMessage(QString username, QString message);
 private:
+	/**
+	 * @brief A chat message
+	 */
 	struct ChatMessage
 	{
-		QString username, message;
+		/**
+		 * @brief The author of the chat message
+		 */
+		QString username;
+		/**
+		 * @brief The actual chat message
+		 */
+		QString message;
 	};
+	/**
+	 * @brief All chat messages
+	 */
 	std::vector<ChatMessage> m_data;
+	/**
+	 * @brief The role name strings for this model
+	 */
 	QHash<int, QByteArray> m_roleNames;
+	/**
+	 * @brief The role names for this model
+	 */
 	enum RoleNames {
 		UserNameRole = Qt::UserRole,
 		MessageRole
