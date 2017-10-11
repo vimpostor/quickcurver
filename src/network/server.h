@@ -55,6 +55,12 @@ private:
 	 * Usually the next update of Curver data resets this flag, after sending the reset bit to every Client
 	 */
 	bool resetDue = false;
+	/**
+	 * @brief The amount of times that curver data was broadcasted
+	 *
+	 * This value is used together with Settings::networkCurverBlock to reduce used network bandwidth
+	 */
+	unsigned dataBroadcastIteration = -1;
 };
 
 #endif // SERVER_H

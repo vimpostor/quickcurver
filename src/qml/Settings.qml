@@ -42,6 +42,17 @@ TabbedPage {
 					onTextChanged: c_settings.setTargetScore(text);
 				}
 			}
+			ListItem {
+				text: "Network block"
+				rightItem: Slider {
+					value: c_settings.getNetworkCurverBlock();
+					from: 1
+					to: 8
+					snapMode: Slider.SnapAlways
+					stepSize: 1
+					onValueChanged: c_settings.setNetworkCurverBlock(value);
+				}
+			}
 		}
 	}
 	Tab {

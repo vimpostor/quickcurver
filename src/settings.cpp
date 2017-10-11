@@ -160,3 +160,21 @@ int Settings::getTargetScore() const
 {
 	return targetScore;
 }
+
+/**
+ * @brief Sets the network blocking value
+ * @param val The new value
+ */
+void Settings::setNetworkCurverBlock(const unsigned val)
+{
+	networkCurverBlock = val;
+}
+
+/**
+ * @brief Returns the network blocking value
+ * @return Settings::networkCurverBlock
+ */
+unsigned Settings::getNetworkCurverBlock() const
+{
+	return networkCurverBlock;
+}

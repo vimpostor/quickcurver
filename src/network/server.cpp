@@ -17,13 +17,15 @@ Server::~Server()
  */
 void Server::broadcastCurverData()
 {
-	Packet::ServerCurverData p;
-	p.fill();
-	p.start = true;
-	// if reset is due, send reset and reset the reset flag
-	p.reset = resetDue;
-	resetDue = false;
-	broadcastPacket(p);
+	if (++dataBroadcastIteration % Settings::getSingleton().getNetworkCurverBlock() == 0) {
+		Packet::ServerCurverData p;
+		p.fill();
+		p.start = true;
+		// if reset is due, send reset and reset the reset flag
+		p.reset = resetDue;
+		resetDue = false;
+		broadcastPacket(p);
+	}
 }
 
 /**

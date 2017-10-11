@@ -30,6 +30,8 @@ public:
 	QColor getClientColor() const;
 	Q_INVOKABLE void setTargetScore(const int score);
 	Q_INVOKABLE int getTargetScore() const;
+	Q_INVOKABLE void setNetworkCurverBlock(const unsigned val);
+	Q_INVOKABLE unsigned getNetworkCurverBlock() const;
 signals:
 	/**
 	 * @brief Emitted, when the dimension of the game changed
@@ -66,6 +68,13 @@ private:
 	 * @brief The score to achieve to win the game
 	 */
 	int targetScore = 15;
+	/**
+	 * @brief Determines how often Curver data should be sent by the Server
+	 *
+	 * A value of n means, that n-1 times no data will be sent before data will be sent again.
+	 * A value of 1 means, that every iteration all data will be sent.
+	 */
+	unsigned networkCurverBlock = 1;
 };
 
 #endif // SETTINGS_H
