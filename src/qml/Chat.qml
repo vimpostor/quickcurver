@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.1
 import Fluid.Controls 1.0
+import Fluid.Core 1.0
 
 Card {
 	ColumnLayout {
@@ -18,7 +19,7 @@ Card {
 				text: model.username
 				subText: model.message
 				valueText: new Date().toLocaleTimeString("hh:mm");
-				iconName: "action/account_circle"
+				icon.source: Utils.iconUrl("action/account_circle")
 			}
 			Layout.fillHeight: true
 			Layout.fillWidth: true
@@ -29,15 +30,15 @@ Card {
 				Layout.fillWidth: true
 				onAccepted: sendButton.send();
 			}
-			IconButton {
+			ToolButton {
 				id: sendButton
 				function send() {
 					game.sendChatMessage(messageTextField.text);
 					messageTextField.text = "";
 					game.forceActiveFocus();
 				}
-				iconName: "content/send"
-				iconColor: Material.accent
+				icon.source: Utils.iconUrl("content/send")
+				icon.color: Material.accent
 				onClicked: send();
 			}
 		}

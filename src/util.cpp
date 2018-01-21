@@ -67,7 +67,7 @@ const QColor Util::getColor(const QString color)
  */
 QString Util::expandIconName(const QString icon)
 {
-	return QString(":/Fluid/Controls/" + icon + ".svg");
+	return QStringLiteral(":/liri.io/imports/Fluid/Controls/icons/%1.svg").arg(icon);
 }
 
 /**

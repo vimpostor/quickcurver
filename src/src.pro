@@ -3,18 +3,38 @@ TEMPLATE = app
 QT += gui qml quick svg quickcontrols2
 CONFIG += c++14
 
-RESOURCES += qml/qml.qrc ../fluid/icons/icons.qrc
+RESOURCES += qml/qml.qrc ../fluid/src/imports/controls/icons.qrc
 
 QML_IMPORT_PATH = $$OUT_PWD/../fluid/qml
 
 DEFINES += QT_DEPRECATED_WARNINGS
+
+android {
+	# Bundle Fluid QML plugins with the application
+	ANDROID_EXTRA_PLUGINS = $$OUT_PWD/../fluid/qml
+
+	# Android package sources
+	ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+}
+
+macx {
+	# Bundle Fluid QML plugins with the application
+	APP_QML_FILES.files = $$OUT_PWD/../fluid/qml/Fluid
+	APP_QML_FILES.path = Contents/MacOS
+	QMAKE_BUNDLE_DATA += APP_QML_FILES
+}
+
+win32 {
+	WINDEPLOYQT_OPTIONS = -qmldir $$OUT_PWD/../fluid/qml/Fluid
+}
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-TARGET = ../QuickCurver
+TARGET = QuickCurver
 
 SOURCES += game.cpp \
     main.cpp \

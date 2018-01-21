@@ -3,6 +3,7 @@ import Qt.labs.platform 1.0 as Platform
 import QtQuick.Controls 2.1
 import QtQuick.Controls.Material 2.1
 import Fluid.Controls 1.0
+import Fluid.Core 1.0
 import QtQuick.Layouts 1.1
 
 import Game 1.0
@@ -24,46 +25,46 @@ ApplicationWindow {
 		appBar.maxActionCount: 6
 		actions: [
 			Action {
-				iconName: "content/undo"
+				icon.source: Utils.iconUrl("content/undo")
 				text: "Reset game"
 				onTriggered: game.resetGame();
 			},
 			Action {
-				iconName: "av/hearing"
+				icon.source: Utils.iconUrl("av/hearing")
 				text: "Server listen"
 				onTriggered: listenDialog.open();
 			},
 			Action {
-				iconName: "file/cloud_upload"
+				icon.source: Utils.iconUrl("file/cloud_upload")
 				text: "Join game"
 				onTriggered: clientDialog.open();
 				shortcut: "Ctrl+J"
 			},
 			Action {
-				iconName: "editor/border_left"
+				icon.source: Utils.iconUrl("editor/border_left")
 				text: "Left"
 				onTriggered: gameWave.width += 20
 				shortcut: "Ctrl+H"
 			},
 			Action {
-				iconName: "editor/border_right"
+				icon.source: Utils.iconUrl("editor/border_right")
 				text: "Right"
 				onTriggered: gameWave.width -= 20
 				shortcut: "Ctrl+L"
 			},
 			Action {
-				iconName: "action/settings"
+				icon.source: Utils.iconUrl("action/settings")
 				text: "Settings"
 				onTriggered: pageStack.push(Qt.resolvedUrl("Settings.qml"))
 				shortcut: "Ctrl+I"
 			},
 			Action {
-				iconName: "action/info"
+				icon.source: Utils.iconUrl("action/info")
 				text: "About"
 				onTriggered: pageStack.push(Qt.resolvedUrl("About.qml"))
 			},
 			Action {
-				iconName: "navigation/close"
+				icon.source: Utils.iconUrl("navigation/close")
 				text: "Quit"
 				onTriggered: close();
 				shortcut: "Ctrl+Q"
@@ -141,9 +142,9 @@ ApplicationWindow {
 					placeholderText: "Username"
 					text: "Client"
 				}
-				IconButton {
-					iconName: "editor/format_color_fill"
-					iconColor: clientColorDialog.color
+				ToolButton {
+					icon.source: Utils.iconUrl("editor/format_color_fill")
+					icon.color: clientColorDialog.color
 					onClicked: clientColorDialog.open();
 					Platform.ColorDialog {
 						id: clientColorDialog

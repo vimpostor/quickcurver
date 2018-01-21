@@ -28,18 +28,18 @@ Card {
 		anchors.fill: parent
 		model: c_playerModel
 		delegate: ListItem {
-			iconName: model.controller === 0 ? "hardware/gamepad" : model.controller === 2 ? "action/android" : "action/account_circle"
+			icon.source: Utils.iconUrl(model.controller === 0 ? "hardware/gamepad" : model.controller === 2 ? "action/android" : "action/account_circle")
 			text: model.name + "   " + model.totalScore + "(+" +  model.roundScore + ")"
 			rightItem: Row {
-				IconButton {
-					iconName: "hardware/keyboard_arrow_left"
+				ToolButton {
+					icon.source: Utils.iconUrl("hardware/keyboard_arrow_left")
 					Keys.onPressed: {
 						c_playerModel.setLeftKey(index, event.key);
 						game.forceActiveFocus();
 					}
 				}
-				IconButton {
-					iconName: "hardware/keyboard_arrow_right"
+				ToolButton {
+					icon.source: Utils.iconUrl("hardware/keyboard_arrow_right")
 					Keys.onPressed: {
 						c_playerModel.setRightKey(index, event.key);
 						game.forceActiveFocus();
@@ -56,24 +56,24 @@ Card {
 				Action {
 					text: "Edit name"
 					enabled: bottomSheet.playerEditable
-					iconName: "action/account_circle"
+					icon.source: Utils.iconUrl("action/account_circle")
 					onTriggered: inputDialog.open();
 				},
 				Action {
 					text: "Edit color"
 					enabled: bottomSheet.playerEditable
-					iconName: "editor/format_color_fill"
+					icon.source: Utils.iconUrl("editor/format_color_fill")
 					onTriggered: colorDialog.open();
 				},
 				Action {
 					text: "Bot Settings"
 					enabled: bottomSheet.playerEditable
-					iconName: "action/android"
+					icon.source: Utils.iconUrl("action/android")
 					onTriggered: botDialog.open();
 				},
 				Action {
 					text: "Delete"
-					iconName: "action/delete"
+					icon.source: Utils.iconUrl("action/delete")
 					onTriggered: c_playerModel.removePlayer(playerListView.modelIndex);
 				}
 			]
@@ -122,7 +122,7 @@ Card {
 		anchors.bottom: parent.bottom
 		anchors.right: parent.right
 		anchors.margins: Units.largeSpacing
-		iconName: "content/add"
+		icon.source: Utils.iconUrl("content/add")
 		Material.background: Material.primary
 		onClicked: {
 			c_playerModel.appendPlayer();

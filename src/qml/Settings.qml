@@ -2,6 +2,7 @@ import QtQuick 2.7
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.1
 import Fluid.Controls 1.0
+import Fluid.Core 1.0
 
 TabbedPage {
 	id: settings
@@ -64,7 +65,7 @@ TabbedPage {
 			delegate: ListItem {
 				text: model.name
 				subText: model.description
-				iconName: model.iconName
+				icon.source: Utils.iconUrl(model.iconName)
 				rightItem: Column {
 					Slider {
 						id: probabilitySlider

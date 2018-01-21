@@ -52,7 +52,7 @@ qmake ..
 make
 ```
 
-To start QuickCurver you need to run the built executable in the build directory, for example on Linux: `./QuickCurver`
+To start QuickCurver you need to run the built executable in the build/src directory, for example on Linux: `src/QuickCurver`
 
 ## Installing compiled binaries
 Coming soon!
