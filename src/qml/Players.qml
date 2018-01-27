@@ -30,22 +30,6 @@ Card {
 		delegate: ListItem {
 			icon.source: Utils.iconUrl(model.controller === 0 ? "hardware/gamepad" : model.controller === 2 ? "action/android" : "action/account_circle")
 			text: model.name + "   " + model.totalScore + "(+" +  model.roundScore + ")"
-			rightItem: Row {
-				ToolButton {
-					icon.source: Utils.iconUrl("hardware/keyboard_arrow_left")
-					Keys.onPressed: {
-						c_playerModel.setLeftKey(index, event.key);
-						game.forceActiveFocus();
-					}
-				}
-				ToolButton {
-					icon.source: Utils.iconUrl("hardware/keyboard_arrow_right")
-					Keys.onPressed: {
-						c_playerModel.setRightKey(index, event.key);
-						game.forceActiveFocus();
-					}
-				}
-			}
 			Ripple {
 				anchors.fill: parent
 				acceptedButtons: Qt.LeftButton | Qt.RightButton
@@ -68,6 +52,24 @@ Card {
 					enabled: bottomSheet.playerEditable
 					icon.source: Utils.iconUrl("editor/format_color_fill")
 					onTriggered: colorDialog.open();
+				},
+				Action {
+					text: "Set counterclockwise key"
+					enabled: bottomSheet.playerEditable
+					icon.source: Utils.iconUrl("hardware/keyboard_arrow_left")
+					onTriggered: {
+						infoBar.open("Press a key!");
+						leftKeyItem.forceActiveFocus();
+					}
+				},
+				Action {
+					text: "Set clockwise key"
+					enabled: bottomSheet.playerEditable
+					icon.source: Utils.iconUrl("hardware/keyboard_arrow_right")
+					onTriggered: {
+						infoBar.open("Press a key!");
+						rightKeyItem.forceActiveFocus();
+					}
 				},
 				Action {
 					text: "Bot Settings"
@@ -105,6 +107,22 @@ Card {
 					onCheckedChanged: c_playerModel.setController(playerListView.modelIndex, 2 * botCheckbox.checked);
 				}
 				onClicked: botCheckbox.checked = !botCheckbox.checked;
+			}
+		}
+		Item {
+			id: leftKeyItem
+			visible: false
+			Keys.onPressed: {
+				c_playerModel.setLeftKey(playerListView.modelIndex, event.key);
+				game.forceActiveFocus();
+			}
+		}
+		Item {
+			id: rightKeyItem
+			visible: false
+			Keys.onPressed: {
+				c_playerModel.setRightKey(playerListView.modelIndex, event.key);
+				game.forceActiveFocus();
 			}
 		}
 	}

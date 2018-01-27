@@ -116,8 +116,9 @@ void PlayerModel::setColor(int row, QColor color)
  */
 void PlayerModel::setLeftKey(int row, Qt::Key key)
 {
-	m_data[static_cast<unsigned long>(row)]->setLeftKey(key);
-	emit Gui::getSingleton().postInfoBar("Set left key to " + QKeySequence(key).toString());
+	const auto player = m_data[static_cast<unsigned long>(row)].get();
+	player->setLeftKey(key);
+	emit Gui::getSingleton().postInfoBar("Set left key of " + player->userName + " to " + QKeySequence(key).toString());
 }
 
 /**
@@ -127,8 +128,9 @@ void PlayerModel::setLeftKey(int row, Qt::Key key)
  */
 void PlayerModel::setRightKey(int row, Qt::Key key)
 {
-	m_data[static_cast<unsigned long>(row)]->setRightKey(key);
-	emit Gui::getSingleton().postInfoBar("Set right key to " + QKeySequence(key).toString());
+	const auto player = m_data[static_cast<unsigned long>(row)].get();
+	player->setRightKey(key);
+	emit Gui::getSingleton().postInfoBar("Set right key of " + player->userName + " to " + QKeySequence(key).toString());
 }
 
 /**
