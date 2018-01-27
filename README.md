@@ -1,6 +1,9 @@
 # Quick Curver
 This is an OpenGL accelerated Qt/C++ implementation of the famous game "Achtung die Kurve".
 
+[![Build Status](https://travis-ci.org/magnus-gross/quickcurver.svg?branch=master)](https://travis-ci.org/magnus-gross/quickcurver)
+[![Build Status](https://travis-ci.org/magnus-gross/quickcurver.svg?branch=develop)](https://travis-ci.org/magnus-gross/quickcurver)
+
 ![alt tag](http://i.imgur.com/IGa3NwA.png)
 
 Please note that this project is still in development. This means that you could experience bugs, while playing the game. Please open an issue if you encounter a bug.
