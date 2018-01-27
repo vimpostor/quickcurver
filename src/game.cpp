@@ -52,7 +52,7 @@ void Game::startGame()
 	Util::for_each(getCurvers(), [](const std::unique_ptr<Curver> &c){ c->start(); });
 	itemFactory->resetRound();
 	// 60 FPS = 16 ms interval
-	gameTimer.start(16);
+	gameTimer.start(static_cast<int>(1000.f / Settings::getSingleton().getUpdatesPerSecond()));
 }
 
 /**

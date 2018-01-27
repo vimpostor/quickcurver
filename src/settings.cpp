@@ -178,3 +178,20 @@ unsigned Settings::getNetworkCurverBlock() const
 {
 	return networkCurverBlock;
 }
+
+/**
+ * @brief Sets the amount of logic updates per second
+ * @param val The new value
+ */
+void Settings::setUpdatesPerSecond(const unsigned val)
+{
+	updatesPerSecond = val;
+}
+
+/**
+ * @brief Returns the amount of logic updates per second
+ */
+unsigned Settings::getUpdatesPerSecond() const
+{
+	return updatesPerSecond;
+}

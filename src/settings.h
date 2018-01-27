@@ -32,6 +32,8 @@ public:
 	Q_INVOKABLE int getTargetScore() const;
 	Q_INVOKABLE void setNetworkCurverBlock(const unsigned val);
 	Q_INVOKABLE unsigned getNetworkCurverBlock() const;
+	Q_INVOKABLE void setUpdatesPerSecond(const unsigned val);
+	Q_INVOKABLE unsigned getUpdatesPerSecond() const;
 signals:
 	/**
 	 * @brief Emitted, when the dimension of the game changed
@@ -75,6 +77,10 @@ private:
 	 * A value of 1 means, that every iteration all data will be sent.
 	 */
 	unsigned networkCurverBlock = 2;
+	/**
+	 * @brief The number of logic updates per second
+	 */
+	unsigned updatesPerSecond = 60;
 };
 
 #endif // SETTINGS_H

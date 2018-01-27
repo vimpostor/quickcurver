@@ -44,6 +44,17 @@ TabbedPage {
 				}
 			}
 			ListItem {
+				text: "Logic update rate"
+				rightItem: Slider {
+					value: c_settings.getUpdatesPerSecond();
+					from: 30
+					to: 120
+					snapMode: Slider.SnapAlways
+					stepSize: 1
+					onValueChanged: c_settings.setUpdatesPerSecond(value);
+				}
+			}
+			ListItem {
 				text: "Network update rate"
 				rightItem: Slider {
 					value: c_settings.getNetworkCurverBlock();
