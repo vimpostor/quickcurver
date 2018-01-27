@@ -46,7 +46,11 @@ Card {
 					}
 				}
 			}
-			onClicked: playerListView.open(index, model.controller);
+			Ripple {
+				anchors.fill: parent
+				acceptedButtons: Qt.LeftButton | Qt.RightButton
+				onClicked: playerListView.open(index, model.controller);
+			}
 		}
 		BottomSheetList {
 			id: bottomSheet
