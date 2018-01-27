@@ -44,7 +44,7 @@ TabbedPage {
 				}
 			}
 			ListItem {
-				text: "Network block"
+				text: "Network update rate"
 				rightItem: Slider {
 					value: c_settings.getNetworkCurverBlock();
 					from: 1

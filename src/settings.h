@@ -74,7 +74,7 @@ private:
 	 * A value of n means, that n-1 times no data will be sent before data will be sent again.
 	 * A value of 1 means, that every iteration all data will be sent.
 	 */
-	unsigned networkCurverBlock = 1;
+	unsigned networkCurverBlock = 2;
 };
 
 #endif // SETTINGS_H
