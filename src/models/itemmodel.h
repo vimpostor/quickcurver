@@ -103,7 +103,7 @@ private:
 		{&ItemModel::makeAgileItem, "Agile", "Turn around faster", 0.2, Item::AllowedUsers::ALLOW_COLLECTOR, "image/rotate_90_degrees_ccw"},
 		{&ItemModel::makeFlashItem, "Flash", "The fastest man alive", 0.2, Item::AllowedUsers::ALLOW_COLLECTOR, "image/flash_on"},
 		{&ItemModel::makeSlowItem, "Freeze", "Decreases speed", 0.1, Item::AllowedUsers::ALLOW_OTHERS, "action/trending_down"},
-		{&ItemModel::makeGhostItem, "Ghost", "Booh!", 0.2, Item::AllowedUsers::ALLOW_OTHERS, "social/sentiment_very_satisfied"},
+		{&ItemModel::makeGhostItem, "Ghost", "Booh!", 0.0, Item::AllowedUsers::ALLOW_OTHERS, "social/sentiment_very_satisfied"},
 	};
 	/**
 	 * @brief The sequence number of the last spawned Item

@@ -116,7 +116,7 @@ ApplicationWindow {
 				}
 			}
 		}
-		InfoBar {
+		SnackBar {
 			id: infoBar
 			anchors {
 				left: parent.left
