@@ -24,10 +24,30 @@ macx {
 	QMAKE_BUNDLE_DATA += APP_QML_FILES
 }
 
+ios {
+	# Bundle Fluid QML plugins with the application
+	APP_QML_FILES.files = $$OUT_PWD/../fluid/qml/Fluid
+	APP_QML_FILES.path = qml
+	QMAKE_BUNDLE_DATA += APP_QML_FILES
+}
+
 win32 {
 	WINDEPLOYQT_OPTIONS = -qmldir $$OUT_PWD/../fluid/qml/Fluid
 }
 
+qtConfig(static) {
+	QMAKE_LIBDIR += \
+		$$OUT_PWD/../fluid/qml/Fluid/Core \
+		$$OUT_PWD/../fluid/qml/Fluid/Controls \
+		$$OUT_PWD/../fluid/qml/Fluid/Private \
+		$$OUT_PWD/../fluid/qml/Fluid/Templates
+	QTPLUGIN += \
+		qsvg \
+		fluidcoreplugin \
+		fluidcontrolsplugin \
+		fluidcontrolsprivateplugin \
+		fluidtemplatesplugin
+}
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
