@@ -1,0 +1,18 @@
+version: '{build}'
+pull_requests:
+  do_not_increment_build_number: true
+configuration: Release
+skip_tags: true
+environment:
+  matrix:
+  - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    QT_PROFILE: msvc2017_64
+    QTDIR: C:\Qt\5.11.1\msvc2017_64
+init:
+- set PATH=%QTDIR%\bin;%PATH%
+build_script:
+- git submodule update --init --recursive
+- mkdir build
+- cd build
+- qmake ..
+- make
