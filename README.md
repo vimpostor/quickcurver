@@ -1,7 +1,7 @@
 # Quick Curver
-This is an OpenGL accelerated Qt/C++ implementation of the famous game "Achtung die Kurve".
+This is an Qt/C++ + OpenGL implementation of the famous game "Achtung die Kurve".
 
-[![Build Status](https://travis-ci.org/magnus-gross/quickcurver.svg?branch=develop)](https://travis-ci.org/magnus-gross/quickcurver)
+[![travis build status](https://travis-ci.org/magnus-gross/quickcurver.svg?branch=develop)](https://travis-ci.org/magnus-gross/quickcurver)
 [![Appveyor build status](https://ci.appveyor.com/api/projects/status/v0yfey5sbceddbd8?svg=true)](https://ci.appveyor.com/project/magnus-gross/quickcurver)
 
 ![screenshot](http://i.imgur.com/IGa3NwA.png)
@@ -61,11 +61,10 @@ To start QuickCurver you need to run the built executable in the build/src direc
 When you click on the AppVeyor icon or go to https://ci.appveyor.com/project/magnus-gross/quickcurver directly, you can click on Artifacts on the latest build and download a zip file. Extract all files and run `QuickCurver.exe` in the `release` directory.
 
 # Multiplayer
+Note: The multiplayer is not 100% stable yet.
+
 To play multiplayer, the host starts an instance and shares the port that QuickCurver is running on. The client then just has to connect to this port on the host's ip address.
 If you are not in the same local network, the host most likely has to use [Port Forwarding](https://en.wikipedia.org/wiki/Port_forwarding) to make his device available to the internet.
 If a firewall is the problem, you might also want to take a look at [Hole Punching](https://en.wikipedia.org/wiki/Hole_punching_(networking)).
 
 If network performance isn't good, the Server can tweak the "Network update rate" value in the settings, which causes data to be sent less frequently which may improve the network performance at the cost of update frequency. (A higher value means worse quality, but better network performance)
-
-# Acknowledgements
-QuickCurver uses [fluid](https://github.com/lirios/fluid), which is a neat QML Material Design library.
