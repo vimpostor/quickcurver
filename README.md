@@ -2,10 +2,9 @@
 This is an OpenGL accelerated Qt/C++ implementation of the famous game "Achtung die Kurve".
 
 [![Build Status](https://travis-ci.org/magnus-gross/quickcurver.svg?branch=develop)](https://travis-ci.org/magnus-gross/quickcurver)
+[![Appveyor build status](https://ci.appveyor.com/api/projects/status/v0yfey5sbceddbd8?svg=true)](https://ci.appveyor.com/project/magnus-gross/quickcurver)
 
-![alt tag](http://i.imgur.com/IGa3NwA.png)
-
-Please note that this project is still in development. This means that you could experience bugs, while playing the game. Please open an issue if you encounter a bug.
+![screenshot](http://i.imgur.com/IGa3NwA.png)
 
 # Features
 * Material Design
@@ -21,7 +20,7 @@ Please note that this project is still in development. This means that you could
 Note: Arch Linux users can simply install [quickcurver-git](https://aur.archlinux.org/packages/quickcurver-git) from the AUR:
 
 ```bash
-pacaur -S quickcurver-git
+yay -S quickcurver-git
 quickcurver
 ```
 
@@ -57,7 +56,9 @@ make
 To start QuickCurver you need to run the built executable in the build/src directory, for example on Linux run: `src/QuickCurver`
 
 ## Installing compiled binaries
-Coming soon!
+
+### Windows
+When you click on the AppVeyor icon or go to https://ci.appveyor.com/project/magnus-gross/quickcurver directly, you can click on Artifacts on the latest build and download a zip file. Extract all files and run `QuickCurver.exe` in the `release` directory.
 
 # Multiplayer
 To play multiplayer, the host starts an instance and shares the port that QuickCurver is running on. The client then just has to connect to this port on the host's ip address.
