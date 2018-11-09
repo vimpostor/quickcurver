@@ -254,7 +254,12 @@ void Curver::appendPoint(const QPointF pos, const bool changingSegment)
 		if (diff.y() < 0) {
 			angle = -1 * angle;
 		}
-		segments.back()->appendPoint(pos, angle);
+		if (segments.size() > 0) {
+			segments.back()->appendPoint(pos, angle);
+		} else {
+			// TODO: Find the real cause for this issue, instead of just ignoring it
+			qDebug() << "Whoops, looks like we got a position packet, before creating a segment";
+		}
 	}
 	oldChangingSegment = changingSegment;
 	lastPos = pos;
