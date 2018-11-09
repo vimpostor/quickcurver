@@ -2,7 +2,7 @@ import QtQuick 2.7
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.1
-import Fluid.Controls 1.0
+import Fluid.Controls 1.1
 import Fluid.Core 1.0
 
 Card {
@@ -16,10 +16,12 @@ Card {
 			clip: true
 			model: c_chatModel
 			delegate: ListItem {
-				text: model.username
-				subText: model.message
+				text: model.message
 				valueText: new Date().toLocaleTimeString("hh:mm");
-				icon.source: Utils.iconUrl("action/account_circle")
+				leftItem: Chip {
+					text: username
+					icon.source: Utils.iconUrl("action/account_circle")
+				}
 			}
 			Layout.fillHeight: true
 			Layout.fillWidth: true

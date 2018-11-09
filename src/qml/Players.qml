@@ -100,7 +100,7 @@ Card {
 			x: (parent.width - width) / 2
 			y: (parent.height - height) / 2
 			ListItem {
-				text: "Controlled by Computer"
+				text: "Controlled by AI"
 				rightItem: CheckBox {
 					id: botCheckbox
 					anchors.verticalCenter: parent.verticalCenter
