@@ -118,11 +118,6 @@ ApplicationWindow {
 		}
 		SnackBar {
 			id: infoBar
-			anchors {
-				left: parent.left
-				bottom: parent.bottom
-				right: parent.right
-			}
 		}
 		InputDialog {
 			id: listenDialog
