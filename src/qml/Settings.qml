@@ -7,10 +7,6 @@ import Fluid.Core 1.0
 TabbedPage {
 	id: settings
 	title: "Settings"
-
-	onGoBack: {
-		settings.forcePop();
-	}
 	Tab {
 		title: "General"
 		ColumnLayout {
@@ -18,6 +14,7 @@ TabbedPage {
 			ListItem {
 				text: "Round time out"
 				rightItem: Slider {
+					height: 24
 					value: c_settings.getRoundTimeOut();
 					from: 0
 					to: 5000
@@ -27,6 +24,7 @@ TabbedPage {
 			ListItem {
 				text: "Item spawn"
 				rightItem: RangeSlider {
+					height: 24
 					from: 50
 					to: 10000
 					first.value: c_settings.getItemSpawnIntervalMin();
@@ -37,6 +35,7 @@ TabbedPage {
 			}
 			ListItem {
 				text: "Score to win"
+				implicitHeight: 50
 				rightItem: TextField {
 					text: c_settings.getTargetScore()
 					inputMethodHints: Qt.ImhDigitsOnly
@@ -46,6 +45,7 @@ TabbedPage {
 			ListItem {
 				text: "Logic update rate"
 				rightItem: Slider {
+					height: 24
 					value: c_settings.getUpdatesPerSecond();
 					from: 30
 					to: 120
@@ -57,6 +57,7 @@ TabbedPage {
 			ListItem {
 				text: "Network update rate"
 				rightItem: Slider {
+					height: 24
 					value: c_settings.getNetworkCurverBlock();
 					from: 1
 					to: 8
@@ -74,6 +75,7 @@ TabbedPage {
 			anchors.fill: parent
 			model: c_itemModel
 			delegate: ListItem {
+				height: 108
 				text: model.name
 				subText: model.description
 				icon.source: Utils.iconUrl(model.iconName)
