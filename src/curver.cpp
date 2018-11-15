@@ -243,7 +243,8 @@ bool Curver::isAlive() const
  */
 void Curver::appendPoint(const QPointF pos, const bool changingSegment)
 {
-	if (!changingSegment && oldChangingSegment) {
+	// segments.size() test fixes a bug, where a client would crash due to network lag
+	if (!changingSegment && (oldChangingSegment || segments.size() == 0)) {
 		segments.push_back(std::make_unique<Segment>(parentNode, &material, thickness));
 	}
 	headNode->setPosition(pos);
@@ -254,12 +255,8 @@ void Curver::appendPoint(const QPointF pos, const bool changingSegment)
 		if (diff.y() < 0) {
 			angle = -1 * angle;
 		}
-		if (segments.size() > 0) {
-			segments.back()->appendPoint(pos, angle);
-		} else {
-			// TODO: Find the real cause for this issue, instead of just ignoring it
-			qDebug() << "Whoops, looks like we got a position packet, before creating a segment";
-		}
+		Q_ASSERT(segments.size() > 0);
+		segments.back()->appendPoint(pos, angle);
 	}
 	oldChangingSegment = changingSegment;
 	lastPos = pos;
