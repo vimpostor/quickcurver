@@ -21,7 +21,12 @@ public:
 
 	void appendPoint(const QPointF newPoint, const float angle);
 	bool checkForIntersection(QPointF a, QPointF b) const;
+	size_t getSegmentSize() const;
+	void popPoints(const size_t amount);
+	void clear();
 private:
+	void updateGeometry();
+
 	/**
 	 * @brief The parent node in the scene graph
 	 */

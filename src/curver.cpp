@@ -200,7 +200,8 @@ void Curver::checkForWall()
 void Curver::cleanInstall()
 {
 	prepareSegmentEvent(true, CLEAN_INVINCIBLE_DURATION, CLEAN_INVINCIBLE_DURATION);
-	segments.clear();
+	// spawn cleaninstall animation and remove segments with it
+	cleaninstallAnimation.trigger(segments);
 }
 
 /**

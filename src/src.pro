@@ -81,7 +81,8 @@ SOURCES += game.cpp \
     items/agileitem.cpp \
     items/flashitem.cpp \
     items/slowitem.cpp \
-    items/ghostitem.cpp
+    items/ghostitem.cpp \
+    cleaninstallanimation.cpp
 
 HEADERS += game.h \
     curver.h \
@@ -107,4 +108,5 @@ HEADERS += game.h \
     items/agileitem.h \
     items/flashitem.h \
     items/slowitem.h \
-    items/ghostitem.h
+    items/ghostitem.h \
+    cleaninstallanimation.h

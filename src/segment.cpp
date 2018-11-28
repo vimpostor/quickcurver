@@ -35,12 +35,7 @@ void Segment::appendPoint(const QPointF newPoint, const float angle)
 	const QPointF normalVector = thickness * QPointF(cos(normalAngle), sin(normalAngle));
 	pos.push_back(newPoint + normalVector);
 	pos.push_back(newPoint - normalVector);
-	geometry.allocate(pos.size());
-	QSGGeometry::Point2D *vertices = geometry.vertexDataAsPoint2D();
-	for (int i = 0; i < static_cast<int>(pos.size()); ++i) {
-		vertices[i].set(pos[i].x(), pos[i].y());
-	}
-	geoNode.markDirty(QSGNode::DirtyGeometry);
+	updateGeometry();
 
 	lastPoint = newPoint;
 }
@@ -99,4 +94,48 @@ bool Segment::checkForIntersection(QPointF a, QPointF b) const
 		}
 	}
 	return false;
+}
+
+/**
+ * @brief Returns the size of the segment
+ * @return The total internal amount of points stored in this segment
+ */
+size_t Segment::getSegmentSize() const
+{
+	return pos.size();
+}
+
+/**
+ * @brief Removes points from the beginning of the segment
+ * @param amount The number of points to remove
+ */
+void Segment::popPoints(const size_t amount)
+{
+	if (!amount) {
+		return;
+	}
+	pos.erase(pos.begin(), pos.begin() + amount);
+	updateGeometry();
+}
+
+/**
+ * @brief Removes all points from this segment
+ */
+void Segment::clear()
+{
+	pos.clear();
+	updateGeometry();
+}
+
+/**
+ * @brief Updates the geometry of the geometry node and flags it dirty for the renderer
+ */
+void Segment::updateGeometry()
+{
+	geometry.allocate(pos.size());
+	QSGGeometry::Point2D *vertices = geometry.vertexDataAsPoint2D();
+	for (size_t i = 0; i < pos.size(); ++i) {
+		vertices[i].set(pos[i].x(), pos[i].y());
+	}
+	geoNode.markDirty(QSGNode::DirtyGeometry);
 }
