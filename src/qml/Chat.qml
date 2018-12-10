@@ -29,6 +29,7 @@ Card {
 		RowLayout {
 			TextField {
 				id: messageTextField
+				background.width: width
 				Layout.fillWidth: true
 				onAccepted: sendButton.send();
 			}
