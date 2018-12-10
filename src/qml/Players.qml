@@ -29,6 +29,7 @@ Card {
 		model: c_playerModel
 		delegate: ListItem {
 			icon.source: Utils.iconUrl(model.controller === 0 ? "hardware/gamepad" : model.controller === 2 ? "action/android" : "action/account_circle")
+			height: 65
 			text: model.name + "   " + model.totalScore + "(+" +  model.roundScore + ")"
 			Ripple {
 				anchors.fill: parent
@@ -100,7 +101,8 @@ Card {
 			x: (parent.width - width) / 2
 			y: (parent.height - height) / 2
 			ListItem {
-				text: "Controlled by AI"
+				text: qsTr("Controlled by AI")
+				height: 65
 				rightItem: CheckBox {
 					id: botCheckbox
 					anchors.verticalCenter: parent.verticalCenter
