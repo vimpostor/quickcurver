@@ -104,3 +104,13 @@ QQuickView* Util::getTextureGenerator()
 	}
 	return result.get();
 }
+
+/**
+ * @brief Calculates the time difference between a time and now
+ * @param t The time to calculate the difference from
+ * @return The resulting difference in milliseconds
+ */
+qint64 Util::getTimeDiff(const QTime& t)
+{
+	return t.msecsTo(QTime::currentTime());
+}

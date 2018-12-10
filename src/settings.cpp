@@ -224,22 +224,3 @@ bool Settings::getOffscreen() const
 {
 	return QGuiApplication::platformName() == "offscreen";
 }
-
-/**
- * @brief Sets the new connection status
- * @param connected Whether the client is currently connected to a server
- */
-void Settings::setConnectedToServer(const bool connected)
-{
-	this->connectedToServer = connected;
-	emit connectedToServerChanged(connectedToServer);
-}
-
-/**
- * @brief Retrieves the current connection status
- * @return Whether the client is currently connected to a server
- */
-bool Settings::getConnectedToServer() const
-{
-	return this->connectedToServer;
-}

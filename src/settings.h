@@ -15,7 +15,6 @@ class Settings : public QObject
 
 	Q_PROPERTY(int width READ getWidth WRITE setWidth NOTIFY widthChanged)
 	Q_PROPERTY(int height READ getHeight WRITE setHeight NOTIFY heightChanged)
-	Q_PROPERTY(bool connectedToServer READ getConnectedToServer WRITE setConnectedToServer NOTIFY connectedToServerChanged)
 public:
 	explicit Settings();
 	static Settings &getSingleton();
@@ -42,8 +41,6 @@ public:
 	Q_INVOKABLE void setUpdatesPerSecond(const unsigned val);
 	Q_INVOKABLE unsigned getUpdatesPerSecond() const;
 	Q_INVOKABLE bool getOffscreen() const;
-	Q_INVOKABLE void setConnectedToServer(const bool connected);
-	Q_INVOKABLE bool getConnectedToServer() const;
 signals:
 	/**
 	 * @brief Emitted, when the dimension of the game changed
@@ -59,11 +56,6 @@ signals:
 	 * @param height The new height
 	 */
 	void heightChanged(int height);
-	/**
-	 * @brief Emitted, when the connection to a server changed
-	 * @param connectedToServer Whether the client is currently connected to a server
-	 */
-	void connectedToServerChanged(bool connectedToServer);
 private:
 	/**
 	 * @brief The username of the client
@@ -106,10 +98,6 @@ private:
 	 * @brief The number of logic updates per second
 	 */
 	unsigned updatesPerSecond = 60;
-	/**
-	 * @brief Whether this instance is connected to a server
-	 */
-	bool connectedToServer = false;
 };
 
 #endif // SETTINGS_H

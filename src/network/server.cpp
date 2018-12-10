@@ -4,8 +4,9 @@ Server::Server()
 {
 	connect(&tcpServer, &QTcpServer::acceptError, this, &Server::acceptError);
 	connect(&tcpServer, &QTcpServer::newConnection, this, &Server::newConnection);
-
 	connect(&Settings::getSingleton(), &Settings::dimensionChanged, this, &Server::broadcastSettings);
+	connect(&udpSocket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this, &Server::udpSocketError);
+	connect(&udpSocket, &QUdpSocket::readyRead, this, &Server::udpSocketReadyRead);
 	reListen(0);
 }
 
@@ -26,7 +27,7 @@ void Server::broadcastCurverData()
 		// if reset is due, send reset and reset the reset flag
 		p.reset = resetDue;
 		resetDue = false;
-		broadcastPacket(p);
+		broadcastPacket(p, true);
 	}
 }
 
@@ -79,6 +80,7 @@ void Server::reListen(quint16 port)
 {
 	tcpServer.close();
 	tcpServer.listen(QHostAddress::Any, port);
+	udpSocket.bind(tcpServer.serverPort());
 	qDebug() << "Running on port" << tcpServer.serverPort();
 }
 
@@ -180,6 +182,42 @@ void Server::socketReadyRead()
 }
 
 /**
+ * @brief Handles an UDP socket error
+ */
+void Server::udpSocketError(QAbstractSocket::SocketError)
+{
+	qDebug() << udpSocket.errorString();
+}
+
+/**
+ * @brief Handles incoming UDP packets
+ */
+void Server::udpSocketReadyRead()
+{
+	while (udpSocket.hasPendingDatagrams()) {
+		// get datagram
+		QByteArray datagram;
+		datagram.resize(udpSocket.pendingDatagramSize());
+		QHostAddress sender;
+		quint16 port;
+		udpSocket.readDatagram(datagram.data(), datagram.size(), &sender, &port);
+		FullNetworkAddress client = {sender, port};
+		QDataStream udpStream(&datagram, QIODevice::ReadOnly);
+		udpStream.startTransaction();
+		auto packet = Packet::AbstractPacket::receivePacket(udpStream, InstanceType::Client);
+		if (udpStream.commitTransaction()) {
+			handlePacket(packet, nullptr, client);
+			// subscribe client to updates if not yet subscribed
+			if (Util::find(udpAddresses, client) == udpAddresses.end()) {
+				udpAddresses.push_back(client);
+			}
+		} else {
+			qInfo() << "Got an ill-formed UDP packet";
+		}
+	}
+}
+
+/**
  * @brief Removes a player permanently
  * @param s The socket that defines the Curver to remove
  */
@@ -200,12 +238,27 @@ void Server::removePlayer(const QTcpSocket *s)
  * @brief Processes an already received packet
  * @param p The packet to process
  * @param s The socket that the packet was received with
+ * @param sender The sender of the packet, if sent via UDP
  */
-void Server::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p, const QTcpSocket *s)
+void Server::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p, const QTcpSocket *s, FullNetworkAddress sender)
 {
-	Curver *curver = curverFromSocket(s);
+	Curver* curver = nullptr;
+	if (s != nullptr) {
+		curver = curverFromSocket(s);
+	}
+	// packet types that require curver to be set
+	const std::array<Packet::ClientTypes, 3> needsCurver = {
+		Packet::ClientTypes::Chat_Message,
+		Packet::ClientTypes::PlayerModelEdit,
+		Packet::ClientTypes::CurverRotation,
+	};
+	const auto packetType = static_cast<Packet::ClientTypes>(p->type);
+	if (curver == nullptr && Util::find(needsCurver, packetType) != needsCurver.end()) {
+		qDebug() << "curver is not set";
+		return;
+	}
 	// TODO: Deal with flags
-	switch (static_cast<Packet::ClientTypes>(p->type)) {
+	switch (packetType) {
 	case Packet::ClientTypes::Chat_Message:
 	{
 		QString msg = ((Packet::ClientChatMsg *)p.get())->message;
@@ -227,8 +280,17 @@ void Server::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p, const QTcp
 		}
 		break;
 	}
+	case Packet::ClientTypes::Ping:
+	{
+		auto* pingPacket = (Packet::Ping *)p.get();
+		// respond with pong
+		Packet::Pong p;
+		p.sent = pingPacket->sent;
+		p.sendPacketUdp(&udpSocket, sender);
+		break;
+	}
 	default:
-		qDebug() << "Unsupported package type";
+		qDebug() << "Unsupported packet type";
 		break;
 	}
 }
@@ -236,10 +298,15 @@ void Server::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p, const QTcp
 /**
  * @brief Broadcasts a packet to every Client
  * @param p The packet to broadcast
+ * @param udp Whether to broadcast using UDP or TCP
  */
-void Server::broadcastPacket(Packet::AbstractPacket &p)
+void Server::broadcastPacket(Packet::AbstractPacket &p, bool udp)
 {
-	Util::for_each(clients, [&](auto &c){ p.sendPacket(c.first.get()); });
+	if (udp) {
+		Util::for_each(udpAddresses, [&](auto &c){ p.sendPacketUdp(&udpSocket, c); });
+	} else {
+		Util::for_each(clients, [&](auto &c){ p.sendPacket(c.first.get()); });
+	}
 }
 
 /**

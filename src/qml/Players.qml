@@ -20,7 +20,7 @@ Card {
 		function open(index, controller) {
 			modelIndex = index;
 			bottomSheet.playerEditable = controller !== 1;
-			if (c_settings.connectedToServer) {
+			if (root.connectedToServer) {
 				bottomSheet.playerEditable = false;
 			}
 			if (controller !== 1) {
@@ -83,7 +83,7 @@ Card {
 				},
 				Action {
 					text: "Delete"
-					enabled: !c_settings.connectedToServer
+					enabled: !root.connectedToServer
 					icon.source: Utils.iconUrl("action/delete")
 					onTriggered: c_playerModel.removePlayer(playerListView.modelIndex);
 				}
@@ -134,7 +134,7 @@ Card {
 	}
 	Button {
 		id: startButton
-		enabled: !c_settings.connectedToServer
+		enabled: !root.connectedToServer
 		anchors.left: parent.left
 		anchors.right: parent.right
 		anchors.bottom: parent.bottom
@@ -148,7 +148,7 @@ Card {
 	}
 	FloatingActionButton {
 		id: addPlayerButton
-		enabled: !c_settings.connectedToServer
+		enabled: !root.connectedToServer
 		anchors.bottom: parent.bottom
 		anchors.right: parent.right
 		anchors.margins: Units.largeSpacing

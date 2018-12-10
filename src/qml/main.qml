@@ -8,8 +8,10 @@ import Fluid.Core 1.0
 import QtQuick.Layouts 1.1
 
 import Game 1.0
+import Client 1.0
 
 ApplicationWindow {
+	property int connectedToServer: game.client.joinStatus === Client.JOINED
 	onClosing: {
 		game.destroy();
 	}
@@ -29,13 +31,13 @@ ApplicationWindow {
 			Action {
 				icon.source: Utils.iconUrl("content/undo")
 				text: "Reset game"
-				enabled: !c_settings.connectedToServer
+				enabled: !root.connectedToServer
 				onTriggered: game.resetGame();
 			},
 			Action {
 				icon.source: Utils.iconUrl("av/hearing")
 				text: "Server listen"
-				enabled: !c_settings.connectedToServer
+				enabled: !root.connectedToServer
 				onTriggered: listenDialog.open();
 			},
 			Action {
@@ -47,7 +49,7 @@ ApplicationWindow {
 			Action {
 				icon.source: Utils.iconUrl("action/settings")
 				text: "Settings"
-				enabled: !c_settings.connectedToServer
+				enabled: !root.connectedToServer
 				onTriggered: pageStack.push(Qt.resolvedUrl("Settings.qml"))
 				shortcut: "Ctrl+I"
 			},
@@ -81,7 +83,7 @@ ApplicationWindow {
 				property int realWidth: c_settings.width
 				property int realHeight: c_settings.height
 				function checkDimension() {
-					if (!c_settings.connectedToServer) {
+					if (!root.connectedToServer) {
 						// we are manually resizing anyway
 						return;
 					}
@@ -92,13 +94,13 @@ ApplicationWindow {
 					}
 				}
 				onWidthChanged: {
-					if (!c_settings.connectedToServer) {
+					if (!root.connectedToServer) {
 						c_settings.width = width;
 					}
 					checkDimension();
 				}
 				onHeightChanged: {
-					if (!c_settings.connectedToServer) {
+					if (!root.connectedToServer) {
 						c_settings.height = height;
 					}
 					checkDimension();
@@ -186,13 +188,23 @@ ApplicationWindow {
 			onAccepted: game.serverReListen(textField.text);
 		}
 		Dialog {
+			property int joinStatus: game.client.joinStatus
+
 			id: clientDialog
 			title: "Join game"
 			x: (parent.width - width)/2
 			y: (parent.height - height)/2
+			onJoinStatusChanged: {
+				if (joinStatus === Client.JOINED) {
+					clientDialog.accept();
+				}
+			}
 			Column {
+				width: 150
 				TextField {
 					id: nameTextField
+					anchors.left: parent.left
+					anchors.right: parent.right
 					placeholderText: "Username"
 					text: "Client"
 				}
@@ -207,20 +219,36 @@ ApplicationWindow {
 				}
 				TextField {
 					id: ipTextField
+					anchors.left: parent.left
+					anchors.right: parent.right
 					placeholderText: "IP (IPv4 or IPv6)"
 					text: "127.0.0.1"
 				}
 				TextField {
 					id: portTextField
+					anchors.left: parent.left
+					anchors.right: parent.right
 					placeholderText: "Port"
-					onAccepted: clientDialog.accept();
+					onAccepted: buttonJoin.clicked();
 				}
-			}
-			standardButtons: Dialog.Cancel | Dialog.Ok
-			onAccepted: {
-				c_settings.setClientName(nameTextField.text);
-				c_settings.setClientColor(clientColorDialog.color);
-				game.connectToHost(ipTextField.text, portTextField.text);
+				Button {
+					id: buttonJoin
+					enabled: clientDialog.joinStatus === Client.NONE || clientDialog.joinStatus === Client.FAILED || clientDialog.joinStatus === Client.JOINED
+					text: enabled ? "Join" : clientDialog.joinStatus === Client.DNS_PENDING ? "Looking up hostname..." : clientDialog.joinStatus === Client.TCP_PENDING ? "Connecting TCP..." : clientDialog.joinStatus === Client.UDP_PENDING ? "Connecting UDP..." : "Connected"
+					anchors.left: parent.left
+					anchors.right: parent.right
+					onClicked: {
+						c_settings.setClientName(nameTextField.text);
+						c_settings.setClientColor(clientColorDialog.color);
+						game.connectToHost(ipTextField.text, portTextField.text);
+					}
+				}
+				BusyIndicator {
+					id: busyIndicatorJoining
+					running: !buttonJoin.enabled
+					visible: running
+					anchors.horizontalCenter: parent.horizontalCenter
+				}
 			}
 			onOpened: portTextField.forceActiveFocus();
 		}

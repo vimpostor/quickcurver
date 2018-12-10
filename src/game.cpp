@@ -61,7 +61,7 @@ void Game::startGame()
 void Game::processKey(Qt::Key key, bool release)
 {
 	Util::for_each(getCurvers(), [&](std::unique_ptr<Curver> &c){ c->processKey(key, release); });
-	if (Settings::getSingleton().getConnectedToServer()) {
+	if (getClient()->getJoinStatus() == Client::JoinStatus::JOINED) {
 		client.processKey(key, release);
 	}
 }
@@ -73,17 +73,7 @@ void Game::processKey(Qt::Key key, bool release)
  */
 void Game::connectToHost(QString ip, int port)
 {
-	// blocking call
-	QHostInfo info = QHostInfo::fromName(ip);
-	if (info.error()) {
-		Gui::getSingleton().postInfoBar(info.errorString());
-		return;
-	} else if (info.addresses().isEmpty()) {
-		Gui::getSingleton().postInfoBar("Could not resolve hostname");
-		return;
-	}
-	QHostAddress addr = info.addresses().first();
-	client.connectToHost(addr, port);
+	client.connectToHost(ip, port);
 }
 
 /**
@@ -94,7 +84,7 @@ void Game::connectToHost(QString ip, int port)
  */
 void Game::sendChatMessage(QString msg)
 {
-	if (Settings::getSingleton().getConnectedToServer()) {
+	if (getClient()->getJoinStatus() == Client::JoinStatus::JOINED) {
 		client.sendChatMessage(msg);
 	} else {
 		server.broadcastChatMessage(msg);
@@ -122,6 +112,15 @@ void Game::resetGame()
 }
 
 /**
+ * @brief Returns the Client belonging to this Game
+ * @return The Client
+ */
+Client*Game::getClient()
+{
+	return &client;
+}
+
+/**
  * @brief Called by the scene graph. This is called before the screen is redrawn.
  * @return Always return Game::rootNode
  */
@@ -135,9 +134,8 @@ QSGNode *Game::updatePaintNode(QSGNode *, QQuickItem::UpdatePaintNodeData *)
  */
 void Game::progress()
 {
-	QTime currentTime = QTime::currentTime();
-	int deltat = lastProgressTime.msecsTo(currentTime);
-	lastProgressTime = currentTime;
+	int deltat = Util::getTimeDiff(lastProgressTime);
+	lastProgressTime = QTime::currentTime();
 	for (auto &c : getCurvers()) {
 		if (c->isAlive()) {
 			if (c->controller == Curver::Controller::CONTROLLER_BOT) {

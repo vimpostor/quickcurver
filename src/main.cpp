@@ -51,6 +51,7 @@ int main(int argc, char *argv[]) {
 
 	// register QML types here
 	qmlRegisterType<Game>("Game", 1, 0, "Game");
+	qmlRegisterType<Client>("Client", 1, 0, "Client");
 
 	QQmlApplicationEngine engine;
 

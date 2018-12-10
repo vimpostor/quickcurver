@@ -2,11 +2,25 @@
 
 Client::Client()
 {
-	in.setDevice(&socket);
-	connect(&socket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this, &Client::socketError);
-	connect(&socket, &QTcpSocket::connected, this, &Client::socketConnected);
-	connect(&socket, &QTcpSocket::disconnected, this, &Client::socketDisconnected);
-	connect(&socket, &QTcpSocket::readyRead, this, &Client::socketReadyRead);
+	in.setDevice(&tcpSocket);
+	connect(&tcpSocket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this, &Client::socketError);
+	connect(&tcpSocket, &QTcpSocket::connected, this, &Client::socketConnected);
+	connect(&tcpSocket, &QTcpSocket::disconnected, this, &Client::socketDisconnected);
+	connect(&tcpSocket, &QTcpSocket::readyRead, this, &Client::socketReadyRead);
+	connect(&udpSocket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this, &Client::udpSocketError);
+	connect(&udpSocket, &QUdpSocket::readyRead, this, &Client::udpSocketReadyRead);
+
+	// choose an arbitrary local port for UDP
+	udpSocket.bind();
+}
+
+/**
+ * @brief Returns the current join status
+ * @return joinStatus
+ */
+Client::JoinStatus Client::getJoinStatus() const
+{
+	return this->joinStatus;
 }
 
 /**
@@ -14,9 +28,25 @@ Client::Client()
  * @param addr The IP address of the host to connect to
  * @param port The port that the host is listening on
  */
-void Client::connectToHost(QHostAddress &addr, quint16 port)
+void Client::connectToHost(QString addr, quint16 port)
 {
-	socket.connectToHost(addr, port);
+	// first look up the hostname
+	setJoinStatus(JoinStatus::DNS_PENDING);
+	// blocking call
+	QHostInfo info = QHostInfo::fromName(addr);
+	if (info.error()) {
+		setJoinStatus(JoinStatus::FAILED);
+		Gui::getSingleton().postInfoBar(info.errorString());
+		return;
+	} else if (info.addresses().isEmpty()) {
+		setJoinStatus(JoinStatus::FAILED);
+		Gui::getSingleton().postInfoBar("Could not resolve hostname");
+		return;
+	}
+	QHostAddress hostAddr = info.addresses().first();
+	this->serverAddress = {hostAddr, port};
+	setJoinStatus(JoinStatus::TCP_PENDING);
+	tcpSocket.connectToHost(hostAddr, port);
 }
 
 /**
@@ -27,7 +57,7 @@ void Client::sendChatMessage(QString msg)
 {
 	Packet::ClientChatMsg p;
 	p.message = msg;
-	p.sendPacket(&socket);
+	p.sendPacket(&tcpSocket);
 }
 
 /**
@@ -38,7 +68,7 @@ void Client::sendPlayerModel()
 	Packet::ClientPlayerModel p;
 	p.username = Settings::getSingleton().getClientName();
 	p.color = Settings::getSingleton().getClientColor();
-	p.sendPacket(&socket);
+	p.sendPacket(&tcpSocket);
 }
 
 /**
@@ -60,7 +90,16 @@ void Client::processKey(Qt::Key key, bool release)
 		else
 			p.rotation = Curver::Rotation::ROTATE_RIGHT;
 	}
-	p.sendPacket(&socket);
+	p.sendPacket(&tcpSocket);
+}
+
+/**
+ * @brief Sends a custom Ping packet to a Server over UDP
+ */
+void Client::pingServer()
+{
+	Packet::Ping p;
+	p.sendPacketUdp(&udpSocket, serverAddress);
 }
 
 /**
@@ -68,7 +107,8 @@ void Client::processKey(Qt::Key key, bool release)
  */
 void Client::socketError(QAbstractSocket::SocketError)
 {
-	Gui::getSingleton().postInfoBar(socket.errorString());
+	setJoinStatus(JoinStatus::FAILED);
+	Gui::getSingleton().postInfoBar(tcpSocket.errorString());
 }
 
 /**
@@ -76,9 +116,9 @@ void Client::socketError(QAbstractSocket::SocketError)
  */
 void Client::socketConnected()
 {
-	Gui::getSingleton().postInfoBar("Connected");
-	Settings::getSingleton().setConnectedToServer(true);
-	sendPlayerModel();
+	// TCP connection successful, now try UDP
+	setJoinStatus(JoinStatus::UDP_PENDING);
+	pingServer();
 }
 
 /**
@@ -86,8 +126,8 @@ void Client::socketConnected()
  */
 void Client::socketDisconnected()
 {
+	setJoinStatus(JoinStatus::FAILED);
 	Gui::getSingleton().postInfoBar("Disconnected");
-	Settings::getSingleton().setConnectedToServer(false);
 }
 
 /**
@@ -96,14 +136,43 @@ void Client::socketDisconnected()
 void Client::socketReadyRead()
 {
 	bool illformedPacket = false;
-	while (socket.bytesAvailable() && !illformedPacket) {
+	while (tcpSocket.bytesAvailable() && !illformedPacket) {
 		in.startTransaction();
 		auto packet = Packet::AbstractPacket::receivePacket(in, InstanceType::Server);
 		if (in.commitTransaction()) {
 			handlePacket(packet);
 		} else {
-			qDebug() << "Received ill-formed packet";
+			qInfo() << "Received ill-formed packet";
 			illformedPacket = true;
+		}
+	}
+}
+
+/**
+ * @brief Handles an UDP socket error
+ */
+void Client::udpSocketError(QAbstractSocket::SocketError)
+{
+	qInfo() << udpSocket.errorString();
+}
+
+/**
+ * @brief Handles incoming UDP datagrams
+ */
+void Client::udpSocketReadyRead()
+{
+	while (udpSocket.hasPendingDatagrams()) {
+		// get datagram
+		QByteArray datagram;
+		datagram.resize(udpSocket.pendingDatagramSize());
+		udpSocket.readDatagram(datagram.data(), datagram.size());
+		QDataStream udpStream(&datagram, QIODevice::ReadOnly);
+		udpStream.startTransaction();
+		auto packet = Packet::AbstractPacket::receivePacket(udpStream, InstanceType::Server);
+		if (udpStream.commitTransaction()) {
+			handlePacket(packet);
+		} else {
+			qInfo() << "ill-formed udp packet";
 		}
 	}
 }
@@ -152,8 +221,28 @@ void Client::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p)
 		settingsData->extract();
 		break;
 	}
-	default:
-		qDebug() << "unsupported package type";
+	case Packet::ServerTypes::Pong:
+	{
+		auto *pong = (Packet::Pong *)p.get();
+		qInfo() << Util::getTimeDiff(pong->sent);
+		if (this->joinStatus == JoinStatus::UDP_PENDING) {
+			setJoinStatus(JoinStatus::JOINED);
+			sendPlayerModel();
+		}
 		break;
 	}
+	default:
+		qInfo() << "Unsupported packet type";
+		break;
+	}
+}
+
+/**
+ * @brief Sets the join status
+ * @param s The new join status
+ */
+void Client::setJoinStatus(JoinStatus s)
+{
+	this->joinStatus = s;
+	emit joinStatusChanged(s);
 }

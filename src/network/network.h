@@ -12,6 +12,23 @@
 #include "items/item.h"
 
 /**
+ * @brief A wrapper for host address plus port.
+ */
+struct FullNetworkAddress
+{
+	/**
+	 * @brief The address of the remote host
+	 */
+	QHostAddress addr;
+	/**
+	 * @brief The port of the remote host
+	 */
+	quint16 port;
+};
+
+bool operator==(const FullNetworkAddress& l, const FullNetworkAddress& r);
+
+/**
  * @brief An enumeration representing the instance type.
  *
  * One of Server and Client.
@@ -41,6 +58,7 @@ enum class ServerTypes : PacketType {
 	CurverData,
 	ItemData,
 	SettingsType,
+	Pong,
 };
 
 /**
@@ -50,6 +68,7 @@ enum class ClientTypes : PacketType {
 	Chat_Message,
 	PlayerModelEdit,
 	CurverRotation,
+	Ping,
 };
 
 /**
@@ -63,6 +82,7 @@ public:
 	explicit AbstractPacket(PacketType type);
 	virtual ~AbstractPacket();
 	void sendPacket(QTcpSocket *s) const;
+	void sendPacketUdp(QUdpSocket *s, FullNetworkAddress a) const;
 	static std::unique_ptr<AbstractPacket> receivePacket(QDataStream &in, InstanceType from);
 	/**
 	 * @brief The packet type
@@ -272,6 +292,22 @@ protected:
 };
 
 /**
+ * @brief A packet representing a Ping from a client
+ */
+class Ping : public AbstractPacket
+{
+public:
+	Ping();
+	/**
+	 * @brief The time that the packet was sent at
+	 */
+	QTime sent = QTime::currentTime();
+protected:
+	virtual void serialize(QDataStream &out) const override;
+	virtual void parse(QDataStream &in) override;
+};
+
+/**
  * @brief A packet that represents game settings
  */
 class ServerSettingsData : public AbstractPacket
@@ -284,6 +320,22 @@ public:
 	 * @brief The dimension of the game field
 	 */
 	QPoint dimension;
+protected:
+	virtual void serialize(QDataStream &out) const override;
+	virtual void parse(QDataStream &in) override;
+};
+
+/**
+ * @brief A packet that is an answer to Ping
+ */
+class Pong : public AbstractPacket
+{
+public:
+	Pong();
+	/**
+	 * @brief The time that the original Ping packet was sent at
+	 */
+	QTime sent = QTime::currentTime();
 protected:
 	virtual void serialize(QDataStream &out) const override;
 	virtual void parse(QDataStream &in) override;

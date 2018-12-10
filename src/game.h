@@ -26,6 +26,8 @@
 class Game : public QQuickItem
 {
 	Q_OBJECT
+
+	Q_PROPERTY(Client* client READ getClient() CONSTANT)
 public:
 	explicit Game(QQuickItem *parent = 0);
 	~Game();
@@ -36,6 +38,7 @@ public:
 	Q_INVOKABLE void sendChatMessage(QString msg);
 	Q_INVOKABLE void serverReListen(quint16 port);
 	Q_INVOKABLE void resetGame();
+	Q_INVOKABLE Client* getClient();
 
 	QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *);
 public slots:
