@@ -4,12 +4,13 @@ pull_requests:
 branches:
   only:
     - master
+    - appveyor
 configuration: Release
 skip_tags: true
 environment:
   matrix:
   - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    QT: C:\Qt\5.11.1\mingw53_32
+    QT: C:\Qt\5.11.2\mingw53_32
     COMPILER: mingw
     platform: mingw
 init:

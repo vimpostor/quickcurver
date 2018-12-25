@@ -2,5 +2,5 @@
 
 mkdir build
 cd build
-qmake ..
+qmake -config release ..
 make
