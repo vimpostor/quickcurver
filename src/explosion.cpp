@@ -26,7 +26,7 @@ Explosion::Explosion(QPointF location, QSGNode *parentNode, QSGFlatColorMaterial
 	}
 	opacityNode->appendChildNode(geoNode.get());
 	parentNode->appendChildNode(opacityNode.get());
-	connect(&timer, SIGNAL(timeout()), this, SLOT(progress()));
+	connect(&timer, &QTimer::timeout, this, &Explosion::progress);
 	timer.start(16);
 }
 

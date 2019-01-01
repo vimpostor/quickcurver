@@ -18,21 +18,21 @@ Game::Game(QQuickItem *parent) : QQuickItem(parent)
 	itemFactory = std::make_unique<ItemFactory>(rootNode);
 	// tell the playermodel, what the root node is, so that it can tell its curvers
 	PlayerModel::getSingleton().setRootNode(this->rootNode);
-	connect(&PlayerModel::getSingleton(), SIGNAL(curverDied()), this, SLOT(curverDied()));
-	connect(&PlayerModel::getSingleton(), SIGNAL(playerModelChanged()), &server, SLOT(broadcastPlayerModel()));
-	connect(&ItemModel::getSingleton(), SIGNAL(itemSpawned(bool,uint,int,QPointF,Item::AllowedUsers,int)), &server, SLOT(broadcastItemData(bool,uint,int,QPointF,Item::AllowedUsers,int)));
+	connect(&PlayerModel::getSingleton(), &PlayerModel::curverDied, this, &Game::curverDied);
+	connect(&PlayerModel::getSingleton(), &PlayerModel::playerModelChanged, &server, &Server::broadcastPlayerModel);
+	connect(&ItemModel::getSingleton(), &ItemModel::itemSpawned, &server, &Server::broadcastItemData);
 	wall.setParentNode(rootNode);
-	connect(&client, SIGNAL(integrateItem(bool,uint,int,QPointF,Item::AllowedUsers,int)), itemFactory.get(), SLOT(integrateItem(bool,uint,int,QPointF,Item::AllowedUsers,int)));
-	connect(&client, SIGNAL(resetRound()), this, SLOT(resetRound()));
-	connect(&Settings::getSingleton(), SIGNAL(dimensionChanged()), this, SLOT(dimensionChanged()));
+	connect(&client, &Client::integrateItem, itemFactory.get(), &ItemFactory::integrateItem);
+	connect(&client, &Client::resetRound, this, &Game::resetRound);
+	connect(&Settings::getSingleton(), &Settings::dimensionChanged, this, &Game::dimensionChanged);
 	// GUI signals
-	connect(&Gui::getSingleton(), SIGNAL(postInfoBar(QString)), this, SIGNAL(postInfoBar(QString)));
-	connect(&Gui::getSingleton(), SIGNAL(startGame()), this, SLOT(tryStartGame()));
+	connect(&Gui::getSingleton(), &Gui::postInfoBar, this, &Game::postInfoBar);
+	connect(&Gui::getSingleton(), &Gui::startGame, this, &Game::tryStartGame);
 
 	// client signals
-	connect(&client, SIGNAL(connectedToServerChanged(bool)), this, SLOT(connectedToServerChanged(bool)));
+	connect(&client, &Client::connectedToServerChanged, this, &Game::connectedToServerChanged);
 
-	connect(&gameTimer, SIGNAL(timeout()), this, SLOT(progress()));
+	connect(&gameTimer, &QTimer::timeout, this, &Game::progress);
 	// tell QtQuick, that this component wants to draw stuff
 	setFlag(ItemHasContents);
 }
@@ -161,7 +161,7 @@ void Game::curverDied()
 	}
 	// check if only one player is remaining
 	if (Util::count_if(getCurvers(), [](const auto &c){ return c->isAlive(); }) == 1) {
-		resetRoundTimer.singleShot(Settings::getSingleton().getRoundTimeOut(), this, SLOT(resetRound()));
+		resetRoundTimer.singleShot(Settings::getSingleton().getRoundTimeOut(), this, &Game::resetRound);
 	}
 }
 

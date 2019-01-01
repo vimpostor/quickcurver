@@ -81,7 +81,7 @@ void PlayerModel::appendPlayer()
 	beginResetModel();
 	m_data.push_back(std::make_unique<Curver>(rootNode));
 	m_data.back()->userName = "Player " + QString::number(m_data.size());
-	connect(m_data.back().get(), SIGNAL(died()), this, SLOT(processDeath()));
+	connect(m_data.back().get(), &Curver::died, this, &PlayerModel::processDeath);
 	endResetModel();
 	emit playerModelChanged();
 }

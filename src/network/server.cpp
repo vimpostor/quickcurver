@@ -2,8 +2,8 @@
 
 Server::Server()
 {
-	connect(&tcpServer, SIGNAL(acceptError(QAbstractSocket::SocketError)), this, SLOT(acceptError(QAbstractSocket::SocketError)));
-	connect(&tcpServer, SIGNAL(newConnection()), this, SLOT(newConnection()));
+	connect(&tcpServer, &QTcpServer::acceptError, this, &Server::acceptError);
+	connect(&tcpServer, &QTcpServer::newConnection, this, &Server::newConnection);
 	reListen(0);
 }
 
@@ -120,9 +120,9 @@ void Server::newConnection()
 		auto *curver = PlayerModel::getSingleton().getNewPlayer();
 		curver->controller = Curver::Controller::CONTROLLER_REMOTE;
 		clients[std::unique_ptr<QTcpSocket>(s)] = curver;
-		connect(s, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError(QAbstractSocket::SocketError)));
-		connect(s, SIGNAL(disconnected()), this, SLOT(socketDisconnect()));
-		connect(s, SIGNAL(readyRead()), this, SLOT(socketReadyRead()));
+		connect(s, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this, &Server::socketError);
+		connect(s, &QTcpSocket::disconnected, this, &Server::socketDisconnect);
+		connect(s, &QTcpSocket::readyRead, this, &Server::socketReadyRead);
 		broadcastChatMessage(s->peerAddress().toString() + " joined");
 	}
 }

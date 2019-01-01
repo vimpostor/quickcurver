@@ -3,10 +3,10 @@
 Client::Client()
 {
 	in.setDevice(&socket);
-	connect(&socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError(QAbstractSocket::SocketError)));
-	connect(&socket, SIGNAL(connected()), this, SLOT(socketConnected()));
-	connect(&socket, SIGNAL(disconnected()), this, SLOT(socketDisconnected()));
-	connect(&socket, SIGNAL(readyRead()), this, SLOT(socketReadyRead()));
+	connect(&socket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this, &Client::socketError);
+	connect(&socket, &QTcpSocket::connected, this, &Client::socketConnected);
+	connect(&socket, &QTcpSocket::disconnected, this, &Client::socketDisconnected);
+	connect(&socket, &QTcpSocket::readyRead, this, &Client::socketReadyRead);
 }
 
 /**

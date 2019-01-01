@@ -29,7 +29,7 @@ Item::Item(QSGNode *parentNode, QString iconPath, AllowedUsers allowedUsers, QPo
 	material.setTexture(texture.get());
 	geoNode.setMaterial(&material);
 	geometry.allocate(4);
-	connect(&fadeTimer, SIGNAL(timeout()), this, SLOT(fade()));
+	connect(&fadeTimer, &QTimer::timeout, this, &Item::fade);
 	startFade(true);
 	fade();
 	parentNode->appendChildNode(&geoNode);
@@ -58,7 +58,7 @@ void Item::trigger(std::unique_ptr<Curver> &collector)
 	active = true;
 	if (this->activatedTime != 0) {
 		// has to be deactivated
-		unUseTimer.singleShot(activatedTime, this, SLOT(deactivate()));
+		unUseTimer.singleShot(activatedTime, this, &Item::deactivate);
 	}
 	startFade(false);
 }
