@@ -300,7 +300,7 @@ void Curver::progress(int deltat, std::vector<std::unique_ptr<Curver> > &curvers
 	} else if (rotation == Rotation::ROTATE_RIGHT) {
 		rotate(deltat * rotateVelocity);
 	}
-	lastPos += deltat * velocity * direction;
+	lastPos += deltat * static_cast<double>(velocity) * direction;
 	if (headVisible) {
 		headNode->setPosition(lastPos);
 	} else {
