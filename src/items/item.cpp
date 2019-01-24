@@ -134,6 +134,9 @@ QColor Item::getColor() const
  */
 void Item::initTexture()
 {
+	if (Settings::getSingleton().getOffscreen()) {
+		return;
+	}
 	if (textureGenerator == NULL) {
 		// textureGenerator NULL, so create one
 		textureGenerator = new QQuickView();

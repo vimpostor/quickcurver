@@ -9,6 +9,7 @@
 #include "models/itemmodel.h"
 #include "settings.h"
 #include "models/chatmodel.h"
+#include "gamewatcher.h"
 
 #ifdef QT_STATIC
 #include <QQmlExtensionPlugin>
@@ -34,6 +35,22 @@ int main(int argc, char *argv[]) {
 	QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 	QQuickStyle::setStyle(QLatin1String("Material"));
 	QApplication app(argc, argv);
+
+	QCommandLineParser parser;
+	parser.setApplicationDescription("Quickcurver");
+	parser.addHelpOption();
+	parser.addVersionOption();
+	const auto offscreenOption = QCommandLineOption("o", "Start the server headless");
+	parser.addOption(offscreenOption);
+	parser.process(app);
+
+	// headless server
+	if (parser.isSet(offscreenOption)) {
+		Settings::getSingleton().setOffscreen(true);
+		GameWatcher gameWatcher;
+		gameWatcher.start();
+		return app.exec();
+	}
 
 	// register QML types here
 	qmlRegisterType<Game>("Game", 1, 0, "Game");

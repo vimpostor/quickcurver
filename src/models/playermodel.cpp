@@ -87,6 +87,15 @@ void PlayerModel::appendPlayer()
 }
 
 /**
+ * @brief Appends a new bot to this model
+ */
+void PlayerModel::appendBot()
+{
+	appendPlayer();
+	setController(m_data.size() - 1, static_cast<int>(Curver::Controller::CONTROLLER_BOT));
+}
+
+/**
  * @brief Removes a player from this model
  * @param row The index of the player
  */

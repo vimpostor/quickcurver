@@ -34,6 +34,8 @@ public:
 	Q_INVOKABLE unsigned getNetworkCurverBlock() const;
 	Q_INVOKABLE void setUpdatesPerSecond(const unsigned val);
 	Q_INVOKABLE unsigned getUpdatesPerSecond() const;
+	Q_INVOKABLE void setOffscreen(const bool offscreen);
+	Q_INVOKABLE bool getOffscreen() const;
 signals:
 	/**
 	 * @brief Emitted, when the dimension of the game changed
@@ -51,7 +53,7 @@ private:
 	/**
 	 * @brief The dimension of the game
 	 */
-	QPoint dimension {100, 100};
+	QPoint dimension {700, 836};
 	/**
 	 * @brief The current round time out
 	 *
@@ -81,6 +83,10 @@ private:
 	 * @brief The number of logic updates per second
 	 */
 	unsigned updatesPerSecond = 60;
+	/**
+	 * @brief Determines if the application is started headless
+	 */
+	bool offscreen = false;
 };
 
 #endif // SETTINGS_H

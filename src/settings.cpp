@@ -195,3 +195,21 @@ unsigned Settings::getUpdatesPerSecond() const
 {
 	return updatesPerSecond;
 }
+
+/**
+ * @brief Sets whether the application is started headless
+ * @param offscreen Whether the application should be started offscreen
+ */
+void Settings::setOffscreen(const bool offscreen)
+{
+	this->offscreen = offscreen;
+}
+
+/**
+ * @brief Returns whether the application is started headless
+ * @return Whether the application is started offscreen
+ */
+bool Settings::getOffscreen() const
+{
+	return offscreen;
+}
