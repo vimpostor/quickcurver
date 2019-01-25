@@ -4,6 +4,7 @@
 #include <QPoint>
 #include <QObject>
 #include <QColor>
+#include <QGuiApplication>
 
 /**
  * @brief This class represents settings that affect the game in any way
@@ -34,7 +35,6 @@ public:
 	Q_INVOKABLE unsigned getNetworkCurverBlock() const;
 	Q_INVOKABLE void setUpdatesPerSecond(const unsigned val);
 	Q_INVOKABLE unsigned getUpdatesPerSecond() const;
-	Q_INVOKABLE void setOffscreen(const bool offscreen);
 	Q_INVOKABLE bool getOffscreen() const;
 signals:
 	/**
@@ -83,10 +83,6 @@ private:
 	 * @brief The number of logic updates per second
 	 */
 	unsigned updatesPerSecond = 60;
-	/**
-	 * @brief Determines if the application is started headless
-	 */
-	bool offscreen = false;
 };
 
 #endif // SETTINGS_H

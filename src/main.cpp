@@ -40,13 +40,10 @@ int main(int argc, char *argv[]) {
 	parser.setApplicationDescription("Quickcurver");
 	parser.addHelpOption();
 	parser.addVersionOption();
-	const auto offscreenOption = QCommandLineOption("o", "Start the server headless");
-	parser.addOption(offscreenOption);
 	parser.process(app);
 
 	// headless server
-	if (parser.isSet(offscreenOption)) {
-		Settings::getSingleton().setOffscreen(true);
+	if (Settings::getSingleton().getOffscreen()) {
 		GameWatcher gameWatcher;
 		gameWatcher.start();
 		return app.exec();
