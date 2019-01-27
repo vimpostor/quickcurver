@@ -193,7 +193,7 @@ void PlayerModel::serialize(QDataStream &out) const
 	out << static_cast<unsigned>(m_data.size());
 	for (unsigned long i = 0; i < m_data.size(); ++i) {
 		const std::unique_ptr<Curver> &c = m_data[i];
-		out << c->userName << c->getColor() << c->roundScore << c->totalScore << static_cast<uint8_t>(c->controller);
+		out << c->userName << c->getColor() << c->roundScore << c->totalScore << static_cast<uint8_t>(c->controller) << static_cast<uint8_t>(c->isAlive());
 	}
 }
 
@@ -212,10 +212,11 @@ void PlayerModel::parse(QDataStream &in)
 			c = std::make_unique<Curver>(rootNode);
 		}
 		QColor color;
-		uint8_t ctrl;
-		in >> c->userName >> color >> c->roundScore >> c->totalScore >> ctrl;
+		uint8_t ctrl, isAlive;
+		in >> c->userName >> color >> c->roundScore >> c->totalScore >> ctrl >> isAlive;
 		c->setColor(color);
 		c->controller = static_cast<Curver::Controller>(ctrl);
+		c->setAlive(static_cast<bool>(isAlive));
 	}
 	emit endResetModel();
 }

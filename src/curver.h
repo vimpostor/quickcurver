@@ -58,6 +58,7 @@ public:
 	void cleanInstall();
 	void increaseScore();
 	void resetRound();
+	void setAlive(const bool alive);
 	bool isAlive() const;
 	void appendPoint(const QPointF pos, const bool changingSegment);
 	void prepareSegmentEvent(bool changingSegment, int lower, int upper);

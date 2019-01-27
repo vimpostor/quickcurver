@@ -140,6 +140,7 @@ that order):
 * Round score
 * Total score
 * Controller
+* Alive
 
 ### Playermodel Edit from client
 

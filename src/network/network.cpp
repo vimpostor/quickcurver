@@ -152,7 +152,7 @@ void Packet::ClientChatMsg::parse(QDataStream &in)
  */
 QDataStream &Packet::operator <<(QDataStream &out, const Player &p)
 {
-	out << p.userName << p.color << p.roundScore << p.totalScore << static_cast<uint8_t>(p.controller);
+	out << p.userName << p.color << p.roundScore << p.totalScore << static_cast<uint8_t>(p.controller) << static_cast<uint8_t>(p.isAlive);
 	return out;
 }
 
@@ -164,9 +164,10 @@ QDataStream &Packet::operator <<(QDataStream &out, const Player &p)
  */
 QDataStream &Packet::operator >>(QDataStream &in, Packet::Player &p)
 {
-	uint8_t ctrl;
-	in >> p.userName >> p.color >> p.roundScore >> p.totalScore >> ctrl;
+	uint8_t ctrl, isAlive;
+	in >> p.userName >> p.color >> p.roundScore >> p.totalScore >> ctrl >> isAlive;
 	p.controller = static_cast<Curver::Controller>(ctrl);
+	p.isAlive = static_cast<bool>(isAlive);
 	return in;
 }
 

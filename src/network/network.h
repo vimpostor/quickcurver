@@ -148,6 +148,10 @@ struct Player
 	 * @brief The controller of the underlying Curver
 	 */
 	Curver::Controller controller;
+	/**
+	 * @brief Whether the player is alive
+	 */
+	bool isAlive;
 };
 
 QDataStream &operator <<(QDataStream &out, const Player &p);
