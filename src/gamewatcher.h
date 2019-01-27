@@ -17,6 +17,7 @@ public:
 	void start();
 private slots:
 	void quit();
+	void printChatMessage(QString username, QString message);
 private:
 	/**
 	 * @brief The commandline reader interface

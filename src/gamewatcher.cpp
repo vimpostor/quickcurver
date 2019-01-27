@@ -16,6 +16,9 @@ GameWatcher::GameWatcher(QObject *parent) : QObject(parent)
 	connect(&cliReader, &CommandlineReader::reset, &game, &Game::resetGame);
 	connect(&cliReader, &CommandlineReader::start, &game, &Game::startGame);
 	connect(&cliReader, &CommandlineReader::targetScore, &Settings::getSingleton(), &Settings::setTargetScore);
+
+	// copy ingame chat to terminal
+	connect(&ChatModel::getSingleton(), &ChatModel::newMessage, this, &GameWatcher::printChatMessage);
 }
 
 /**
@@ -32,4 +35,9 @@ void GameWatcher::start()
 void GameWatcher::quit()
 {
 	QCoreApplication::quit();
+}
+
+void GameWatcher::printChatMessage(QString username, QString message)
+{
+	qInfo() << username << message;
 }

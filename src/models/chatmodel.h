@@ -19,6 +19,8 @@ public:
 
 	static ChatModel &getSingleton();
 	void appendMessage(QString username, QString message);
+signals:
+	void newMessage(QString username, QString message);
 private:
 	/**
 	 * @brief A chat message
