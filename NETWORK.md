@@ -82,11 +82,11 @@ packet begins with the following 1-byte header:
  0               1
  0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7
 -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-|TTT|SRRRRRRRRRR|    .....
+|T|T|T|U|U|U|R|S|    .....
 -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 ```
 
-The first two bits denote the packet type (T). The next 6 bits define
+The first three bits denote the packet type (T). The next 5 bits define
 special flags. The following table defines how the flags are interpreted:
 
 ```
@@ -95,12 +95,13 @@ special flags. The following table defines how the flags are interpreted:
 |----------------|
 |   S  | Start   |
 |   R  | Reset   |
+|   U  | Unused  |
 ------------------
 ```
 
 The interpretation of the type information depends on whether the packet
 was sent by a server or a client. The fact whether the sender is a
-server or a client is simply deducted by the fact whether the instance
+server or a client is simply deduced by the fact whether the instance
 itself is a server or a client. The following table defines how the type
 information is interpreted:
 
@@ -108,10 +109,11 @@ information is interpreted:
 -------------------------------------------------------
 | Type | Binary | Sent from server | Sent from client |
 |-----------------------------------------------------|
-|   0  |   00   | Chat Message     | Chat Message     |
-|   1  |   01   | Playermodel Edit | Playermodel Edit |
-|   2  |   10   | Curver Data      | Curver Rotation  |
-|   3  |   11   | Item Data        | ---------------- |
+|   0  |  000   | Chat Message     | Chat Message     |
+|   1  |  001   | Playermodel Edit | Playermodel Edit |
+|   2  |  010   | Curver Data      | Curver Rotation  |
+|   3  |  011   | Item Data        | ---------------- |
+|   4  |  100   | Settings         | ---------------- |
 -------------------------------------------------------
 ```
 
@@ -186,3 +188,9 @@ The server sends the following data (in this order):
 * Position as QPointF
 * Allowed users as uint8_t
 * index of collector as int (if spawned, this must be -1)
+
+### Settings from server
+
+The server sends the following data:
+
+* Game dimension as QPoint

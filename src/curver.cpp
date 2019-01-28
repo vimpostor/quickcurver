@@ -228,6 +228,10 @@ void Curver::resetRound()
 	alive = true;
 }
 
+/**
+ * @brief Changes the alive state
+ * @param alive Whether this Curver is alive
+ */
 void Curver::setAlive(const bool alive)
 {
 	if (isAlive() && !alive) {

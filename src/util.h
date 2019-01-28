@@ -45,6 +45,7 @@ namespace Util {
 	};
 	QString expandIconName(const QString icon);
 	bool getBit(const uint8_t byte, const int pos);
+	void setBit(uint8_t& byte, const int pos, bool value);
 
 	// std algorithm wrappers
 

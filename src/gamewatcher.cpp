@@ -13,7 +13,10 @@ GameWatcher::GameWatcher(QObject *parent) : QObject(parent)
 	connect(&cliReader, &CommandlineReader::logicUpdate, &Settings::getSingleton(), &Settings::setUpdatesPerSecond);
 	connect(&cliReader, &CommandlineReader::networkUpdate, &Settings::getSingleton(), &Settings::setNetworkCurverBlock);
 	connect(&cliReader, &CommandlineReader::quit, this, &GameWatcher::quit, Qt::QueuedConnection);
+	// TODO: Remove player must call the slot in Server
+	connect(&cliReader, &CommandlineReader::remove, &PlayerModel::getSingleton(), &PlayerModel::removePlayer);
 	connect(&cliReader, &CommandlineReader::reset, &game, &Game::resetGame);
+	connect(&cliReader, &CommandlineReader::resize, &Settings::getSingleton(), &Settings::setDimension);
 	connect(&cliReader, &CommandlineReader::start, &game, &Game::startGame);
 	connect(&cliReader, &CommandlineReader::targetScore, &Settings::getSingleton(), &Settings::setTargetScore);
 
@@ -37,6 +40,11 @@ void GameWatcher::quit()
 	QCoreApplication::quit();
 }
 
+/**
+ * @brief Prints a chat message
+ * @param username The author of the chat message
+ * @param message The message content
+ */
 void GameWatcher::printChatMessage(QString username, QString message)
 {
 	qInfo() << username << message;

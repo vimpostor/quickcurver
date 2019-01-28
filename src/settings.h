@@ -12,13 +12,19 @@
 class Settings : public QObject
 {
 	Q_OBJECT
+
+	Q_PROPERTY(int width READ getWidth WRITE setWidth NOTIFY widthChanged)
+	Q_PROPERTY(int height READ getHeight WRITE setHeight NOTIFY heightChanged)
+	Q_PROPERTY(bool connectedToServer READ getConnectedToServer WRITE setConnectedToServer NOTIFY connectedToServerChanged)
 public:
 	explicit Settings();
 	static Settings &getSingleton();
 	void setDimension(QPoint dimension);
 	QPoint getDimension() const;
 	Q_INVOKABLE void setWidth(int width);
+	Q_INVOKABLE int getWidth() const;
 	Q_INVOKABLE void setHeight(int height);
+	Q_INVOKABLE int getHeight() const;
 	Q_INVOKABLE void setRoundTimeOut(int roundTimeOut);
 	Q_INVOKABLE int getRoundTimeOut() const;
 	Q_INVOKABLE void setItemSpawnIntervalMin(const int interval);
@@ -36,11 +42,28 @@ public:
 	Q_INVOKABLE void setUpdatesPerSecond(const unsigned val);
 	Q_INVOKABLE unsigned getUpdatesPerSecond() const;
 	Q_INVOKABLE bool getOffscreen() const;
+	Q_INVOKABLE void setConnectedToServer(const bool connected);
+	Q_INVOKABLE bool getConnectedToServer() const;
 signals:
 	/**
 	 * @brief Emitted, when the dimension of the game changed
 	 */
 	void dimensionChanged();
+	/**
+	 * @brief Emitted, when the width changed
+	 * @param width The new width
+	 */
+	void widthChanged(int width);
+	/**
+	 * @brief Emitted, when the height changed
+	 * @param height The new height
+	 */
+	void heightChanged(int height);
+	/**
+	 * @brief Emitted, when the connection to a server changed
+	 * @param connectedToServer Whether the client is currently connected to a server
+	 */
+	void connectedToServerChanged(bool connectedToServer);
 private:
 	/**
 	 * @brief The username of the client
@@ -83,6 +106,10 @@ private:
 	 * @brief The number of logic updates per second
 	 */
 	unsigned updatesPerSecond = 60;
+	/**
+	 * @brief Whether this instance is connected to a server
+	 */
+	bool connectedToServer = false;
 };
 
 #endif // SETTINGS_H

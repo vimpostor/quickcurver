@@ -23,10 +23,10 @@ void Packet::AbstractPacket::sendPacket(QTcpSocket *s) const
 	QByteArray block;
 	QDataStream out(&block, QIODevice::WriteOnly);
 	// write type and flags to stream
-	uint8_t flags = 0;
-	flags |= start << 5;
-	flags |= reset << 4;
-	uint8_t header = (type << 6) | flags;
+	uint8_t header = 0;
+	header |= type << (8 - PACKET_TYPE_BITS);
+	Util::setBit(header, 0, start);
+	Util::setBit(header, 1, reset);
 	out << header;
 	this->serialize(out);
 	s->write(block);
@@ -45,8 +45,8 @@ std::unique_ptr<Packet::AbstractPacket> Packet::AbstractPacket::receivePacket(QD
 	std::unique_ptr<Packet::AbstractPacket> result;
 	uint8_t header;
 	in >> header;
-	PacketType type = header >> 6;
-	uint8_t flags = header << 2 >> 2;
+	PacketType type = header >> (8 - PACKET_TYPE_BITS);
+	uint8_t flags = header << PACKET_TYPE_BITS >> PACKET_TYPE_BITS;
 	switch (from) {
 	case InstanceType::Server:
 		switch (static_cast<ServerTypes>(type)) {
@@ -61,6 +61,9 @@ std::unique_ptr<Packet::AbstractPacket> Packet::AbstractPacket::receivePacket(QD
 			break;
 		case ServerTypes::ItemData:
 			result = std::make_unique<ServerItemData>();
+			break;
+		case ServerTypes::SettingsType:
+			result = std::make_unique<ServerSettingsData>();
 			break;
 		default:
 			qDebug() << "unsupported server package";
@@ -85,8 +88,8 @@ std::unique_ptr<Packet::AbstractPacket> Packet::AbstractPacket::receivePacket(QD
 		break;
 	}
 	if (result) {
-		result->start = Util::getBit(flags, 5);
-		result->reset = Util::getBit(flags, 4);
+		result->start = Util::getBit(flags, 0);
+		result->reset = Util::getBit(flags, 1);
 		result->parse(in);
 	} else {
 		qDebug() << "Received ill-formed package";
@@ -370,4 +373,45 @@ void Packet::ServerItemData::parse(QDataStream &in)
 	uint8_t allowed;
 	in >> spawned >> sequenceNumber >> which >> pos >> allowed >> collectorIndex;
 	allowedUsers = static_cast<Item::AllowedUsers>(allowed);
+}
+
+/**
+ * @brief Constructs a ServerSettingsData
+ */
+Packet::ServerSettingsData::ServerSettingsData() : AbstractPacket(static_cast<PacketType>(ServerTypes::SettingsType))
+{
+}
+
+/**
+ * @brief Automatically fills the packet
+ */
+void Packet::ServerSettingsData::fill()
+{
+	this->dimension = Settings::getSingleton().getDimension();
+}
+
+/**
+ * @brief Automatically extracts the packet
+ */
+void Packet::ServerSettingsData::extract()
+{
+	Settings::getSingleton().setDimension(this->dimension);
+}
+
+/**
+ * @brief Serializes the ServerSettingsData
+ * @param out The stream to serialize into
+ */
+void Packet::ServerSettingsData::serialize(QDataStream& out) const
+{
+	out << dimension;
+}
+
+/**
+ * @brief Parses a ServerSettingsData
+ * @param in The stream to parse from
+ */
+void Packet::ServerSettingsData::parse(QDataStream& in)
+{
+	in >> dimension;
 }

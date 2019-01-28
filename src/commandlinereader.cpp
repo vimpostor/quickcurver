@@ -70,8 +70,18 @@ void CommandlineReader::run()
 				} else if (command == "quit") {
 					cancel = true;
 					emit quit();
+				} else if (command == "remove") {
+					int index;
+					if (takeInt(index, parts, "index")) {
+						emit remove(index);
+					}
 				} else if (command == "reset") {
 					emit reset();
+				} else if (command == "resize") {
+					int width, height;
+					if (takeInt(width, parts, "width") && takeInt(height, parts, "height")) {
+						emit resize(QPoint(width, height));
+					}
 				} else if (command == "start") {
 					emit start();
 				} else if (command == "targetscore") {

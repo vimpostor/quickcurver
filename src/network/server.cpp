@@ -4,6 +4,8 @@ Server::Server()
 {
 	connect(&tcpServer, &QTcpServer::acceptError, this, &Server::acceptError);
 	connect(&tcpServer, &QTcpServer::newConnection, this, &Server::newConnection);
+
+	connect(&Settings::getSingleton(), &Settings::dimensionChanged, this, &Server::broadcastSettings);
 	reListen(0);
 }
 
@@ -49,6 +51,16 @@ void Server::broadcastChatMessage(QString username, QString message)
 void Server::broadcastChatMessage(QString msg)
 {
 	broadcastChatMessage(ADMIN_NAME, msg);
+}
+
+/**
+ * @brief Broadcasts the game settings to every Client
+ */
+void Server::broadcastSettings()
+{
+	Packet::ServerSettingsData p;
+	p.fill();
+	broadcastPacket(p);
 }
 
 /**
@@ -124,6 +136,7 @@ void Server::newConnection()
 		connect(s, &QTcpSocket::disconnected, this, &Server::socketDisconnect);
 		connect(s, &QTcpSocket::readyRead, this, &Server::socketReadyRead);
 		broadcastChatMessage(s->peerAddress().toString() + " joined");
+		broadcastSettings();
 	}
 }
 

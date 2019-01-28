@@ -24,13 +24,9 @@ Game::Game(QQuickItem *parent) : QQuickItem(parent)
 	wall.setParentNode(rootNode);
 	connect(&client, &Client::integrateItem, itemFactory.get(), &ItemFactory::integrateItem);
 	connect(&client, &Client::resetRound, this, &Game::resetRound);
-	connect(&Settings::getSingleton(), &Settings::dimensionChanged, this, &Game::dimensionChanged);
 	// GUI signals
 	connect(&Gui::getSingleton(), &Gui::postInfoBar, this, &Game::postInfoBar);
 	connect(&Gui::getSingleton(), &Gui::startGame, this, &Game::tryStartGame);
-
-	// client signals
-	connect(&client, &Client::connectedToServerChanged, this, &Game::connectedToServerChanged);
 
 	connect(&gameTimer, &QTimer::timeout, this, &Game::progress);
 	// tell QtQuick, that this component wants to draw stuff
@@ -65,7 +61,7 @@ void Game::startGame()
 void Game::processKey(Qt::Key key, bool release)
 {
 	Util::for_each(getCurvers(), [&](std::unique_ptr<Curver> &c){ c->processKey(key, release); });
-	if (connectedToServer) {
+	if (Settings::getSingleton().getConnectedToServer()) {
 		client.processKey(key, release);
 	}
 }
@@ -89,7 +85,7 @@ void Game::connectToHost(QString ip, int port)
  */
 void Game::sendChatMessage(QString msg)
 {
-	if (connectedToServer) {
+	if (Settings::getSingleton().getConnectedToServer()) {
 		client.sendChatMessage(msg);
 	} else {
 		server.broadcastChatMessage(msg);
@@ -173,23 +169,6 @@ void Game::resetRound()
 	itemFactory->resetRound();
 	Util::for_each(getCurvers(), [](const auto &c){ c->resetRound(); });
 	server.resetRound();
-}
-
-/**
- * @brief Called, when the game dimension changed
- */
-void Game::dimensionChanged()
-{
-	wall.updateDimension();
-}
-
-/**
- * @brief Called, when the connection status changed
- * @param connected Whether the new state is connected
- */
-void Game::connectedToServerChanged(bool connected)
-{
-	this->connectedToServer = connected;
 }
 
 /**

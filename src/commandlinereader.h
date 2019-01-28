@@ -56,9 +56,19 @@ signals:
 	 */
 	void quit();
 	/**
+	 * @brief Remove a player from the game
+	 * @param index The player to remove
+	 */
+	void remove(int index);
+	/**
 	 * @brief The user wants to reset the game
 	 */
 	void reset();
+	/**
+	 * @brief The user wants to resize the game
+	 * @param dimension The new dimension
+	 */
+	void resize(QPoint dimension);
 	/**
 	 * @brief The user wants to start the game
 	 */

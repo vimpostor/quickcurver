@@ -80,3 +80,14 @@ bool Util::getBit(const uint8_t byte, const int pos)
 {
 	return (byte >> pos) % 2;
 }
+
+/**
+ * @brief Sets the bit at position \a pos in \a byte to \a value
+ * @param byte The byte to set a bit in
+ * @param pos The position of the bit
+ * @param value The new value of the bit
+ */
+void Util::setBit(uint8_t& byte, const int pos, bool value)
+{
+	byte |= value << pos;
+}

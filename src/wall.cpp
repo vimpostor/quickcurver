@@ -10,7 +10,9 @@ Wall::Wall()
 	material.setColor(Util::getColor("Cyan"));
 	geoNode.setMaterial(&material);
 	geometry.allocate(4);
+	updateDimension();
 	resize();
+	connect(&Settings::getSingleton(), &Settings::dimensionChanged, this, &Wall::updateDimension);
 }
 
 /**

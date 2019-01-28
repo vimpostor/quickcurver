@@ -20,6 +20,11 @@ public:
 	static ChatModel &getSingleton();
 	void appendMessage(QString username, QString message);
 signals:
+	/**
+	 * @brief Notifies that a new message has arrived
+	 * @param username The username of the author
+	 * @param message The message content
+	 */
 	void newMessage(QString username, QString message);
 private:
 	/**

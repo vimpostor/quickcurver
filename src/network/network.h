@@ -30,6 +30,7 @@ namespace Packet {
  * @brief A data type representing the type of a packet
  */
 using PacketType = uint8_t;
+#define PACKET_TYPE_BITS 3
 
 /**
  * @brief An enumeration containing all server packet types
@@ -38,7 +39,8 @@ enum class ServerTypes : PacketType {
 	Chat_Message,
 	PlayerModelEdit,
 	CurverData,
-	ItemData
+	ItemData,
+	SettingsType,
 };
 
 /**
@@ -47,7 +49,7 @@ enum class ServerTypes : PacketType {
 enum class ClientTypes : PacketType {
 	Chat_Message,
 	PlayerModelEdit,
-	CurverRotation
+	CurverRotation,
 };
 
 /**
@@ -264,6 +266,24 @@ public:
 	 * @brief If ServeritemData::spawned is false, this value represents the index of the collecting Curver
 	 */
 	int collectorIndex = -1;
+protected:
+	virtual void serialize(QDataStream &out) const override;
+	virtual void parse(QDataStream &in) override;
+};
+
+/**
+ * @brief A packet that represents game settings
+ */
+class ServerSettingsData : public AbstractPacket
+{
+public:
+	ServerSettingsData();
+	void fill();
+	void extract();
+	/**
+	 * @brief The dimension of the game field
+	 */
+	QPoint dimension;
 protected:
 	virtual void serialize(QDataStream &out) const override;
 	virtual void parse(QDataStream &in) override;

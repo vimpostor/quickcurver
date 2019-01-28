@@ -1,4 +1,4 @@
-import QtQuick 2.7
+import QtQuick 2.12
 import Qt.labs.platform 1.0 as Platform
 import QtQuick.Controls 2.1
 import QtQuick.Controls.Material 2.1
@@ -22,16 +22,18 @@ ApplicationWindow {
 	initialPage: Page {
 		id: initialPage
 		title: "Quick Curver"
-		appBar.maxActionCount: 6
+		appBar.maxActionCount: 4
 		actions: [
 			Action {
 				icon.source: Utils.iconUrl("content/undo")
 				text: "Reset game"
+				enabled: !c_settings.connectedToServer
 				onTriggered: game.resetGame();
 			},
 			Action {
 				icon.source: Utils.iconUrl("av/hearing")
 				text: "Server listen"
+				enabled: !c_settings.connectedToServer
 				onTriggered: listenDialog.open();
 			},
 			Action {
@@ -41,20 +43,9 @@ ApplicationWindow {
 				shortcut: "Ctrl+J"
 			},
 			Action {
-				icon.source: Utils.iconUrl("editor/border_left")
-				text: "Left"
-				onTriggered: gameWave.width += 20
-				shortcut: "Ctrl+H"
-			},
-			Action {
-				icon.source: Utils.iconUrl("editor/border_right")
-				text: "Right"
-				onTriggered: gameWave.width -= 20
-				shortcut: "Ctrl+L"
-			},
-			Action {
 				icon.source: Utils.iconUrl("action/settings")
 				text: "Settings"
+				enabled: !c_settings.connectedToServer
 				onTriggered: pageStack.push(Qt.resolvedUrl("Settings.qml"))
 				shortcut: "Ctrl+I"
 			},
@@ -70,19 +61,9 @@ ApplicationWindow {
 				shortcut: "Ctrl+Q"
 			}
 		]
-		Chat {
-			id: chat
-			anchors {top: parent.top; left: parent.left; right: gameWave.left; margins: Units.smallSpacing}
-			height: parent.height / 3
-		}
-		Players {
-			id: players
-			anchors {top: chat.bottom; left: parent.left; right: gameWave.left; bottom: parent.bottom; margins: Units.smallSpacing}
-		}
 		Wave {
 			id: gameWave
-			anchors {top: parent.top; right: parent.right; bottom: parent.bottom; margins: Units.smallSpacing}
-			width: 0
+			anchors {top: parent.top; left: parent.left; right: gameSeparator.left; bottom: parent.bottom; margins: Units.smallSpacing}
 			Behavior on width {
 				NumberAnimation {
 					easing.type: Easing.OutCubic
@@ -95,9 +76,34 @@ ApplicationWindow {
 			Game {
 				id: game
 				anchors.fill: parent
+				property int realWidth: c_settings.width
+				property int realHeight: c_settings.height
+				function checkDimension() {
+					if (!c_settings.connectedToServer) {
+						// we are manually resizing anyway
+						return;
+					}
+					if (realWidth > width || realHeight > height || width > root.width) {
+						resizeSnackbar.open("The server has set a larger game size.", "Resize automatically");
+					} else {
+						resizeSnackbar.close();
+					}
+				}
+				onWidthChanged: {
+					if (!c_settings.connectedToServer) {
+						c_settings.width = width;
+					}
+					checkDimension();
+				}
+				onHeightChanged: {
+					if (!c_settings.connectedToServer) {
+						c_settings.height = height;
+					}
+					checkDimension();
+				}
+				onRealWidthChanged: checkDimension();
+				onRealHeightChanged: checkDimension();
 				onPostInfoBar: infoBar.open(msg);
-				onWidthChanged: c_settings.setWidth(width);
-				onHeightChanged: c_settings.setHeight(height);
 				Keys.onPressed: {
 					game.processKey(event.key, false);
 				}
@@ -105,10 +111,10 @@ ApplicationWindow {
 					game.processKey(event.key, true);
 				}
 				onGameStarted: {
-					game.forceActiveFocus();
-					gameWave.width = 700;
-					gameWave.openWave();
 					players.startButton.visible = false;
+					game.forceActiveFocus();
+					gameWave.width = gameWave.effWidth;
+					gameWave.openWave();
 				}
 				Ripple {
 					anchors.fill: parent
@@ -116,8 +122,40 @@ ApplicationWindow {
 				}
 			}
 		}
+		Button {
+			id: gameSeparator
+			x: 720
+			width: Units.smallSpacing
+			anchors.top: parent.top
+			anchors.bottom: parent.bottom
+			anchors.margins: Units.smallSpacing
+			DragHandler {
+				yAxis.enabled: false
+			}
+		}
+		Chat {
+			id: chat
+			anchors {top: parent.top; left: gameSeparator.right; right: parent.right; margins: Units.smallSpacing}
+			height: parent.height / 3
+		}
+		Players {
+			id: players
+			anchors {top: chat.bottom; left: gameSeparator.right; right: parent.right; bottom: parent.bottom; margins: Units.smallSpacing}
+		}
 		SnackBar {
 			id: infoBar
+		}
+		SnackBar {
+			id: resizeSnackbar
+			duration: 10000
+			onClicked: {
+				gameSeparator.x = c_settings.width + Units.largeSpacing;
+				root.height = c_settings.height + 3 * Units.largeSpacing;
+				if (root.width < gameSeparator.x) {
+					root.width = gameSeparator.x + 14 * Units.largeSpacing;
+				}
+				close();
+			}
 		}
 		InputDialog {
 			id: listenDialog

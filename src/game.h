@@ -53,8 +53,6 @@ private slots:
 	void progress();
 	void curverDied();
 	void resetRound();
-	void dimensionChanged();
-	void connectedToServerChanged(bool connected);
 	void tryStartGame();
 private:
 	std::vector<std::unique_ptr<Curver> > &getCurvers();
@@ -91,10 +89,6 @@ private:
 	 * @brief The client instance
 	 */
 	Client client;
-	/**
-	 * @brief Whether this instance is connected to a server
-	 */
-	bool connectedToServer = false;
 	/**
 	 * @brief Whether the game already started
 	 */

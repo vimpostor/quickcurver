@@ -1,5 +1,5 @@
 import Qt.labs.platform 1.0
-import QtQuick 2.7
+import QtQuick 2.12
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.1
 import Fluid.Layouts 1.0
@@ -20,6 +20,9 @@ Card {
 		function open(index, controller) {
 			modelIndex = index;
 			bottomSheet.playerEditable = controller !== 1;
+			if (c_settings.connectedToServer) {
+				bottomSheet.playerEditable = false;
+			}
 			if (controller !== 1) {
 				botCheckbox.checked = controller === 2;
 			}
@@ -80,6 +83,7 @@ Card {
 				},
 				Action {
 					text: "Delete"
+					enabled: !c_settings.connectedToServer
 					icon.source: Utils.iconUrl("action/delete")
 					onTriggered: c_playerModel.removePlayer(playerListView.modelIndex);
 				}
@@ -130,6 +134,7 @@ Card {
 	}
 	Button {
 		id: startButton
+		enabled: !c_settings.connectedToServer
 		anchors.left: parent.left
 		anchors.right: parent.right
 		anchors.bottom: parent.bottom
@@ -143,6 +148,7 @@ Card {
 	}
 	FloatingActionButton {
 		id: addPlayerButton
+		enabled: !c_settings.connectedToServer
 		anchors.bottom: parent.bottom
 		anchors.right: parent.right
 		anchors.margins: Units.largeSpacing

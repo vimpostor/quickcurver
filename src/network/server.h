@@ -25,6 +25,7 @@ public:
 	void broadcastCurverData();
 	void broadcastChatMessage(QString username, QString message);
 	void broadcastChatMessage(QString msg);
+	void broadcastSettings();
 	void resetRound();
 	void reListen(quint16 port);
 public slots:
@@ -60,7 +61,7 @@ private:
 	 *
 	 * This value is used together with Settings::networkCurverBlock to reduce used network bandwidth
 	 */
-	unsigned dataBroadcastIteration = -1;
+	unsigned dataBroadcastIteration = 0;
 };
 
 #endif // SERVER_H

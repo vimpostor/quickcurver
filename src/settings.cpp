@@ -21,6 +21,8 @@ Settings &Settings::getSingleton()
 void Settings::setDimension(QPoint dimension)
 {
 	this->dimension = dimension;
+	emit widthChanged(dimension.x());
+	emit heightChanged(dimension.y());
 	emit dimensionChanged();
 }
 
@@ -44,6 +46,15 @@ void Settings::setWidth(int width)
 }
 
 /**
+ * @brief Returns the width of the game
+ * @return The width
+ */
+int Settings::getWidth() const
+{
+	return dimension.x();
+}
+
+/**
  * @brief Sets the height only of the game
  * @param height The new height
  */
@@ -51,6 +62,15 @@ void Settings::setHeight(int height)
 {
 	dimension.setY(height);
 	setDimension(dimension);
+}
+
+/**
+ * @brief Returns the height of the game
+ * @return The height of the game
+ */
+int Settings::getHeight() const
+{
+	return dimension.y();
 }
 
 /**
@@ -203,4 +223,23 @@ unsigned Settings::getUpdatesPerSecond() const
 bool Settings::getOffscreen() const
 {
 	return QGuiApplication::platformName() == "offscreen";
+}
+
+/**
+ * @brief Sets the new connection status
+ * @param connected Whether the client is currently connected to a server
+ */
+void Settings::setConnectedToServer(const bool connected)
+{
+	this->connectedToServer = connected;
+	emit connectedToServerChanged(connectedToServer);
+}
+
+/**
+ * @brief Retrieves the current connection status
+ * @return Whether the client is currently connected to a server
+ */
+bool Settings::getConnectedToServer() const
+{
+	return this->connectedToServer;
 }

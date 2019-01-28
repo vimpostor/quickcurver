@@ -77,7 +77,7 @@ void Client::socketError(QAbstractSocket::SocketError)
 void Client::socketConnected()
 {
 	Gui::getSingleton().postInfoBar("Connected");
-	emit connectedToServerChanged(true);
+	Settings::getSingleton().setConnectedToServer(true);
 	sendPlayerModel();
 }
 
@@ -87,7 +87,7 @@ void Client::socketConnected()
 void Client::socketDisconnected()
 {
 	Gui::getSingleton().postInfoBar("Disconnected");
-	emit connectedToServerChanged(false);
+	Settings::getSingleton().setConnectedToServer(false);
 }
 
 /**
@@ -144,6 +144,12 @@ void Client::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p)
 	{
 		auto *itemData = (Packet::ServerItemData *)p.get();
 		emit integrateItem(itemData->spawned, itemData->sequenceNumber, itemData->which, itemData->pos, itemData->allowedUsers, itemData->collectorIndex);
+		break;
+	}
+	case Packet::ServerTypes::SettingsType:
+	{
+		auto *settingsData = (Packet::ServerSettingsData *)p.get();
+		settingsData->extract();
 		break;
 	}
 	default:

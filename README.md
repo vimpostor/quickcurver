@@ -31,7 +31,7 @@ First make sure, that you have the required dependencies of QuickCurver installe
 
 * A C++ compiler with C++14 support
 * make
-* At least Qt 5.10
+* At least Qt 5.12
 * The following Qt Modules (in the parantheses there is an example how the package could be called for your distro (this depends on the distro!)):
 	- Qt Core (qt5-base)
 	- Qt GUI (qt5-base)
@@ -70,3 +70,5 @@ If you are not in the same local network, the host most likely has to use [Port 
 If a firewall is the problem, you might also want to take a look at [Hole Punching](https://en.wikipedia.org/wiki/Hole_punching_(networking)).
 
 If network performance isn't good, the Server can tweak the "Network update rate" value in the settings, which causes data to be sent less frequently which may improve the network performance at the cost of update frequency. (A higher value means worse quality, but better network performance)
+
+If you want to host Quickcurver on a separate server and do not need the GUI, you can start it with the CLI parameter `-platform offscreen`.
