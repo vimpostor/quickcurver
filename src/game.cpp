@@ -108,6 +108,7 @@ void Game::resetGame()
 {
 	resetRound();
 	Util::for_each(getCurvers(), [](const auto &c){ c->totalScore = 0; });
+	winnerAnnounced = false;
 }
 
 /**
@@ -151,8 +152,9 @@ void Game::curverDied()
 {
 	Util::for_each(getCurvers(), [](const auto &c){ if (c->isAlive()) c->increaseScore(); });
 	auto maxScorer = Util::max_element(getCurvers());
-	if ((*maxScorer)->totalScore >= Settings::getSingleton().getTargetScore()) {
+	if ((*maxScorer)->totalScore >= Settings::getSingleton().getTargetScore() && !winnerAnnounced) {
 		// we have a winner
+		winnerAnnounced = true;
 		server.broadcastChatMessage((*maxScorer)->userName + " won!");
 	}
 	// check if only one player is remaining

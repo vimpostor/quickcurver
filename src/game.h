@@ -93,6 +93,10 @@ private:
 	 * @brief Whether the game already started
 	 */
 	bool started = false;
+	/**
+	 * @brief Whether the winner was already announced
+	 */
+	bool winnerAnnounced = false;
 };
 
 #endif // GAME_H
