@@ -109,6 +109,7 @@ void Game::resetGame()
 	resetRound();
 	Util::for_each(getCurvers(), [](const auto &c){ c->totalScore = 0; });
 	winnerAnnounced = false;
+	PlayerModel::getSingleton().forceRefresh();
 }
 
 /**
