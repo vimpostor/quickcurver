@@ -73,7 +73,16 @@ void Game::processKey(Qt::Key key, bool release)
  */
 void Game::connectToHost(QString ip, int port)
 {
-	QHostAddress addr = QHostAddress(ip);
+	// blocking call
+	QHostInfo info = QHostInfo::fromName(ip);
+	if (info.error()) {
+		Gui::getSingleton().postInfoBar(info.errorString());
+		return;
+	} else if (info.addresses().isEmpty()) {
+		Gui::getSingleton().postInfoBar("Could not resolve hostname");
+		return;
+	}
+	QHostAddress addr = info.addresses().first();
 	client.connectToHost(addr, port);
 }
 
