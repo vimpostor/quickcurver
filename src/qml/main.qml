@@ -1,4 +1,5 @@
 import QtQuick 2.12
+import QtQuick.Window 2.12
 import Qt.labs.platform 1.0 as Platform
 import QtQuick.Controls 2.1
 import QtQuick.Controls.Material 2.1
@@ -113,22 +114,41 @@ ApplicationWindow {
 				onGameStarted: {
 					players.startButton.visible = false;
 					game.forceActiveFocus();
-					gameWave.width = gameWave.effWidth;
 					gameWave.openWave();
+					if (Device.isMobile) {
+						appBar.visible = false;
+					}
 				}
-				Ripple {
-					anchors.fill: parent
-					onClicked: game.forceActiveFocus();
-				}
+			}
+			Ripple {
+				anchors.fill: parent
+				onClicked: game.forceActiveFocus();
+			}
+			MouseArea {
+				enabled: Device.isMobile
+				anchors.fill: parent
+				anchors.rightMargin: parent.width / 2
+				onPressedChanged: game.processKey(Qt.Key_Left, !pressed);
+			}
+			MouseArea {
+				enabled: Device.isMobile
+				anchors.fill: parent
+				anchors.leftMargin: parent.width / 2
+				onPressedChanged: game.processKey(Qt.Key_Right, !pressed);
 			}
 		}
 		Button {
 			id: gameSeparator
-			x: 720
+			x: Device.isMobile ? 200 : 720
 			width: Units.smallSpacing
 			anchors.top: parent.top
 			anchors.bottom: parent.bottom
 			anchors.margins: Units.smallSpacing
+			onClicked: {
+				if (Device.isMobile) {
+					appBar.visible = !appBar.visible;
+				}
+			}
 			DragHandler {
 				yAxis.enabled: false
 			}
@@ -149,8 +169,8 @@ ApplicationWindow {
 			id: resizeSnackbar
 			duration: 10000
 			onClicked: {
-				gameSeparator.x = c_settings.width + Units.largeSpacing;
-				root.height = c_settings.height + 3 * Units.largeSpacing;
+				gameSeparator.x =  Math.min(c_settings.width + Units.largeSpacing, Screen.width - Units.largeSpacing);
+				root.height = Math.min(c_settings.height + 3 * Units.largeSpacing, Screen.height - Units.largeSpacing);
 				if (root.width < gameSeparator.x) {
 					root.width = gameSeparator.x + 14 * Units.largeSpacing;
 				}
