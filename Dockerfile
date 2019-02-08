@@ -1,4 +1,4 @@
-FROM base/archlinux
+FROM archlinux/base
 ADD . /build
 WORKDIR /build
 RUN scripts/installDependencies.sh

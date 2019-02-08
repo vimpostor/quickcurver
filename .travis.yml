@@ -12,7 +12,7 @@ services:
   - docker
 
 before_install:
-  - docker pull base/archlinux
+  - docker pull archlinux/base
 
 script:
   - scripts/travisDocker.sh
