@@ -23,6 +23,11 @@ signals:
 	 */
 	void addBot();
 	/**
+	 * @brief The user wants to broadcast a chat message
+	 * @param message The message to broadcast
+	 */
+	void chat(QString message);
+	/**
 	 * @brief The user wants to set item spawn probabilities
 	 * @param index The index of the item
 	 * @param prob The probability of the item to spawn
@@ -82,6 +87,7 @@ private:
 	bool checkList(const std::list<QString>& l);
 	bool takeFloat(float& result, std::list<QString>& l, QString info);
 	bool takeInt(int& result, std::list<QString>& l, QString info);
+	bool takeString(QString& result, std::list<QString>& l, QString info);
 };
 
 #endif // COMMANDLINEREADER_H

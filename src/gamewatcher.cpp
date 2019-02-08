@@ -7,6 +7,7 @@
 GameWatcher::GameWatcher(QObject *parent) : QObject(parent)
 {
 	connect(&cliReader, &CommandlineReader::addBot, &PlayerModel::getSingleton(), &PlayerModel::appendBot);
+	connect(&cliReader, &CommandlineReader::chat, &game, &Game::sendChatMessage);
 	connect(&cliReader, &CommandlineReader::itemSpawn, &ItemModel::getSingleton(), &ItemModel::setProbability);
 	connect(&cliReader, &CommandlineReader::itemWait, [](int min, int max){ Settings::getSingleton().setItemSpawnIntervalMin(min); Settings::getSingleton().setItemSpawnIntervalMax(max); });
 	connect(&cliReader, &CommandlineReader::listen, &game, &Game::serverReListen);

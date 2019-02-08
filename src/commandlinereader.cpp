@@ -45,6 +45,11 @@ void CommandlineReader::run()
 					for (int i = 0; i < amount; ++i) {
 						emit addBot();
 					}
+				} else if (command == "chat") {
+					QString message;
+					if (takeString(message, parts, "Chat message")) {
+						emit chat(message);
+					}
 				} else if (command == "help") {
 					qInfo() << "/start starts the game";
 				} else if (command == "itemspawn") {
@@ -124,7 +129,7 @@ bool CommandlineReader::takeFloat(float& result, std::list<QString>& l, QString 
 {
 	bool ok = false;
 	if (checkList(l)) {
-		QString p = *l.begin();
+		QString p = l.front();
 		l.pop_front();
 		result = p.toFloat(&ok);
 	}
@@ -145,9 +150,30 @@ bool CommandlineReader::takeInt(int& result, std::list<QString>& l, QString info
 {
 	bool ok = false;
 	if (checkList(l)) {
-		QString p = *l.begin();
+		QString p = l.front();
 		l.pop_front();
 		result = p.toInt(&ok);
+	}
+	if (!ok) {
+		qInfo() << info;
+	}
+	return ok;
+}
+
+/**
+ * @brief Returns the first parameter from the list as QString
+ * @param result The first parameter interpreted as QString
+ * @param l The parameter list
+ * @param info An info text about the parameter
+ * @return Whether the operation was successful
+ */
+bool CommandlineReader::takeString(QString& result, std::list<QString>& l, QString info)
+{
+	bool ok = false;
+	if (checkList(l)) {
+		result = l.front();
+		l.pop_front();
+		ok = !result.isEmpty();
 	}
 	if (!ok) {
 		qInfo() << info;
