@@ -38,7 +38,13 @@ void CommandlineReader::run()
 				const auto command = parts.begin()->mid(1);
 				parts.pop_front();
 				if (command == "addbot") {
-					emit addBot();
+					int amount;
+					if (!takeInt(amount, parts, "You can also specify the number of bots to add")) {
+						amount = 1;
+					}
+					for (int i = 0; i < amount; ++i) {
+						emit addBot();
+					}
 				} else if (command == "help") {
 					qInfo() << "/start starts the game";
 				} else if (command == "itemspawn") {
