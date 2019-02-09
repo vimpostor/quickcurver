@@ -20,6 +20,7 @@ ApplicationWindow {
 	title: "Quick Curver"
 	Material.primary: Material.Yellow
 	Material.accent: Material.Blue
+	onWidthChanged: game.checkDimension();
 	initialPage: Page {
 		id: initialPage
 		title: "Quick Curver"
