@@ -93,7 +93,7 @@ ItemModel &ItemModel::getSingleton()
 /**
  * @brief Creates a random Item at a given position
  * @param parentNode The parent node in the scene graph
- * @param pos THe location of the Item
+ * @param pos The location of the Item
  * @return The just created Item
  */
 Item *ItemModel::makeRandomItem(QSGNode *parentNode, QPointF pos)

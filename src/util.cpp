@@ -91,3 +91,16 @@ void Util::setBit(uint8_t& byte, const int pos, bool value)
 {
 	byte |= value << pos;
 }
+
+/**
+ * @brief Returns a helper object with the intent of generating textures from SVG files
+ * @return The texture generator
+ */
+QQuickView* Util::getTextureGenerator()
+{
+	static std::unique_ptr<QQuickView> result;
+	if (!result) {
+		result = std::make_unique<QQuickView>();
+	}
+	return result.get();
+}

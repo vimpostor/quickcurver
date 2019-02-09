@@ -6,8 +6,6 @@
 #define SIZE 12
 #define FADEDURATION 256
 
-QQuickView *Item::textureGenerator = NULL;
-
 /**
  * @brief Constructs a new Item instance
  * @param parentNode The parent node in the scene graph
@@ -137,17 +135,12 @@ void Item::initTexture()
 	if (Settings::getSingleton().getOffscreen()) {
 		return;
 	}
-	if (textureGenerator == NULL) {
-		// textureGenerator NULL, so create one
-		textureGenerator = new QQuickView();
-		// TODO: Free this at the end
-	}
-	QImage img = QImage(SIZE*2, SIZE*2, QImage::Format_RGB16);
+	QImage img = QImage(SIZE*2, SIZE*2, QImage::Format_RGB32);
 	img.fill(color); // fill with background color
 	QSvgRenderer renderer(iconPath);
 	QPainter painter(&img);
 	renderer.render(&painter); // paint the icon on top of it
-	texture = std::unique_ptr<QSGTexture>(this->textureGenerator->createTextureFromImage(img));
+	texture = std::unique_ptr<QSGTexture>(Util::getTextureGenerator()->createTextureFromImage(img));
 	texture->setMipmapFiltering(QSGTexture::Linear);
 	texture->bind();
 }

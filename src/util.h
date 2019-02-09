@@ -7,7 +7,9 @@
 #include <QColor>
 #include <map>
 #include <algorithm>
+#include <memory>
 #include <QDataStream>
+#include <QQuickView>
 
 /**
  * @brief Contains frequently used useful routines that are available for every class
@@ -46,6 +48,7 @@ namespace Util {
 	QString expandIconName(const QString icon);
 	bool getBit(const uint8_t byte, const int pos);
 	void setBit(uint8_t& byte, const int pos, bool value);
+	QQuickView* getTextureGenerator();
 
 	// std algorithm wrappers
 
