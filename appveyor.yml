@@ -10,13 +10,14 @@ skip_tags: true
 environment:
   matrix:
   - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    QT: C:\Qt\5.11.2\mingw53_32
+    QT: C:\Qt\latest\mingw73_64
     COMPILER: mingw
     platform: mingw
 init:
-- set PATH=%QT%\bin\;%QT%\lib;C:\Qt\Tools\QtCreator\bin\;C:\Qt\Tools\mingw530_32\bin;C:\MinGW\bin;%PATH%
+- set PATH=%QT%\bin\;%QT%\lib;C:\Qt\Tools\QtCreator\bin\;C:\Qt\Tools\mingw730_64\bin;%PATH%
 before_build:
 - git submodule update --init --recursive
+- qmake -v
 build_script:
 - mkdir build
 - cd build
