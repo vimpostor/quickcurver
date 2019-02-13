@@ -305,6 +305,10 @@ void Packet::ServerCurverData::fill()
 void Packet::ServerCurverData::extract()
 {
 	auto &curvers = PlayerModel::getSingleton().getCurvers();
+	if (curvers.size() != pos.size()) {
+		// invalid size, can be UDP related
+		return;
+	}
 	for (uint i = 0; i < curvers.size(); ++i) {
 		curvers[i]->appendPoint(pos[i], changingSegment[i]);
 	}
