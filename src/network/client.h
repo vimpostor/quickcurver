@@ -87,7 +87,14 @@ private:
 	 * @brief The address of the server to connect to
 	 */
 	FullNetworkAddress serverAddress;
+	/**
+	 * @brief The current join status
+	 */
 	JoinStatus joinStatus = JoinStatus::NONE;
+	/**
+	 * @brief The timer responsible for continuously sending a Ping to the Server
+	 */
+	QTimer pingTimer;
 };
 
 #endif // CLIENT_H

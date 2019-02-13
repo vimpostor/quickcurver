@@ -1,5 +1,7 @@
 #include "client.h"
 
+#define PING_INTERVAL 5000
+
 Client::Client()
 {
 	in.setDevice(&tcpSocket);
@@ -9,6 +11,9 @@ Client::Client()
 	connect(&tcpSocket, &QTcpSocket::readyRead, this, &Client::socketReadyRead);
 	connect(&udpSocket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this, &Client::udpSocketError);
 	connect(&udpSocket, &QUdpSocket::readyRead, this, &Client::udpSocketReadyRead);
+
+	connect(&pingTimer, &QTimer::timeout, this, &Client::pingServer);
+	pingTimer.setInterval(PING_INTERVAL);
 
 	// choose an arbitrary local port for UDP
 	udpSocket.bind();
@@ -224,7 +229,7 @@ void Client::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p)
 	case Packet::ServerTypes::Pong:
 	{
 		auto *pong = (Packet::Pong *)p.get();
-		qInfo() << Util::getTimeDiff(pong->sent);
+		Settings::getSingleton().setPing(Util::getTimeDiff(pong->sent));
 		if (this->joinStatus == JoinStatus::UDP_PENDING) {
 			setJoinStatus(JoinStatus::JOINED);
 			sendPlayerModel();
@@ -244,5 +249,10 @@ void Client::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p)
 void Client::setJoinStatus(JoinStatus s)
 {
 	this->joinStatus = s;
+	if (joinStatus == JoinStatus::JOINED) {
+		pingTimer.start();
+	} else {
+		pingTimer.stop();
+	}
 	emit joinStatusChanged(s);
 }

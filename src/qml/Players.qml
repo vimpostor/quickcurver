@@ -13,7 +13,7 @@ Card {
 	ListView {
 		id: playerListView
 		header: Subheader {
-			text: "Players"
+			text: "Players (Ping: " + c_settings.ping + ")"
 		}
 		clip: true
 		property int modelIndex: 0
