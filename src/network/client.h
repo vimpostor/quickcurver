@@ -75,6 +75,7 @@ private slots:
 	void udpSocketReadyRead();
 
 	void handleDns(QHostInfo info);
+	void handleJoinTimeout();
 private:
 	void handlePacket(std::unique_ptr<Packet::AbstractPacket> &p);
 	void setJoinStatus(const JoinStatus s);
@@ -102,6 +103,10 @@ private:
 	 * @brief The timer responsible for continuously sending a Ping to the Server
 	 */
 	QTimer pingTimer;
+	/**
+	 * @brief The timer responsible for cancelling a join request, if it takes too long
+	 */
+	QTimer joinTimeoutTimer;
 };
 
 #endif // CLIENT_H

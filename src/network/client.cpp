@@ -1,6 +1,7 @@
 #include "client.h"
 
 #define PING_INTERVAL 5000
+#define JOIN_TIMEOUT 30000
 
 Client::Client()
 {
@@ -15,6 +16,9 @@ Client::Client()
 	connect(&pingTimer, &QTimer::timeout, this, &Client::pingServer);
 	pingTimer.setInterval(PING_INTERVAL);
 	connect(this, &Client::dnsFinished, this, &Client::handleDns);
+	connect(&joinTimeoutTimer, &QTimer::timeout, this, &Client::handleJoinTimeout);
+	joinTimeoutTimer.setSingleShot(true);
+	joinTimeoutTimer.setInterval(JOIN_TIMEOUT);
 
 	// choose an arbitrary local port for UDP
 	udpSocket.bind();
@@ -37,6 +41,7 @@ Client::JoinStatus Client::getJoinStatus() const
 void Client::connectToHost(QString addr, quint16 port)
 {
 	this->serverAddress = {QHostAddress(), port};
+	joinTimeoutTimer.start();
 	// first look up the hostname
 	setJoinStatus(JoinStatus::DNS_PENDING);
 	QHostInfo::lookupHost(addr, this, &Client::dnsFinished);
@@ -188,6 +193,15 @@ void Client::handleDns(QHostInfo info)
 	this->serverAddress.addr = info.addresses().first();
 	setJoinStatus(JoinStatus::TCP_PENDING);
 	tcpSocket.connectToHost(serverAddress.addr, serverAddress.port);
+}
+
+/**
+ * @brief Handles a join timeout
+ */
+void Client::handleJoinTimeout()
+{
+	setJoinStatus(JoinStatus::FAILED);
+	Gui::getSingleton().postInfoBar("The join request timed out");
 }
 
 /**
