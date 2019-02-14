@@ -200,8 +200,10 @@ void Client::handleDns(QHostInfo info)
  */
 void Client::handleJoinTimeout()
 {
-	setJoinStatus(JoinStatus::FAILED);
-	Gui::getSingleton().postInfoBar("The join request timed out");
+	if (joinStatus != JoinStatus::JOINED) {
+		setJoinStatus(JoinStatus::FAILED);
+		Gui::getSingleton().postInfoBar("The join request timed out");
+	}
 }
 
 /**
