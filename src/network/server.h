@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QSignalMapper>
 #include <memory>
+#include <array>
 
 #include "network.h"
 
