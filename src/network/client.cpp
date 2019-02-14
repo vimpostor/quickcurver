@@ -14,6 +14,7 @@ Client::Client()
 
 	connect(&pingTimer, &QTimer::timeout, this, &Client::pingServer);
 	pingTimer.setInterval(PING_INTERVAL);
+	connect(this, &Client::dnsFinished, this, &Client::handleDns);
 
 	// choose an arbitrary local port for UDP
 	udpSocket.bind();
@@ -35,23 +36,10 @@ Client::JoinStatus Client::getJoinStatus() const
  */
 void Client::connectToHost(QString addr, quint16 port)
 {
+	this->serverAddress = {QHostAddress(), port};
 	// first look up the hostname
 	setJoinStatus(JoinStatus::DNS_PENDING);
-	// blocking call
-	QHostInfo info = QHostInfo::fromName(addr);
-	if (info.error()) {
-		setJoinStatus(JoinStatus::FAILED);
-		Gui::getSingleton().postInfoBar(info.errorString());
-		return;
-	} else if (info.addresses().isEmpty()) {
-		setJoinStatus(JoinStatus::FAILED);
-		Gui::getSingleton().postInfoBar("Could not resolve hostname");
-		return;
-	}
-	QHostAddress hostAddr = info.addresses().first();
-	this->serverAddress = {hostAddr, port};
-	setJoinStatus(JoinStatus::TCP_PENDING);
-	tcpSocket.connectToHost(hostAddr, port);
+	QHostInfo::lookupHost(addr, this, &Client::dnsFinished);
 }
 
 /**
@@ -183,6 +171,26 @@ void Client::udpSocketReadyRead()
 }
 
 /**
+ * @brief Handles the result of a DNS request
+ * @param info The returned DNS info
+ */
+void Client::handleDns(QHostInfo info)
+{
+	if (info.error()) {
+		setJoinStatus(JoinStatus::FAILED);
+		Gui::getSingleton().postInfoBar(info.errorString());
+		return;
+	} else if (info.addresses().isEmpty()) {
+		setJoinStatus(JoinStatus::FAILED);
+		Gui::getSingleton().postInfoBar("Could not resolve hostname");
+		return;
+	}
+	this->serverAddress.addr = info.addresses().first();
+	setJoinStatus(JoinStatus::TCP_PENDING);
+	tcpSocket.connectToHost(serverAddress.addr, serverAddress.port);
+}
+
+/**
  * @brief Processes an already received packet
  * @param p The packet that was received
  */
@@ -246,7 +254,7 @@ void Client::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p)
  * @brief Sets the join status
  * @param s The new join status
  */
-void Client::setJoinStatus(JoinStatus s)
+void Client::setJoinStatus(const JoinStatus s)
 {
 	this->joinStatus = s;
 	if (joinStatus == JoinStatus::JOINED) {

@@ -58,7 +58,12 @@ signals:
 	 * @brief Emitted when the join status changed
 	 * @param joinStatus The new join status
 	 */
-	void joinStatusChanged(JoinStatus joinStatus);
+	void joinStatusChanged(const JoinStatus joinStatus);
+	/**
+	 * @brief Emitted when the DNS replied
+	 * @param info The DNS reply
+	 */
+	void dnsFinished(QHostInfo info);
 private slots:
 	// tcp
 	void socketError(QAbstractSocket::SocketError);
@@ -68,9 +73,11 @@ private slots:
 	// udp
 	void udpSocketError(QAbstractSocket::SocketError);
 	void udpSocketReadyRead();
+
+	void handleDns(QHostInfo info);
 private:
 	void handlePacket(std::unique_ptr<Packet::AbstractPacket> &p);
-	void setJoinStatus(JoinStatus s);
+	void setJoinStatus(const JoinStatus s);
 	/**
 	 * @brief The TCP socket to communicate with
 	 */

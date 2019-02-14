@@ -36,6 +36,8 @@ int main(int argc, char *argv[]) {
 	QQuickStyle::setStyle(QLatin1String("Material"));
 	QApplication app(argc, argv);
 
+	qRegisterMetaType<Client::JoinStatus>("JoinStatus");
+
 	QCommandLineParser parser;
 	parser.setApplicationDescription("Quickcurver");
 	parser.addHelpOption();
