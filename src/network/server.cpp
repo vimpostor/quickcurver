@@ -284,9 +284,9 @@ void Server::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p, const QTcp
 	{
 		auto* pingPacket = (Packet::Ping *)p.get();
 		// respond with pong
-		Packet::Pong p;
-		p.sent = pingPacket->sent;
-		p.sendPacketUdp(&udpSocket, sender);
+		Packet::Pong pongPacket;
+		pongPacket.sent = pingPacket->sent;
+		pongPacket.sendPacketUdp(&udpSocket, sender);
 		break;
 	}
 	default:
