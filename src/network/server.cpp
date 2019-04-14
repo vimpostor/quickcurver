@@ -80,6 +80,7 @@ void Server::reListen(quint16 port)
 {
 	tcpServer.close();
 	tcpServer.listen(QHostAddress::Any, port);
+	udpSocket.close();
 	udpSocket.bind(tcpServer.serverPort());
 	qDebug() << "Running on port" << tcpServer.serverPort();
 }
