@@ -60,7 +60,7 @@ void Game::startGame()
  */
 void Game::processKey(Qt::Key key, bool release)
 {
-	Util::for_each(getCurvers(), [&](std::unique_ptr<Curver> &c){ c->processKey(key, release); });
+	Util::for_each(getCurvers(), [&](auto &c){ c->processKey(key, release); });
 	if (getClient()->getJoinStatus() == Client::JoinStatus::JOINED) {
 		client.processKey(key, release);
 	}

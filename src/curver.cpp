@@ -139,17 +139,15 @@ bool Curver::isChangingSegment() const
  */
 void Curver::processKey(Qt::Key key, bool release)
 {
-	if (controller != Controller::CONTROLLER_LOCAL) {
+	if (controller != Controller::CONTROLLER_LOCAL || ((key != leftKey) && (key != rightKey))) {
 		return;
 	}
 	if (release) {
 		rotation = Rotation::ROTATE_NONE;
-	} else {
-		if (key == leftKey) {
-			rotation = Rotation::ROTATE_LEFT;
-		} else if (key == rightKey) {
-			rotation = Rotation::ROTATE_RIGHT;
-		}
+	} else if (key == leftKey) {
+		rotation = Rotation::ROTATE_LEFT;
+	} else if (key == rightKey) {
+		rotation = Rotation::ROTATE_RIGHT;
 	}
 }
 
