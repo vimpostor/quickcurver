@@ -224,6 +224,7 @@ void Curver::resetRound()
 	prepareSegmentEvent(true, SPAWN_INVINCIBLE_DURATION, SPAWN_INVINCIBLE_DURATION);
 	roundScore = 0;
 	alive = true;
+	headVisible = true;
 }
 
 /**
@@ -259,7 +260,9 @@ void Curver::appendPoint(const QPointF pos, const bool changingSegment)
 	if (!changingSegment && (oldChangingSegment || segments.size() == 0)) {
 		segments.push_back(std::make_unique<Segment>(parentNode, &material, thickness));
 	}
-	headNode->setPosition(pos);
+	if (headVisible) {
+		headNode->setPosition(pos);
+	}
 	if (!changingSegment && pos != lastPos) {
 		const QPointF diff = pos - lastPos;
 		const double length = sqrt(QPointF::dotProduct(diff, diff));
