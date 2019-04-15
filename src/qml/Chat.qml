@@ -25,6 +25,7 @@ Card {
 			}
 			Layout.fillHeight: true
 			Layout.fillWidth: true
+			onCountChanged: currentIndex = count - 1;
 		}
 		RowLayout {
 			TextField {
