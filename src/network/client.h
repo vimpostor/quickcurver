@@ -79,6 +79,9 @@ private slots:
 private:
 	void handlePacket(std::unique_ptr<Packet::AbstractPacket> &p);
 	void setJoinStatus(const JoinStatus s);
+#ifdef MUMBLE_SUPPORT
+	void initMumble();
+#endif // MUMBLE_SUPPORT
 	/**
 	 * @brief The TCP socket to communicate with
 	 */
@@ -107,6 +110,10 @@ private:
 	 * @brief The timer responsible for cancelling a join request, if it takes too long
 	 */
 	QTimer joinTimeoutTimer;
+	/**
+	 * @brief The index of the client in the server curver array
+	 */
+	int curverIndex = -1;
 };
 
 #endif // CLIENT_H

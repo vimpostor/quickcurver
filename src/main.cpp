@@ -10,6 +10,7 @@
 #include "settings.h"
 #include "models/chatmodel.h"
 #include "gamewatcher.h"
+#include "mumble.h"
 
 #ifdef QT_STATIC
 #include <QQmlExtensionPlugin>
@@ -60,6 +61,11 @@ int main(int argc, char *argv[]) {
 		gameWatcher.start();
 		return app.exec();
 	}
+
+	// Mumble
+#ifdef MUMBLE_SUPPORT
+	Mumble::Api::get()->initialize();
+#endif // MUMBLE_SUPPORT
 
 	// register QML types here
 	qmlRegisterType<Game>("Game", 1, 0, "Game");

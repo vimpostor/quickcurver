@@ -290,7 +290,7 @@ Packet::ServerCurverData::ServerCurverData() : AbstractPacket(static_cast<Packet
  */
 void Packet::ServerCurverData::fill()
 {
-	auto &curvers = PlayerModel::getSingleton().getCurvers();
+	auto& curvers = PlayerModel::getSingleton().getCurvers();
 	pos.resize(curvers.size());
 	changingSegment.resize(curvers.size());
 	for (uint i = 0; i < curvers.size(); ++i) {
@@ -490,7 +490,7 @@ Packet::Pong::Pong() : AbstractPacket(static_cast<PacketType>(ServerTypes::Pong)
  */
 void Packet::Pong::serialize(QDataStream& out) const
 {
-	out << sent;
+	out << sent << curverIndex;
 }
 
 /**
@@ -499,5 +499,5 @@ void Packet::Pong::serialize(QDataStream& out) const
  */
 void Packet::Pong::parse(QDataStream& in)
 {
-	in >> sent;
+	in >> sent >> curverIndex;
 }

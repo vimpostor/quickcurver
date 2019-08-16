@@ -336,6 +336,10 @@ public:
 	 * @brief The time that the original Ping packet was sent at
 	 */
 	QTime sent = QTime::currentTime();
+	/**
+	 * @brief The index of the client-controlled curver in the server-side array
+	 */
+	int curverIndex = -1;
 protected:
 	virtual void serialize(QDataStream &out) const override;
 	virtual void parse(QDataStream &in) override;

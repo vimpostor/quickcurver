@@ -287,6 +287,7 @@ void Server::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p, const QTcp
 		// respond with pong
 		Packet::Pong pongPacket;
 		pongPacket.sent = pingPacket->sent;
+		pongPacket.curverIndex = getCurverIndex(sender);
 		pongPacket.sendPacketUdp(&udpSocket, sender);
 		break;
 	}
@@ -308,6 +309,26 @@ void Server::broadcastPacket(Packet::AbstractPacket &p, bool udp)
 	} else {
 		Util::for_each(clients, [&](auto &c){ p.sendPacket(c.first.get()); });
 	}
+}
+
+/**
+ * @brief Computes the index belonging to a client
+ * @param peer The address of the client
+ * @return The index in the server-side curver array
+ */
+int Server::getCurverIndex(const FullNetworkAddress peer)
+{
+	auto it = Util::find_if(clients, [&](auto& p){ return p.first->peerAddress() == peer.addr; });
+	if (it != clients.end()) {
+		auto& curvers = PlayerModel::getSingleton().getCurvers();
+		for (int i = 0; i < curvers.size(); ++i) {
+			if (curvers[i].get() == it->second) {
+				return i;
+			}
+		}
+	}
+	qDebug() << "Client index not found" << peer.addr << peer.port;
+	return -1;
 }
 
 /**

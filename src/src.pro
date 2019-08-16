@@ -18,6 +18,10 @@ QML_IMPORT_PATH = $$OUT_PWD/../fluid/qml
 
 DEFINES += QT_DEPRECATED_WARNINGS
 
+unix:!android {
+	LIBS += -lrt
+}
+
 android {
 	# Bundle Fluid QML plugins with the application
 	ANDROID_EXTRA_PLUGINS = $$OUT_PWD/../fluid/qml

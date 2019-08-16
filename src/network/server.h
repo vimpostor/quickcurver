@@ -47,6 +47,7 @@ private:
 	void removePlayer(const QTcpSocket *s);
 	void handlePacket(std::unique_ptr<Packet::AbstractPacket> &p, const QTcpSocket *s = nullptr, FullNetworkAddress sender = {});
 	void broadcastPacket(Packet::AbstractPacket &p, bool udp = false);
+	int getCurverIndex(const FullNetworkAddress peer);
 	/**
 	 * @brief The server instance that handles every incoming connection
 	 */
@@ -58,7 +59,7 @@ private:
 	/**
 	 * @brief The mapping between TCP sockets and their Curver instances
 	 */
-	std::map<std::unique_ptr<QTcpSocket>, Curver *> clients;
+	std::map<std::unique_ptr<QTcpSocket>, Curver*> clients;
 	Curver *curverFromSocket(const QTcpSocket *s) const;
 	/**
 	 * @brief Whether the round has to be reset
