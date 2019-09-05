@@ -20,7 +20,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 unix:!android {
 	LIBS += -lrt
-	DEFINES += "MUMBLE_SUPPORT=true"
 }
 
 android {
@@ -57,7 +56,6 @@ ios {
 
 win32 {
 	WINDEPLOYQT_OPTIONS = -qmldir $$OUT_PWD/../fluid/qml/Fluid
-	DEFINES += "MUMBLE_SUPPORT=true"
 }
 
 qtConfig(static) {
