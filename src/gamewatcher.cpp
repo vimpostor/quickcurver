@@ -1,3 +1,4 @@
+#ifdef HEADLESS_SERVER
 #include "gamewatcher.h"
 
 /**
@@ -50,3 +51,5 @@ void GameWatcher::printChatMessage(QString username, QString message)
 {
 	qInfo() << username << message;
 }
+
+#endif // HEADLESS_SERVER

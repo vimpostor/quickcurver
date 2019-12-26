@@ -1,3 +1,4 @@
+#ifdef HEADLESS_SERVER
 #include "commandlinereader.h"
 
 /**
@@ -180,3 +181,4 @@ bool CommandlineReader::takeString(QString& result, std::list<QString>& l, QStri
 	}
 	return ok;
 }
+#endif // HEADLESS_SERVER

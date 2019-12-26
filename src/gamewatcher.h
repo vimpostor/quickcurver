@@ -1,3 +1,4 @@
+#ifdef HEADLESS_SERVER
 #ifndef GAMEWATCHER_H
 #define GAMEWATCHER_H
 
@@ -30,3 +31,4 @@ private:
 };
 
 #endif // GAMEWATCHER_H
+#endif // HEADLESS_SERVER

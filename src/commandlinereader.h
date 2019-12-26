@@ -1,3 +1,4 @@
+#ifdef HEADLESS_SERVER
 #ifndef COMMANDLINEREADER_H
 #define COMMANDLINEREADER_H
 
@@ -91,3 +92,4 @@ private:
 };
 
 #endif // COMMANDLINEREADER_H
+#endif // HEADLESS_SERVER

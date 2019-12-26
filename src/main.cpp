@@ -55,12 +55,14 @@ int main(int argc, char *argv[]) {
 	parser.addVersionOption();
 	parser.process(app);
 
+#ifdef HEADLESS_SERVER
 	// headless server
 	if (Settings::getSingleton().getOffscreen()) {
 		GameWatcher gameWatcher;
 		gameWatcher.start();
 		return app.exec();
 	}
+#endif // HEADLESS_SERVER
 
 	// Mumble
 #ifdef MUMBLE_SUPPORT
