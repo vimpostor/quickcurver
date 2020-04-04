@@ -7,7 +7,7 @@ pkgdesc="Qt Material design implementation of Achtung die Kurve with online mult
 arch=('i686' 'x86_64')
 url="https://github.com/magnus-gross/$_pkgname"
 license=('GPL3')
-depends=(qt5-base qt5-declarative qt5-svg qt5-quickcontrols2 qt5-graphicaleffects)
+depends=(qt5-base qt5-declarative qt5-svg qt5-quickcontrols2 qt5-graphicaleffects fluid)
 makedepends=(git)
 source=("git+https://github.com/magnus-gross/$_pkgname.git"
 		"git+https://github.com/lirios/fluid.git")
@@ -38,5 +38,5 @@ build() {
 }
 
 package() {
-  install -D "$srcdir/$_pkgname/build/QuickCurver" "$pkgdir/usr/bin/$_pkgname"
+  install -D "$srcdir/$_pkgname/build/src/QuickCurver" "$pkgdir/usr/bin/$_pkgname"
 }
