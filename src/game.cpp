@@ -18,21 +18,17 @@ Game::Game(QQuickItem *parent) : QQuickItem(parent)
 	itemFactory = std::make_unique<ItemFactory>(rootNode);
 	// tell the playermodel, what the root node is, so that it can tell its curvers
 	PlayerModel::getSingleton().setRootNode(this->rootNode);
-	connect(&PlayerModel::getSingleton(), SIGNAL(curverDied()), this, SLOT(curverDied()));
-	connect(&PlayerModel::getSingleton(), SIGNAL(playerModelChanged()), &server, SLOT(broadcastPlayerModel()));
-	connect(&ItemModel::getSingleton(), SIGNAL(itemSpawned(bool,uint,int,QPointF,Item::AllowedUsers,int)), &server, SLOT(broadcastItemData(bool,uint,int,QPointF,Item::AllowedUsers,int)));
+	connect(&PlayerModel::getSingleton(), &PlayerModel::curverDied, this, &Game::curverDied);
+	connect(&PlayerModel::getSingleton(), &PlayerModel::playerModelChanged, &server, &Server::broadcastPlayerModel);
+	connect(&ItemModel::getSingleton(), &ItemModel::itemSpawned, &server, &Server::broadcastItemData);
 	wall.setParentNode(rootNode);
-	connect(&client, SIGNAL(integrateItem(bool,uint,int,QPointF,Item::AllowedUsers,int)), itemFactory.get(), SLOT(integrateItem(bool,uint,int,QPointF,Item::AllowedUsers,int)));
-	connect(&client, SIGNAL(resetRound()), this, SLOT(resetRound()));
-	connect(&Settings::getSingleton(), SIGNAL(dimensionChanged()), this, SLOT(dimensionChanged()));
+	connect(&client, &Client::integrateItem, itemFactory.get(), &ItemFactory::integrateItem);
+	connect(&client, &Client::resetRound, this, &Game::resetRound);
 	// GUI signals
-	connect(&Gui::getSingleton(), SIGNAL(postInfoBar(QString)), this, SIGNAL(postInfoBar(QString)));
-	connect(&Gui::getSingleton(), SIGNAL(startGame()), this, SLOT(tryStartGame()));
+	connect(&Gui::getSingleton(), &Gui::postInfoBar, this, &Game::postInfoBar);
+	connect(&Gui::getSingleton(), &Gui::startGame, this, &Game::tryStartGame);
 
-	// client signals
-	connect(&client, SIGNAL(connectedToServerChanged(bool)), this, SLOT(connectedToServerChanged(bool)));
-
-	connect(&gameTimer, SIGNAL(timeout()), this, SLOT(progress()));
+	connect(&gameTimer, &QTimer::timeout, this, &Game::progress);
 	// tell QtQuick, that this component wants to draw stuff
 	setFlag(ItemHasContents);
 }
@@ -64,8 +60,8 @@ void Game::startGame()
  */
 void Game::processKey(Qt::Key key, bool release)
 {
-	Util::for_each(getCurvers(), [&](std::unique_ptr<Curver> &c){ c->processKey(key, release); });
-	if (connectedToServer) {
+	Util::for_each(getCurvers(), [&](auto &c){ c->processKey(key, release); });
+	if (getClient()->getJoinStatus() == Client::JoinStatus::JOINED) {
 		client.processKey(key, release);
 	}
 }
@@ -77,8 +73,7 @@ void Game::processKey(Qt::Key key, bool release)
  */
 void Game::connectToHost(QString ip, int port)
 {
-	QHostAddress addr = QHostAddress(ip);
-	client.connectToHost(addr, port);
+	client.connectToHost(ip, port);
 }
 
 /**
@@ -89,7 +84,7 @@ void Game::connectToHost(QString ip, int port)
  */
 void Game::sendChatMessage(QString msg)
 {
-	if (connectedToServer) {
+	if (getClient()->getJoinStatus() == Client::JoinStatus::JOINED) {
 		client.sendChatMessage(msg);
 	} else {
 		server.broadcastChatMessage(msg);
@@ -112,6 +107,17 @@ void Game::resetGame()
 {
 	resetRound();
 	Util::for_each(getCurvers(), [](const auto &c){ c->totalScore = 0; });
+	winnerAnnounced = false;
+	PlayerModel::getSingleton().forceRefresh();
+}
+
+/**
+ * @brief Returns the Client belonging to this Game
+ * @return The Client
+ */
+Client*Game::getClient()
+{
+	return &client;
 }
 
 /**
@@ -128,9 +134,8 @@ QSGNode *Game::updatePaintNode(QSGNode *, QQuickItem::UpdatePaintNodeData *)
  */
 void Game::progress()
 {
-	QTime currentTime = QTime::currentTime();
-	int deltat = lastProgressTime.msecsTo(currentTime);
-	lastProgressTime = currentTime;
+	int deltat = Util::getTimeDiff(lastProgressTime);
+	lastProgressTime = QTime::currentTime();
 	for (auto &c : getCurvers()) {
 		if (c->isAlive()) {
 			if (c->controller == Curver::Controller::CONTROLLER_BOT) {
@@ -155,13 +160,14 @@ void Game::curverDied()
 {
 	Util::for_each(getCurvers(), [](const auto &c){ if (c->isAlive()) c->increaseScore(); });
 	auto maxScorer = Util::max_element(getCurvers());
-	if ((*maxScorer)->totalScore >= Settings::getSingleton().getTargetScore()) {
+	if ((*maxScorer)->totalScore >= Settings::getSingleton().getTargetScore() && !winnerAnnounced) {
 		// we have a winner
+		winnerAnnounced = true;
 		server.broadcastChatMessage((*maxScorer)->userName + " won!");
 	}
 	// check if only one player is remaining
 	if (Util::count_if(getCurvers(), [](const auto &c){ return c->isAlive(); }) == 1) {
-		resetRoundTimer.singleShot(Settings::getSingleton().getRoundTimeOut(), this, SLOT(resetRound()));
+		resetRoundTimer.singleShot(Settings::getSingleton().getRoundTimeOut(), this, &Game::resetRound);
 	}
 }
 
@@ -173,23 +179,6 @@ void Game::resetRound()
 	itemFactory->resetRound();
 	Util::for_each(getCurvers(), [](const auto &c){ c->resetRound(); });
 	server.resetRound();
-}
-
-/**
- * @brief Called, when the game dimension changed
- */
-void Game::dimensionChanged()
-{
-	wall.updateDimension();
-}
-
-/**
- * @brief Called, when the connection status changed
- * @param connected Whether the new state is connected
- */
-void Game::connectedToServerChanged(bool connected)
-{
-	this->connectedToServer = connected;
 }
 
 /**

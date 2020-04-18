@@ -14,18 +14,32 @@
 class Client : public QObject
 {
 	Q_OBJECT
+
+	Q_PROPERTY(JoinStatus joinStatus READ getJoinStatus NOTIFY joinStatusChanged)
 public:
+	/**
+	 * @brief The current status of joining a Server
+	 */
+	enum class JoinStatus {
+		NONE,
+		FAILED,
+		DNS_PENDING,
+		TCP_PENDING,
+		UDP_PENDING,
+		JOINED
+	};
+	Q_ENUM(JoinStatus)
+
 	Client();
-	void connectToHost(QHostAddress &addr, quint16 port);
+
+	Q_INVOKABLE JoinStatus getJoinStatus() const;
+
+	void connectToHost(QString addr, quint16 port);
 	void sendChatMessage(QString msg);
 	void sendPlayerModel();
 	void processKey(Qt::Key key, bool release);
+	void pingServer();
 signals:
-	/**
-	 * @brief Emitted when the connection status changed
-	 * @param connected Whether the new status is connected
-	 */
-	void connectedToServerChanged(bool connected);
 	/**
 	 * @brief Emitted when a new Item has to be integrated into the Game
 	 * @param spawned Whether the Item spawned or was triggered
@@ -40,21 +54,66 @@ signals:
 	 * @brief Emitted when the round has to be reset
 	 */
 	void resetRound();
+	/**
+	 * @brief Emitted when the join status changed
+	 * @param joinStatus The new join status
+	 */
+	void joinStatusChanged(const JoinStatus joinStatus);
+	/**
+	 * @brief Emitted when the DNS replied
+	 * @param info The DNS reply
+	 */
+	void dnsFinished(QHostInfo info);
 private slots:
+	// tcp
 	void socketError(QAbstractSocket::SocketError);
 	void socketConnected();
 	void socketDisconnected();
 	void socketReadyRead();
+	// udp
+	void udpSocketError(QAbstractSocket::SocketError);
+	void udpSocketReadyRead();
+
+	void handleDns(QHostInfo info);
+	void handleJoinTimeout();
 private:
 	void handlePacket(std::unique_ptr<Packet::AbstractPacket> &p);
+	void setJoinStatus(const JoinStatus s);
+#ifdef MUMBLE_SUPPORT
+	void initMumble();
+#endif // MUMBLE_SUPPORT
 	/**
-	 * @brief The socket to communicate with
+	 * @brief The TCP socket to communicate with
 	 */
-	QTcpSocket socket;
+	QTcpSocket tcpSocket;
+	/**
+	 * @brief The UDP socket to communicate with
+	 */
+	QUdpSocket udpSocket;
 	/**
 	 * @brief A data stream belonging to Client::socket
 	 */
 	QDataStream in;
+	/**
+	 * @brief The address of the server to connect to
+	 */
+	FullNetworkAddress serverAddress;
+	/**
+	 * @brief The current join status
+	 */
+	JoinStatus joinStatus = JoinStatus::NONE;
+	/**
+	 * @brief The timer responsible for continuously sending a Ping to the Server
+	 */
+	QTimer pingTimer;
+	/**
+	 * @brief The timer responsible for cancelling a join request, if it takes too long
+	 */
+	QTimer joinTimeoutTimer;
+	/**
+	 * @brief The index of the client in the server curver array
+	 */
+	int curverIndex = -1;
 };
 
 #endif // CLIENT_H

@@ -6,8 +6,6 @@
 #define SIZE 12
 #define FADEDURATION 256
 
-QQuickView *Item::textureGenerator = NULL;
-
 /**
  * @brief Constructs a new Item instance
  * @param parentNode The parent node in the scene graph
@@ -29,7 +27,7 @@ Item::Item(QSGNode *parentNode, QString iconPath, AllowedUsers allowedUsers, QPo
 	material.setTexture(texture.get());
 	geoNode.setMaterial(&material);
 	geometry.allocate(4);
-	connect(&fadeTimer, SIGNAL(timeout()), this, SLOT(fade()));
+	connect(&fadeTimer, &QTimer::timeout, this, &Item::fade);
 	startFade(true);
 	fade();
 	parentNode->appendChildNode(&geoNode);
@@ -58,7 +56,7 @@ void Item::trigger(std::unique_ptr<Curver> &collector)
 	active = true;
 	if (this->activatedTime != 0) {
 		// has to be deactivated
-		unUseTimer.singleShot(activatedTime, this, SLOT(deactivate()));
+		unUseTimer.singleShot(activatedTime, this, &Item::deactivate);
 	}
 	startFade(false);
 }
@@ -134,17 +132,15 @@ QColor Item::getColor() const
  */
 void Item::initTexture()
 {
-	if (textureGenerator == NULL) {
-		// textureGenerator NULL, so create one
-		textureGenerator = new QQuickView();
-		// TODO: Free this at the end
+	if (Settings::getSingleton().getOffscreen()) {
+		return;
 	}
-	QImage img = QImage(SIZE*2, SIZE*2, QImage::Format_RGB16);
+	QImage img = QImage(SIZE*2, SIZE*2, QImage::Format_RGB32);
 	img.fill(color); // fill with background color
 	QSvgRenderer renderer(iconPath);
 	QPainter painter(&img);
 	renderer.render(&painter); // paint the icon on top of it
-	texture = std::unique_ptr<QSGTexture>(this->textureGenerator->createTextureFromImage(img));
+	texture = std::unique_ptr<QSGTexture>(Util::getTextureGenerator()->createTextureFromImage(img));
 	texture->setMipmapFiltering(QSGTexture::Linear);
 	texture->bind();
 }

@@ -139,17 +139,15 @@ bool Curver::isChangingSegment() const
  */
 void Curver::processKey(Qt::Key key, bool release)
 {
-	if (controller != Controller::CONTROLLER_LOCAL) {
+	if (controller != Controller::CONTROLLER_LOCAL || ((key != leftKey) && (key != rightKey))) {
 		return;
 	}
 	if (release) {
 		rotation = Rotation::ROTATE_NONE;
-	} else {
-		if (key == leftKey) {
-			rotation = Rotation::ROTATE_LEFT;
-		} else if (key == rightKey) {
-			rotation = Rotation::ROTATE_RIGHT;
-		}
+	} else if (key == leftKey) {
+		rotation = Rotation::ROTATE_LEFT;
+	} else if (key == rightKey) {
+		rotation = Rotation::ROTATE_RIGHT;
 	}
 }
 
@@ -200,7 +198,8 @@ void Curver::checkForWall()
 void Curver::cleanInstall()
 {
 	prepareSegmentEvent(true, CLEAN_INVINCIBLE_DURATION, CLEAN_INVINCIBLE_DURATION);
-	segments.clear();
+	// spawn cleaninstall animation and remove segments with it
+	cleaninstallAnimation.trigger(segments);
 }
 
 /**
@@ -225,6 +224,20 @@ void Curver::resetRound()
 	prepareSegmentEvent(true, SPAWN_INVINCIBLE_DURATION, SPAWN_INVINCIBLE_DURATION);
 	roundScore = 0;
 	alive = true;
+	headVisible = true;
+}
+
+/**
+ * @brief Changes the alive state
+ * @param alive Whether this Curver is alive
+ */
+void Curver::setAlive(const bool alive)
+{
+	if (isAlive() && !alive) {
+		die();
+	} else {
+		this->alive = alive;
+	}
 }
 
 /**
@@ -243,10 +256,13 @@ bool Curver::isAlive() const
  */
 void Curver::appendPoint(const QPointF pos, const bool changingSegment)
 {
-	if (!changingSegment && oldChangingSegment) {
+	// segments.size() test fixes a bug, where a client would crash due to network lag
+	if (!changingSegment && (oldChangingSegment || segments.size() == 0)) {
 		segments.push_back(std::make_unique<Segment>(parentNode, &material, thickness));
 	}
-	headNode->setPosition(pos);
+	if (headVisible) {
+		headNode->setPosition(pos);
+	}
 	if (!changingSegment && pos != lastPos) {
 		const QPointF diff = pos - lastPos;
 		const double length = sqrt(QPointF::dotProduct(diff, diff));
@@ -254,6 +270,7 @@ void Curver::appendPoint(const QPointF pos, const bool changingSegment)
 		if (diff.y() < 0) {
 			angle = -1 * angle;
 		}
+		Q_ASSERT(segments.size() > 0);
 		segments.back()->appendPoint(pos, angle);
 	}
 	oldChangingSegment = changingSegment;
@@ -297,7 +314,7 @@ void Curver::progress(int deltat, std::vector<std::unique_ptr<Curver> > &curvers
 	} else if (rotation == Rotation::ROTATE_RIGHT) {
 		rotate(deltat * rotateVelocity);
 	}
-	lastPos += deltat * velocity * direction;
+	lastPos += deltat * static_cast<double>(velocity) * direction;
 	if (headVisible) {
 		headNode->setPosition(lastPos);
 	} else {

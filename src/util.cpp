@@ -80,3 +80,37 @@ bool Util::getBit(const uint8_t byte, const int pos)
 {
 	return (byte >> pos) % 2;
 }
+
+/**
+ * @brief Sets the bit at position \a pos in \a byte to \a value
+ * @param byte The byte to set a bit in
+ * @param pos The position of the bit
+ * @param value The new value of the bit
+ */
+void Util::setBit(uint8_t& byte, const int pos, bool value)
+{
+	byte |= value << pos;
+}
+
+/**
+ * @brief Returns a helper object with the intent of generating textures from SVG files
+ * @return The texture generator
+ */
+QQuickView* Util::getTextureGenerator()
+{
+	static std::unique_ptr<QQuickView> result;
+	if (!result) {
+		result = std::make_unique<QQuickView>();
+	}
+	return result.get();
+}
+
+/**
+ * @brief Calculates the time difference between a time and now
+ * @param t The time to calculate the difference from
+ * @return The resulting difference in milliseconds
+ */
+qint64 Util::getTimeDiff(const QTime& t)
+{
+	return t.msecsTo(QTime::currentTime());
+}

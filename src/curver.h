@@ -9,6 +9,7 @@
 #include "explosion.h"
 #include "headnode.h"
 #include "settings.h"
+#include "cleaninstallanimation.h"
 
 /**
  * @brief The Curver class represents a player and all the segments belonging to the player
@@ -57,6 +58,7 @@ public:
 	void cleanInstall();
 	void increaseScore();
 	void resetRound();
+	void setAlive(const bool alive);
 	bool isAlive() const;
 	void appendPoint(const QPointF pos, const bool changingSegment);
 	void prepareSegmentEvent(bool changingSegment, int lower, int upper);
@@ -175,6 +177,12 @@ private:
 	 * Unused by Server.
 	 */
 	bool oldChangingSegment = true;
+	/**
+	 * @brief An object responsible for the cleaninstall animation
+	 *
+	 * Note, that this object will take ownership of all segments when triggered
+	 */
+	CleaninstallAnimation cleaninstallAnimation;
 };
 
 bool operator <(const std::unique_ptr<Curver> &l, const std::unique_ptr<Curver> &r);

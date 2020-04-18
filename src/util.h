@@ -7,7 +7,9 @@
 #include <QColor>
 #include <map>
 #include <algorithm>
+#include <memory>
 #include <QDataStream>
+#include <QQuickView>
 
 /**
  * @brief Contains frequently used useful routines that are available for every class
@@ -45,6 +47,9 @@ namespace Util {
 	};
 	QString expandIconName(const QString icon);
 	bool getBit(const uint8_t byte, const int pos);
+	void setBit(uint8_t& byte, const int pos, bool value);
+	QQuickView* getTextureGenerator();
+	qint64 getTimeDiff(const QTime& t);
 
 	// std algorithm wrappers
 
@@ -82,7 +87,18 @@ namespace Util {
 	}
 
 	/**
-	 * @brief Finds a element in a container where a given predicate is true
+	 * @brief Finds an element in a container
+	 * @param cnt The container to search in
+	 * @param value The value to search for
+	 * @return The iterator to the first satisfying element or the end iterator, if not found
+	 */
+	template<typename Cnt_T, typename T>
+	auto find(Cnt_T &cnt, const T& value) {
+		return std::find(std::begin(cnt), std::end(cnt), value);
+	}
+
+	/**
+	 * @brief Finds an element in a container where a given predicate is true
 	 * @param cnt The container to search in
 	 * @param p The predicate that has to be satisfied
 	 * @return The iterator to the first satisfying element or the end iterator, if not satisfiable

@@ -8,13 +8,9 @@ to provide a fluent online multiplayer.
 
 ## Introduction
 
-Quick Curver uses TCP to communicate with different instances. In
-particular, Quick Curver does not differentiate between reliable and
-unreliable data, but it is expected that every data is exchanged on a
-reliable base. Instead of relying on the speed of UDP, Quick Curver uses
-reliable communication to minimize the amount of data having to be
-transferred, such that there is not even a need for a fast transport
-protocol.
+Quick Curver uses TCP and UDP to communicate with different instances.
+TCP is used for most packet types, but UDP is used for the broadcasting
+of Curver data due to performance reasons.
 
 ## Conventions and Definitions
 
@@ -43,9 +39,9 @@ server is started. The server listens for incoming client connections
 and adds players to the local running game on demand by its own.
 
 A client requests a connection simply by sending a TCP connection
-request to the server. If the server accepts the connection, this is
-already proof for the client that it was able to join the game and got a
-free place.
+request to the server. If the server accepts the connection, the client
+must send a Ping packet via UDP to the server. The server replies with a
+Pong packet and only then the player has successfully joined the game.
 
 Any party may at any time close the TCP socket, which closes the session
 for the client.
@@ -82,11 +78,11 @@ packet begins with the following 1-byte header:
  0               1
  0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7
 -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-|TTT|SRRRRRRRRRR|    .....
+|T|T|T|U|U|U|R|S|    .....
 -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 ```
 
-The first two bits denote the packet type (T). The next 6 bits define
+The first three bits denote the packet type (T). The next 5 bits define
 special flags. The following table defines how the flags are interpreted:
 
 ```
@@ -95,12 +91,13 @@ special flags. The following table defines how the flags are interpreted:
 |----------------|
 |   S  | Start   |
 |   R  | Reset   |
+|   U  | Unused  |
 ------------------
 ```
 
 The interpretation of the type information depends on whether the packet
 was sent by a server or a client. The fact whether the sender is a
-server or a client is simply deducted by the fact whether the instance
+server or a client is simply deduced by the fact whether the instance
 itself is a server or a client. The following table defines how the type
 information is interpreted:
 
@@ -108,10 +105,12 @@ information is interpreted:
 -------------------------------------------------------
 | Type | Binary | Sent from server | Sent from client |
 |-----------------------------------------------------|
-|   0  |   00   | Chat Message     | Chat Message     |
-|   1  |   01   | Playermodel Edit | Playermodel Edit |
-|   2  |   10   | Curver Data      | Curver Rotation  |
-|   3  |   11   | Item Data        | ---------------- |
+|   0  |  000   | Chat Message     | Chat Message     |
+|   1  |  001   | Playermodel Edit | Playermodel Edit |
+|   2  |  010   | Curver Data      | Curver Rotation  |
+|   3  |  011   | Item Data        | Ping             |
+|   4  |  100   | Settings         | ---------------- |
+|   5  |  101   | Pong             | ---------------- |
 -------------------------------------------------------
 ```
 
@@ -140,6 +139,7 @@ that order):
 * Round score
 * Total score
 * Controller
+* Alive
 
 ### Playermodel Edit from client
 
@@ -185,3 +185,18 @@ The server sends the following data (in this order):
 * Position as QPointF
 * Allowed users as uint8_t
 * index of collector as int (if spawned, this must be -1)
+
+### Ping packet from client
+
+The client sends the current time.
+
+### Settings from server
+
+The server sends the following data:
+
+* Game dimension as QPoint
+
+### Pong packet from client
+
+The server sends the current time as received from the corresponding
+Ping packet.

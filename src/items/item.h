@@ -9,7 +9,6 @@
 #include <QQuickWindow>
 #include <QTimer>
 #include <QImage>
-#include <QQuickView>
 
 #include "curver.h"
 #include "util.h"
@@ -84,10 +83,6 @@ protected:
 	 * @brief The material used for displaying this Item
 	 */
 	QSGTextureMaterial material;
-	/**
-	 * @brief A helper object that is just there for generating textures from SVG icons
-	 */
-	static QQuickView *textureGenerator;
 	/**
 	 * @brief The texture of this Item
 	 */

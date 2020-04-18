@@ -10,8 +10,9 @@
 /**
  * @brief A node that visualizes the game borders in the scene graph
  */
-class Wall
+class Wall : public QObject
 {
+	Q_OBJECT
 public:
 	explicit Wall();
 	void setParentNode(QSGNode *parentNode);

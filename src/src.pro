@@ -5,16 +5,29 @@ CONFIG += c++14
 
 RESOURCES += qml/qml.qrc ../fluid/src/imports/controls/icons.qrc
 
+CONFIG(debug, debug|release) {
+	message("Running debug build")
+}
+
+CONFIG(release, debug|release) {
+	message("Running release build")
+	CONFIG += qtquickcompiler
+}
+
 QML_IMPORT_PATH = $$OUT_PWD/../fluid/qml
 
 DEFINES += QT_DEPRECATED_WARNINGS
+
+unix:!android {
+	LIBS += -lrt
+}
 
 android {
 	# Bundle Fluid QML plugins with the application
 	ANDROID_EXTRA_PLUGINS = $$OUT_PWD/../fluid/qml
 
 	# Android package sources
-	ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+	ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../android
 }
 
 macx {
@@ -24,10 +37,40 @@ macx {
 	QMAKE_BUNDLE_DATA += APP_QML_FILES
 }
 
+ios {
+	# Bundle Fluid QML plugins with the application
+	APP_QML_FILES_Core.files = $$files($$OUT_PWD/../fluid/qml/Fluid/Core/*qml*)
+	APP_QML_FILES_Core.path = qml/Fluid/Core
+	APP_QML_FILES_Controls.files = $$files($$OUT_PWD/../fluid/qml/Fluid/Controls/*qml*) $$OUT_PWD/../fluid/qml/Fluid/Controls/icons
+	APP_QML_FILES_Controls.path = qml/Fluid/Controls
+	APP_QML_FILES_ControlsPrivate.files = $$files($$OUT_PWD/../fluid/qml/Fluid/Controls/Private/*qml*)
+	APP_QML_FILES_ControlsPrivate.path = qml/Fluid/Controls/Private
+	APP_QML_FILES_Effects.files = $$files($$OUT_PWD/../fluid/qml/Fluid/Effects/*qml*)
+	APP_QML_FILES_Effects.path = qml/Fluid/Effects
+	APP_QML_FILES_Layouts.files = $$files($$OUT_PWD/../fluid/qml/Fluid/Layouts/*qml*)
+	APP_QML_FILES_Layouts.path = qml/Fluid/Layouts
+	APP_QML_FILES_Templates.files = $$files($$OUT_PWD/../fluid/qml/Fluid/Templates/*qml*)
+	APP_QML_FILES_Templates.path = qml/Fluid/Templates
+	QMAKE_BUNDLE_DATA += APP_QML_FILES_Core APP_QML_FILES_Controls APP_QML_FILES_ControlsPrivate APP_QML_FILES_Effects APP_QML_FILES_Layouts APP_QML_FILES_Templates
+}
+
 win32 {
 	WINDEPLOYQT_OPTIONS = -qmldir $$OUT_PWD/../fluid/qml/Fluid
 }
 
+qtConfig(static) {
+	QMAKE_LIBDIR += \
+		$$OUT_PWD/../fluid/qml/Fluid/Core \
+		$$OUT_PWD/../fluid/qml/Fluid/Controls \
+		$$OUT_PWD/../fluid/qml/Fluid/Private \
+		$$OUT_PWD/../fluid/qml/Fluid/Templates
+	QTPLUGIN += \
+		qsvg \
+		fluidcoreplugin \
+		fluidcontrolsplugin \
+		fluidcontrolsprivateplugin \
+		fluidtemplatesplugin
+}
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -36,55 +79,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 TARGET = QuickCurver
 
-SOURCES += game.cpp \
-    main.cpp \
-    curver.cpp \
-    segment.cpp \
-    gui.cpp \
-    models/playermodel.cpp \
-    explosion.cpp \
-    util.cpp \
-    headnode.cpp \
-    items/item.cpp \
-    items/speeditem.cpp \
-    itemfactory.cpp \
-    items/cleaninstallitem.cpp \
-    models/itemmodel.cpp \
-    wall.cpp \
-    settings.cpp \
-    network/client.cpp \
-    network/network.cpp \
-    network/server.cpp \
-    models/chatmodel.cpp \
-    items/invisibleitem.cpp \
-    bot.cpp \
-    items/agileitem.cpp \
-    items/flashitem.cpp \
-    items/slowitem.cpp \
-    items/ghostitem.cpp
+SOURCES += $$files(*.cpp, true)
 
-HEADERS += game.h \
-    curver.h \
-    segment.h \
-    gui.h \
-    models/playermodel.h \
-    explosion.h \
-    util.h \
-    headnode.h \
-    items/item.h \
-    items/speeditem.h \
-    itemfactory.h \
-    items/cleaninstallitem.h \
-    models/itemmodel.h \
-    wall.h \
-    settings.h \
-    network/client.h \
-    network/network.h \
-    network/server.h \
-    models/chatmodel.h \
-    items/invisibleitem.h \
-    bot.h \
-    items/agileitem.h \
-    items/flashitem.h \
-    items/slowitem.h \
-    items/ghostitem.h
+HEADERS += $$files(*.h, true)

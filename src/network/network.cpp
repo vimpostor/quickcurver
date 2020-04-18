@@ -1,5 +1,10 @@
 #include "network.h"
 
+bool operator==(const FullNetworkAddress& l, const FullNetworkAddress& r)
+{
+	return l.addr == r.addr && l.port == r.port;
+}
+
 /**
  * @brief Constructs an AbstractPacket with the given type
  * @param type The type of the AbstractPacket
@@ -13,7 +18,7 @@ Packet::AbstractPacket::~AbstractPacket()
 }
 
 /**
- * @brief Sends the packet over the network
+ * @brief Sends the packet over the network via TCP
  *
  * This serializes the data using the overloaded AbstractPacket::serialize() function
  * @param s The socket to send with
@@ -23,13 +28,32 @@ void Packet::AbstractPacket::sendPacket(QTcpSocket *s) const
 	QByteArray block;
 	QDataStream out(&block, QIODevice::WriteOnly);
 	// write type and flags to stream
-	uint8_t flags = 0;
-	flags |= start << 5;
-	flags |= reset << 4;
-	uint8_t header = (type << 6) | flags;
+	uint8_t header = 0;
+	header |= type << (8 - PACKET_TYPE_BITS);
+	Util::setBit(header, 0, start);
+	Util::setBit(header, 1, reset);
 	out << header;
 	this->serialize(out);
 	s->write(block);
+}
+
+/**
+ * @brief Sends the packet via UDP
+ * @param s The socket to send with
+ * @param a The address to send to
+ */
+void Packet::AbstractPacket::sendPacketUdp(QUdpSocket *s, FullNetworkAddress a) const
+{
+	QByteArray block;
+	QDataStream out(&block, QIODevice::WriteOnly);
+	// write type and flags to stream
+	uint8_t header = 0;
+	header |= type << (8 - PACKET_TYPE_BITS);
+	Util::setBit(header, 0, start);
+	Util::setBit(header, 1, reset);
+	out << header;
+	this->serialize(out);
+	s->writeDatagram(block, a.addr, a.port);
 }
 
 /**
@@ -45,8 +69,8 @@ std::unique_ptr<Packet::AbstractPacket> Packet::AbstractPacket::receivePacket(QD
 	std::unique_ptr<Packet::AbstractPacket> result;
 	uint8_t header;
 	in >> header;
-	PacketType type = header >> 6;
-	uint8_t flags = header << 2 >> 2;
+	PacketType type = header >> (8 - PACKET_TYPE_BITS);
+	uint8_t flags = header << PACKET_TYPE_BITS >> PACKET_TYPE_BITS;
 	switch (from) {
 	case InstanceType::Server:
 		switch (static_cast<ServerTypes>(type)) {
@@ -62,8 +86,14 @@ std::unique_ptr<Packet::AbstractPacket> Packet::AbstractPacket::receivePacket(QD
 		case ServerTypes::ItemData:
 			result = std::make_unique<ServerItemData>();
 			break;
+		case ServerTypes::SettingsType:
+			result = std::make_unique<ServerSettingsData>();
+			break;
+		case ServerTypes::Pong:
+			result = std::make_unique<Pong>();
+			break;
 		default:
-			qDebug() << "unsupported server package";
+			qDebug() << "unsupported server packet";
 			in.rollbackTransaction();
 		}
 		break;
@@ -78,18 +108,21 @@ std::unique_ptr<Packet::AbstractPacket> Packet::AbstractPacket::receivePacket(QD
 		case ClientTypes::CurverRotation:
 			result = std::make_unique<ClientCurverRotation>();
 			break;
+		case ClientTypes::Ping:
+			result = std::make_unique<Ping>();
+			break;
 		default:
-			qDebug() << "unsupported client package";
+			qDebug() << "unsupported client packet";
 			in.rollbackTransaction();
 		}
 		break;
 	}
 	if (result) {
-		result->start = Util::getBit(flags, 5);
-		result->reset = Util::getBit(flags, 4);
+		result->start = Util::getBit(flags, 0);
+		result->reset = Util::getBit(flags, 1);
 		result->parse(in);
 	} else {
-		qDebug() << "Received ill-formed package";
+		qDebug() << "Received ill-formed packet";
 	}
 	return result;
 }
@@ -152,7 +185,7 @@ void Packet::ClientChatMsg::parse(QDataStream &in)
  */
 QDataStream &Packet::operator <<(QDataStream &out, const Player &p)
 {
-	out << p.userName << p.color << p.roundScore << p.totalScore << static_cast<uint8_t>(p.controller);
+	out << p.userName << p.color << p.roundScore << p.totalScore << static_cast<uint8_t>(p.controller) << static_cast<uint8_t>(p.isAlive);
 	return out;
 }
 
@@ -164,9 +197,10 @@ QDataStream &Packet::operator <<(QDataStream &out, const Player &p)
  */
 QDataStream &Packet::operator >>(QDataStream &in, Packet::Player &p)
 {
-	uint8_t ctrl;
-	in >> p.userName >> p.color >> p.roundScore >> p.totalScore >> ctrl;
+	uint8_t ctrl, isAlive;
+	in >> p.userName >> p.color >> p.roundScore >> p.totalScore >> ctrl >> isAlive;
 	p.controller = static_cast<Curver::Controller>(ctrl);
+	p.isAlive = static_cast<bool>(isAlive);
 	return in;
 }
 
@@ -256,7 +290,7 @@ Packet::ServerCurverData::ServerCurverData() : AbstractPacket(static_cast<Packet
  */
 void Packet::ServerCurverData::fill()
 {
-	auto &curvers = PlayerModel::getSingleton().getCurvers();
+	auto& curvers = PlayerModel::getSingleton().getCurvers();
 	pos.resize(curvers.size());
 	changingSegment.resize(curvers.size());
 	for (uint i = 0; i < curvers.size(); ++i) {
@@ -271,6 +305,10 @@ void Packet::ServerCurverData::fill()
 void Packet::ServerCurverData::extract()
 {
 	auto &curvers = PlayerModel::getSingleton().getCurvers();
+	if (curvers.size() != pos.size()) {
+		// invalid size, can be UDP related
+		return;
+	}
 	for (uint i = 0; i < curvers.size(); ++i) {
 		curvers[i]->appendPoint(pos[i], changingSegment[i]);
 	}
@@ -369,4 +407,97 @@ void Packet::ServerItemData::parse(QDataStream &in)
 	uint8_t allowed;
 	in >> spawned >> sequenceNumber >> which >> pos >> allowed >> collectorIndex;
 	allowedUsers = static_cast<Item::AllowedUsers>(allowed);
+}
+
+/**
+ * @brief Constructs a Ping
+ */
+Packet::Ping::Ping() : AbstractPacket (static_cast<PacketType>(ClientTypes::Ping))
+{
+}
+
+/**
+ * @brief Serializes the Ping
+ * @param out The stream to serialize into
+ */
+void Packet::Ping::serialize(QDataStream& out) const
+{
+	out << sent;
+}
+
+/**
+ * @brief Parses a Ping
+ * @param in The stream to parse from
+ */
+void Packet::Ping::parse(QDataStream& in)
+{
+	in >> sent;
+}
+
+/**
+ * @brief Constructs a ServerSettingsData
+ */
+Packet::ServerSettingsData::ServerSettingsData() : AbstractPacket(static_cast<PacketType>(ServerTypes::SettingsType))
+{
+}
+
+/**
+ * @brief Automatically fills the packet
+ */
+void Packet::ServerSettingsData::fill()
+{
+	this->dimension = Settings::getSingleton().getDimension();
+}
+
+/**
+ * @brief Automatically extracts the packet
+ */
+void Packet::ServerSettingsData::extract()
+{
+	Settings::getSingleton().setDimension(this->dimension);
+}
+
+/**
+ * @brief Serializes the ServerSettingsData
+ * @param out The stream to serialize into
+ */
+void Packet::ServerSettingsData::serialize(QDataStream& out) const
+{
+	out << dimension;
+}
+
+/**
+ * @brief Parses a ServerSettingsData
+ * @param in The stream to parse from
+ */
+void Packet::ServerSettingsData::parse(QDataStream& in)
+{
+	in >> dimension;
+}
+
+/**
+ * @brief Constructs a Pong
+ *
+ * This is an answer packet to Ping
+ */
+Packet::Pong::Pong() : AbstractPacket(static_cast<PacketType>(ServerTypes::Pong))
+{
+}
+
+/**
+ * @brief Serializes a Pong
+ * @param out The stream to serialize into
+ */
+void Packet::Pong::serialize(QDataStream& out) const
+{
+	out << sent << curverIndex;
+}
+
+/**
+ * @brief Parses a Pong
+ * @param in The stream to parse from
+ */
+void Packet::Pong::parse(QDataStream& in)
+{
+	in >> sent >> curverIndex;
 }

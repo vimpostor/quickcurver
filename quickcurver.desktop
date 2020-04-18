@@ -1,0 +1,8 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=0.1
+Type=Application
+Name=QuickCurver
+Exec=QuickCurver
+TryExec=QuickCurver
+Terminal=false

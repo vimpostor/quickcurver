@@ -21,6 +21,8 @@ Settings &Settings::getSingleton()
 void Settings::setDimension(QPoint dimension)
 {
 	this->dimension = dimension;
+	emit widthChanged(dimension.x());
+	emit heightChanged(dimension.y());
 	emit dimensionChanged();
 }
 
@@ -44,6 +46,15 @@ void Settings::setWidth(int width)
 }
 
 /**
+ * @brief Returns the width of the game
+ * @return The width
+ */
+int Settings::getWidth() const
+{
+	return dimension.x();
+}
+
+/**
  * @brief Sets the height only of the game
  * @param height The new height
  */
@@ -51,6 +62,15 @@ void Settings::setHeight(int height)
 {
 	dimension.setY(height);
 	setDimension(dimension);
+}
+
+/**
+ * @brief Returns the height of the game
+ * @return The height of the game
+ */
+int Settings::getHeight() const
+{
+	return dimension.y();
 }
 
 /**
@@ -194,4 +214,24 @@ void Settings::setUpdatesPerSecond(const unsigned val)
 unsigned Settings::getUpdatesPerSecond() const
 {
 	return updatesPerSecond;
+}
+
+/**
+ * @brief Returns whether the application is started headless
+ * @return Whether the application is started offscreen
+ */
+bool Settings::getOffscreen() const
+{
+	return QGuiApplication::platformName() == "offscreen";
+}
+
+void Settings::setPing(int ping)
+{
+	this->ping = ping;
+	emit pingChanged(ping);
+}
+
+int Settings::getPing() const
+{
+	return ping;
 }

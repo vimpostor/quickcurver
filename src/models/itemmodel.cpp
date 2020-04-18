@@ -64,6 +64,9 @@ QHash<int, QByteArray> ItemModel::roleNames() const
  */
 void ItemModel::setProbability(const int row, const float probability)
 {
+	if (row < 0 || row >= itemConfigs.size() || probability < 0 || probability > 1) {
+		return;
+	}
 	itemConfigs[static_cast<unsigned long>(row)].probability = probability;
 }
 
@@ -90,7 +93,7 @@ ItemModel &ItemModel::getSingleton()
 /**
  * @brief Creates a random Item at a given position
  * @param parentNode The parent node in the scene graph
- * @param pos THe location of the Item
+ * @param pos The location of the Item
  * @return The just created Item
  */
 Item *ItemModel::makeRandomItem(QSGNode *parentNode, QPointF pos)

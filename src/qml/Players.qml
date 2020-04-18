@@ -1,5 +1,5 @@
 import Qt.labs.platform 1.0
-import QtQuick 2.7
+import QtQuick 2.12
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.1
 import Fluid.Layouts 1.0
@@ -13,13 +13,16 @@ Card {
 	ListView {
 		id: playerListView
 		header: Subheader {
-			text: "Players"
+			text: "Players (Ping: " + c_settings.ping + ")"
 		}
 		clip: true
 		property int modelIndex: 0
 		function open(index, controller) {
 			modelIndex = index;
 			bottomSheet.playerEditable = controller !== 1;
+			if (root.connectedToServer) {
+				bottomSheet.playerEditable = false;
+			}
 			if (controller !== 1) {
 				botCheckbox.checked = controller === 2;
 			}
@@ -29,6 +32,7 @@ Card {
 		model: c_playerModel
 		delegate: ListItem {
 			icon.source: Utils.iconUrl(model.controller === 0 ? "hardware/gamepad" : model.controller === 2 ? "action/android" : "action/account_circle")
+			height: 65
 			text: model.name + "   " + model.totalScore + "(+" +  model.roundScore + ")"
 			Ripple {
 				anchors.fill: parent
@@ -79,6 +83,7 @@ Card {
 				},
 				Action {
 					text: "Delete"
+					enabled: !root.connectedToServer
 					icon.source: Utils.iconUrl("action/delete")
 					onTriggered: c_playerModel.removePlayer(playerListView.modelIndex);
 				}
@@ -100,7 +105,8 @@ Card {
 			x: (parent.width - width) / 2
 			y: (parent.height - height) / 2
 			ListItem {
-				text: "Controlled by Computer"
+				text: qsTr("Controlled by AI")
+				height: 65
 				rightItem: CheckBox {
 					id: botCheckbox
 					anchors.verticalCenter: parent.verticalCenter
@@ -128,6 +134,7 @@ Card {
 	}
 	Button {
 		id: startButton
+		enabled: !root.connectedToServer
 		anchors.left: parent.left
 		anchors.right: parent.right
 		anchors.bottom: parent.bottom
@@ -141,6 +148,7 @@ Card {
 	}
 	FloatingActionButton {
 		id: addPlayerButton
+		enabled: !root.connectedToServer
 		anchors.bottom: parent.bottom
 		anchors.right: parent.right
 		anchors.margins: Units.largeSpacing

@@ -25,6 +25,7 @@ public:
 	static PlayerModel &getSingleton();
 
 	Q_INVOKABLE void appendPlayer();
+	Q_INVOKABLE void appendBot();
 	Q_INVOKABLE void removePlayer(int row);
 	Q_INVOKABLE void setColor(int row, QColor color);
 	Q_INVOKABLE void setLeftKey(int row, Qt::Key key);

@@ -26,6 +26,8 @@
 class Game : public QQuickItem
 {
 	Q_OBJECT
+
+	Q_PROPERTY(Client* client READ getClient() CONSTANT)
 public:
 	explicit Game(QQuickItem *parent = 0);
 	~Game();
@@ -36,6 +38,7 @@ public:
 	Q_INVOKABLE void sendChatMessage(QString msg);
 	Q_INVOKABLE void serverReListen(quint16 port);
 	Q_INVOKABLE void resetGame();
+	Q_INVOKABLE Client* getClient();
 
 	QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *);
 public slots:
@@ -53,8 +56,6 @@ private slots:
 	void progress();
 	void curverDied();
 	void resetRound();
-	void dimensionChanged();
-	void connectedToServerChanged(bool connected);
 	void tryStartGame();
 private:
 	std::vector<std::unique_ptr<Curver> > &getCurvers();
@@ -92,13 +93,13 @@ private:
 	 */
 	Client client;
 	/**
-	 * @brief Whether this instance is connected to a server
-	 */
-	bool connectedToServer = false;
-	/**
 	 * @brief Whether the game already started
 	 */
 	bool started = false;
+	/**
+	 * @brief Whether the winner was already announced
+	 */
+	bool winnerAnnounced = false;
 };
 
 #endif // GAME_H

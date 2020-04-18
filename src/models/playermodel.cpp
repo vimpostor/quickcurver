@@ -81,9 +81,18 @@ void PlayerModel::appendPlayer()
 	beginResetModel();
 	m_data.push_back(std::make_unique<Curver>(rootNode));
 	m_data.back()->userName = "Player " + QString::number(m_data.size());
-	connect(m_data.back().get(), SIGNAL(died()), this, SLOT(processDeath()));
+	connect(m_data.back().get(), &Curver::died, this, &PlayerModel::processDeath);
 	endResetModel();
 	emit playerModelChanged();
+}
+
+/**
+ * @brief Appends a new bot to this model
+ */
+void PlayerModel::appendBot()
+{
+	appendPlayer();
+	setController(m_data.size() - 1, static_cast<int>(Curver::Controller::CONTROLLER_BOT));
 }
 
 /**
@@ -184,7 +193,7 @@ void PlayerModel::serialize(QDataStream &out) const
 	out << static_cast<unsigned>(m_data.size());
 	for (unsigned long i = 0; i < m_data.size(); ++i) {
 		const std::unique_ptr<Curver> &c = m_data[i];
-		out << c->userName << c->getColor() << c->roundScore << c->totalScore << static_cast<uint8_t>(c->controller);
+		out << c->userName << c->getColor() << c->roundScore << c->totalScore << static_cast<uint8_t>(c->controller) << static_cast<uint8_t>(c->isAlive());
 	}
 }
 
@@ -203,10 +212,11 @@ void PlayerModel::parse(QDataStream &in)
 			c = std::make_unique<Curver>(rootNode);
 		}
 		QColor color;
-		uint8_t ctrl;
-		in >> c->userName >> color >> c->roundScore >> c->totalScore >> ctrl;
+		uint8_t ctrl, isAlive;
+		in >> c->userName >> color >> c->roundScore >> c->totalScore >> ctrl >> isAlive;
 		c->setColor(color);
 		c->controller = static_cast<Curver::Controller>(ctrl);
+		c->setAlive(static_cast<bool>(isAlive));
 	}
 	emit endResetModel();
 }
