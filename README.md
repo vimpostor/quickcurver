@@ -6,7 +6,7 @@ This is a Qt/C++ implementation of the famous game "Achtung die Kurve", accelera
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/magnus-gross/quickcurver.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/magnus-gross/quickcurver/alerts/)
 [![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/magnus-gross/quickcurver.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/magnus-gross/quickcurver/context:cpp)
 
-![screenshot](Screenshots/2020-04-18 14_16_25-Quick Curver.png)
+![screenshot](https://raw.githubusercontent.com/sam9032/quickcurver/master/Screenshots/2020-04-18%2014_16_25-Quick%20Curver.png)
 
 # Screenshots
 Please have a look into the "Screenshots" folder for more impressions!
