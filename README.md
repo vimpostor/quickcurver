@@ -62,7 +62,8 @@ Note: You can compile the game with Mumble Positional Audio support, by defining
 ## Installing compiled binaries
 
 ### Windows
-When you click on the AppVeyor icon or go to https://ci.appveyor.com/project/magnus-gross/quickcurver directly, you can click on Artifacts on the latest build and download a zip file. Extract all files and run `QuickCurver.exe` in the `release` directory.
+Download [the latest build artifact](https://ci.appveyor.com/api/projects/magnus-gross/quickcurver/artifacts/build%2FQuickCurver.zip).
+Extract all files and run `QuickCurver.exe` in the `release` directory.
 
 # Multiplayer
 To play multiplayer, the host starts an instance and shares the port that QuickCurver is running on. The client then just has to connect to this port on the host's ip address.
