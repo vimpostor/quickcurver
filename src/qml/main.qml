@@ -26,19 +26,13 @@ ApplicationWindow {
 	initialPage: Page {
 		id: initialPage
 		title: "Quick Curver"
-		appBar.maxActionCount: 4
+		appBar.maxActionCount: 3
 		actions: [
 			Action {
 				icon.source: Utils.iconUrl("content/undo")
 				text: "Reset game"
 				enabled: !root.connectedToServer
 				onTriggered: game.resetGame();
-			},
-			Action {
-				icon.source: Utils.iconUrl("av/hearing")
-				text: "Server listen"
-				enabled: !root.connectedToServer
-				onTriggered: listenDialog.open();
 			},
 			Action {
 				icon.source: Utils.iconUrl("file/cloud_upload")
@@ -179,13 +173,6 @@ ApplicationWindow {
 				}
 				close();
 			}
-		}
-		InputDialog {
-			id: listenDialog
-			x: (parent.width - width)/2
-			y: (parent.height - height)/2
-			title: "Listen on which port"
-			onAccepted: game.serverReListen(textField.text);
 		}
 		Dialog {
 			property int joinStatus: game.client.joinStatus
