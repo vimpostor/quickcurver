@@ -39,6 +39,10 @@ Card {
 				acceptedButtons: Qt.LeftButton | Qt.RightButton
 				onClicked: playerListView.open(index, model.controller);
 			}
+			rightItem: ToolButton {
+				anchors.verticalCenter: parent.verticalCenter
+				icon.source: Utils.iconUrl("editor/mode_edit")
+			}
 		}
 		BottomSheetList {
 			id: bottomSheet
