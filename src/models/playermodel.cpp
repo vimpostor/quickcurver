@@ -250,3 +250,15 @@ void PlayerModel::processDeath()
 	emit dataChanged(index(0, 0), index(static_cast<int>(m_data.size()) - 1, 0), QVector<int>() = {RoundScoreRole, TotalScoreRole});
 	emit playerModelChanged();
 }
+
+/**
+ * @brief Removes all bots
+ */
+void PlayerModel::removeBots()
+{
+	for (int i = 0; i < m_data.size(); ++i) {
+		if (m_data[i]->controller == Curver::Controller::CONTROLLER_BOT) {
+			this->removePlayer(i);
+		}
+	}
+}

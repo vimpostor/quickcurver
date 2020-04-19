@@ -87,6 +87,8 @@ void CommandlineReader::run()
 					if (takeInt(index, parts, "index")) {
 						emit remove(index);
 					}
+				} else if (command == "removebots") {
+					emit removeBots();
 				} else if (command == "reset") {
 					emit reset();
 				} else if (command == "resize") {
@@ -96,7 +98,7 @@ void CommandlineReader::run()
 					}
 				} else if (command == "start") {
 					emit start();
-				} else if (command == "targetscore") {
+				} else if (command == "score") {
 					int score;
 					if (takeInt(score, parts, "Score to reach")) {
 						emit targetScore(score);

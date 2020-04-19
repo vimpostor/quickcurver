@@ -41,6 +41,7 @@ public:
 	void forceRefresh();
 public slots:
 	void processDeath();
+	void removeBots();
 signals:
 	/**
 	 * @brief Emitted when a Curver died

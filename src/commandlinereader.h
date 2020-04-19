@@ -66,6 +66,10 @@ signals:
 	 */
 	void remove(int index);
 	/**
+	 * @brief Remove all bots
+	 */
+	void removeBots();
+	/**
 	 * @brief The user wants to reset the game
 	 */
 	void reset();
