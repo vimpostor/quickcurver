@@ -50,6 +50,7 @@ namespace Util {
 	void setBit(uint8_t& byte, const int pos, bool value);
 	QQuickView* getTextureGenerator();
 	qint64 getTimeDiff(const QTime& t);
+	float easeInOutSine(const float& a);
 
 	// std algorithm wrappers
 

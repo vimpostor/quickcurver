@@ -1,5 +1,7 @@
 #include "util.h"
 
+#include <math.h>
+
 /**
  * @brief Initializes the random seed
  */
@@ -113,4 +115,9 @@ QQuickView* Util::getTextureGenerator()
 qint64 Util::getTimeDiff(const QTime& t)
 {
 	return t.msecsTo(QTime::currentTime());
+}
+
+float Util::easeInOutSine(const float& a)
+{
+	return 0.5 * (1 - std::cos(M_PI * a));
 }

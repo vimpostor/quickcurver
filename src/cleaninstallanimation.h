@@ -20,13 +20,9 @@ class CleaninstallAnimation : public QObject
 {
 	Q_OBJECT
 public:
-	explicit CleaninstallAnimation(QObject *parent = nullptr);
 	void trigger(std::vector<std::unique_ptr<Segment>>& newSegments);
+	void progress();
 private:
-	/**
-	 * @brief The timer updating the animation
-	 */
-	QTimer timer;
 	/**
 	 * @brief The point in time that the animation was triggered with trigger()
 	 */
@@ -49,8 +45,10 @@ private:
 	 * @brief The total size over all segments
 	 */
 	size_t totalSize;
-private slots:
-	void progress();
+	/**
+	 * @brief Whether the animation is currently running
+	 */
+	bool active = false;
 };
 
 #endif // CLEANINSTALLANIMATION_H

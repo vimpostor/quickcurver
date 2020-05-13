@@ -3,15 +3,6 @@
 #define ANIMATION_DURATION 300
 
 /**
- * @brief Creates a CleaninstallAnimation object
- * @param parent The parent object
- */
-CleaninstallAnimation::CleaninstallAnimation(QObject *parent) : QObject(parent)
-{
-	connect(&timer, &QTimer::timeout, this, &CleaninstallAnimation::progress);
-}
-
-/**
  * @brief Triggers the cleaninstall animation
  * @param newSegments The current state of segments in the Curver object
  *
@@ -24,7 +15,7 @@ void CleaninstallAnimation::trigger(std::vector<std::unique_ptr<Segment> > &newS
 		// do not spawn an animation, if there is nothing to animate
 		return;
 	}
-	timer.stop();
+	active = false;
 	for (auto it = newSegments.begin(); it != newSegments.end(); ++it) {
 		segments.push_back(std::move(*it));
 	}
@@ -38,7 +29,7 @@ void CleaninstallAnimation::trigger(std::vector<std::unique_ptr<Segment> > &newS
 	}
 	totalSize = Util::accumulate(sizeCache, 0);
 	initialTime = QTime::currentTime();
-	timer.start(16);
+	active = true;
 }
 
 /**
@@ -46,10 +37,14 @@ void CleaninstallAnimation::trigger(std::vector<std::unique_ptr<Segment> > &newS
  */
 void CleaninstallAnimation::progress()
 {
+	if (!active) {
+		return;
+	}
 	const float timeSinceStart = initialTime.msecsTo(QTime::currentTime());
 	const float factor = timeSinceStart / ANIMATION_DURATION;
-	const size_t pos = totalSize * factor;
-	if (factor < 1) {
+	const float easedFactor = Util::easeInOutSine(factor);
+	const size_t pos = totalSize * easedFactor;
+	if (easedFactor < 1) {
 		size_t pointsToDelete = pos;
 		size_t segmentIndex;
 		for (segmentIndex = 0; segmentIndex < sizeCache.size() && pointsToDelete >= sizeCache[segmentIndex]; ++segmentIndex) {
@@ -60,7 +55,7 @@ void CleaninstallAnimation::progress()
 		segments[segmentIndex]->popPoints(pointsToDelete - pointsDeleted[segmentIndex]);
 		pointsDeleted[segmentIndex] = pointsToDelete;
 	} else {
-		timer.stop();
+		active = false;
 		segments.clear();
 	}
 }

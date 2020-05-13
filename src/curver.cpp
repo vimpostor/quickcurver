@@ -331,6 +331,8 @@ void Curver::progress(int deltat, std::vector<std::unique_ptr<Curver> > &curvers
 			die();
 		}
 	}
+
+	cleaninstallAnimation.progress();
 }
 
 /**
