@@ -48,7 +48,7 @@ TabbedPage {
 					height: 24
 					value: c_settings.getUpdatesPerSecond();
 					from: 30
-					to: 120
+					to: 144
 					snapMode: Slider.SnapAlways
 					stepSize: 1
 					onValueChanged: c_settings.setUpdatesPerSecond(value);

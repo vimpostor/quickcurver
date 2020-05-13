@@ -44,7 +44,7 @@ void CleaninstallAnimation::progress()
 	const float factor = timeSinceStart / ANIMATION_DURATION;
 	const float easedFactor = Util::easeInOutSine(factor);
 	const size_t pos = totalSize * easedFactor;
-	if (easedFactor < 1) {
+	if (factor < 1) {
 		size_t pointsToDelete = pos;
 		size_t segmentIndex;
 		for (segmentIndex = 0; segmentIndex < sizeCache.size() && pointsToDelete >= sizeCache[segmentIndex]; ++segmentIndex) {
