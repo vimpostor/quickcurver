@@ -45,8 +45,7 @@ First make sure, that you have the required dependencies of QuickCurver installe
 ### Build instructions
 Run the following commands:
 ```bash
-git clone --recursive git@github.com:magnus-gross/quickcurver.git
-# Alternatively clone with HTTPS, if you don't have SSH keys
+git clone --recursive https://github.com/magnus-gross/quickcurver.git
 # If you forgot to clone with --recursive, just run git submodule update --init
 cd quickcurver
 mkdir build
@@ -56,8 +55,6 @@ make
 ```
 
 To start QuickCurver you need to run the built executable in the build/src directory, for example on Linux run: `src/QuickCurver`
-
-Note: You can compile the game with Mumble Positional Audio support, by defining `MUMBLE_SUPPORT=true` at compile time.
 
 ## Installing compiled binaries
 
