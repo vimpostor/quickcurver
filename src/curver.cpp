@@ -292,6 +292,16 @@ void Curver::prepareSegmentEvent(bool changingSegment, int lower, int upper)
 }
 
 /**
+ * @brief Updates the cleaninstall animation
+ *
+ * This exists to synchronize the animation with the main game timer
+ */
+void Curver::updateCleaninstallAnimation()
+{
+	cleaninstallAnimation.progress();
+}
+
+/**
  * @brief Updates the Curver assuming that \a deltat has gone by
  * @param deltat The amount of time since the last update in milliseconds
  * @param curvers All curvers
@@ -331,8 +341,6 @@ void Curver::progress(int deltat, std::vector<std::unique_ptr<Curver> > &curvers
 			die();
 		}
 	}
-
-	cleaninstallAnimation.progress();
 }
 
 /**
