@@ -30,7 +30,6 @@ Q_IMPORT_PLUGIN(FluidTemplatesPlugin)
 
 
 int main(int argc, char *argv[]) {
-	Util::init();
 	// threaded render_loop, which is default on non-mesa drivers, breaks drawing
 	qputenv("QSG_RENDER_LOOP", "basic");
 	constexpr std::array<const char*, 4> customDpiVars = {"QT_DEVICE_PIXEL_RATIO", "QT_AUTO_SCREEN_SCALE_FACTOR", "QT_SCALE_FACTOR", "QT_SCREEN_SCALE_FACTORS"};

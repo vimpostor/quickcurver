@@ -7,11 +7,11 @@
 Client::Client()
 {
 	in.setDevice(&tcpSocket);
-	connect(&tcpSocket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this, &Client::socketError);
+	connect(&tcpSocket, &QTcpSocket::errorOccurred, this, &Client::socketError);
 	connect(&tcpSocket, &QTcpSocket::connected, this, &Client::socketConnected);
 	connect(&tcpSocket, &QTcpSocket::disconnected, this, &Client::socketDisconnected);
 	connect(&tcpSocket, &QTcpSocket::readyRead, this, &Client::socketReadyRead);
-	connect(&udpSocket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this, &Client::udpSocketError);
+	connect(&udpSocket, &QUdpSocket::errorOccurred, this, &Client::udpSocketError);
 	connect(&udpSocket, &QUdpSocket::readyRead, this, &Client::udpSocketReadyRead);
 
 	connect(&pingTimer, &QTimer::timeout, this, &Client::pingServer);

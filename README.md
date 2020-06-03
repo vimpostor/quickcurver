@@ -31,7 +31,7 @@ First make sure, that you have the required dependencies of QuickCurver installe
 
 * A C++ compiler with C++14 support
 * make
-* At least Qt 5.12
+* At least Qt 5.15
 * The following Qt Modules (in the parantheses there is an example how the package could be called for your distro (this depends on the distro!)):
 	- Qt Core (qt5-base)
 	- Qt GUI (qt5-base)

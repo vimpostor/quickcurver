@@ -15,7 +15,6 @@
  * @brief Contains frequently used useful routines that are available for every class
  */
 namespace Util {
-	void init();
 	double rand();
 	QPointF randQPointF();
 	int randInt(const int lower, const int upper);

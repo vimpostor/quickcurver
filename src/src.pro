@@ -1,7 +1,7 @@
 TEMPLATE = app
 
 QT += gui qml quick svg quickcontrols2
-CONFIG += c++14
+CONFIG += c++17
 
 RESOURCES += qml/qml.qrc ../fluid/src/imports/controls/icons.qrc
 

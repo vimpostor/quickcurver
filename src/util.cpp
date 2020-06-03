@@ -1,14 +1,7 @@
 #include "util.h"
 
 #include <math.h>
-
-/**
- * @brief Initializes the random seed
- */
-void Util::init()
-{
-	qsrand(static_cast<uint>(QDateTime::currentMSecsSinceEpoch()));
-}
+#include <QRandomGenerator>
 
 /**
  * @brief Returns a random number between 0 and 1
@@ -16,7 +9,7 @@ void Util::init()
  */
 double Util::rand()
 {
-	return static_cast<double>(qrand()) / RAND_MAX;
+	return QRandomGenerator::global()->generateDouble();
 }
 
 /**

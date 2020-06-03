@@ -5,7 +5,7 @@ Server::Server()
 	connect(&tcpServer, &QTcpServer::acceptError, this, &Server::acceptError);
 	connect(&tcpServer, &QTcpServer::newConnection, this, &Server::newConnection);
 	connect(&Settings::getSingleton(), &Settings::dimensionChanged, this, &Server::broadcastSettings);
-	connect(&udpSocket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this, &Server::udpSocketError);
+	connect(&udpSocket, &QUdpSocket::errorOccurred, this, &Server::udpSocketError);
 	connect(&udpSocket, &QUdpSocket::readyRead, this, &Server::udpSocketReadyRead);
 	reListen(0);
 }
@@ -135,7 +135,7 @@ void Server::newConnection()
 		auto *curver = PlayerModel::getSingleton().getNewPlayer();
 		curver->controller = Curver::Controller::CONTROLLER_REMOTE;
 		clients[std::unique_ptr<QTcpSocket>(s)] = curver;
-		connect(s, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this, &Server::socketError);
+		connect(s, &QTcpSocket::errorOccurred, this, &Server::socketError);
 		connect(s, &QTcpSocket::disconnected, this, &Server::socketDisconnect);
 		connect(s, &QTcpSocket::readyRead, this, &Server::socketReadyRead);
 		broadcastChatMessage(s->peerAddress().toString() + " joined");

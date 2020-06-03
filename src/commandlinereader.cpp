@@ -31,7 +31,7 @@ void CommandlineReader::run()
 		if (!line.startsWith("/")) {
 			qInfo() << "Commands start with /";
 		} else {
-			const auto split = line.split(' ', QString::SkipEmptyParts);
+			const auto split = line.split(' ', Qt::SkipEmptyParts);
 			auto parts = std::list<QString>(split.begin(), split.end());
 			if (parts.empty()) {
 				qInfo() << "Please enter a nonempty command";
