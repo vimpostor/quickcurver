@@ -13,7 +13,15 @@ Card {
 	ListView {
 		id: playerListView
 		header: Subheader {
+			property real pingFactor: Math.min(500, c_settings.ping) / 500
 			text: "Players (Ping: " + c_settings.ping + ")"
+			textColor: c_settings.ping ? Qt.rgba(pingFactor, (1 - pingFactor), 0, 1) : Material.secondaryTextColor
+			Behavior on textColor {
+				ColorAnimation {
+					duration: 300
+					easing.type: Easing.OutCubic
+				}
+			}
 		}
 		clip: true
 		property int modelIndex: 0
