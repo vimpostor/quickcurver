@@ -140,7 +140,7 @@ void Game::progress()
 		c->updateCleaninstallAnimation();
 		if (c->isAlive()) {
 			if (c->controller == Curver::Controller::CONTROLLER_BOT) {
-				Bot::makeMove(c.get());
+				Bot::makeMove(*c.get());
 			}
 			c->progress(deltat, getCurvers());
 			c->checkForWall();

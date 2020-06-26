@@ -11,7 +11,7 @@ class Bot
 {
 public:
 	Bot() = delete;
-	static void makeMove(Curver *c);
+	static void makeMove(Curver& c);
 };
 
 #endif // BOT_H

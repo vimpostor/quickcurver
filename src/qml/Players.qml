@@ -166,9 +166,18 @@ Card {
 		anchors.margins: Units.largeSpacing
 		icon.source: Utils.iconUrl("content/add")
 		Material.background: Material.primary
-		onClicked: {
-			c_playerModel.appendPlayer();
-			game.forceActiveFocus();
+		TapHandler {
+			onTapped: {
+				c_playerModel.appendPlayer();
+				game.forceActiveFocus();
+			}
+		}
+		TapHandler {
+			acceptedButtons: Qt.RightButton
+			onTapped: {
+				c_playerModel.appendBot();
+				game.forceActiveFocus();
+			}
 		}
 	}
 }
