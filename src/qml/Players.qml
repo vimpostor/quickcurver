@@ -18,7 +18,7 @@ Card {
 			textColor: c_settings.ping ? Qt.rgba(pingFactor, (1 - pingFactor), 0, 1) : Material.secondaryTextColor
 			Behavior on textColor {
 				ColorAnimation {
-					duration: 300
+					duration: 800
 					easing.type: Easing.OutCubic
 				}
 			}
