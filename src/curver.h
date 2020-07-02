@@ -62,7 +62,6 @@ public:
 	bool isAlive() const;
 	void appendPoint(const QPointF pos, const bool changingSegment);
 	void prepareSegmentEvent(bool changingSegment, int lower, int upper);
-	void updateCleaninstallAnimation();
 
 	/**
 	 * @brief The username of the Curver

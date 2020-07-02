@@ -137,7 +137,6 @@ void Game::progress()
 	int deltat = Util::getTimeDiff(lastProgressTime);
 	lastProgressTime = QTime::currentTime();
 	for (auto &c : getCurvers()) {
-		c->updateCleaninstallAnimation();
 		if (c->isAlive()) {
 			if (c->controller == Curver::Controller::CONTROLLER_BOT) {
 				Bot::makeMove(*c.get());
