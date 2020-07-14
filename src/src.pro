@@ -5,6 +5,8 @@ CONFIG += c++17
 
 RESOURCES += qml/qml.qrc ../fluid/src/imports/controls/icons.qrc
 
+!versionAtLeast(QT_VERSION, 5.15):error("At least Qt 5.15 is required")
+
 CONFIG(debug, debug|release) {
 	message("Running debug build")
 }
