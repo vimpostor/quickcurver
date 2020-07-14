@@ -9,12 +9,12 @@ configuration: Release
 skip_tags: true
 environment:
   matrix:
-  - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    QT: C:\Qt\latest\mingw73_64
+  - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    QT: C:\Qt\latest\mingw81_64
     COMPILER: mingw
     platform: mingw
 init:
-- set PATH=%QT%\bin\;%QT%\lib;C:\Qt\Tools\QtCreator\bin\;C:\Qt\Tools\mingw730_64\bin;%PATH%
+- set PATH=%QT%\bin\;%QT%\lib;C:\Qt\Tools\QtCreator\bin\;C:\Qt\Tools\mingw810_64\bin;%PATH%
 before_build:
 - git submodule update --init --recursive
 - qmake -v
