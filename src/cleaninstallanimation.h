@@ -22,6 +22,12 @@ class CleaninstallAnimation : public QObject
 public:
 	explicit CleaninstallAnimation(QObject *parent = nullptr);
 	void trigger(std::vector<std::unique_ptr<Segment>>& newSegments);
+signals:
+	/**
+	 * @brief Request to spawn an explosion
+	 * @param location The position of the explosion
+	 */
+	void spawnExplosion(QPointF location);
 private:
 	/**
 	 * @brief The timer updating the animation

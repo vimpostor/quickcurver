@@ -58,8 +58,20 @@ void CleaninstallAnimation::progress()
 			segments[segmentIndex]->clear();
 			pointsDeleted[segmentIndex] = sizeCache[segmentIndex];
 		}
-		segments[segmentIndex]->popPoints(pointsToDelete - pointsDeleted[segmentIndex]);
-		pointsDeleted[segmentIndex] = pointsToDelete;
+
+		const auto pointsAlreadyDeleted = pointsToDelete;
+		pointsToDelete -= pointsDeleted[segmentIndex];
+		// remove points in an interval making an explosion every time
+		constexpr size_t explosionInterval = 16;
+		for (; pointsToDelete >= explosionInterval; pointsToDelete -= explosionInterval) {
+			if (const auto pos = segments[segmentIndex]->getFirstPos()) {
+				emit spawnExplosion(pos.value());
+			}
+			segments[segmentIndex]->popPoints(explosionInterval);
+		}
+		// remove the remaining few points without explosion
+		segments[segmentIndex]->popPoints(pointsToDelete);
+		pointsDeleted[segmentIndex] = pointsAlreadyDeleted;
 	} else {
 		timer.stop();
 		segments.clear();

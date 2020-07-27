@@ -20,6 +20,8 @@ Curver::Curver(QSGNode *parentNode)
 	// random initial rotation
 	headNode = std::make_unique<HeadNode>(parentNode, &material);
 	resetRound();
+
+	connect(&cleaninstallAnimation, &CleaninstallAnimation::spawnExplosion, this, &Curver::spawnExplosion);
 }
 
 Curver::~Curver()
@@ -292,6 +294,15 @@ void Curver::prepareSegmentEvent(bool changingSegment, int lower, int upper)
 }
 
 /**
+ * @brief Spawns an explosion animation at the given position
+ * @param location The position of the explosion
+ */
+void Curver::spawnExplosion(QPointF location)
+{
+	(void) new Explosion(location, parentNode, &material, this);
+}
+
+/**
  * @brief Updates the Curver assuming that \a deltat has gone by
  * @param deltat The amount of time since the last update in milliseconds
  * @param curvers All curvers
@@ -357,7 +368,7 @@ void Curver::rotate(float radians)
 void Curver::die()
 {
 	alive = false;
-	(void) new Explosion(lastPos, parentNode, &material, this);
+	spawnExplosion(lastPos);
 	emit died();
 }
 

@@ -24,6 +24,7 @@ public:
 	size_t getSegmentSize() const;
 	void popPoints(const size_t amount);
 	void clear();
+	std::optional<QPointF> getFirstPos() const;
 private:
 	void updateGeometry();
 

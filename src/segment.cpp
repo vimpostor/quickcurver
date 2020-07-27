@@ -128,6 +128,19 @@ void Segment::clear()
 }
 
 /**
+ * @brief Returns the last position in this segment
+ * @return The last position or \c std::nullopt, if no position exists
+ */
+std::optional<QPointF> Segment::getFirstPos() const
+{
+	if (getSegmentSize()) {
+		return pos.front();
+	} else {
+		return std::nullopt;
+	}
+}
+
+/**
  * @brief Updates the geometry of the geometry node and flags it dirty for the renderer
  */
 void Segment::updateGeometry()
