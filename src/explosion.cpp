@@ -7,7 +7,7 @@
  * @param material The material to use for drawing calls
  * @param parent The parent object
  */
-Explosion::Explosion(QPointF location, QSGNode *parentNode, QSGFlatColorMaterial *material, QObject *parent) : QObject(parent)
+Explosion::Explosion(QPointF location, QSGNode *parentNode, QSGFlatColorMaterial *material, QObject *parent, float radius) : QObject(parent)
 {
 	this->location = location;
 	this->parentNode = parentNode;
@@ -22,7 +22,7 @@ Explosion::Explosion(QPointF location, QSGNode *parentNode, QSGFlatColorMaterial
 	vertices = geometry.vertexDataAsPoint2D();
 	for (int i = 0; i < PARTICLECOUNT; ++i) {
 		vertices[i].set(location.x(), location.y());
-		particleDirections[i] = Util::randQPointF() - QPointF(0.5, 0.5);
+		particleDirections[i] = radius * (Util::randQPointF() - QPointF(0.5, 0.5));
 	}
 	opacityNode->appendChildNode(geoNode.get());
 	parentNode->appendChildNode(opacityNode.get());

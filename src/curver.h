@@ -62,7 +62,7 @@ public:
 	bool isAlive() const;
 	void appendPoint(const QPointF pos, const bool changingSegment);
 	void prepareSegmentEvent(bool changingSegment, int lower, int upper);
-	void spawnExplosion(QPointF location);
+	void spawnExplosion(QPointF location, float radius = 1.0);
 
 	/**
 	 * @brief The username of the Curver

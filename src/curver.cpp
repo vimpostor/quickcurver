@@ -21,7 +21,7 @@ Curver::Curver(QSGNode *parentNode)
 	headNode = std::make_unique<HeadNode>(parentNode, &material);
 	resetRound();
 
-	connect(&cleaninstallAnimation, &CleaninstallAnimation::spawnExplosion, this, &Curver::spawnExplosion);
+	connect(&cleaninstallAnimation, &CleaninstallAnimation::spawnExplosion, std::bind(&Curver::spawnExplosion, this, std::placeholders::_1, 0.3));
 }
 
 Curver::~Curver()
@@ -297,9 +297,9 @@ void Curver::prepareSegmentEvent(bool changingSegment, int lower, int upper)
  * @brief Spawns an explosion animation at the given position
  * @param location The position of the explosion
  */
-void Curver::spawnExplosion(QPointF location)
+void Curver::spawnExplosion(QPointF location, float radius)
 {
-	(void) new Explosion(location, parentNode, &material, this);
+	(void) new Explosion(location, parentNode, &material, this, radius);
 }
 
 /**

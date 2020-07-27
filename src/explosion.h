@@ -23,7 +23,7 @@ class Explosion : public QObject
 {
 	Q_OBJECT
 public:
-	explicit Explosion(QPointF location, QSGNode *parentNode, QSGFlatColorMaterial *material, QObject *parent = nullptr);
+	explicit Explosion(QPointF location, QSGNode *parentNode, QSGFlatColorMaterial *material, QObject *parent = nullptr, float radius = 1.0);
 	~Explosion();
 private slots:
 	void progress();
