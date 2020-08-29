@@ -12,7 +12,7 @@ services:
   - docker
 
 before_install:
-  - docker pull archlinux/base
+  - docker pull vimperator97/qt5
 
 script:
   - scripts/travisDocker.sh

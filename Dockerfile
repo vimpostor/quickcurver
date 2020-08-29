@@ -1,5 +1,4 @@
-FROM archlinux/base
+FROM vimperator97/qt5
 ADD . /build
 WORKDIR /build
-RUN scripts/installDependencies.sh
 RUN scripts/build.sh
