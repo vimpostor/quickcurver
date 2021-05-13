@@ -14,7 +14,7 @@ services:
   - docker
 
 before_install:
-  - docker pull vimperator97/qt5
+  - docker pull vimpostor/arch-qt5
 
 script:
   - scripts/travisDocker.sh
