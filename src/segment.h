@@ -6,6 +6,7 @@
 #include <QSGFlatColorMaterial>
 #include <memory>
 #include <QtMath>
+#include <optional>
 
 /**
  * @brief A class representing a segment of a line
