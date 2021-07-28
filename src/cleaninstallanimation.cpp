@@ -6,7 +6,7 @@
  * @brief Creates a CleaninstallAnimation object
  * @param parent The parent object
  */
-CleaninstallAnimation::CleaninstallAnimation(QObject* parent)
+CleaninstallAnimation::CleaninstallAnimation(QObject*)
 {
 	connect(&timer, &QTimer::timeout, this, &CleaninstallAnimation::progress);
 }
