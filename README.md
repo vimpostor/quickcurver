@@ -3,8 +3,8 @@ This is a Qt/C++ implementation of the famous game "Achtung die Kurve", accelera
 
 [![travis build status](https://travis-ci.org/magnus-gross/quickcurver.svg?branch=develop)](https://travis-ci.org/magnus-gross/quickcurver)
 [![Appveyor build status](https://ci.appveyor.com/api/projects/status/v0yfey5sbceddbd8?svg=true)](https://ci.appveyor.com/project/magnus-gross/quickcurver)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/magnus-gross/quickcurver.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/magnus-gross/quickcurver/alerts/)
-[![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/magnus-gross/quickcurver.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/magnus-gross/quickcurver/context:cpp)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/vimpostor/quickcurver.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/magnus-gross/quickcurver/alerts/)
+[![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/vimpostor/quickcurver.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/magnus-gross/quickcurver/context:cpp)
 
 ![screenshot](https://user-images.githubusercontent.com/21310755/93923083-2ed2e300-fd13-11ea-86f1-d79bc09ce96a.png)
 
@@ -45,7 +45,7 @@ First make sure, that you have the required dependencies of QuickCurver installe
 ### Build instructions
 Run the following commands:
 ```bash
-git clone --recursive https://github.com/magnus-gross/quickcurver.git
+git clone --recursive https://github.com/vimpostor/quickcurver.git
 # If you forgot to clone with --recursive, just run git submodule update --init
 cd quickcurver
 mkdir build
