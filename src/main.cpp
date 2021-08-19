@@ -3,6 +3,7 @@
 #include <QQuickStyle>
 #include <QQmlContext>
 
+#include "version.h"
 #include "models/playermodel.h"
 #include "game.h"
 #include "utility"
@@ -47,6 +48,9 @@ int main(int argc, char *argv[]) {
 	QApplication app(argc, argv);
 
 	qRegisterMetaType<Client::JoinStatus>("JoinStatus");
+
+	QCoreApplication::setApplicationName("Quickcurver");
+	QCoreApplication::setApplicationVersion(VERSION);
 
 	QCommandLineParser parser;
 	parser.setApplicationDescription("Quickcurver");
