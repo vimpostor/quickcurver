@@ -59,7 +59,8 @@ To start QuickCurver you need to run the built executable in the build/src direc
 ## Installing compiled binaries
 
 ### Windows
-Download [the latest build artifact](https://ci.appveyor.com/api/projects/magnus-gross/quickcurver/artifacts/build%2FQuickCurver.zip).
+Download the precompiled binary from the [latest stable release](https://github.com/vimpostor/quickcurver/releases/latest).
+Alternatively you can also download the latest [nightly build artifact](https://ci.appveyor.com/api/projects/magnus-gross/quickcurver/artifacts/build%2FQuickCurver.zip).
 Extract all files and run `QuickCurver.exe` in the `release` directory.
 
 # Multiplayer
