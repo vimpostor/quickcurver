@@ -28,6 +28,7 @@ class Game : public QQuickItem
 	Q_OBJECT
 
 	Q_PROPERTY(Client* client READ getClient() CONSTANT)
+	Q_PROPERTY(bool isStarted MEMBER started NOTIFY gameStarted)
 public:
 	explicit Game(QQuickItem *parent = 0);
 	~Game();

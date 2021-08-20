@@ -39,7 +39,9 @@ Card {
 				function send() {
 					game.sendChatMessage(messageTextField.text);
 					messageTextField.text = "";
-					game.forceActiveFocus();
+					if (game.isStarted) {
+						game.forceActiveFocus();
+					}
 				}
 				icon.source: Utils.iconUrl("content/send")
 				icon.color: Material.accent
