@@ -3,7 +3,7 @@ TEMPLATE = app
 QT += gui qml quick svg quickcontrols2
 CONFIG += c++17
 
-RESOURCES += qml/qml.qrc ../fluid/src/imports/controls/icons.qrc
+RESOURCES += qml/qml.qrc ../fluid/src/imports/controls/icons.qrc ../icons.qrc
 
 !versionAtLeast(QT_VERSION, 5.15):error("At least Qt 5.15 is required")
 

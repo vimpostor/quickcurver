@@ -78,7 +78,7 @@ TabbedPage {
 				height: 108
 				text: model.name
 				subText: model.description
-				icon.source: Utils.iconUrl(model.iconName)
+				icon.source: "qrc:///" + model.iconName
 				rightItem: Column {
 					Slider {
 						id: probabilitySlider

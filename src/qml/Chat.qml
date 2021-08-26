@@ -20,7 +20,7 @@ Card {
 				valueText: new Date().toLocaleTimeString("hh:mm");
 				leftItem: Chip {
 					text: username
-					icon.source: Utils.iconUrl("action/account_circle")
+					icon.source: "qrc:///action/account_circle"
 				}
 			}
 			Layout.fillHeight: true
@@ -43,7 +43,7 @@ Card {
 						game.forceActiveFocus();
 					}
 				}
-				icon.source: Utils.iconUrl("content/send")
+				icon.source: "qrc:///content/send"
 				icon.color: Material.accent
 				onClicked: send();
 			}

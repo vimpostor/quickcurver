@@ -39,7 +39,7 @@ Card {
 		anchors.fill: parent
 		model: c_playerModel
 		delegate: ListItem {
-			icon.source: Utils.iconUrl(model.controller === 0 ? "hardware/gamepad" : model.controller === 2 ? "action/android" : "action/account_circle")
+			icon.source: model.controller === 0 ? "qrc:///hardware/gamepad" : model.controller === 2 ? "qrc:///action/android" : "action/account_circle"
 			height: 65
 			text: model.name + "   " + model.totalScore + "(+" +  model.roundScore + ")"
 			Ripple {
@@ -49,7 +49,7 @@ Card {
 			}
 			rightItem: ToolButton {
 				anchors.verticalCenter: parent.verticalCenter
-				icon.source: Utils.iconUrl("editor/mode_edit")
+				icon.source: "qrc:///editor/mode_edit"
 			}
 		}
 		BottomSheetList {
@@ -60,19 +60,19 @@ Card {
 				Action {
 					text: "Edit name"
 					enabled: bottomSheet.playerEditable
-					icon.source: Utils.iconUrl("action/account_circle")
+					icon.source: "qrc:///action/account_circle"
 					onTriggered: inputDialog.open();
 				},
 				Action {
 					text: "Edit color"
 					enabled: bottomSheet.playerEditable
-					icon.source: Utils.iconUrl("editor/format_color_fill")
+					icon.source: "qrc:///editor/format_color_fill"
 					onTriggered: colorDialog.open();
 				},
 				Action {
 					text: "Set counterclockwise key"
 					enabled: bottomSheet.playerEditable
-					icon.source: Utils.iconUrl("hardware/keyboard_arrow_left")
+					icon.source: "qrc:///hardware/keyboard_arrow_left"
 					onTriggered: {
 						infoBar.open("Press a key!");
 						leftKeyItem.forceActiveFocus();
@@ -81,7 +81,7 @@ Card {
 				Action {
 					text: "Set clockwise key"
 					enabled: bottomSheet.playerEditable
-					icon.source: Utils.iconUrl("hardware/keyboard_arrow_right")
+					icon.source: "qrc:///hardware/keyboard_arrow_right"
 					onTriggered: {
 						infoBar.open("Press a key!");
 						rightKeyItem.forceActiveFocus();
@@ -90,13 +90,13 @@ Card {
 				Action {
 					text: "Bot Settings"
 					enabled: bottomSheet.playerEditable
-					icon.source: Utils.iconUrl("action/android")
+					icon.source: "qrc:///action/android"
 					onTriggered: botDialog.open();
 				},
 				Action {
 					text: "Delete"
 					enabled: !root.connectedToServer
-					icon.source: Utils.iconUrl("action/delete")
+					icon.source: "qrc:///action/delete"
 					onTriggered: c_playerModel.removePlayer(playerListView.modelIndex);
 				}
 			]
@@ -164,7 +164,7 @@ Card {
 		anchors.bottom: parent.bottom
 		anchors.right: parent.right
 		anchors.margins: Units.largeSpacing
-		icon.source: Utils.iconUrl("content/add")
+		icon.source: "qrc:///content/add"
 		Material.background: Material.primary
 		TapHandler {
 			onTapped: {

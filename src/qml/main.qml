@@ -29,31 +29,31 @@ ApplicationWindow {
 		appBar.maxActionCount: 3
 		actions: [
 			Action {
-				icon.source: Utils.iconUrl("content/undo")
+				icon.source: "qrc:///content/undo"
 				text: "Reset game"
 				enabled: !root.connectedToServer
 				onTriggered: game.resetGame();
 			},
 			Action {
-				icon.source: Utils.iconUrl("file/cloud_upload")
+				icon.source: "qrc:///file/cloud_upload"
 				text: "Join game"
 				onTriggered: clientDialog.open();
 				shortcut: "Ctrl+J"
 			},
 			Action {
-				icon.source: Utils.iconUrl("action/settings")
+				icon.source: "qrc:///action/settings"
 				text: "Settings"
 				enabled: !root.connectedToServer
 				onTriggered: pageStack.push(Qt.resolvedUrl("Settings.qml"))
 				shortcut: "Ctrl+I"
 			},
 			Action {
-				icon.source: Utils.iconUrl("action/info")
+				icon.source: "qrc:///action/info"
 				text: "About"
 				onTriggered: pageStack.push(Qt.resolvedUrl("About.qml"))
 			},
 			Action {
-				icon.source: Utils.iconUrl("navigation/close")
+				icon.source: "qrc:///navigation/close"
 				text: "Quit"
 				onTriggered: close();
 				shortcut: "Ctrl+Q"
@@ -196,7 +196,7 @@ ApplicationWindow {
 					text: "Client"
 				}
 				ToolButton {
-					icon.source: Utils.iconUrl("editor/format_color_fill")
+					icon.source: "qrc:///editor/format_color_fill"
 					icon.color: clientColorDialog.color
 					onClicked: clientColorDialog.open();
 					Platform.ColorDialog {
