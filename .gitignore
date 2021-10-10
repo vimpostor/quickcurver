@@ -35,6 +35,7 @@ Makefile*
 
 # QtCtreator CMake
 CMakeLists.txt.user
+compile_commands.json
 
 #Ignore build folder
 /build/*
