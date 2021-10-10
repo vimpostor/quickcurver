@@ -256,7 +256,7 @@ void PlayerModel::processDeath()
  */
 void PlayerModel::removeBots()
 {
-	for (int i = 0; i < m_data.size(); ++i) {
+	for (size_t i = 0; i < m_data.size(); ++i) {
 		if (m_data[i]->controller == Curver::Controller::CONTROLLER_BOT) {
 			this->removePlayer(i);
 		}

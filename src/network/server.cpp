@@ -321,7 +321,7 @@ int Server::getCurverIndex(const FullNetworkAddress peer)
 	auto it = Util::find_if(clients, [&](auto& p){ return p.first->peerAddress() == peer.addr; });
 	if (it != clients.end()) {
 		auto& curvers = PlayerModel::getSingleton().getCurvers();
-		for (int i = 0; i < curvers.size(); ++i) {
+		for (size_t i = 0; i < curvers.size(); ++i) {
 			if (curvers[i].get() == it->second) {
 				return i;
 			}
