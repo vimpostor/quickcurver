@@ -5,7 +5,6 @@
 #include <QSGTextureMaterial>
 #include <QObject>
 #include <QQuickWindow>
-#include <QOpenGLTexture>
 #include <QQuickWindow>
 #include <QTimer>
 #include <QImage>
