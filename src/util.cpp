@@ -110,6 +110,11 @@ qint64 Util::getTimeDiff(const QTime& t)
 	return t.msecsTo(QTime::currentTime());
 }
 
+/**
+ * @brief Interpolates a value from 0.0 to 1.0 in a pre-defined way
+ * @param a The value to interpolate
+ * @return The interpolated value
+ */
 float Util::easeInOutSine(const float& a)
 {
 	return 0.5 * (1 - std::cos(M_PI * a));

@@ -338,6 +338,7 @@ void Curver::prepareSegmentEvent(bool changingSegment, int lower, int upper)
 /**
  * @brief Spawns an explosion animation at the given position
  * @param location The position of the explosion
+ * @param radius The size of the explosion
  */
 void Curver::spawnExplosion(QPointF location, float radius)
 {

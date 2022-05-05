@@ -6,6 +6,7 @@
  * @param parentNode The parent node in the scene graph
  * @param material The material to use for drawing calls
  * @param parent The parent object
+ * @param radius The size of the explosion
  */
 Explosion::Explosion(QPointF location, QSGNode *parentNode, QSGFlatColorMaterial *material, QObject *parent, float radius) : QObject(parent)
 {
