@@ -1,10 +1,10 @@
 #!/usr/bin/env xdg-open
 [Desktop Entry]
-Version=1.0
 Type=Application
 Name=QuickCurver
+Comment=A Qt implementation of Curve Fever
 Exec=QuickCurver
 TryExec=QuickCurver
 Terminal=false
 Categories=Game;
-Icon=xorg
+Icon=quickcurver
