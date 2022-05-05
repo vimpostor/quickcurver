@@ -9,7 +9,8 @@ HeadNode::HeadNode(QSGNode *parentNode, QSGFlatColorMaterial *material) : QSGGeo
 {
 	this->parentNode = parentNode;
 
-	geometry.setLineWidth(6);
+	// TODO: Use something else, this does not work with all graphic APIs
+	// geometry.setLineWidth(6);
 	geometry.setDrawingMode(QSGGeometry::DrawPoints);
 	this->setGeometry(&geometry);
 	this->setMaterial(material);

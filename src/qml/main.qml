@@ -3,12 +3,11 @@ import QtQuick.Window 2.12
 import Qt.labs.platform 1.0 as Platform
 import QtQuick.Controls 2.1
 import QtQuick.Controls.Material 2.1
-import Fluid.Controls 1.0
-import Fluid.Core 1.0
 import QtQuick.Layouts 1.1
 
 import Game 1.0
 import Client 1.0
+import Backend
 
 ApplicationWindow {
 	property int connectedToServer: game.client.joinStatus === Client.JOINED
@@ -23,45 +22,12 @@ ApplicationWindow {
 	Material.primary: Material.Yellow
 	Material.accent: Material.Blue
 	onWidthChanged: game.checkDimension();
-	initialPage: Page {
+	Item {
 		id: initialPage
-		title: "Quick Curver"
-		appBar.maxActionCount: 3
-		actions: [
-			Action {
-				icon.source: "qrc:///content/undo"
-				text: "Reset game"
-				enabled: !root.connectedToServer
-				onTriggered: game.resetGame();
-			},
-			Action {
-				icon.source: "qrc:///file/cloud_upload"
-				text: "Join game"
-				onTriggered: clientDialog.open();
-				shortcut: "Ctrl+J"
-			},
-			Action {
-				icon.source: "qrc:///action/settings"
-				text: "Settings"
-				enabled: !root.connectedToServer
-				onTriggered: pageStack.push(Qt.resolvedUrl("Settings.qml"))
-				shortcut: "Ctrl+I"
-			},
-			Action {
-				icon.source: "qrc:///action/info"
-				text: "About"
-				onTriggered: pageStack.push(Qt.resolvedUrl("About.qml"))
-			},
-			Action {
-				icon.source: "qrc:///navigation/close"
-				text: "Quit"
-				onTriggered: close();
-				shortcut: "Ctrl+Q"
-			}
-		]
-		Wave {
+		anchors.fill: parent
+		MouseArea {
 			id: gameWave
-			anchors {top: parent.top; left: parent.left; right: gameSeparator.left; bottom: parent.bottom; margins: Units.smallSpacing}
+			anchors {top: parent.top; left: parent.left; right: gameSeparator.left; bottom: parent.bottom; margins: 8}
 			Behavior on width {
 				NumberAnimation {
 					easing.type: Easing.OutCubic
@@ -111,24 +77,24 @@ ApplicationWindow {
 				onGameStarted: {
 					players.startButton.visible = false;
 					game.forceActiveFocus();
-					gameWave.openWave();
-					if (Device.isMobile) {
+					/* gameWave.openWave(); */
+					if (Backend.isMobile) {
 						appBar.visible = false;
 					}
 				}
 			}
-			Ripple {
+			MouseArea {
 				anchors.fill: parent
 				onClicked: game.forceActiveFocus();
 			}
 			MouseArea {
-				enabled: Device.isMobile
+				enabled: Backend.isMobile
 				anchors.fill: parent
 				anchors.rightMargin: parent.width / 2
 				onPressedChanged: game.processKey(Qt.Key_Left, !pressed);
 			}
 			MouseArea {
-				enabled: Device.isMobile
+				enabled: Backend.isMobile
 				anchors.fill: parent
 				anchors.leftMargin: parent.width / 2
 				onPressedChanged: game.processKey(Qt.Key_Right, !pressed);
@@ -136,13 +102,13 @@ ApplicationWindow {
 		}
 		Button {
 			id: gameSeparator
-			x: Device.isMobile ? 200 : 720
-			width: Units.smallSpacing
+			x: Backend.isMobile ? 200 : 720
+			width: 8
 			anchors.top: parent.top
 			anchors.bottom: parent.bottom
-			anchors.margins: Units.smallSpacing
+			anchors.margins: 8
 			onClicked: {
-				if (Device.isMobile) {
+				if (Backend.isMobile) {
 					appBar.visible = !appBar.visible;
 				}
 			}
@@ -152,28 +118,28 @@ ApplicationWindow {
 		}
 		Chat {
 			id: chat
-			anchors {top: parent.top; left: gameSeparator.right; right: parent.right; margins: Units.smallSpacing}
+			anchors {top: parent.top; left: gameSeparator.right; right: parent.right; margins: 8}
 			height: parent.height / 3
 		}
 		Players {
 			id: players
-			anchors {top: chat.bottom; left: gameSeparator.right; right: parent.right; bottom: parent.bottom; margins: Units.smallSpacing}
+			anchors {top: chat.bottom; left: gameSeparator.right; right: parent.right; bottom: parent.bottom; margins: 8}
 		}
-		SnackBar {
-			id: infoBar
-		}
-		SnackBar {
-			id: resizeSnackbar
-			duration: 10000
-			onClicked: {
-				gameSeparator.x =  Math.min(c_settings.width + Units.largeSpacing, Screen.width - Units.largeSpacing);
-				root.height = Math.min(c_settings.height + 3 * Units.largeSpacing, Screen.height - Units.largeSpacing);
-				if (root.width < gameSeparator.x) {
-					root.width = gameSeparator.x + 14 * Units.largeSpacing;
-				}
-				close();
-			}
-		}
+		/* SnackBar { */
+			/* id: infoBar */
+		/* } */
+		/* SnackBar { */
+			/* id: resizeSnackbar */
+			/* duration: 10000 */
+			/* onClicked: { */
+				/* gameSeparator.x =  Math.min(c_settings.width + 16, Screen.width - 16); */
+				/* root.height = Math.min(c_settings.height + 3 * 16, Screen.height - 16); */
+				/* if (root.width < gameSeparator.x) { */
+					/* root.width = gameSeparator.x + 14 * 16; */
+				/* } */
+				/* close(); */
+			/* } */
+		/* } */
 		Dialog {
 			property int joinStatus: game.client.joinStatus
 

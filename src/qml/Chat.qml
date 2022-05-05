@@ -2,26 +2,24 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Material 2.1
-import Fluid.Controls 1.1
-import Fluid.Core 1.0
 
-Card {
+Item {
 	ColumnLayout {
 		anchors.fill: parent
-		anchors.margins: Units.smallSpacing
+		anchors.margins: 8
 		ListView {
-			header: Subheader {
+			header: Label {
 				text: "Chat"
 			}
 			clip: true
 			model: c_chatModel
-			delegate: ListItem {
+			delegate: Label {
 				text: model.message
-				valueText: new Date().toLocaleTimeString("hh:mm");
-				leftItem: Chip {
-					text: username
-					icon.source: "qrc:///action/account_circle"
-				}
+				/* valueText: new Date().toLocaleTimeString("hh:mm"); */
+				/* leftItem: Label { */
+					/* text: username */
+					/* icon.source: "qrc:///action/account_circle" */
+				/* } */
 			}
 			Layout.fillHeight: true
 			Layout.fillWidth: true

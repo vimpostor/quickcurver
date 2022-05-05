@@ -1,18 +1,17 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.1
-import Fluid.Controls 1.0
-import Fluid.Layouts 1.0
 import QtQuick.Layouts 1.1
-import Fluid.Core 1.0
+
+import Backend
 
 Flickable {
 	anchors.fill: parent
-	contentHeight: Math.max(licensesLayout.implicitHeight, height) + Units.mediumSpacing
+	contentHeight: Math.max(licensesLayout.implicitHeight, height) + 10
 	AutomaticGrid {
 		id: licensesLayout
 		anchors.fill: parent
-		anchors.margins: Units.smallSpacing
-		cellWidth: Device.isMobile ? parent.width - 2*Units.smallSpacing : 400
+		anchors.margins: 8
+		cellWidth: Backend.isMobile ? parent.width - 16 : 400
 		cellHeight: 156
 		model: ListModel {
 			ListElement {
@@ -21,13 +20,6 @@ Flickable {
 				cardHomepage: "https://www.qt.io/"
 				cardLicense: "http://code.qt.io/cgit/qt/qtbase.git/tree/LICENSE.GPL3"
 				cardSource: "http://code.qt.io"
-			}
-			ListElement {
-				cardTitle: "Fluid"
-				cardDescription: "Beautiful Material design library. Licensed under MPL v. 2.0"
-				cardHomepage: "https://liri.io/"
-				cardLicense: "https://github.com/lirios/fluid/blob/develop/LICENSE.MPL2"
-				cardSource: "https://github.com/lirios/fluid"
 			}
 			ListElement {
 				cardTitle: "Google Material Icons"
@@ -48,13 +40,13 @@ Flickable {
 			width: licensesLayout.cellWidth
 			height: licensesLayout.cellHeight
 			Card {
-				width: parent.width - Units.smallSpacing
-				height: parent.height - Units.smallSpacing
+				width: parent.width - 8
+				height: parent.height - 8
 				anchors.centerIn: parent
 				Column {
 					anchors.fill: parent
-					anchors.margins: Units.smallSpacing
-					spacing: Units.smallSpacing * 2
+					anchors.margins: 8
+					spacing: 16
 					TitleLabel {
 						text: cardTitle
 					}
@@ -68,8 +60,8 @@ Flickable {
 					anchors.left: parent.left
 					anchors.right: parent.right
 					anchors.bottom: parent.bottom
-					anchors.margins: Units.smallSpacing
-					spacing: Units.smallSpacing
+					anchors.margins: 8
+					spacing: 8
 					Button {
 						text: qsTr("Website")
 						flat: true

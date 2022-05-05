@@ -13,14 +13,6 @@
 #include "gamewatcher.h"
 #include "mumble.h"
 
-#ifdef QT_STATIC
-#include <QQmlExtensionPlugin>
-Q_IMPORT_PLUGIN(FluidCorePlugin)
-Q_IMPORT_PLUGIN(FluidControlsPlugin)
-Q_IMPORT_PLUGIN(FluidControlsPrivatePlugin)
-Q_IMPORT_PLUGIN(FluidTemplatesPlugin)
-#endif
-
 /**
  * @mainpage Introduction
  *
