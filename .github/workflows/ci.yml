@@ -1,0 +1,11 @@
+name: Continuous Integration
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build -t quickcurver .
+    - name: Check that headless server works
+      run: echo "/quit" > docker run -it quickcurver build/quickcurver -platform offscreen
