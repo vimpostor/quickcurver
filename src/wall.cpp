@@ -5,11 +5,11 @@
 Wall::Wall()
 {
 	geometry.setLineWidth(WALL_SIZE);
-	geometry.setDrawingMode(QSGGeometry::DrawLineLoop);
+	geometry.setDrawingMode(QSGGeometry::DrawLineStrip);
 	geoNode.setGeometry(&geometry);
 	material.setColor(Util::getColor("Cyan"));
 	geoNode.setMaterial(&material);
-	geometry.allocate(4);
+	geometry.allocate(5);
 	updateDimension();
 	resize();
 	connect(&Settings::getSingleton(), &Settings::dimensionChanged, this, &Wall::updateDimension);
@@ -43,5 +43,6 @@ void Wall::resize()
 	vertices[1].set(dimension.x(), 0);
 	vertices[2].set(dimension.x(), dimension.y());
 	vertices[3].set(0, dimension.y());
+	vertices[4].set(0, 0);
 	geoNode.markDirty(QSGNode::DirtyGeometry);
 }
