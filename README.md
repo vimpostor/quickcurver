@@ -29,18 +29,16 @@ quickcurver
 ### Dependencies
 First make sure, that you have the required dependencies of QuickCurver installed. These are:
 
-* A C++ compiler with C++14 support
-* make
-* At least Qt 5.15
+* A C++ compiler with C++20 support
+* At least Qt 6.3
 * The following Qt Modules (in the parentheses there is an example how the package could be called for your distro (this depends on the distro!)):
-	- Qt Core (qt5-base)
-	- Qt GUI (qt5-base)
-	- Qt Quick (qt5-declarative)
-	- Qt QML (qt5-declarative)
-	- Qt SVG (qt5-svg)
-	- Qt Network (qt5-base)
-	- Qt Quick Controls 2 (qt5-quickcontrols2)
-	- Qt Graphical Effects (qt5-graphicaleffects)
+	- Qt Core (qt6-base)
+	- Qt GUI (qt6-base)
+	- Qt Quick (qt6-declarative)
+	- Qt QML (qt6-declarative)
+	- Qt SVG (qt6-svg)
+	- Qt Network (qt6-base)
+	- Qt Quick Controls 2 (qt6-quickcontrols2)
 
 ### Build instructions
 Run the following commands:
@@ -48,19 +46,17 @@ Run the following commands:
 git clone --recursive https://github.com/vimpostor/quickcurver.git
 # If you forgot to clone with --recursive, just run git submodule update --init
 cd quickcurver
-mkdir build
-cd build
-qmake .. -config release
+cmake -B build
+cmake --build build
 make
 ```
 
-To start QuickCurver you need to run the built executable in the build/src directory, for example on Linux run: `src/QuickCurver`
+To start QuickCurver you need to run the built executable in the `build` directory, for example on Linux run: `build/quickcurver`
 
 ## Installing compiled binaries
 
 ### Windows
 Download the precompiled binary from the [latest stable release](https://github.com/vimpostor/quickcurver/releases/latest).
-Alternatively you can also download the latest [nightly build artifact](https://ci.appveyor.com/api/projects/magnus-gross/quickcurver/artifacts/build%2FQuickCurver.zip).
 Extract all files and run `QuickCurver.exe` in the `release` directory.
 
 # Multiplayer
