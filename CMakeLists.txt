@@ -1,27 +1,33 @@
-cmake_minimum_required(VERSION 3.1.0)
+project(quickcurver)
+cmake_minimum_required(VERSION 3.21)
 
-project(QuickCurver)
-
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-find_package(Qt5 COMPONENTS Core Svg Quick QuickControls2 REQUIRED)
+list(APPEND QT_MODULES Core Qml Quick QuickControls2 Svg)
+find_package(Qt6 6.3 COMPONENTS ${QT_MODULES} REQUIRED)
+set(QT_PREFIXED_MODULES ${QT_MODULES})
+list(TRANSFORM QT_PREFIXED_MODULES PREPEND "Qt6::")
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+include_directories("src")
 
 file(GLOB_RECURSE SRCS "src/*.cpp")
 file(GLOB_RECURSE HDRS "src/*.h")
-file(GLOB_RECURSE RSRC "src/*.qrc")
+file(GLOB_RECURSE QMLS RELATIVE "${CMAKE_SOURCE_DIR}" "src/qml/*.qml")
 
-file(GLOB FLUID "fluid/icons/icons.qrc")
+list(APPEND RSRC "icons.qrc")
+qt6_add_resources(RESOURCES ${RSRC})
 
-include_directories(
-	"src"
-)
+qt_add_executable(${PROJECT_NAME} ${SRCS} ${RESOURCES})
 
-add_executable(${PROJECT_NAME} ${SRCS} ${HDRS} ${RSRC} ${FLUID})
+qt_add_qml_module(${PROJECT_NAME} URI "Backend" VERSION 1.0 QML_FILES ${QMLS})
 
+target_link_libraries(${PROJECT_NAME} PRIVATE ${QT_PREFIXED_MODULES})
 
-target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Svg Qt5::Quick Qt5::QuickControls2)
+# install
+include(GNUInstallDirs)
+install(TARGETS ${PROJECT_NAME} RUNTIME)
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/doc/man/" TYPE MAN)

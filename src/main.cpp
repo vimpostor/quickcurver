@@ -1,4 +1,4 @@
-#include <QApplication>
+#include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 #include <QQmlContext>
@@ -33,10 +33,6 @@ Q_IMPORT_PLUGIN(FluidTemplatesPlugin)
 int main(int argc, char *argv[]) {
 	// threaded render_loop, which is default on non-mesa drivers, breaks drawing
 	qputenv("QSG_RENDER_LOOP", "basic");
-	constexpr std::array<const char*, 4> customDpiVars = {"QT_DEVICE_PIXEL_RATIO", "QT_AUTO_SCREEN_SCALE_FACTOR", "QT_SCALE_FACTOR", "QT_SCREEN_SCALE_FACTORS"};
-	if (Util::find_if(customDpiVars, [](auto dpiVar){ return qEnvironmentVariableIsSet(dpiVar); }) == customDpiVars.end()) {
-		QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-	}
 	QQuickStyle::setStyle(QLatin1String("Material"));
 #if defined(Q_OS_LINUX) || defined(Q_OS_WIN) || defined(Q_OS_MAC)
 	const char* materialVariantName = "QT_QUICK_CONTROLS_MATERIAL_VARIANT";
@@ -45,7 +41,7 @@ int main(int argc, char *argv[]) {
 		qputenv(materialVariantName, "Dense");
 	}
 #endif
-	QApplication app(argc, argv);
+	QGuiApplication app(argc, argv);
 
 	qRegisterMetaType<Client::JoinStatus>("JoinStatus");
 
@@ -82,11 +78,9 @@ int main(int argc, char *argv[]) {
 	engine.rootContext()->setContextProperty("c_chatModel", &ChatModel::getSingleton());
 	engine.rootContext()->setContextProperty("c_settings", &Settings::getSingleton());
 
-	engine.addImportPath(QCoreApplication::applicationDirPath() + QDir::separator() + QLatin1String("..") + QDir::separator() + QLatin1String("fluid") + QDir::separator() + QLatin1String("qml"));
-	engine.addImportPath(QCoreApplication::applicationDirPath() + QDir::separator() + QLatin1String("qml"));
-	engine.load(QUrl(QLatin1String("qrc:/main.qml")));
+	engine.load(QUrl(QLatin1String("qrc:/Backend/src/qml/main.qml")));
 	if (engine.rootObjects().isEmpty()) {
 		return -1;
 	}
-	return app.exec();
+	return QGuiApplication::exec();
 }

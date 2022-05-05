@@ -12,7 +12,7 @@ Segment::Segment(QSGNode *parentNode, QSGFlatColorMaterial *material, const floa
 	this->thickness = thickness;
 
 	geometry.setLineWidth(thickness);
-	geometry.setDrawingMode(GL_TRIANGLE_STRIP);
+	geometry.setDrawingMode(QSGGeometry::DrawTriangleStrip);
 	geoNode.setGeometry(&geometry);
 	geoNode.setMaterial(material);
 	geometry.allocate(1);

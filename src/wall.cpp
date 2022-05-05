@@ -5,7 +5,7 @@
 Wall::Wall()
 {
 	geometry.setLineWidth(WALL_SIZE);
-	geometry.setDrawingMode(GL_LINE_LOOP);
+	geometry.setDrawingMode(QSGGeometry::DrawLineLoop);
 	geoNode.setGeometry(&geometry);
 	material.setColor(Util::getColor("Cyan"));
 	geoNode.setMaterial(&material);

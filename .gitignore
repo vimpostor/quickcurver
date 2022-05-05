@@ -54,3 +54,4 @@ html/
 latex/
 
 *.AppImage
+/.cache/

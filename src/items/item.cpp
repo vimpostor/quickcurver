@@ -142,7 +142,6 @@ void Item::initTexture()
 	renderer.render(&painter); // paint the icon on top of it
 	texture = std::unique_ptr<QSGTexture>(Util::getTextureGenerator()->createTextureFromImage(img));
 	texture->setMipmapFiltering(QSGTexture::Linear);
-	texture->bind();
 }
 
 /**

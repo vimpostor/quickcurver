@@ -162,6 +162,48 @@ void Curver::start()
 }
 
 /**
+ * @brief Updates the Curver assuming that \a deltat has gone by
+ * @param deltat The amount of time since the last update in milliseconds
+ * @param curvers All curvers
+ */
+void Curver::progress(int deltat, std::vector<std::unique_ptr<Curver> > &curvers)
+{
+	if (nextSegmentEvent <= QTime::currentTime()) {
+		if (changingSegment) {
+			// spawn a new segment
+			segments.push_back(std::make_unique<Segment>(parentNode, &material, thickness));
+			prepareSegmentEvent(false, SEGMENT_USE_TIME_MIN, SEGMENT_USE_TIME_MAX);
+		} else {
+			// plan a new segment spawn
+			prepareSegmentEvent(true, SEGMENT_CHANGE_TIME, SEGMENT_CHANGE_TIME);
+		}
+	}
+	secondLastPos = lastPos;
+	if (rotation == Rotation::ROTATE_LEFT) {
+		rotate(-deltat * rotateVelocity);
+	} else if (rotation == Rotation::ROTATE_RIGHT) {
+		rotate(deltat * rotateVelocity);
+	}
+	lastPos += deltat * static_cast<double>(velocity) * direction;
+	if (headVisible) {
+		headNode->setPosition(lastPos);
+	} else {
+		// it is not possible to have both head invisible and not changing segment
+		// check for collision
+		if (checkForIntersection(curvers, secondLastPos, lastPos)) {
+			die();
+		}
+	}
+	if (!changingSegment) {
+		segments.back()->appendPoint(lastPos, angle);
+		// check for collision
+		if (checkForIntersection(curvers, secondLastPos, lastPos)) {
+			die();
+		}
+	}
+}
+
+/**
  * @brief Checks, if any Curver collides with the line from \a a to \a b
  * @param curvers All Curvers
  * @param a The start point of the line
@@ -300,48 +342,6 @@ void Curver::prepareSegmentEvent(bool changingSegment, int lower, int upper)
 void Curver::spawnExplosion(QPointF location, float radius)
 {
 	(void) new Explosion(location, parentNode, &material, this, radius);
-}
-
-/**
- * @brief Updates the Curver assuming that \a deltat has gone by
- * @param deltat The amount of time since the last update in milliseconds
- * @param curvers All curvers
- */
-void Curver::progress(int deltat, std::vector<std::unique_ptr<Curver> > &curvers)
-{
-	if (nextSegmentEvent <= QTime::currentTime()) {
-		if (changingSegment) {
-			// spawn a new segment
-			segments.push_back(std::make_unique<Segment>(parentNode, &material, thickness));
-			prepareSegmentEvent(false, SEGMENT_USE_TIME_MIN, SEGMENT_USE_TIME_MAX);
-		} else {
-			// plan a new segment spawn
-			prepareSegmentEvent(true, SEGMENT_CHANGE_TIME, SEGMENT_CHANGE_TIME);
-		}
-	}
-	secondLastPos = lastPos;
-	if (rotation == Rotation::ROTATE_LEFT) {
-		rotate(-deltat * rotateVelocity);
-	} else if (rotation == Rotation::ROTATE_RIGHT) {
-		rotate(deltat * rotateVelocity);
-	}
-	lastPos += deltat * static_cast<double>(velocity) * direction;
-	if (headVisible) {
-		headNode->setPosition(lastPos);
-	} else {
-		// it is not possible to have both head invisible and not changing segment
-		// check for collision
-		if (checkForIntersection(curvers, secondLastPos, lastPos)) {
-			die();
-		}
-	}
-	if (!changingSegment) {
-		segments.back()->appendPoint(lastPos, angle);
-		// check for collision
-		if (checkForIntersection(curvers, secondLastPos, lastPos)) {
-			die();
-		}
-	}
 }
 
 /**

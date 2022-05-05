@@ -15,7 +15,7 @@ Explosion::Explosion(QPointF location, QSGNode *parentNode, QSGFlatColorMaterial
 	opacityNode = std::make_unique<QSGOpacityNode>();
 	geoNode = std::make_unique<QSGGeometryNode>();
 	geometry.setLineWidth(PARTICLESIZE);
-	geometry.setDrawingMode(GL_POINTS);
+	geometry.setDrawingMode(QSGGeometry::DrawPoints);
 	geoNode->setGeometry(&geometry);
 	geoNode->setMaterial(material);
 	geometry.allocate(PARTICLECOUNT);

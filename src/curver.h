@@ -53,6 +53,7 @@ public:
 
 	void processKey(Qt::Key key, bool release = false);
 	void start();
+	void progress(int deltat, std::vector<std::unique_ptr<Curver> > &curvers);
 	bool checkForIntersection(std::vector<std::unique_ptr<Curver> > &curvers, QPointF a, QPointF b) const;
 	void checkForWall();
 	void cleanInstall();
@@ -101,8 +102,6 @@ signals:
 	 * @brief Emitted, when the Curver died due to collision
 	 */
 	void died();
-public slots:
-	void progress(int deltat, std::vector<std::unique_ptr<Curver> > &curvers);
 private slots:
 private:
 	void rotate(float radians);

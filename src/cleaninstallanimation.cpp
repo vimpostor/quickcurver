@@ -64,8 +64,8 @@ void CleaninstallAnimation::progress()
 		// remove points in an interval making an explosion every time
 		constexpr size_t explosionInterval = 16;
 		for (; pointsToDelete >= explosionInterval; pointsToDelete -= explosionInterval) {
-			if (const auto pos = segments[segmentIndex]->getFirstPos()) {
-				emit spawnExplosion(pos.value());
+			if (const auto p = segments[segmentIndex]->getFirstPos()) {
+				emit spawnExplosion(p.value());
 			}
 			segments[segmentIndex]->popPoints(explosionInterval);
 		}

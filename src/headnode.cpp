@@ -10,7 +10,7 @@ HeadNode::HeadNode(QSGNode *parentNode, QSGFlatColorMaterial *material) : QSGGeo
 	this->parentNode = parentNode;
 
 	geometry.setLineWidth(6);
-	geometry.setDrawingMode(GL_POINTS);
+	geometry.setDrawingMode(QSGGeometry::DrawPoints);
 	this->setGeometry(&geometry);
 	this->setMaterial(material);
 	geometry.allocate(1);

@@ -13,7 +13,7 @@ CommandlineReader::CommandlineReader(QObject *parent) : QObject(parent)
  */
 void CommandlineReader::runAsync()
 {
-	auto future = QtConcurrent::run(this, &CommandlineReader::run);
+	auto future = QtConcurrent::run([&](){ this->run(); });
 }
 
 /**
