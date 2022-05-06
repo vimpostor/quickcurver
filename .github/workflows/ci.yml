@@ -5,6 +5,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+      with:
+        submodules: recursive
     - name: Build the Docker image
       run: docker build -t quickcurver .
     - name: Check that headless server works
