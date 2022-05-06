@@ -1,12 +1,12 @@
-import QtQuick 2.12
-import QtQuick.Window 2.12
-import Qt.labs.platform 1.0 as Platform
-import QtQuick.Controls 2.1
-import QtQuick.Controls.Material 2.1
-import QtQuick.Layouts 1.1
+import QtQuick
+import QtQuick.Window
+import Qt.labs.platform as Platform
+import QtQuick.Controls
+import QtQuick.Controls.Material
+import QtQuick.Layouts
 
-import Game 1.0
-import Client 1.0
+import Game
+import Client
 import Backend
 
 ApplicationWindow {
