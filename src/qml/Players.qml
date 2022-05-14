@@ -7,7 +7,6 @@ import QtQuick.Controls.impl
 
 Item {
 	id: playersRoot
-	property alias startButton: startButton
 	ListView {
 		id: playerListView
 		header: Label {
@@ -154,26 +153,13 @@ Item {
 		}
 	}
 	Button {
-		id: startButton
-		enabled: !root.connectedToServer
-		anchors.left: parent.left
-		anchors.right: parent.right
-		anchors.bottom: parent.bottom
-		anchors.margins: 8
-		height: 64
-		text: "Start!"
-		highlighted: true
-		onClicked: {
-			game.startGame();
-		}
-	}
-	Button {
 		id: addPlayerButton
 		enabled: !root.connectedToServer
 		anchors.bottom: parent.bottom
 		anchors.right: parent.right
 		anchors.margins: 16
 		icon.source: "qrc:///content/add"
+		highlighted: true
 		onClicked: {
 			c_playerModel.appendPlayer();
 			/* c_playerModel.appendBot(); */

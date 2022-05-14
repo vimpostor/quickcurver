@@ -38,6 +38,7 @@
     </qresource>
     <qresource prefix="/maps">
         <file alias="directions_bike">material-design-icons/maps/svg/production/ic_directions_bike_48px.svg</file>
+        <file alias="navigation">material-design-icons/maps/svg/production/ic_navigation_48px.svg</file>
     </qresource>
     <qresource prefix="/navigation">
         <file alias="close">material-design-icons/navigation/svg/production/ic_close_48px.svg</file>

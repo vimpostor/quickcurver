@@ -12,4 +12,4 @@ jobs:
     - name: Check that headless server works
       run: echo "/quit" | docker run -i quickcurver build/quickcurver -platform offscreen
     - name: Build documentation
-      run: cd doc && doxygen
+      run: docker run quickcurver sh -c 'cd doc && doxygen'

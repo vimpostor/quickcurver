@@ -10,7 +10,7 @@ import Client
 import Backend
 
 ApplicationWindow {
-	property int connectedToServer: game.client.joinStatus === Client.JOINED
+	property int connectedToServer: game ? game.client.joinStatus === Client.JOINED : 0
 	onClosing: {
 		game.destroy();
 	}
@@ -75,7 +75,6 @@ ApplicationWindow {
 					game.processKey(event.key, true);
 				}
 				onGameStarted: {
-					players.startButton.visible = false;
 					game.forceActiveFocus();
 					/* gameWave.openWave(); */
 					if (Backend.isMobile) {
@@ -116,9 +115,50 @@ ApplicationWindow {
 				yAxis.enabled: false
 			}
 		}
+		Item {
+			id: options
+			height: optionsLayout.implicitHeight
+			anchors {top: parent.top; left: gameSeparator.right; right: parent.right; margins: 8}
+			RowLayout {
+				id: optionsLayout
+				anchors {left: parent.left; right: parent.right}
+				Button {
+					icon.source: "qrc:///content/undo"
+					enabled: !root.connectedToServer
+					onClicked: game.resetGame();
+				}
+				Button {
+					icon.source: "qrc:///file/cloud_upload"
+					onClicked: clientDialog.open();
+				}
+				Button {
+					icon.source: "qrc:///action/settings"
+					enabled: !root.connectedToServer
+					onClicked: pageStack.push(Qt.resolvedUrl("Settings.qml"))
+				}
+				Button {
+					icon.source: "qrc:///action/info"
+					onClicked: pageStack.push(Qt.resolvedUrl("About.qml"))
+				}
+				Button {
+					id: startButton
+					Layout.fillWidth: true
+					icon.source: "qrc:///maps/navigation"
+					enabled: !root.connectedToServer && (game ? !game.isStarted : false)
+					text: "Start!"
+					highlighted: true
+					onClicked: {
+						game.startGame();
+					}
+				}
+				StackView {
+					id: pageStack
+				}
+			}
+		}
 		Chat {
 			id: chat
-			anchors {top: parent.top; left: gameSeparator.right; right: parent.right; margins: 8}
+			anchors {top: options.bottom; left: gameSeparator.right; right: parent.right; margins: 8}
 			height: parent.height / 3
 		}
 		Players {
@@ -141,7 +181,7 @@ ApplicationWindow {
 			/* } */
 		/* } */
 		Dialog {
-			property int joinStatus: game.client.joinStatus
+			property int joinStatus: game ? game.client.joinStatus : 0
 
 			id: clientDialog
 			title: "Join game"
