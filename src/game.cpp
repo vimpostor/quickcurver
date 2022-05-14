@@ -24,6 +24,7 @@ Game::Game(QQuickItem *parent) : QQuickItem(parent)
 	wall.setParentNode(rootNode);
 	connect(&client, &Client::integrateItem, itemFactory.get(), &ItemFactory::integrateItem);
 	connect(&client, &Client::resetRound, this, &Game::resetRound);
+	connect(&client, &Client::updateGraphics, this, &QQuickItem::update);
 	// GUI signals
 	connect(&Gui::getSingleton(), &Gui::postInfoBar, this, &Game::postInfoBar);
 	connect(&Gui::getSingleton(), &Gui::startGame, this, &Game::tryStartGame);

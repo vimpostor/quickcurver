@@ -243,6 +243,7 @@ void Client::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p)
 			Mumble::Api::get()->updatePosition(curvers[curverIndex]->getPos());
 		}
 #endif // MUMBLE_SUPPORT
+		emit updateGraphics();
 		break;
 	}
 	case Packet::ServerTypes::ItemData:

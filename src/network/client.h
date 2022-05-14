@@ -64,6 +64,13 @@ signals:
 	 * @param info The DNS reply
 	 */
 	void dnsFinished(QHostInfo info);
+	/**
+	 * @brief Emitted when the graphics stack needs to push a new frame
+	 *
+	 * This can happen for example when the \a Client receives new \a Curver data.
+	 * Thus requiring an update in the graphics stack so that the user can see the new data.
+	 */
+	void updateGraphics();
 private slots:
 	// tcp
 	void socketError(QAbstractSocket::SocketError);
