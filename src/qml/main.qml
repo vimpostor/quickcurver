@@ -67,11 +67,11 @@ ApplicationWindow {
 				}
 				onRealWidthChanged: checkDimension();
 				onRealHeightChanged: checkDimension();
-				onPostInfoBar: infoBar.open(msg);
-				Keys.onPressed: {
+				onPostInfoBar: (msg) => infoBar.open(msg);
+				Keys.onPressed: (event) => {
 					game.processKey(event.key, false);
 				}
-				Keys.onReleased: {
+				Keys.onReleased: (event) => {
 					game.processKey(event.key, true);
 				}
 				onGameStarted: {
@@ -125,9 +125,9 @@ ApplicationWindow {
 			id: players
 			anchors {top: chat.bottom; left: gameSeparator.right; right: parent.right; bottom: parent.bottom; margins: 8}
 		}
-		/* SnackBar { */
-			/* id: infoBar */
-		/* } */
+		SnackBar {
+			id: infoBar
+		}
 		/* SnackBar { */
 			/* id: resizeSnackbar */
 			/* duration: 10000 */

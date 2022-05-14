@@ -139,7 +139,7 @@ Item {
 		Item {
 			id: leftKeyItem
 			visible: false
-			Keys.onPressed: {
+			Keys.onPressed: (event) => {
 				c_playerModel.setLeftKey(playerListView.modelIndex, event.key);
 				game.forceActiveFocus();
 			}
@@ -147,7 +147,7 @@ Item {
 		Item {
 			id: rightKeyItem
 			visible: false
-			Keys.onPressed: {
+			Keys.onPressed: (event) => {
 				c_playerModel.setRightKey(playerListView.modelIndex, event.key);
 				game.forceActiveFocus();
 			}
