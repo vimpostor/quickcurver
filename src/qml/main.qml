@@ -78,9 +78,6 @@ ApplicationWindow {
 				onGameStarted: {
 					game.forceActiveFocus();
 					/* gameWave.openWave(); */
-					if (Backend.isMobile) {
-						appBar.visible = false;
-					}
 				}
 			}
 			MouseArea {
@@ -100,18 +97,14 @@ ApplicationWindow {
 				onPressedChanged: game.processKey(Qt.Key_Right, !pressed);
 			}
 		}
-		Button {
+		Rectangle {
 			id: gameSeparator
 			x: Backend.isMobile ? 200 : 720
 			width: 8
+			color: Material.color(Material.Grey, Material.Shade100)
 			anchors.top: parent.top
 			anchors.bottom: parent.bottom
 			anchors.margins: 8
-			onClicked: {
-				if (Backend.isMobile) {
-					appBar.visible = !appBar.visible;
-				}
-			}
 			DragHandler {
 				yAxis.enabled: false
 			}
@@ -174,18 +167,17 @@ ApplicationWindow {
 		SnackBar {
 			id: infoBar
 		}
-		/* SnackBar { */
-			/* id: resizeSnackbar */
-			/* duration: 10000 */
-			/* onClicked: { */
-				/* gameSeparator.x =  Math.min(c_settings.width + 16, Screen.width - 16); */
-				/* root.height = Math.min(c_settings.height + 3 * 16, Screen.height - 16); */
-				/* if (root.width < gameSeparator.x) { */
-					/* root.width = gameSeparator.x + 14 * 16; */
-				/* } */
-				/* close(); */
-			/* } */
-		/* } */
+		SnackBar {
+			id: resizeSnackbar
+			duration: 10000
+			onAccepted: {
+				gameSeparator.x =  Math.min(c_settings.width + 16, Screen.width - 16);
+				root.height = Math.min(c_settings.height + 3 * 16, Screen.height - 16);
+				if (root.width < gameSeparator.x) {
+					root.width = gameSeparator.x + 14 * 16;
+				}
+			}
+		}
 		Dialog {
 			property int joinStatus: game ? game.client.joinStatus : 0
 
