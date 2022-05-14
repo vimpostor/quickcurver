@@ -15,6 +15,10 @@ Page {
 			text: "Item spawn probabilities"
 		}
 	}
+	ToolButton {
+		icon.source: "qrc:///navigation/close"
+		onClicked: pageStack.clear();
+	}
 	StackLayout {
 		anchors {top: bar.bottom; left: parent.left; right: parent.right; bottom: parent.bottom}
 		currentIndex: bar.currentIndex

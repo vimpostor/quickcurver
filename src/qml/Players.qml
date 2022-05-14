@@ -39,7 +39,7 @@ Item {
 			height: playerIcon.implicitHeight
 			ToolButton {
 				id: playerIcon
-				icon.source: model.controller === 0 ? "qrc:///hardware/gamepad" : model.controller === 2 ? "qrc:///action/android" : "action/account_circle"
+				icon.source: model.controller === 0 ? "qrc:///hardware/gamepad" : model.controller === 2 ? "qrc:///action/android" : "qrc:///action/account_circle"
 				anchors.left: parent.left
 				onClicked: playerListView.open(index, model.controller);
 			}

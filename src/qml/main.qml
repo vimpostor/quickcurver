@@ -147,7 +147,7 @@ ApplicationWindow {
 				}
 				MessageDialog {
 					id: licenseDialog
-					text: "This software is free software licensed under the GNU GPL3.\nThe source code repository is available at https://github.com/vimpostor/quickcurver\nYou can also report any issues on that same website."
+					text: "This software is free software licensed under the GNU GPL3.\nThe source code repository is available at https://github.com/vimpostor/quickcurver\nYou can also report any issues on the same website."
 					buttons: MessageDialog.Ok
 				}
 			}
