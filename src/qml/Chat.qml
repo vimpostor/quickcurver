@@ -13,13 +13,19 @@ Item {
 			}
 			clip: true
 			model: c_chatModel
-			delegate: Label {
-				text: model.message
-				/* valueText: new Date().toLocaleTimeString("hh:mm"); */
-				/* leftItem: Label { */
-					/* text: username */
-					/* icon.source: "qrc:///action/account_circle" */
-				/* } */
+			delegate: Item {
+				height: usernameLabel.implicitHeight
+				Text {
+					id: usernameLabel
+					anchors.left: parent.left
+					text: model.username + ":"
+				}
+				Text {
+					anchors.left: usernameLabel.right
+					anchors.right: parent.right
+					anchors.margins: 8
+					text: model.message
+				}
 			}
 			Layout.fillHeight: true
 			Layout.fillWidth: true
@@ -28,7 +34,6 @@ Item {
 		RowLayout {
 			TextField {
 				id: messageTextField
-				background.width: width
 				Layout.fillWidth: true
 				onAccepted: sendButton.send();
 			}
