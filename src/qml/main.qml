@@ -145,9 +145,6 @@ ApplicationWindow {
 						game.startGame();
 					}
 				}
-				StackView {
-					id: pageStack
-				}
 				MessageDialog {
 					id: licenseDialog
 					text: "This software is free software licensed under the GNU GPL3.\nThe source code repository is available at https://github.com/vimpostor/quickcurver\nYou can also report any issues on that same website."
@@ -163,6 +160,10 @@ ApplicationWindow {
 		Players {
 			id: players
 			anchors {top: chat.bottom; left: gameSeparator.right; right: parent.right; bottom: parent.bottom; margins: 8}
+		}
+		StackView {
+			id: pageStack
+			anchors.fill: parent
 		}
 		SnackBar {
 			id: infoBar
