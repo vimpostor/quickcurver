@@ -4,6 +4,7 @@ import Qt.labs.platform as Platform
 import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
+import QtQuick.Dialogs
 
 import Game
 import Client
@@ -138,7 +139,7 @@ ApplicationWindow {
 				}
 				Button {
 					icon.source: "qrc:///action/info"
-					onClicked: pageStack.push(Qt.resolvedUrl("About.qml"))
+					onClicked: licenseDialog.open();
 				}
 				Button {
 					id: startButton
@@ -153,6 +154,11 @@ ApplicationWindow {
 				}
 				StackView {
 					id: pageStack
+				}
+				MessageDialog {
+					id: licenseDialog
+					text: "This software is free software licensed under the GNU GPL3.\nThe source code repository is available at https://github.com/vimpostor/quickcurver\nYou can also report any issues on that same website."
+					buttons: MessageDialog.Ok
 				}
 			}
 		}
