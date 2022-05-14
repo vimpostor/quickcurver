@@ -3,6 +3,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick.Controls.Material
+import QtQuick.Controls.impl
 
 Item {
 	id: playersRoot
@@ -35,95 +36,106 @@ Item {
 		}
 		anchors.fill: parent
 		model: c_playerModel
-		delegate: Label {
-			/* icon.source: model.controller === 0 ? "qrc:///hardware/gamepad" : model.controller === 2 ? "qrc:///action/android" : "action/account_circle" */
-			height: 65
-			text: model.name + "   " + model.totalScore + "(+" +  model.roundScore + ")"
-			/* Ripple { */
-				/* anchors.fill: parent */
-				/* acceptedButtons: Qt.LeftButton | Qt.RightButton */
-				/* onClicked: playerListView.open(index, model.controller); */
-			/* } */
-			/* rightItem: ToolButton { */
-				/* anchors.verticalCenter: parent.verticalCenter */
-				/* icon.source: "qrc:///editor/mode_edit" */
-			/* } */
+		delegate: Item {
+			height: playerIcon.implicitHeight
+			ToolButton {
+				id: playerIcon
+				icon.source: model.controller === 0 ? "qrc:///hardware/gamepad" : model.controller === 2 ? "qrc:///action/android" : "action/account_circle"
+				anchors.left: parent.left
+				onClicked: playerListView.open(index, model.controller);
+			}
+			Label {
+				text: model.name + "   " + model.totalScore + "(+" +  model.roundScore + ")"
+				anchors.verticalCenter: parent.verticalCenter
+				anchors.left: playerIcon.right
+			}
 		}
-		/* BottomSheetList { */
-			/* id: bottomSheet */
-			/* property bool playerEditable: true */
-			/* title: qsTr("Edit Player") */
-			/* actions: [ */
-				/* Action { */
-					/* text: "Edit name" */
-					/* enabled: bottomSheet.playerEditable */
-					/* icon.source: "qrc:///action/account_circle" */
-					/* onTriggered: inputDialog.open(); */
-				/* }, */
-				/* Action { */
-					/* text: "Edit color" */
-					/* enabled: bottomSheet.playerEditable */
-					/* icon.source: "qrc:///editor/format_color_fill" */
-					/* onTriggered: colorDialog.open(); */
-				/* }, */
-				/* Action { */
-					/* text: "Set counterclockwise key" */
-					/* enabled: bottomSheet.playerEditable */
-					/* icon.source: "qrc:///hardware/keyboard_arrow_left" */
-					/* onTriggered: { */
-						/* infoBar.open("Press a key!"); */
-						/* leftKeyItem.forceActiveFocus(); */
-					/* } */
-				/* }, */
-				/* Action { */
-					/* text: "Set clockwise key" */
-					/* enabled: bottomSheet.playerEditable */
-					/* icon.source: "qrc:///hardware/keyboard_arrow_right" */
-					/* onTriggered: { */
-						/* infoBar.open("Press a key!"); */
-						/* rightKeyItem.forceActiveFocus(); */
-					/* } */
-				/* }, */
-				/* Action { */
-					/* text: "Bot Settings" */
-					/* enabled: bottomSheet.playerEditable */
-					/* icon.source: "qrc:///action/android" */
-					/* onTriggered: botDialog.open(); */
-				/* }, */
-				/* Action { */
-					/* text: "Delete" */
-					/* enabled: !root.connectedToServer */
-					/* icon.source: "qrc:///action/delete" */
-					/* onTriggered: c_playerModel.removePlayer(playerListView.modelIndex); */
-				/* } */
-			/* ] */
-		/* } */
-		/* InputDialog { */
-			/* id: inputDialog */
-			/* x: (parent.width - width) / 2 */
-			/* y: (parent.height - height) / 2 */
-			/* title: "Player name" */
-			/* onAccepted: c_playerModel.setUserName(playerListView.modelIndex, textField.text); */
-		/* } */
+		Dialog {
+			id: bottomSheet
+			property bool playerEditable: true
+			title: qsTr("Edit Player")
+			ColumnLayout {
+				Button {
+					text: "Edit name"
+					enabled: bottomSheet.playerEditable
+					icon.source: "qrc:///action/account_circle"
+					onClicked: inputDialog.open();
+				}
+				Button {
+					text: "Edit color"
+					enabled: bottomSheet.playerEditable
+					icon.source: "qrc:///editor/format_color_fill"
+					onClicked: colorDialog.open();
+				}
+				Button {
+					text: "Set counterclockwise key"
+					enabled: bottomSheet.playerEditable
+					icon.source: "qrc:///hardware/keyboard_arrow_left"
+					onClicked: {
+						infoBar.open("Press a key!");
+						leftKeyItem.forceActiveFocus();
+					}
+				}
+				Button {
+					text: "Set clockwise key"
+					enabled: bottomSheet.playerEditable
+					icon.source: "qrc:///hardware/keyboard_arrow_right"
+					onClicked: {
+						infoBar.open("Press a key!");
+						rightKeyItem.forceActiveFocus();
+					}
+				}
+				Button {
+					text: "Bot Settings"
+					enabled: bottomSheet.playerEditable
+					icon.source: "qrc:///action/android"
+					onClicked: botDialog.open();
+				}
+				Button {
+					text: "Delete"
+					enabled: !root.connectedToServer
+					icon.source: "qrc:///action/delete"
+					onClicked: {
+						c_playerModel.removePlayer(playerListView.modelIndex);
+						bottomSheet.close();
+					}
+				}
+			}
+		}
+		Dialog {
+			id: inputDialog
+			title: "Player name"
+			standardButtons: Dialog.Ok | Dialog.Cancel
+			ColumnLayout {
+				TextField {
+					id: textField
+				}
+				DialogButtonBox {
+					standardButtons: DialogButtonBox.Ok
+					onAccepted: {
+						c_playerModel.setUserName(playerListView.modelIndex, textField.text);
+						inputDialog.accept();
+					}
+				}
+			}
+		}
 		ColorDialog {
 			id: colorDialog
 			onAccepted: c_playerModel.setColor(playerListView.modelIndex, color);
 		}
-		/* Dialog { */
-			/* id: botDialog */
-			/* x: (parent.width - width) / 2 */
-			/* y: (parent.height - height) / 2 */
-			/* Label { */
-				/* text: qsTr("Controlled by AI") */
-				/* height: 65 */
-				/* rightItem: CheckBox { */
-					/* id: botCheckbox */
-					/* anchors.verticalCenter: parent.verticalCenter */
-					/* onCheckedChanged: c_playerModel.setController(playerListView.modelIndex, 2 * botCheckbox.checked); */
-				/* } */
-				/* onClicked: botCheckbox.checked = !botCheckbox.checked; */
-			/* } */
-		/* } */
+		Dialog {
+			id: botDialog
+			RowLayout {
+				Label {
+					text: qsTr("Controlled by AI")
+					height: 65
+				}
+				CheckBox {
+					id: botCheckbox
+					onCheckedChanged: c_playerModel.setController(playerListView.modelIndex, 2 * botCheckbox.checked);
+				}
+			}
+		}
 		Item {
 			id: leftKeyItem
 			visible: false
@@ -155,14 +167,13 @@ Item {
 			game.startGame();
 		}
 	}
-	ToolButton {
+	Button {
 		id: addPlayerButton
 		enabled: !root.connectedToServer
 		anchors.bottom: parent.bottom
 		anchors.right: parent.right
 		anchors.margins: 16
 		icon.source: "qrc:///content/add"
-		Material.background: Material.primary
 		onClicked: {
 			c_playerModel.appendPlayer();
 			/* c_playerModel.appendBot(); */
