@@ -33,7 +33,7 @@ install(TARGETS ${PROJECT_NAME} RUNTIME)
 install(DIRECTORY "${CMAKE_SOURCE_DIR}/doc/man/" TYPE MAN)
 install(FILES "assets/${PROJECT_NAME}.desktop" DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/applications")
 # icon
-install(FILES "assets/${PROJECT_NAME}.svg" DESTINATION "{$CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/apps")
+install(FILES "assets/${PROJECT_NAME}.svg" DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/apps")
 list(APPEND ICON_SIZES 16 32 48 64 128 256 512)
 foreach(ICON_SIZE IN LISTS ICON_SIZES)
 	list(APPEND ICON_COMMANDS COMMAND "convert" "${CMAKE_SOURCE_DIR}/assets/${PROJECT_NAME}.svg" "-resize" "${ICON_SIZE}x${ICON_SIZE}" "${ICON_SIZE}.png")
