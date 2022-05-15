@@ -36,7 +36,6 @@ First make sure, that you have the required dependencies of QuickCurver installe
 	- Qt QML (qt6-declarative)
 	- Qt SVG (qt6-svg)
 	- Qt Network (qt6-base)
-	- Qt Quick Controls 2 (qt6-quickcontrols2)
 
 ### Build instructions
 Run the following commands:
@@ -46,7 +45,6 @@ git clone --recursive https://github.com/vimpostor/quickcurver.git
 cd quickcurver
 cmake -B build
 cmake --build build
-make
 ```
 
 To start QuickCurver you need to run the built executable in the `build` directory, for example on Linux run: `build/quickcurver`
