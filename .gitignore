@@ -54,4 +54,5 @@ html/
 latex/
 
 *.AppImage
+appdir/
 /.cache/

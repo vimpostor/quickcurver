@@ -2,5 +2,5 @@
 
 set -e
 
-cmake -B build
+cmake -B build -DCMAKE_INSTALL_PREFIX=/usr
 cmake --build build

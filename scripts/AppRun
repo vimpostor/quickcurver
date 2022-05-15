@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+SELF="$(readlink -f "$0")"
+HERE="${SELF%/*}"
+export PATH="${HERE}/usr/bin/:/usr/bin/:$PATH"
+export LD_LIBRARY_PATH="${HERE}/usr/lib/:/usr/lib/:$LD_LIBRARY_PATH"
+export QT_PLUGIN_PATH="${HERE}/usr/lib/qt6/plugins/:$QT_PLUGIN_PATH"
+EXEC=$(grep -e '^Exec=.*' "${HERE}"/*.desktop | head -n 1 | cut -d "=" -f 2 | cut -d " " -f 1)
+exec "$EXEC" "$@"
