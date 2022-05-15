@@ -3,8 +3,8 @@
 
 #include <QObject>
 
-#include "commandlinereader.h"
-#include "game.h"
+#include "commandlinereader.hpp"
+#include "game.hpp"
 
 /**
  * @brief Watches a CommandlineReader to interact with the game. This is the CLI implementation of the game.

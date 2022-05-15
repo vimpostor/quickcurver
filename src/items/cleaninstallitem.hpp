@@ -1,7 +1,7 @@
 #ifndef CLEANINSTALLITEM_H
 #define CLEANINSTALLITEM_H
 
-#include "item.h"
+#include "item.hpp"
 
 /**
  * @brief Cleaninstalls the entire round

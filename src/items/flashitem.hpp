@@ -1,7 +1,7 @@
 #ifndef FLASHITEM_H
 #define FLASHITEM_H
 
-#include "item.h"
+#include "item.hpp"
 
 /**
  * @brief Flashes a Curver forward depending on its velocity

@@ -1,4 +1,4 @@
-#include "wall.h"
+#include "wall.hpp"
 
 #define WALL_SIZE 4
 

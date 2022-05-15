@@ -1,4 +1,4 @@
-#include "gui.h"
+#include "gui.hpp"
 
 /**
  * @brief Returns the Gui singleton

@@ -1,7 +1,7 @@
 #ifndef GHOSTITEM_H
 #define GHOSTITEM_H
 
-#include "item.h"
+#include "item.hpp"
 
 /**
  * @brief Renders a Curver invisible while still being able to collide

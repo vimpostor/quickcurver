@@ -1,4 +1,4 @@
-#include "ghostitem.h"
+#include "ghostitem.hpp"
 
 #define GHOST_TIME 2000
 

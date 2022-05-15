@@ -1,4 +1,4 @@
-#include "curver.h"
+#include "curver.hpp"
 
 #define SPAWN_WALL_THRESHOLD 50
 #define SPAWN_INVINCIBLE_DURATION 1000

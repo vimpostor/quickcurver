@@ -15,7 +15,7 @@ set(CMAKE_AUTORCC ON)
 include_directories("src")
 
 file(GLOB_RECURSE SRCS "src/*.cpp")
-file(GLOB_RECURSE HDRS "src/*.h")
+file(GLOB_RECURSE HDRS "src/*.hpp")
 file(GLOB_RECURSE QMLS RELATIVE "${CMAKE_SOURCE_DIR}" "src/qml/*.qml")
 
 list(APPEND RSRC "icons.qrc")

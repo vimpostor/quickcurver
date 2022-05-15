@@ -1,4 +1,4 @@
-#include "headnode.h"
+#include "headnode.hpp"
 
 /**
  * @brief Constructs a HeadNode

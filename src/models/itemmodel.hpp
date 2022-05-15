@@ -4,14 +4,14 @@
 #include <QAbstractListModel>
 #include <QSGNode>
 
-#include "items/item.h"
-#include "items/cleaninstallitem.h"
-#include "items/speeditem.h"
-#include "items/invisibleitem.h"
-#include "items/agileitem.h"
-#include "items/flashitem.h"
-#include "items/slowitem.h"
-#include "items/ghostitem.h"
+#include "items/item.hpp"
+#include "items/cleaninstallitem.hpp"
+#include "items/speeditem.hpp"
+#include "items/invisibleitem.hpp"
+#include "items/agileitem.hpp"
+#include "items/flashitem.hpp"
+#include "items/slowitem.hpp"
+#include "items/ghostitem.hpp"
 
 /**
  * @brief A model containing all Item configurations

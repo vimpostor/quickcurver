@@ -1,4 +1,4 @@
-#include "speeditem.h"
+#include "speeditem.hpp"
 
 /**
  * @brief Constructs the SpeedItem

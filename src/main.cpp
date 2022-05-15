@@ -3,15 +3,15 @@
 #include <QQuickStyle>
 #include <QQmlContext>
 
-#include "version.h"
-#include "models/playermodel.h"
-#include "game.h"
+#include "version.hpp"
+#include "models/playermodel.hpp"
+#include "game.hpp"
 #include "utility"
-#include "models/itemmodel.h"
-#include "settings.h"
-#include "models/chatmodel.h"
-#include "gamewatcher.h"
-#include "mumble.h"
+#include "models/itemmodel.hpp"
+#include "settings.hpp"
+#include "models/chatmodel.hpp"
+#include "gamewatcher.hpp"
+#include "mumble.hpp"
 
 /**
  * @mainpage Introduction

@@ -6,8 +6,8 @@
 #include <QHash>
 #include <QSGNode>
 
-#include "curver.h"
-#include "gui.h"
+#include "curver.hpp"
+#include "gui.hpp"
 
 /**
  * @brief A model containing all players

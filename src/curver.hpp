@@ -5,11 +5,11 @@
 #include <QSGFlatColorMaterial>
 #include <QTime>
 
-#include "segment.h"
-#include "explosion.h"
-#include "headnode.h"
-#include "settings.h"
-#include "cleaninstallanimation.h"
+#include "segment.hpp"
+#include "explosion.hpp"
+#include "headnode.hpp"
+#include "settings.hpp"
+#include "cleaninstallanimation.hpp"
 
 /**
  * @brief The Curver class represents a player and all the segments belonging to the player

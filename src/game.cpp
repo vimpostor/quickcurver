@@ -1,4 +1,4 @@
-#include "game.h"
+#include "game.hpp"
 
 /**
  * @brief Constructs a Game with the given parent.

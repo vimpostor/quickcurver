@@ -9,14 +9,14 @@
 #include <QSGGeometry>
 #include <QQuickView>
 
-#include "gui.h"
-#include "models/playermodel.h"
-#include "curver.h"
-#include "itemfactory.h"
-#include "wall.h"
-#include "bot.h"
-#include "network/server.h"
-#include "network/client.h"
+#include "gui.hpp"
+#include "models/playermodel.hpp"
+#include "curver.hpp"
+#include "itemfactory.hpp"
+#include "wall.hpp"
+#include "bot.hpp"
+#include "network/server.hpp"
+#include "network/client.hpp"
 
 /**
  * @brief A class representing an entire game

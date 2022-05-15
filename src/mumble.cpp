@@ -1,6 +1,6 @@
 #ifdef MUMBLE_SUPPORT
 
-#include "mumble.h"
+#include "mumble.hpp"
 
 #include <QDebug>
 #include <unistd.h>

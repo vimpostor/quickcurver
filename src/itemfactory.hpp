@@ -5,12 +5,12 @@
 #include <QTime>
 #include <QSGNode>
 
-#include "models/playermodel.h"
-#include "util.h"
-#include "items/speeditem.h"
-#include "items/cleaninstallitem.h"
-#include "models/itemmodel.h"
-#include "settings.h"
+#include "models/playermodel.hpp"
+#include "util.hpp"
+#include "items/speeditem.hpp"
+#include "items/cleaninstallitem.hpp"
+#include "models/itemmodel.hpp"
+#include "settings.hpp"
 
 /**
  * @brief This class plans and manages all Item spawns

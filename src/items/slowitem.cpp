@@ -1,4 +1,4 @@
-#include "slowitem.h"
+#include "slowitem.hpp"
 
 /**
  * @brief Constructs the SlowItem

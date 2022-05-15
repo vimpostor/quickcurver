@@ -1,4 +1,4 @@
-#include "cleaninstallitem.h"
+#include "cleaninstallitem.hpp"
 
 /**
  * @brief Constructs the CleanInstallItem

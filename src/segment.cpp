@@ -1,4 +1,4 @@
-#include "segment.h"
+#include "segment.hpp"
 
 /**
  * @brief Constructs a Segment with the given parent node, material and thickness

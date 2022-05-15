@@ -1,4 +1,4 @@
-#include "item.h"
+#include "item.hpp"
 
 #include <QSvgRenderer>
 #include <QPainter>

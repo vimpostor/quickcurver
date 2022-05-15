@@ -1,4 +1,4 @@
-#include "bot.h"
+#include "bot.hpp"
 
 #define LOOK_AHEAD 1000
 #define MAX_ANGLE M_PI/4

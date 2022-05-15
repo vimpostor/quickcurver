@@ -1,4 +1,4 @@
-#include "explosion.h"
+#include "explosion.hpp"
 
 /**
  * @brief Creates an explosion

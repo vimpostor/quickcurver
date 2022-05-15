@@ -1,4 +1,4 @@
-#include "network.h"
+#include "network.hpp"
 
 bool operator==(const FullNetworkAddress& l, const FullNetworkAddress& r)
 {

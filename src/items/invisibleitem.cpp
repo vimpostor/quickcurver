@@ -1,4 +1,4 @@
-#include "invisibleitem.h"
+#include "invisibleitem.hpp"
 
 #define INVISIBLE_TIME 3000
 

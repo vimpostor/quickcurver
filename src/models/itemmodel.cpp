@@ -1,4 +1,4 @@
-#include "itemmodel.h"
+#include "itemmodel.hpp"
 
 /**
  * @brief Constructs an ItemModel

@@ -1,4 +1,4 @@
-#include "cleaninstallanimation.h"
+#include "cleaninstallanimation.hpp"
 
 #define ANIMATION_DURATION 300
 

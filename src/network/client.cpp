@@ -1,5 +1,5 @@
-#include "client.h"
-#include "mumble.h"
+#include "client.hpp"
+#include "mumble.hpp"
 
 #define PING_INTERVAL 5000
 #define JOIN_TIMEOUT 30000

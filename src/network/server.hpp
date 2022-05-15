@@ -7,7 +7,7 @@
 #include <memory>
 #include <array>
 
-#include "network.h"
+#include "network.hpp"
 
 #define ADMIN_NAME "Chat Bot"
 

@@ -1,7 +1,7 @@
 #ifndef INVISIBLEITEM_H
 #define INVISIBLEITEM_H
 
-#include "item.h"
+#include "item.hpp"
 
 /**
  * @brief Renders a Curver invisible and makes it immune to collisions

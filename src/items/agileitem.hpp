@@ -1,7 +1,7 @@
 #ifndef AGILEITEM_H
 #define AGILEITEM_H
 
-#include "item.h"
+#include "item.hpp"
 
 /**
  * @brief An Item that makes a Curver turn around faster

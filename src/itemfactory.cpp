@@ -1,4 +1,4 @@
-#include "itemfactory.h"
+#include "itemfactory.hpp"
 
 #define SPAWN_WALL_THRESHOLD 20
 

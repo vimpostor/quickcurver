@@ -1,4 +1,4 @@
-#include "gamewatcher.h"
+#include "gamewatcher.hpp"
 
 /**
  * @brief Constructs a GameWatcher object and connects all signals of the commandline reader with slots related to the Game.

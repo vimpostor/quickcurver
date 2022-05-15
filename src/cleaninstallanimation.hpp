@@ -8,8 +8,8 @@
 #include <QTime>
 #include <memory>
 
-#include "segment.h"
-#include "util.h"
+#include "segment.hpp"
+#include "util.hpp"
 
 /**
  * @brief An animated event representing a Curver cleaninstall

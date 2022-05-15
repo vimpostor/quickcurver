@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QPointF>
 
-#include "util.h"
+#include "util.hpp"
 
 #define PARTICLECOUNT 64
 #define PARTICLESIZE 4

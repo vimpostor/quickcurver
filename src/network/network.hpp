@@ -4,12 +4,12 @@
 #include <QString>
 #include <QtNetwork>
 
-#include "gui.h"
-#include "curver.h"
-#include "models/playermodel.h"
-#include "models/chatmodel.h"
-#include "util.h"
-#include "items/item.h"
+#include "gui.hpp"
+#include "curver.hpp"
+#include "models/playermodel.hpp"
+#include "models/chatmodel.hpp"
+#include "util.hpp"
+#include "items/item.hpp"
 
 /**
  * @brief A wrapper for host address plus port.

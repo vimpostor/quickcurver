@@ -4,7 +4,7 @@
 #include <QtNetwork>
 #include <QTimer>
 
-#include "network.h"
+#include "network.hpp"
 
 /**
  * @brief A Client network instance

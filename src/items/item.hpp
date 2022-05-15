@@ -9,9 +9,9 @@
 #include <QTimer>
 #include <QImage>
 
-#include "curver.h"
-#include "util.h"
-#include "models/playermodel.h"
+#include "curver.hpp"
+#include "util.hpp"
+#include "models/playermodel.hpp"
 
 /**
  * @brief An Item that can be collected by a Curver and has certain effects

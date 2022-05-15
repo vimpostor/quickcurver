@@ -1,7 +1,7 @@
 #ifndef FASTITEM_H
 #define FASTITEM_H
 
-#include "item.h"
+#include "item.hpp"
 
 /**
  * @brief Increases the velocity of a Curver

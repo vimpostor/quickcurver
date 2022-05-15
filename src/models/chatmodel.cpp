@@ -1,4 +1,4 @@
-#include "chatmodel.h"
+#include "chatmodel.hpp"
 
 ChatModel::ChatModel()
 {

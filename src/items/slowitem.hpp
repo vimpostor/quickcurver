@@ -1,7 +1,7 @@
 #ifndef SLOWITEM_H
 #define SLOWITEM_H
 
-#include "item.h"
+#include "item.hpp"
 
 /**
  * @brief Decreases the velocity of a Curver

@@ -4,8 +4,8 @@
 #include <QSGGeometryNode>
 #include <QSGFlatColorMaterial>
 
-#include "util.h"
-#include "settings.h"
+#include "util.hpp"
+#include "settings.hpp"
 
 /**
  * @brief A node that visualizes the game borders in the scene graph

@@ -1,4 +1,4 @@
-#include "flashitem.h"
+#include "flashitem.hpp"
 
 #define RECOVER_TIME 360
 

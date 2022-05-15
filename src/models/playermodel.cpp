@@ -1,4 +1,4 @@
-#include "playermodel.h"
+#include "playermodel.hpp"
 
 /**
  * @brief Constructs a PlayerModel

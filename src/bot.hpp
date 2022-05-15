@@ -1,8 +1,8 @@
 #ifndef BOT_H
 #define BOT_H
 
-#include "models/playermodel.h"
-#include "settings.h"
+#include "models/playermodel.hpp"
+#include "settings.hpp"
 
 /**
  * @brief A class representing an AI that controls a Curver
