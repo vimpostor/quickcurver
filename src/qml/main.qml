@@ -120,19 +120,31 @@ ApplicationWindow {
 					icon.source: "qrc:///content/undo"
 					enabled: !root.connectedToServer
 					onClicked: game.resetGame();
+					ToolTip.text: "Reset game"
+					ToolTip.visible: pressed
+					ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
 				}
 				Button {
 					icon.source: "qrc:///file/cloud_upload"
 					onClicked: clientDialog.open();
+					ToolTip.text: "Join game"
+					ToolTip.visible: pressed
+					ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
 				}
 				Button {
 					icon.source: "qrc:///action/settings"
 					enabled: !root.connectedToServer
 					onClicked: pageStack.push(Qt.resolvedUrl("Settings.qml"))
+					ToolTip.text: "Settings"
+					ToolTip.visible: pressed
+					ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
 				}
 				Button {
 					icon.source: "qrc:///action/info"
 					onClicked: licenseDialog.open();
+					ToolTip.text: "About"
+					ToolTip.visible: pressed
+					ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
 				}
 				Button {
 					id: startButton
