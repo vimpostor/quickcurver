@@ -13,18 +13,20 @@ Item {
 			}
 			clip: true
 			model: c_chatModel
-			delegate: Item {
-				height: usernameLabel.implicitHeight
+			delegate: RowLayout {
+				width: parent.width
 				Text {
 					id: usernameLabel
-					anchors.left: parent.left
 					text: model.username + ":"
 				}
 				Text {
-					anchors.left: usernameLabel.right
-					anchors.right: parent.right
-					anchors.margins: 8
 					text: model.message
+				}
+				Item {
+					Layout.fillWidth: true
+				}
+				Text {
+					text: Qt.formatDateTime(model.timestamp, "HH:mm")
 				}
 			}
 			Layout.fillHeight: true

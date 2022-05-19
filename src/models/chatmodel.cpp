@@ -4,6 +4,7 @@ ChatModel::ChatModel()
 {
 	m_roleNames[UserNameRole] = "username";
 	m_roleNames[MessageRole] = "message";
+	m_roleNames[TimestampRole] = "timestamp";
 }
 
 /**
@@ -23,12 +24,14 @@ int ChatModel::rowCount(const QModelIndex &) const
  */
 QVariant ChatModel::data(const QModelIndex &index, int role) const
 {
-	auto &m = m_data[index.row()];
+	const auto &m = m_data[index.row()];
 	switch (role) {
 	case UserNameRole:
 		return m.username;
 	case MessageRole:
 		return m.message;
+	case TimestampRole:
+		return m.timestamp;
 	default:
 		return "Unknown role";
 	}

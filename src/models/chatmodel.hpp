@@ -2,6 +2,7 @@
 #define CHATMODEL_H
 
 #include <QAbstractListModel>
+#include <QDateTime>
 #include <vector>
 
 /**
@@ -30,8 +31,9 @@ private:
 	/**
 	 * @brief A chat message
 	 */
-	struct ChatMessage
+	class ChatMessage
 	{
+	public:
 		/**
 		 * @brief The author of the chat message
 		 */
@@ -40,6 +42,10 @@ private:
 		 * @brief The actual chat message
 		 */
 		QString message;
+		/**
+		 * @brief The time that this message arrived
+		 */
+		QDateTime timestamp = QDateTime::currentDateTime();
 	};
 	/**
 	 * @brief All chat messages
@@ -54,7 +60,8 @@ private:
 	 */
 	enum RoleNames {
 		UserNameRole = Qt::UserRole,
-		MessageRole
+		MessageRole,
+		TimestampRole,
 	};
 };
 

@@ -127,6 +127,8 @@ Client*Game::getClient()
  */
 QSGNode *Game::updatePaintNode(QSGNode *, QQuickItem::UpdatePaintNodeData *)
 {
+	// TODO: Actually do our rendering only during update
+	// Right now we can't use the threaded render loop because we update nodes from everywhere
 	return rootNode;
 }
 
