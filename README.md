@@ -1,6 +1,7 @@
 # Quick Curver
-This is a Qt/C++ implementation of the famous game "Achtung die Kurve", accelerated using OpenGL.
+This is a hardware accelerated implementation of the famous game "Achtung die Kurve", written in modern C++20 and Qt 6.
 
+[![Continuous Integration](https://github.com/vimpostor/quickcurver/actions/workflows/ci.yml/badge.svg)](https://github.com/vimpostor/quickcurver/actions/workflows/ci.yml)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/vimpostor/quickcurver.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/magnus-gross/quickcurver/alerts/)
 [![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/vimpostor/quickcurver.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/magnus-gross/quickcurver/context:cpp)
 
@@ -20,8 +21,7 @@ This is a Qt/C++ implementation of the famous game "Achtung die Kurve", accelera
 Note: Arch Linux users can simply install [quickcurver-git](https://aur.archlinux.org/packages/quickcurver-git) from the AUR:
 
 ```bash
-yay -S quickcurver-git
-quickcurver
+paru -S quickcurver-git
 ```
 
 ### Dependencies
