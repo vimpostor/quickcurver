@@ -6,8 +6,7 @@
  * @param material The material to use for all drawing calls
  * @param thickness The thickness of the segment
  */
-Segment::Segment(QSGNode *parentNode, QSGFlatColorMaterial *material, const float thickness)
-{
+Segment::Segment(QSGNode *parentNode, QSGFlatColorMaterial *material, const float thickness) {
 	this->parentNode = parentNode;
 	this->thickness = thickness;
 
@@ -19,8 +18,7 @@ Segment::Segment(QSGNode *parentNode, QSGFlatColorMaterial *material, const floa
 	parentNode->appendChildNode(&geoNode);
 }
 
-Segment::~Segment()
-{
+Segment::~Segment() {
 	parentNode->removeChildNode(&geoNode);
 }
 
@@ -29,9 +27,8 @@ Segment::~Segment()
  * @param newPoint The point to append
  * @param angle The angle to append the point with. The thickness of the line spreads orthogonal relative to the angle
  */
-void Segment::appendPoint(const QPointF newPoint, const float angle)
-{
-	const float normalAngle = angle + M_PI/2;
+void Segment::appendPoint(const QPointF newPoint, const float angle) {
+	const float normalAngle = angle + M_PI / 2;
 	const QPointF normalVector = thickness * QPointF(cos(normalAngle), sin(normalAngle));
 	pos.push_back(newPoint + normalVector);
 	pos.push_back(newPoint - normalVector);
@@ -46,8 +43,7 @@ void Segment::appendPoint(const QPointF newPoint, const float angle)
  * @param b The end point of the line
  * @return \c True, iif this segment intersects with the line a -> b
  */
-bool Segment::checkForIntersection(QPointF a, QPointF b) const
-{
+bool Segment::checkForIntersection(QPointF a, QPointF b) const {
 	/* Given a line (a -- b) and (c -- d), we find an intersection as follows:
 	 *
 	 * First compute the equation A*x + B*y = C for both lines
@@ -75,7 +71,7 @@ bool Segment::checkForIntersection(QPointF a, QPointF b) const
 	const float minY = std::min(a.y(), b.y()) - epsilon;
 	const float maxY = std::max(a.y(), b.y()) + epsilon;
 	for (int i = 2; i < static_cast<int>(pos.size() - 1); ++i) {
-		const QPointF c = pos[i-2];
+		const QPointF c = pos[i - 2];
 		const QPointF d = pos[i];
 		const float secondA = d.y() - c.y();
 		const float secondB = c.x() - d.x();
@@ -86,9 +82,9 @@ bool Segment::checkForIntersection(QPointF a, QPointF b) const
 			const float x = (secondB * firstC - firstB * secondC) / det;
 			const float y = (firstA * secondC - secondA * firstC) / det;
 			// is the intersection location contained in both lines?
-			if (minX <= x && x <= maxX && minY <= y && y <= maxY && \
-					(std::min(c.x(), d.x()) - epsilon) <= x && (x <= std::max(c.x(), d.x()) + epsilon) && \
-					(std::min(c.y(), d.y()) - epsilon) <= y && (y <= std::max(c.y(), d.y()) + epsilon)) {
+			if (minX <= x && x <= maxX && minY <= y && y <= maxY &&
+				(std::min(c.x(), d.x()) - epsilon) <= x && (x <= std::max(c.x(), d.x()) + epsilon) &&
+				(std::min(c.y(), d.y()) - epsilon) <= y && (y <= std::max(c.y(), d.y()) + epsilon)) {
 				return true;
 			}
 		}
@@ -100,8 +96,7 @@ bool Segment::checkForIntersection(QPointF a, QPointF b) const
  * @brief Returns the size of the segment
  * @return The total internal amount of points stored in this segment
  */
-size_t Segment::getSegmentSize() const
-{
+size_t Segment::getSegmentSize() const {
 	return pos.size();
 }
 
@@ -109,8 +104,7 @@ size_t Segment::getSegmentSize() const
  * @brief Removes points from the beginning of the segment
  * @param amount The number of points to remove
  */
-void Segment::popPoints(const size_t amount)
-{
+void Segment::popPoints(const size_t amount) {
 	if (!amount) {
 		return;
 	}
@@ -121,8 +115,7 @@ void Segment::popPoints(const size_t amount)
 /**
  * @brief Removes all points from this segment
  */
-void Segment::clear()
-{
+void Segment::clear() {
 	pos.clear();
 	updateGeometry();
 }
@@ -131,8 +124,7 @@ void Segment::clear()
  * @brief Returns the last position in this segment
  * @return The last position or \c std::nullopt, if no position exists
  */
-std::optional<QPointF> Segment::getFirstPos() const
-{
+std::optional<QPointF> Segment::getFirstPos() const {
 	if (getSegmentSize()) {
 		return pos.front();
 	} else {
@@ -143,8 +135,7 @@ std::optional<QPointF> Segment::getFirstPos() const
 /**
  * @brief Updates the geometry of the geometry node and flags it dirty for the renderer
  */
-void Segment::updateGeometry()
-{
+void Segment::updateGeometry() {
 	geometry.allocate(pos.size());
 	QSGGeometry::Point2D *vertices = geometry.vertexDataAsPoint2D();
 	for (size_t i = 0; i < pos.size(); ++i) {

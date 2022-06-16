@@ -4,16 +4,15 @@
  * @brief Constructs a CommandlineReader object
  * @param parent The parent object
  */
-CommandlineReader::CommandlineReader(QObject *parent) : QObject(parent)
-{
+CommandlineReader::CommandlineReader(QObject *parent)
+	: QObject(parent) {
 }
 
 /**
  * @brief Calls run() asynchronously
  */
-void CommandlineReader::runAsync()
-{
-	auto future = QtConcurrent::run([&](){ this->run(); });
+void CommandlineReader::runAsync() {
+	auto future = QtConcurrent::run([&]() { this->run(); });
 }
 
 /**
@@ -21,8 +20,7 @@ void CommandlineReader::runAsync()
  *
  * This function returns, when the user inputs "/quit" into the terminal.
  */
-void CommandlineReader::run()
-{
+void CommandlineReader::run() {
 	QTextStream stdInput(stdin);
 	QString line;
 	bool cancel = false;
@@ -116,8 +114,7 @@ void CommandlineReader::run()
  * @param l The list to check
  * @return Whether the list passed the test
  */
-bool CommandlineReader::checkList(const std::list<QString>& l)
-{
+bool CommandlineReader::checkList(const std::list<QString> &l) {
 	return !l.empty() && l.cbegin()->size() > 0;
 }
 
@@ -128,8 +125,7 @@ bool CommandlineReader::checkList(const std::list<QString>& l)
  * @param info An info text about the parameter
  * @return Whether the operation was successful
  */
-bool CommandlineReader::takeFloat(float& result, std::list<QString>& l, QString info)
-{
+bool CommandlineReader::takeFloat(float &result, std::list<QString> &l, QString info) {
 	bool ok = false;
 	if (checkList(l)) {
 		QString p = l.front();
@@ -149,8 +145,7 @@ bool CommandlineReader::takeFloat(float& result, std::list<QString>& l, QString 
  * @param info An info text about the parameter
  * @return Whether the operation was successful
  */
-bool CommandlineReader::takeInt(int& result, std::list<QString>& l, QString info)
-{
+bool CommandlineReader::takeInt(int &result, std::list<QString> &l, QString info) {
 	bool ok = false;
 	if (checkList(l)) {
 		QString p = l.front();
@@ -170,8 +165,7 @@ bool CommandlineReader::takeInt(int& result, std::list<QString>& l, QString info
  * @param info An info text about the parameter
  * @return Whether the operation was successful
  */
-bool CommandlineReader::takeString(QString& result, std::list<QString>& l, QString info)
-{
+bool CommandlineReader::takeString(QString &result, std::list<QString> &l, QString info) {
 	bool ok = false;
 	if (checkList(l)) {
 		result = l.front();

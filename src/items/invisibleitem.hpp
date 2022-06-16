@@ -6,8 +6,7 @@
 /**
  * @brief Renders a Curver invisible and makes it immune to collisions
  */
-class InvisibleItem : public Item
-{
+class InvisibleItem : public Item {
 public:
 	InvisibleItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos);
 private:

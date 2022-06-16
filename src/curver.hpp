@@ -1,15 +1,15 @@
 #ifndef QCURVER_H
 #define QCURVER_H
 #include <QQuickItem>
-#include <QSGNode>
 #include <QSGFlatColorMaterial>
+#include <QSGNode>
 #include <QTime>
 
-#include "segment.hpp"
+#include "cleaninstallanimation.hpp"
 #include "explosion.hpp"
 #include "headnode.hpp"
+#include "segment.hpp"
 #include "settings.hpp"
-#include "cleaninstallanimation.hpp"
 
 /**
  * @brief The Curver class represents a player and all the segments belonging to the player
@@ -45,7 +45,7 @@ public:
 	Qt::Key getLeftKey() const;
 	void setRightKey(const Qt::Key key);
 	Qt::Key getRightKey() const;
-	const std::vector<std::unique_ptr<Segment> > &getSegments() const;
+	const std::vector<std::unique_ptr<Segment>> &getSegments() const;
 	QPointF getPos() const;
 	QPointF getDirection() const;
 	float getAngle() const;
@@ -53,8 +53,8 @@ public:
 
 	void processKey(Qt::Key key, bool release = false);
 	void start();
-	void progress(int deltat, std::vector<std::unique_ptr<Curver> > &curvers);
-	bool checkForIntersection(std::vector<std::unique_ptr<Curver> > &curvers, QPointF a, QPointF b) const;
+	void progress(int deltat, std::vector<std::unique_ptr<Curver>> &curvers);
+	bool checkForIntersection(std::vector<std::unique_ptr<Curver>> &curvers, QPointF a, QPointF b) const;
 	void checkForWall();
 	void cleanInstall();
 	void increaseScore();
@@ -142,7 +142,7 @@ private:
 	/**
 	 * @brief The current position
 	 */
-	QPointF lastPos = QPointF(0,0);
+	QPointF lastPos = QPointF(0, 0);
 	/**
 	 * @brief The position before Curver::lastPos
 	 */
@@ -185,6 +185,6 @@ private:
 	CleaninstallAnimation cleaninstallAnimation;
 };
 
-bool operator <(const std::unique_ptr<Curver> &l, const std::unique_ptr<Curver> &r);
+bool operator<(const std::unique_ptr<Curver> &l, const std::unique_ptr<Curver> &r);
 
 #endif // QCURVER_H

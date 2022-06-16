@@ -6,8 +6,7 @@
 /**
  * @brief Decreases the velocity of a Curver
  */
-class SlowItem : public Item
-{
+class SlowItem : public Item {
 public:
 	SlowItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos);
 private:

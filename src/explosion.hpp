@@ -2,10 +2,10 @@
 #define EXPLOSION_H
 
 #include <QObject>
+#include <QPointF>
+#include <QTimer>
 #include <QtQuick>
 #include <memory>
-#include <QTimer>
-#include <QPointF>
 
 #include "util.hpp"
 
@@ -19,8 +19,7 @@
  *
  * This class is used, when a Curver died
  */
-class Explosion : public QObject
-{
+class Explosion : public QObject {
 	Q_OBJECT
 public:
 	explicit Explosion(QPointF location, QSGNode *parentNode, QSGFlatColorMaterial *material, QObject *parent = nullptr, float radius = 1.0);

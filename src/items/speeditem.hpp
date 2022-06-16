@@ -6,8 +6,7 @@
 /**
  * @brief Increases the velocity of a Curver
  */
-class SpeedItem : public Item
-{
+class SpeedItem : public Item {
 public:
 	SpeedItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos);
 private:

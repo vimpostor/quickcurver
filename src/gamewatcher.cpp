@@ -4,12 +4,12 @@
  * @brief Constructs a GameWatcher object and connects all signals of the commandline reader with slots related to the Game.
  * @param parent The parent object
  */
-GameWatcher::GameWatcher(QObject *parent) : QObject(parent)
-{
+GameWatcher::GameWatcher(QObject *parent)
+	: QObject(parent) {
 	connect(&cliReader, &CommandlineReader::addBot, &PlayerModel::getSingleton(), &PlayerModel::appendBot);
 	connect(&cliReader, &CommandlineReader::chat, &game, &Game::sendChatMessage);
 	connect(&cliReader, &CommandlineReader::itemSpawn, &ItemModel::getSingleton(), &ItemModel::setProbability);
-	connect(&cliReader, &CommandlineReader::itemWait, [](int min, int max){ Settings::getSingleton().setItemSpawnIntervalMin(min); Settings::getSingleton().setItemSpawnIntervalMax(max); });
+	connect(&cliReader, &CommandlineReader::itemWait, [](int min, int max) { Settings::getSingleton().setItemSpawnIntervalMin(min); Settings::getSingleton().setItemSpawnIntervalMax(max); });
 	connect(&cliReader, &CommandlineReader::listen, &game, &Game::serverReListen);
 	connect(&cliReader, &CommandlineReader::logicUpdate, &Settings::getSingleton(), &Settings::setUpdatesPerSecond);
 	connect(&cliReader, &CommandlineReader::networkUpdate, &Settings::getSingleton(), &Settings::setNetworkCurverBlock);
@@ -28,16 +28,14 @@ GameWatcher::GameWatcher(QObject *parent) : QObject(parent)
 /**
  * @brief Starts the GameWatcher by parsing the commandline input.
  */
-void GameWatcher::start()
-{
+void GameWatcher::start() {
 	cliReader.runAsync();
 }
 
 /**
  * @brief Quits the whole operation and the program.
  */
-void GameWatcher::quit()
-{
+void GameWatcher::quit() {
 	QCoreApplication::quit();
 }
 
@@ -46,7 +44,6 @@ void GameWatcher::quit()
  * @param username The author of the chat message
  * @param message The message content
  */
-void GameWatcher::printChatMessage(QString username, QString message)
-{
+void GameWatcher::printChatMessage(QString username, QString message) {
 	qInfo() << username << message;
 }

@@ -1,8 +1,8 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 #include <QObject>
-#include <QtNetwork>
 #include <QTimer>
+#include <QtNetwork>
 
 #include "network.hpp"
 
@@ -11,8 +11,7 @@
  *
  * Handles the network communication from the client side
  */
-class Client : public QObject
-{
+class Client : public QObject {
 	Q_OBJECT
 
 	Q_PROPERTY(JoinStatus joinStatus READ getJoinStatus NOTIFY joinStatusChanged)

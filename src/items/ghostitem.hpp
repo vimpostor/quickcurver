@@ -6,8 +6,7 @@
 /**
  * @brief Renders a Curver invisible while still being able to collide
  */
-class GhostItem : public Item
-{
+class GhostItem : public Item {
 public:
 	GhostItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos);
 private:

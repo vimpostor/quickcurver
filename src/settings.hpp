@@ -1,16 +1,15 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include <QPoint>
-#include <QObject>
 #include <QColor>
 #include <QGuiApplication>
+#include <QObject>
+#include <QPoint>
 
 /**
  * @brief This class represents settings that affect the game in any way
  */
-class Settings : public QObject
-{
+class Settings : public QObject {
 	Q_OBJECT
 
 	Q_PROPERTY(int width READ getWidth WRITE setWidth NOTIFY widthChanged)

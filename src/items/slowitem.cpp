@@ -7,8 +7,8 @@
  * @param allowedUsers The allowed users
  * @param pos The location
  */
-SlowItem::SlowItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos) : Item(parentNode, iconName, allowedUsers, pos)
-{
+SlowItem::SlowItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos)
+	: Item(parentNode, iconName, allowedUsers, pos) {
 	activatedTime = 2000;
 }
 
@@ -16,8 +16,7 @@ SlowItem::SlowItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUs
  * @brief Decreases the velocity of the Curver
  * @param curver The affected Curver
  */
-void SlowItem::use(Curver *curver)
-{
+void SlowItem::use(Curver *curver) {
 	curver->velocity /= 2;
 }
 
@@ -25,7 +24,6 @@ void SlowItem::use(Curver *curver)
  * @brief Increases the velocity of the Curver
  * @param curver The affected Curver
  */
-void SlowItem::unUse(Curver *curver)
-{
+void SlowItem::unUse(Curver *curver) {
 	curver->velocity *= 2;
 }

@@ -6,8 +6,8 @@
  * \a parent is used to draw everything onto the GUI window.
  * @param parent The parent to draw on
  */
-Game::Game(QQuickItem *parent) : QQuickItem(parent)
-{
+Game::Game(QQuickItem *parent)
+	: QQuickItem(parent) {
 	/* Create a new root node. No, this does not leak memory, the Qt scene graph automatically deletes this node at the end.
 	 * The scene graph knows this root node from updatePaintNode and will destroy it, when the window closes.
 	 * Do NOT under any circumstances delete this node, or otherwise Qt will try to double free it,
@@ -42,11 +42,10 @@ Game::~Game() {
 /**
  * @brief Starts the game
  */
-void Game::startGame()
-{
+void Game::startGame() {
 	tryStartGame();
 	lastProgressTime = QTime::currentTime();
-	Util::for_each(getCurvers(), [](const std::unique_ptr<Curver> &c){ c->start(); });
+	Util::for_each(getCurvers(), [](const std::unique_ptr<Curver> &c) { c->start(); });
 	itemFactory->resetRound();
 	// 60 FPS = 16 ms interval
 	gameTimer.start(static_cast<int>(1000.f / Settings::getSingleton().getUpdatesPerSecond()));
@@ -59,9 +58,8 @@ void Game::startGame()
  * @param key The key to process
  * @param release Whether the key was pressed or released
  */
-void Game::processKey(Qt::Key key, bool release)
-{
-	Util::for_each(getCurvers(), [&](auto &c){ c->processKey(key, release); });
+void Game::processKey(Qt::Key key, bool release) {
+	Util::for_each(getCurvers(), [&](auto &c) { c->processKey(key, release); });
 	if (getClient()->getJoinStatus() == Client::JoinStatus::JOINED) {
 		client.processKey(key, release);
 	}
@@ -72,8 +70,7 @@ void Game::processKey(Qt::Key key, bool release)
  * @param ip The IP address of the host
  * @param port The port that the host is listening on
  */
-void Game::connectToHost(QString ip, int port)
-{
+void Game::connectToHost(QString ip, int port) {
 	client.connectToHost(ip, port);
 }
 
@@ -83,8 +80,7 @@ void Game::connectToHost(QString ip, int port)
  * If this instance is the Server of a game, the chat message will be broadcasted to all clients.
  * @param msg The message to send
  */
-void Game::sendChatMessage(QString msg)
-{
+void Game::sendChatMessage(QString msg) {
 	if (getClient()->getJoinStatus() == Client::JoinStatus::JOINED) {
 		client.sendChatMessage(msg);
 	} else {
@@ -96,18 +92,16 @@ void Game::sendChatMessage(QString msg)
  * @brief Reconfigures the server to listen on a different port
  * @param port The port to listen on
  */
-void Game::serverReListen(quint16 port)
-{
+void Game::serverReListen(quint16 port) {
 	server.reListen(port);
 }
 
 /**
  * @brief Resets the entire game
  */
-void Game::resetGame()
-{
+void Game::resetGame() {
 	resetRound();
-	Util::for_each(getCurvers(), [](const auto &c){ c->totalScore = 0; });
+	Util::for_each(getCurvers(), [](const auto &c) { c->totalScore = 0; });
 	winnerAnnounced = false;
 	PlayerModel::getSingleton().forceRefresh();
 }
@@ -116,8 +110,7 @@ void Game::resetGame()
  * @brief Returns the Client belonging to this Game
  * @return The Client
  */
-Client*Game::getClient()
-{
+Client *Game::getClient() {
 	return &client;
 }
 
@@ -125,8 +118,7 @@ Client*Game::getClient()
  * @brief Called by the scene graph. This is called before the screen is redrawn.
  * @return Always return Game::rootNode
  */
-QSGNode *Game::updatePaintNode(QSGNode *, QQuickItem::UpdatePaintNodeData *)
-{
+QSGNode *Game::updatePaintNode(QSGNode *, QQuickItem::UpdatePaintNodeData *) {
 	// TODO: Actually do our rendering only during update
 	// Right now we can't use the threaded render loop because we update nodes from everywhere
 	return rootNode;
@@ -135,8 +127,7 @@ QSGNode *Game::updatePaintNode(QSGNode *, QQuickItem::UpdatePaintNodeData *)
 /**
  * @brief Updates the game's logic respecting how much time actually passed by
  */
-void Game::progress()
-{
+void Game::progress() {
 	int deltat = Util::getTimeDiff(lastProgressTime);
 	lastProgressTime = QTime::currentTime();
 	for (auto &c : getCurvers()) {
@@ -159,9 +150,8 @@ void Game::progress()
  *
  * This method taskes care of the score board and checks if a new round is due.
  */
-void Game::curverDied()
-{
-	Util::for_each(getCurvers(), [](const auto &c){ if (c->isAlive()) c->increaseScore(); });
+void Game::curverDied() {
+	Util::for_each(getCurvers(), [](const auto &c) { if (c->isAlive()) c->increaseScore(); });
 	auto maxScorer = Util::max_element(getCurvers());
 	if ((*maxScorer)->totalScore >= Settings::getSingleton().getTargetScore() && !winnerAnnounced) {
 		// we have a winner
@@ -169,7 +159,7 @@ void Game::curverDied()
 		server.broadcastChatMessage((*maxScorer)->userName + " won!");
 	}
 	// check if only one player is remaining
-	if (Util::count_if(getCurvers(), [](const auto &c){ return c->isAlive(); }) == 1) {
+	if (Util::count_if(getCurvers(), [](const auto &c) { return c->isAlive(); }) == 1) {
 		resetRoundTimer.singleShot(Settings::getSingleton().getRoundTimeOut(), this, &Game::resetRound);
 	}
 }
@@ -177,10 +167,9 @@ void Game::curverDied()
 /**
  * @brief Resets the round
  */
-void Game::resetRound()
-{
+void Game::resetRound() {
 	itemFactory->resetRound();
-	Util::for_each(getCurvers(), [](const auto &c){ c->resetRound(); });
+	Util::for_each(getCurvers(), [](const auto &c) { c->resetRound(); });
 	server.resetRound();
 }
 
@@ -189,8 +178,7 @@ void Game::resetRound()
  *
  * This method does nothing, if the game already started.
  */
-void Game::tryStartGame()
-{
+void Game::tryStartGame() {
 	if (!started) {
 		started = true;
 		emit gameStarted();
@@ -201,7 +189,6 @@ void Game::tryStartGame()
  * @brief A helper method to get a vector of all curvers
  * @return A vector containing all curvers
  */
-std::vector<std::unique_ptr<Curver> > &Game::getCurvers()
-{
+std::vector<std::unique_ptr<Curver>> &Game::getCurvers() {
 	return PlayerModel::getSingleton().getCurvers();
 }

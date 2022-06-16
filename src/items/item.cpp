@@ -1,7 +1,7 @@
 #include "item.hpp"
 
-#include <QSvgRenderer>
 #include <QPainter>
+#include <QSvgRenderer>
 
 #define SIZE 12
 #define FADEDURATION 256
@@ -13,8 +13,7 @@
  * @param allowedUsers The allowed users for this Item
  * @param pos The location of this Item
  */
-Item::Item(QSGNode *parentNode, QString iconPath, AllowedUsers allowedUsers, QPointF pos)
-{
+Item::Item(QSGNode *parentNode, QString iconPath, AllowedUsers allowedUsers, QPointF pos) {
 	this->parentNode = parentNode;
 	this->iconPath = iconPath;
 	this->allowedUsers = allowedUsers;
@@ -36,8 +35,7 @@ Item::Item(QSGNode *parentNode, QString iconPath, AllowedUsers allowedUsers, QPo
 /**
  * @brief Renders the Item inactive
  */
-void Item::defuse()
-{
+void Item::defuse() {
 	if (active) {
 		unUseTimer.stop();
 		deactivate();
@@ -48,8 +46,7 @@ void Item::defuse()
  * @brief Triggers the Item
  * @param collector The collecting Curver
  */
-void Item::trigger(std::unique_ptr<Curver> &collector)
-{
+void Item::trigger(std::unique_ptr<Curver> &collector) {
 	this->collector = collector.get();
 
 	applyToAffected(&Item::use);
@@ -64,21 +61,20 @@ void Item::trigger(std::unique_ptr<Curver> &collector)
 /**
  * @brief Fades the Item in or out according to how much time passed by
  */
-void Item::fade()
-{
+void Item::fade() {
 	float actualDuration = fadeStart.msecsTo(QTime::currentTime());
 	float factor = !fadeIn + (fadeIn - !fadeIn) * actualDuration / FADEDURATION;
 	factor = qMin(1.f, qMax(0.f, factor)); // 0 <= factor <= 1
 	QSGGeometry::TexturedPoint2D *vertices = geometry.vertexDataAsTexturedPoint2D();
-	vertices[0].set(this->pos.x() - SIZE*factor, this->pos.y() - SIZE*factor, 0, 0);
-	vertices[1].set(this->pos.x() + SIZE*factor, this->pos.y() - SIZE*factor, 1, 0);
-	vertices[2].set(this->pos.x() - SIZE*factor, this->pos.y() + SIZE*factor, 0, 1);
-	vertices[3].set(this->pos.x() + SIZE*factor, this->pos.y() + SIZE*factor, 1, 1);
+	vertices[0].set(this->pos.x() - SIZE * factor, this->pos.y() - SIZE * factor, 0, 0);
+	vertices[1].set(this->pos.x() + SIZE * factor, this->pos.y() - SIZE * factor, 1, 0);
+	vertices[2].set(this->pos.x() - SIZE * factor, this->pos.y() + SIZE * factor, 0, 1);
+	vertices[3].set(this->pos.x() + SIZE * factor, this->pos.y() + SIZE * factor, 1, 1);
 	geoNode.markDirty(QSGNode::DirtyGeometry);
 	if (actualDuration > FADEDURATION) {
 		fadeTimer.stop();
 		if (!fadeIn && activatedTime == 0) {
-//			parentNode->removeChildNode(&geoNode);
+			// parentNode->removeChildNode(&geoNode);
 		}
 	}
 }
@@ -88,18 +84,16 @@ void Item::fade()
  *
  * Calls Item::unUse() on all affected Curver instances
  */
-void Item::deactivate()
-{
+void Item::deactivate() {
 	active = false;
 	applyToAffected(&Item::unUse);
-//	parentNode->removeChildNode(&geoNode);
+	// parentNode->removeChildNode(&geoNode);
 }
 
 /**
  * @brief The immediate effect when the Item is triggered
  */
-void Item::use(Curver *)
-{
+void Item::use(Curver *) {
 }
 
 /**
@@ -107,16 +101,14 @@ void Item::use(Curver *)
  *
  * This is triggered, when the Item effect should be deactived again.
  */
-void Item::unUse(Curver *)
-{
+void Item::unUse(Curver *) {
 }
 
 /**
  * @brief Returns the color of the Item
  * @return The color
  */
-QColor Item::getColor() const
-{
+QColor Item::getColor() const {
 	switch (allowedUsers) {
 	case AllowedUsers::ALLOW_ALL:
 		return Util::getColor("Blue");
@@ -130,14 +122,13 @@ QColor Item::getColor() const
 /**
  * @brief Initializes the texture of the Item
  */
-void Item::initTexture()
-{
+void Item::initTexture() {
 	if (Settings::getSingleton().getOffscreen()) {
 		return;
 	}
 	QSvgRenderer renderer(iconPath);
 	const auto size = renderer.defaultSize();
-	QImage img = QImage(std::max(SIZE*2, size.width()), std::max(SIZE*2, size.height()), QImage::Format_RGB32);
+	QImage img = QImage(std::max(SIZE * 2, size.width()), std::max(SIZE * 2, size.height()), QImage::Format_RGB32);
 	img.fill(color); // fill with background color
 	QPainter painter(&img);
 	renderer.render(&painter); // paint the icon on top of it
@@ -150,8 +141,7 @@ void Item::initTexture()
  * @param p The point to check for
  * @return \c True, iif \a p is in range
  */
-bool Item::isInRange(QPointF p) const
-{
+bool Item::isInRange(QPointF p) const {
 	QPointF diff = p - pos;
 	if (qAbs(diff.x()) < SIZE && qAbs(diff.y()) < SIZE) {
 		return true;
@@ -163,8 +153,7 @@ bool Item::isInRange(QPointF p) const
  * @brief Starts a visual fade of the Item
  * @param in Whether to fade in or out
  */
-void Item::startFade(bool in)
-{
+void Item::startFade(bool in) {
 	fadeStart = QTime::currentTime();
 	fadeIn = in;
 	fadeTimer.start(16);
@@ -175,14 +164,13 @@ void Item::startFade(bool in)
  *
  * This can be the Item::use() or Item::unUse() routine.
  */
-void Item::applyToAffected(void (Item::*method)(Curver *))
-{
+void Item::applyToAffected(void (Item::*method)(Curver *)) {
 	switch (allowedUsers) {
 	case AllowedUsers::ALLOW_ALL:
-		Util::for_each(PlayerModel::getSingleton().getCurvers(), [&](auto &curver){ (this->*method)(curver.get()); });
+		Util::for_each(PlayerModel::getSingleton().getCurvers(), [&](auto &curver) { (this->*method)(curver.get()); });
 		break;
 	case AllowedUsers::ALLOW_OTHERS:
-		Util::for_each(PlayerModel::getSingleton().getCurvers(), [&](auto &curver){ if (curver.get() != this->collector) (this->*method)(curver.get()); });
+		Util::for_each(PlayerModel::getSingleton().getCurvers(), [&](auto &curver) { if (curver.get() != this->collector) (this->*method)(curver.get()); });
 		break;
 	case AllowedUsers::ALLOW_COLLECTOR:
 		(this->*method)(collector);

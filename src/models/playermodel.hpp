@@ -2,9 +2,9 @@
 #define PLAYERMODEL_H
 
 #include <QAbstractListModel>
-#include <vector>
 #include <QHash>
 #include <QSGNode>
+#include <vector>
 
 #include "curver.hpp"
 #include "gui.hpp"
@@ -12,8 +12,7 @@
 /**
  * @brief A model containing all players
  */
-class PlayerModel : public QAbstractListModel
-{
+class PlayerModel : public QAbstractListModel {
 	Q_OBJECT
 public:
 	explicit PlayerModel(QObject *parent = NULL);

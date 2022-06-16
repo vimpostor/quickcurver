@@ -5,8 +5,8 @@
  * @param parentNode The parent node in the scene graph
  * @param material The material to use for this node
  */
-HeadNode::HeadNode(QSGNode *parentNode, QSGFlatColorMaterial *material) : QSGGeometryNode ()
-{
+HeadNode::HeadNode(QSGNode *parentNode, QSGFlatColorMaterial *material)
+	: QSGGeometryNode() {
 	this->parentNode = parentNode;
 
 	// TODO: Use something else, this does not work with all graphic APIs
@@ -18,8 +18,7 @@ HeadNode::HeadNode(QSGNode *parentNode, QSGFlatColorMaterial *material) : QSGGeo
 	parentNode->appendChildNode(this);
 }
 
-HeadNode::~HeadNode()
-{
+HeadNode::~HeadNode() {
 	parentNode->removeChildNode(this);
 }
 
@@ -27,8 +26,7 @@ HeadNode::~HeadNode()
  * @brief Updates the location
  * @param newPos The new location
  */
-void HeadNode::setPosition(const QPointF newPos)
-{
+void HeadNode::setPosition(const QPointF newPos) {
 	this->pos = newPos;
 	QSGGeometry::Point2D *vertices = geometry.vertexDataAsPoint2D();
 	vertices[0].set(pos.x(), pos.y());

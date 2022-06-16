@@ -1,16 +1,15 @@
 #ifndef COMMANDLINEREADER_H
 #define COMMANDLINEREADER_H
 
+#include <QDebug>
 #include <QObject>
 #include <QTextStream>
-#include <QDebug>
 #include <QtConcurrent/QtConcurrent>
 
 /**
  * @brief This class is able to read from the command line in an asynchronous way
  */
-class CommandlineReader : public QObject
-{
+class CommandlineReader : public QObject {
 	Q_OBJECT
 public:
 	explicit CommandlineReader(QObject *parent = nullptr);
@@ -88,10 +87,10 @@ signals:
 	 */
 	void targetScore(int targetScore);
 private:
-	bool checkList(const std::list<QString>& l);
-	bool takeFloat(float& result, std::list<QString>& l, QString info);
-	bool takeInt(int& result, std::list<QString>& l, QString info);
-	bool takeString(QString& result, std::list<QString>& l, QString info);
+	bool checkList(const std::list<QString> &l);
+	bool takeFloat(float &result, std::list<QString> &l, QString info);
+	bool takeInt(int &result, std::list<QString> &l, QString info);
+	bool takeString(QString &result, std::list<QString> &l, QString info);
 };
 
 #endif // COMMANDLINEREADER_H

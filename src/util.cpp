@@ -1,14 +1,13 @@
 #include "util.hpp"
 
-#include <math.h>
 #include <QRandomGenerator>
+#include <math.h>
 
 /**
  * @brief Returns a random number between 0 and 1
  * @return A random number between 0 and 1
  */
-double Util::rand()
-{
+double Util::rand() {
 	return QRandomGenerator::global()->generateDouble();
 }
 
@@ -16,8 +15,7 @@ double Util::rand()
  * @brief Returns a random QPointF with values between 0 and 1 each
  * @return A random QPointF
  */
-QPointF Util::randQPointF()
-{
+QPointF Util::randQPointF() {
 	return QPointF(rand(), rand());
 }
 
@@ -27,8 +25,7 @@ QPointF Util::randQPointF()
  * @param upper Upper boundary
  * @return A random integer in the given range
  */
-int Util::randInt(const int lower, const int upper)
-{
+int Util::randInt(const int lower, const int upper) {
 	return lower + rand() * (upper - lower);
 }
 
@@ -36,8 +33,7 @@ int Util::randInt(const int lower, const int upper)
  * @brief Returns a random Material design color
  * @return A random color
  */
-QColor Util::randColor()
-{
+QColor Util::randColor() {
 	auto it = colors.begin();
 	std::advance(it, randInt(0, static_cast<int>(colors.size()) - 1));
 	return it->second;
@@ -48,8 +44,7 @@ QColor Util::randColor()
  * @param color The color to look up
  * @return The Material design color
  */
-const QColor Util::getColor(const QString color)
-{
+const QColor Util::getColor(const QString color) {
 	return colors.find(color)->second;
 }
 
@@ -60,8 +55,7 @@ const QColor Util::getColor(const QString color)
  * @param icon The icon name to expand
  * @return The expanded icon name, that is ready to use from the Qt resource system
  */
-QString Util::expandIconName(const QString icon)
-{
+QString Util::expandIconName(const QString icon) {
 	return QStringLiteral(":/%1").arg(icon);
 }
 
@@ -71,8 +65,7 @@ QString Util::expandIconName(const QString icon)
  * @param pos The position of the bit
  * @return The extracted bit
  */
-bool Util::getBit(const uint8_t byte, const int pos)
-{
+bool Util::getBit(const uint8_t byte, const int pos) {
 	return (byte >> pos) % 2;
 }
 
@@ -82,8 +75,7 @@ bool Util::getBit(const uint8_t byte, const int pos)
  * @param pos The position of the bit
  * @param value The new value of the bit
  */
-void Util::setBit(uint8_t& byte, const int pos, bool value)
-{
+void Util::setBit(uint8_t &byte, const int pos, bool value) {
 	byte |= value << pos;
 }
 
@@ -91,8 +83,7 @@ void Util::setBit(uint8_t& byte, const int pos, bool value)
  * @brief Returns a helper object with the intent of generating textures from SVG files
  * @return The texture generator
  */
-QQuickView* Util::getTextureGenerator()
-{
+QQuickView *Util::getTextureGenerator() {
 	static std::unique_ptr<QQuickView> result;
 	if (!result) {
 		result = std::make_unique<QQuickView>();
@@ -105,8 +96,7 @@ QQuickView* Util::getTextureGenerator()
  * @param t The time to calculate the difference from
  * @return The resulting difference in milliseconds
  */
-qint64 Util::getTimeDiff(const QTime& t)
-{
+qint64 Util::getTimeDiff(const QTime &t) {
 	return t.msecsTo(QTime::currentTime());
 }
 
@@ -115,7 +105,6 @@ qint64 Util::getTimeDiff(const QTime& t)
  * @param a The value to interpolate
  * @return The interpolated value
  */
-float Util::easeInOutSine(const float& a)
-{
+float Util::easeInOutSine(const float &a) {
 	return 0.5 * (1 - std::cos(M_PI * a));
 }

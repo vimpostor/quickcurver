@@ -2,10 +2,10 @@
 #define SEGMENT_H
 
 #include <QQuickItem>
-#include <QSGNode>
 #include <QSGFlatColorMaterial>
-#include <memory>
+#include <QSGNode>
 #include <QtMath>
+#include <memory>
 #include <optional>
 
 /**
@@ -13,8 +13,7 @@
  *
  * Every Curver consists of multiple Segment lines. This class represents a single instance of such a line.
  */
-class Segment : public QObject
-{
+class Segment : public QObject {
 	Q_OBJECT
 public:
 	explicit Segment(QSGNode *parentNode, QSGFlatColorMaterial *material, const float thickness);

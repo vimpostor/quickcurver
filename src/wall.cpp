@@ -2,8 +2,7 @@
 
 #define WALL_SIZE 4
 
-Wall::Wall()
-{
+Wall::Wall() {
 	geometry.setLineWidth(WALL_SIZE);
 	geometry.setDrawingMode(QSGGeometry::DrawLineStrip);
 	geoNode.setGeometry(&geometry);
@@ -19,16 +18,14 @@ Wall::Wall()
  * @brief Sets the parent node in the scene graph
  * @param parentNode The new parent node
  */
-void Wall::setParentNode(QSGNode *parentNode)
-{
+void Wall::setParentNode(QSGNode *parentNode) {
 	parentNode->appendChildNode(&geoNode);
 }
 
 /**
  * @brief Updates the dimension of the game
  */
-void Wall::updateDimension()
-{
+void Wall::updateDimension() {
 	this->dimension = Settings::getSingleton().getDimension();
 	resize();
 }
@@ -36,8 +33,7 @@ void Wall::updateDimension()
 /**
  * @brief Resizes the Wall according to the game's dimension
  */
-void Wall::resize()
-{
+void Wall::resize() {
 	QSGGeometry::Point2D *vertices = geometry.vertexDataAsPoint2D();
 	vertices[0].set(0, 0);
 	vertices[1].set(dimension.x(), 0);

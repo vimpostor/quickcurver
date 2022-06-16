@@ -9,16 +9,15 @@
  * @param allowedUsers The allowed users
  * @param pos The location
  */
-FlashItem::FlashItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos) : Item(parentNode, iconName, allowedUsers, pos)
-{
+FlashItem::FlashItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos)
+	: Item(parentNode, iconName, allowedUsers, pos) {
 }
 
 /**
  * @brief Flashes the given Curver forward a bit
  * @param curver The Curver to flash
  */
-void FlashItem::use(Curver *curver)
-{
+void FlashItem::use(Curver *curver) {
 	curver->prepareSegmentEvent(true, RECOVER_TIME, RECOVER_TIME);
 	Curver::Rotation backup = curver->rotation;
 	curver->rotation = Curver::Rotation::ROTATE_NONE;

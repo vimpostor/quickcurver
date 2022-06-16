@@ -3,8 +3,8 @@
 #include "mumble.hpp"
 
 #include <QDebug>
-#include <unistd.h>
 #include <stdio.h>
+#include <unistd.h>
 #include <wchar.h>
 
 #define IDLE_INTERVAL 512
@@ -12,8 +12,7 @@
 /**
  * @brief Constructs a Mumble Api instance
  */
-Mumble::Api::Api()
-{
+Mumble::Api::Api() {
 	connect(&idleTimer, &QTimer::timeout, this, &Mumble::Api::increaseTick);
 	idleTimer.setInterval(IDLE_INTERVAL);
 }
@@ -22,8 +21,7 @@ Mumble::Api::Api()
  * @brief Returns a singleton Mumble Api instance
  * @return The singleton instance
  */
-Mumble::Api* Mumble::Api::get()
-{
+Mumble::Api *Mumble::Api::get() {
 	static Api result;
 	return &result;
 }
@@ -31,8 +29,7 @@ Mumble::Api* Mumble::Api::get()
 /**
  * @brief Tries to connect to Mumble and to retreive a handle
  */
-void Mumble::Api::initialize()
-{
+void Mumble::Api::initialize() {
 	initializeHandle();
 	if (lm) {
 		if (lm->uiVersion != 2) {
@@ -50,8 +47,7 @@ void Mumble::Api::initialize()
  * @param identity The identity of the player
  * @param context The context of the player
  */
-void Mumble::Api::setGeneralInfo(QString identity, QString context)
-{
+void Mumble::Api::setGeneralInfo(QString identity, QString context) {
 	if (!lm) {
 		return;
 	}
@@ -76,8 +72,7 @@ void Mumble::Api::setGeneralInfo(QString identity, QString context)
  * @brief Propagates the position to Mumble
  * @param pos The position of the player
  */
-void Mumble::Api::updatePosition(const QPointF pos)
-{
+void Mumble::Api::updatePosition(const QPointF pos) {
 	if (!lm) {
 		return;
 	}
@@ -92,8 +87,7 @@ void Mumble::Api::updatePosition(const QPointF pos)
 /**
  * @brief Increases the tick in a thread-safe manner
  */
-void Mumble::Api::increaseTick()
-{
+void Mumble::Api::increaseTick() {
 	tickLock.lock();
 	lm->uiTick++;
 	tickLock.unlock();
@@ -104,8 +98,7 @@ void Mumble::Api::increaseTick()
  *
  * If initialization failed, \a lm will be \c nullptr
  */
-void Mumble::Api::initializeHandle()
-{
+void Mumble::Api::initializeHandle() {
 #ifdef _WIN32
 	HANDLE hMapObject = OpenFileMappingW(FILE_MAP_ALL_ACCESS, FALSE, L"MumbleLink");
 	if (hMapObject == nullptr)
@@ -127,9 +120,9 @@ void Mumble::Api::initializeHandle()
 		return;
 	}
 
-	lm = static_cast<LinkedMem*>((mmap(nullptr, sizeof(struct LinkedMem), PROT_READ | PROT_WRITE, MAP_SHARED, shmfd,0)));
+	lm = static_cast<LinkedMem *>((mmap(nullptr, sizeof(struct LinkedMem), PROT_READ | PROT_WRITE, MAP_SHARED, shmfd, 0)));
 
-	if (lm == (void *)(-1)) {
+	if (lm == (void *) (-1)) {
 		lm = nullptr;
 		return;
 	}

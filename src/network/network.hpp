@@ -4,18 +4,17 @@
 #include <QString>
 #include <QtNetwork>
 
-#include "gui.hpp"
 #include "curver.hpp"
-#include "models/playermodel.hpp"
-#include "models/chatmodel.hpp"
-#include "util.hpp"
+#include "gui.hpp"
 #include "items/item.hpp"
+#include "models/chatmodel.hpp"
+#include "models/playermodel.hpp"
+#include "util.hpp"
 
 /**
  * @brief A wrapper for host address plus port.
  */
-struct FullNetworkAddress
-{
+struct FullNetworkAddress {
 	/**
 	 * @brief The address of the remote host
 	 */
@@ -26,7 +25,7 @@ struct FullNetworkAddress
 	quint16 port;
 };
 
-bool operator==(const FullNetworkAddress& l, const FullNetworkAddress& r);
+bool operator==(const FullNetworkAddress &l, const FullNetworkAddress &r);
 
 /**
  * @brief An enumeration representing the instance type.
@@ -76,8 +75,7 @@ enum class ClientTypes : PacketType {
  *
  * Contains all common packet members and their serialization patterns
  */
-class AbstractPacket
-{
+class AbstractPacket {
 public:
 	explicit AbstractPacket(PacketType type);
 	virtual ~AbstractPacket();
@@ -112,8 +110,7 @@ protected:
 /**
  * @brief A packet that represents a chat message coming from a Server
  */
-class ServerChatMsg : public AbstractPacket
-{
+class ServerChatMsg : public AbstractPacket {
 public:
 	ServerChatMsg();
 	/**
@@ -132,8 +129,7 @@ protected:
 /**
  * @brief A packet that represents a chat message coming from a Client
  */
-class ClientChatMsg : public AbstractPacket
-{
+class ClientChatMsg : public AbstractPacket {
 public:
 	ClientChatMsg();
 	/**
@@ -148,8 +144,7 @@ protected:
 /**
  * @brief A struct containing all Player data that is necessary to send over the network
  */
-struct Player
-{
+struct Player {
 	/**
 	 * @brief The username
 	 */
@@ -176,14 +171,13 @@ struct Player
 	bool isAlive;
 };
 
-QDataStream &operator <<(QDataStream &out, const Player &p);
-QDataStream &operator >>(QDataStream &in, Player &p);
+QDataStream &operator<<(QDataStream &out, const Player &p);
+QDataStream &operator>>(QDataStream &in, Player &p);
 
 /**
  * @brief A packet that represents a PlayerModel change coming from a Server
  */
-class ServerPlayerModel : public AbstractPacket
-{
+class ServerPlayerModel : public AbstractPacket {
 public:
 	ServerPlayerModel();
 	void fill();
@@ -200,8 +194,7 @@ protected:
 /**
  * @brief A packet that represents a PlayerModel change coming from a Client
  */
-class ClientPlayerModel : public AbstractPacket
-{
+class ClientPlayerModel : public AbstractPacket {
 public:
 	ClientPlayerModel();
 	/**
@@ -220,8 +213,7 @@ protected:
 /**
  * @brief A packet that represents a Curver data post from the Server
  */
-class ServerCurverData : public AbstractPacket
-{
+class ServerCurverData : public AbstractPacket {
 public:
 	ServerCurverData();
 	void fill();
@@ -242,8 +234,7 @@ protected:
 /**
  * @brief A packet that represents a Curver rotation change coming from the Client
  */
-class ClientCurverRotation : public AbstractPacket
-{
+class ClientCurverRotation : public AbstractPacket {
 public:
 	ClientCurverRotation();
 	/**
@@ -258,8 +249,7 @@ protected:
 /**
  * @brief A packet that represents an Item event coming from a Server
  */
-class ServerItemData : public AbstractPacket
-{
+class ServerItemData : public AbstractPacket {
 public:
 	ServerItemData();
 	/**
@@ -294,8 +284,7 @@ protected:
 /**
  * @brief A packet representing a Ping from a client
  */
-class Ping : public AbstractPacket
-{
+class Ping : public AbstractPacket {
 public:
 	Ping();
 	/**
@@ -310,8 +299,7 @@ protected:
 /**
  * @brief A packet that represents game settings
  */
-class ServerSettingsData : public AbstractPacket
-{
+class ServerSettingsData : public AbstractPacket {
 public:
 	ServerSettingsData();
 	void fill();
@@ -328,8 +316,7 @@ protected:
 /**
  * @brief A packet that is an answer to Ping
  */
-class Pong : public AbstractPacket
-{
+class Pong : public AbstractPacket {
 public:
 	Pong();
 	/**

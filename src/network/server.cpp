@@ -1,7 +1,6 @@
 #include "server.hpp"
 
-Server::Server()
-{
+Server::Server() {
 	connect(&tcpServer, &QTcpServer::acceptError, this, &Server::acceptError);
 	connect(&tcpServer, &QTcpServer::newConnection, this, &Server::newConnection);
 	connect(&Settings::getSingleton(), &Settings::dimensionChanged, this, &Server::broadcastSettings);
@@ -10,16 +9,14 @@ Server::Server()
 	reListen(0);
 }
 
-Server::~Server()
-{
+Server::~Server() {
 	clients.clear();
 }
 
 /**
  * @brief Broadcasts new Curver data to every Client
  */
-void Server::broadcastCurverData()
-{
+void Server::broadcastCurverData() {
 	if (++dataBroadcastIteration % Settings::getSingleton().getNetworkCurverBlock() == 0) {
 		Packet::ServerCurverData p;
 		p.fill();
@@ -36,8 +33,7 @@ void Server::broadcastCurverData()
  * @param username The author of the message
  * @param message The chat message
  */
-void Server::broadcastChatMessage(QString username, QString message)
-{
+void Server::broadcastChatMessage(QString username, QString message) {
 	Packet::ServerChatMsg p;
 	p.username = username;
 	p.message = message;
@@ -49,16 +45,14 @@ void Server::broadcastChatMessage(QString username, QString message)
  * @brief Broadcasts an admin chat message to every Client
  * @param msg The chat message to broadcast
  */
-void Server::broadcastChatMessage(QString msg)
-{
+void Server::broadcastChatMessage(QString msg) {
 	broadcastChatMessage(ADMIN_NAME, msg);
 }
 
 /**
  * @brief Broadcasts the game settings to every Client
  */
-void Server::broadcastSettings()
-{
+void Server::broadcastSettings() {
 	Packet::ServerSettingsData p;
 	p.fill();
 	broadcastPacket(p);
@@ -67,8 +61,7 @@ void Server::broadcastSettings()
 /**
  * @brief Resets the current round
  */
-void Server::resetRound()
-{
+void Server::resetRound() {
 	resetDue = true;
 }
 
@@ -76,8 +69,7 @@ void Server::resetRound()
  * @brief Reconfigures the Server to listen on another port
  * @param port The new port to listen on
  */
-void Server::reListen(quint16 port)
-{
+void Server::reListen(quint16 port) {
 	tcpServer.close();
 	tcpServer.listen(QHostAddress::Any, port);
 	udpSocket.close();
@@ -88,8 +80,7 @@ void Server::reListen(quint16 port)
 /**
  * @brief Broadcasts the PlayerModel to every Client
  */
-void Server::broadcastPlayerModel()
-{
+void Server::broadcastPlayerModel() {
 	Packet::ServerPlayerModel p;
 	p.fill();
 	broadcastPacket(p);
@@ -104,8 +95,7 @@ void Server::broadcastPlayerModel()
  * @param allowedUsers The allowed users for the Item
  * @param collectorIndex If \a spawned is \c false, this value defines which Curver collected the Item
  */
-void Server::broadcastItemData(bool spawned, unsigned int sequenceNumber, int which, QPointF pos, Item::AllowedUsers allowedUsers, int collectorIndex)
-{
+void Server::broadcastItemData(bool spawned, unsigned int sequenceNumber, int which, QPointF pos, Item::AllowedUsers allowedUsers, int collectorIndex) {
 	Packet::ServerItemData p;
 	p.spawned = spawned;
 	p.sequenceNumber = sequenceNumber;
@@ -119,16 +109,14 @@ void Server::broadcastItemData(bool spawned, unsigned int sequenceNumber, int wh
 /**
  * @brief This function is called, when an error occurred during accepting an incoming connection
  */
-void Server::acceptError(QAbstractSocket::SocketError)
-{
+void Server::acceptError(QAbstractSocket::SocketError) {
 	Gui::getSingleton().postInfoBar(tcpServer.errorString());
 }
 
 /**
  * @brief This function is called when there is a new connection pending
  */
-void Server::newConnection()
-{
+void Server::newConnection() {
 	QTcpSocket *s = tcpServer.nextPendingConnection();
 	// socket must not be NULL
 	if (s) {
@@ -146,8 +134,7 @@ void Server::newConnection()
 /**
  * @brief This function is called, when there was a socket error
  */
-void Server::socketError(QAbstractSocket::SocketError)
-{
+void Server::socketError(QAbstractSocket::SocketError) {
 	QTcpSocket *s = static_cast<QTcpSocket *>(sender());
 	Gui::getSingleton().postInfoBar(s->errorString());
 	removePlayer(s);
@@ -156,8 +143,7 @@ void Server::socketError(QAbstractSocket::SocketError)
 /**
  * @brief This function is called, when a socket disconnected
  */
-void Server::socketDisconnect()
-{
+void Server::socketDisconnect() {
 	QTcpSocket *s = static_cast<QTcpSocket *>(sender());
 	removePlayer(s);
 }
@@ -165,8 +151,7 @@ void Server::socketDisconnect()
 /**
  * @brief This function is called, when there is data available to read from a socket
  */
-void Server::socketReadyRead()
-{
+void Server::socketReadyRead() {
 	QTcpSocket *s = static_cast<QTcpSocket *>(sender());
 	QDataStream in(s);
 	bool illformedPacket = false;
@@ -185,16 +170,14 @@ void Server::socketReadyRead()
 /**
  * @brief Handles an UDP socket error
  */
-void Server::udpSocketError(QAbstractSocket::SocketError)
-{
+void Server::udpSocketError(QAbstractSocket::SocketError) {
 	qDebug() << udpSocket.errorString();
 }
 
 /**
  * @brief Handles incoming UDP packets
  */
-void Server::udpSocketReadyRead()
-{
+void Server::udpSocketReadyRead() {
 	while (udpSocket.hasPendingDatagrams()) {
 		// get datagram
 		QByteArray datagram;
@@ -222,15 +205,14 @@ void Server::udpSocketReadyRead()
  * @brief Removes a player permanently
  * @param s The socket that defines the Curver to remove
  */
-void Server::removePlayer(const QTcpSocket *s)
-{
+void Server::removePlayer(const QTcpSocket *s) {
 	// TODO: Reconsider, whether Server should remove the Curver from the player model as well
 	// TODO: Actually delete something here: Note, deleting here results in a segfault, because after this method was called in socketError()
 	// or in socketDisconnect(), the TcpSocket seems to be still in use until after those methods are completely finished.
 
-//	auto it = Util::find_if(clients, [=](const auto &c){ return c.first.get() == s; });
-//	if (it != clients.end()) {
-//		clients.erase(it);
+	//	auto it = Util::find_if(clients, [=](const auto &c){ return c.first.get() == s; });
+	//	if (it != clients.end()) {
+	//		clients.erase(it);
 	//	}
 	broadcastChatMessage(s->peerAddress().toString() + " left the game");
 }
@@ -241,9 +223,8 @@ void Server::removePlayer(const QTcpSocket *s)
  * @param s The socket that the packet was received with
  * @param sender The sender of the packet, if sent via UDP
  */
-void Server::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p, const QTcpSocket *s, FullNetworkAddress sender)
-{
-	Curver* curver = nullptr;
+void Server::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p, const QTcpSocket *s, FullNetworkAddress sender) {
+	Curver *curver = nullptr;
 	if (s != nullptr) {
 		curver = curverFromSocket(s);
 	}
@@ -261,36 +242,36 @@ void Server::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p, const QTcp
 	// TODO: Deal with flags
 	switch (packetType) {
 	case Packet::ClientTypes::Chat_Message:
-	{
-		QString msg = ((Packet::ClientChatMsg *)p.get())->message;
-		broadcastChatMessage(curver->userName, msg);
-		break;
-	}
-	case Packet::ClientTypes::PlayerModelEdit:
-	{
-		auto *playerData = (Packet::ClientPlayerModel *)p.get();
-		curver->userName = playerData->username;
-		curver->setColor(playerData->color);
-		PlayerModel::getSingleton().forceRefresh();
-		break;
-	}
-	case Packet::ClientTypes::CurverRotation:
-	{
-		if (curver) {
-			curver->rotation = ((Packet::ClientCurverRotation *)p.get())->rotation;
+		{
+			QString msg = ((Packet::ClientChatMsg *) p.get())->message;
+			broadcastChatMessage(curver->userName, msg);
+			break;
 		}
-		break;
-	}
+	case Packet::ClientTypes::PlayerModelEdit:
+		{
+			auto *playerData = (Packet::ClientPlayerModel *) p.get();
+			curver->userName = playerData->username;
+			curver->setColor(playerData->color);
+			PlayerModel::getSingleton().forceRefresh();
+			break;
+		}
+	case Packet::ClientTypes::CurverRotation:
+		{
+			if (curver) {
+				curver->rotation = ((Packet::ClientCurverRotation *) p.get())->rotation;
+			}
+			break;
+		}
 	case Packet::ClientTypes::Ping:
-	{
-		auto* pingPacket = (Packet::Ping *)p.get();
-		// respond with pong
-		Packet::Pong pongPacket;
-		pongPacket.sent = pingPacket->sent;
-		pongPacket.curverIndex = getCurverIndex(sender);
-		pongPacket.sendPacketUdp(&udpSocket, sender);
-		break;
-	}
+		{
+			auto *pingPacket = (Packet::Ping *) p.get();
+			// respond with pong
+			Packet::Pong pongPacket;
+			pongPacket.sent = pingPacket->sent;
+			pongPacket.curverIndex = getCurverIndex(sender);
+			pongPacket.sendPacketUdp(&udpSocket, sender);
+			break;
+		}
 	default:
 		qDebug() << "Unsupported packet type";
 		break;
@@ -302,12 +283,11 @@ void Server::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p, const QTcp
  * @param p The packet to broadcast
  * @param udp Whether to broadcast using UDP or TCP
  */
-void Server::broadcastPacket(Packet::AbstractPacket &p, bool udp)
-{
+void Server::broadcastPacket(Packet::AbstractPacket &p, bool udp) {
 	if (udp) {
-		Util::for_each(udpAddresses, [&](auto &c){ p.sendPacketUdp(&udpSocket, c); });
+		Util::for_each(udpAddresses, [&](auto &c) { p.sendPacketUdp(&udpSocket, c); });
 	} else {
-		Util::for_each(clients, [&](auto &c){ p.sendPacket(c.first.get()); });
+		Util::for_each(clients, [&](auto &c) { p.sendPacket(c.first.get()); });
 	}
 }
 
@@ -316,11 +296,10 @@ void Server::broadcastPacket(Packet::AbstractPacket &p, bool udp)
  * @param peer The address of the client
  * @return The index in the server-side curver array
  */
-int Server::getCurverIndex(const FullNetworkAddress peer)
-{
-	auto it = Util::find_if(clients, [&](auto& p){ return p.first->peerAddress() == peer.addr; });
+int Server::getCurverIndex(const FullNetworkAddress peer) {
+	auto it = Util::find_if(clients, [&](auto &p) { return p.first->peerAddress() == peer.addr; });
 	if (it != clients.end()) {
-		auto& curvers = PlayerModel::getSingleton().getCurvers();
+		auto &curvers = PlayerModel::getSingleton().getCurvers();
 		for (size_t i = 0; i < curvers.size(); ++i) {
 			if (curvers[i].get() == it->second) {
 				return i;
@@ -336,9 +315,8 @@ int Server::getCurverIndex(const FullNetworkAddress peer)
  * @param s The socket to return the Curver of
  * @return The Curver that belongs to \a s
  */
-Curver *Server::curverFromSocket(const QTcpSocket *s) const
-{
-	auto it = Util::find_if(clients, [&](auto &c){ return c.first.get() == s; });
+Curver *Server::curverFromSocket(const QTcpSocket *s) const {
+	auto it = Util::find_if(clients, [&](auto &c) { return c.first.get() == s; });
 	if (it != clients.end()) {
 		return it->second;
 	} else {

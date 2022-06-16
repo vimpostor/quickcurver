@@ -9,8 +9,7 @@
 /**
  * @brief Watches a CommandlineReader to interact with the game. This is the CLI implementation of the game.
  */
-class GameWatcher : public QObject
-{
+class GameWatcher : public QObject {
 	Q_OBJECT
 public:
 	explicit GameWatcher(QObject *parent = nullptr);

@@ -2,21 +2,20 @@
 #define ITEMFACTORY_H
 
 #include <QObject>
-#include <QTime>
 #include <QSGNode>
+#include <QTime>
 
-#include "models/playermodel.hpp"
-#include "util.hpp"
-#include "items/speeditem.hpp"
 #include "items/cleaninstallitem.hpp"
+#include "items/speeditem.hpp"
 #include "models/itemmodel.hpp"
+#include "models/playermodel.hpp"
 #include "settings.hpp"
+#include "util.hpp"
 
 /**
  * @brief This class plans and manages all Item spawns
  */
-class ItemFactory : public QObject
-{
+class ItemFactory : public QObject {
 	Q_OBJECT
 public:
 	explicit ItemFactory(QSGNode *parentNode, QObject *parent = nullptr);

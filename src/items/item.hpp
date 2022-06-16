@@ -1,23 +1,21 @@
 #ifndef CURVEITEM_H
 #define CURVEITEM_H
+#include <QImage>
+#include <QObject>
 #include <QPointF>
+#include <QQuickWindow>
 #include <QSGNode>
 #include <QSGTextureMaterial>
-#include <QObject>
-#include <QQuickWindow>
-#include <QQuickWindow>
 #include <QTimer>
-#include <QImage>
 
 #include "curver.hpp"
-#include "util.hpp"
 #include "models/playermodel.hpp"
+#include "util.hpp"
 
 /**
  * @brief An Item that can be collected by a Curver and has certain effects
  */
-class Item : public QObject
-{
+class Item : public QObject {
 	Q_OBJECT
 public:
 	/**

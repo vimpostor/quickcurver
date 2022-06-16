@@ -6,8 +6,7 @@
 /**
  * @brief A centralized place for notifying the GUI about something
  */
-class Gui : public QObject
-{
+class Gui : public QObject {
 	Q_OBJECT
 public:
 	static const Gui &getSingleton();

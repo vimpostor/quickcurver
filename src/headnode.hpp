@@ -1,15 +1,14 @@
 #ifndef HEADNODE_H
 #define HEADNODE_H
 #include <QPointF>
-#include <QSGGeometryNode>
-#include <QSGGeometry>
 #include <QSGFlatColorMaterial>
+#include <QSGGeometry>
+#include <QSGGeometryNode>
 
 /**
  * @brief A node representing the head of a Curver
  */
-class HeadNode : public QSGGeometryNode
-{
+class HeadNode : public QSGGeometryNode {
 public:
 	HeadNode(QSGNode *parentNode, QSGFlatColorMaterial *material);
 	~HeadNode();

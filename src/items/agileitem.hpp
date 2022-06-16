@@ -6,8 +6,7 @@
 /**
  * @brief An Item that makes a Curver turn around faster
  */
-class AgileItem : public Item
-{
+class AgileItem : public Item {
 public:
 	AgileItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos);
 private:

@@ -8,8 +8,7 @@
  *
  * Erases every line
  */
-class CleanInstallItem : public Item
-{
+class CleanInstallItem : public Item {
 public:
 	CleanInstallItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos);
 private:

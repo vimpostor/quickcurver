@@ -1,11 +1,11 @@
 #ifndef SERVER_H
 #define SERVER_H
 #include <QObject>
-#include <QtNetwork>
-#include <QTimer>
 #include <QSignalMapper>
-#include <memory>
+#include <QTimer>
+#include <QtNetwork>
 #include <array>
+#include <memory>
 
 #include "network.hpp"
 
@@ -16,8 +16,7 @@
  *
  * Handles the network communication from the server side
  */
-class Server : public QObject
-{
+class Server : public QObject {
 	Q_OBJECT
 public:
 	explicit Server();
@@ -59,7 +58,7 @@ private:
 	/**
 	 * @brief The mapping between TCP sockets and their Curver instances
 	 */
-	std::map<std::unique_ptr<QTcpSocket>, Curver*> clients;
+	std::map<std::unique_ptr<QTcpSocket>, Curver *> clients;
 	Curver *curverFromSocket(const QTcpSocket *s) const;
 	/**
 	 * @brief Whether the round has to be reset

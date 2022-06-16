@@ -4,14 +4,14 @@
 #include <QAbstractListModel>
 #include <QSGNode>
 
-#include "items/item.hpp"
-#include "items/cleaninstallitem.hpp"
-#include "items/speeditem.hpp"
-#include "items/invisibleitem.hpp"
 #include "items/agileitem.hpp"
+#include "items/cleaninstallitem.hpp"
 #include "items/flashitem.hpp"
-#include "items/slowitem.hpp"
 #include "items/ghostitem.hpp"
+#include "items/invisibleitem.hpp"
+#include "items/item.hpp"
+#include "items/slowitem.hpp"
+#include "items/speeditem.hpp"
 
 /**
  * @brief A model containing all Item configurations
@@ -19,8 +19,7 @@
  * This model does not hold spawned items. See ItemFactory for this.
  * This model stores the settings of all possible items.
  */
-class ItemModel : public QAbstractListModel
-{
+class ItemModel : public QAbstractListModel {
 	Q_OBJECT
 public:
 	explicit ItemModel(QObject *parent = NULL);
@@ -120,7 +119,7 @@ private:
 	Item *makeGhostItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos);
 };
 
-float operator +(const float &a, const ItemModel::ItemConfig &b);
-ItemModel::ItemConfig operator +(const ItemModel::ItemConfig &a, const ItemModel::ItemConfig &b);
+float operator+(const float &a, const ItemModel::ItemConfig &b);
+ItemModel::ItemConfig operator+(const ItemModel::ItemConfig &a, const ItemModel::ItemConfig &b);
 
 #endif // ITEMMODEL_H

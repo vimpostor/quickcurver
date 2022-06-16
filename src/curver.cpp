@@ -11,8 +11,7 @@
  * @brief Constructs a Curver object that belongs to \a parentNode in the scene graph
  * @param parentNode The parent node in the scene graph
  */
-Curver::Curver(QSGNode *parentNode)
-{
+Curver::Curver(QSGNode *parentNode) {
 	this->parentNode = parentNode;
 
 	nextSegmentEvent = QTime::currentTime();
@@ -24,16 +23,14 @@ Curver::Curver(QSGNode *parentNode)
 	connect(&cleaninstallAnimation, &CleaninstallAnimation::spawnExplosion, std::bind(&Curver::spawnExplosion, this, std::placeholders::_1, 0.3));
 }
 
-Curver::~Curver()
-{
+Curver::~Curver() {
 }
 
 /**
  * @brief Sets the color of the Curver
  * @param color The new color
  */
-void Curver::setColor(const QColor color)
-{
+void Curver::setColor(const QColor color) {
 	this->color = color;
 	material.setColor(color);
 }
@@ -42,8 +39,7 @@ void Curver::setColor(const QColor color)
  * @brief Returns the color of the Curver
  * @return The color
  */
-QColor Curver::getColor() const
-{
+QColor Curver::getColor() const {
 	return this->color;
 }
 
@@ -53,8 +49,7 @@ QColor Curver::getColor() const
  * This key is used to rotate counter clockwise
  * @param key The left key
  */
-void Curver::setLeftKey(const Qt::Key key)
-{
+void Curver::setLeftKey(const Qt::Key key) {
 	leftKey = key;
 }
 
@@ -62,8 +57,7 @@ void Curver::setLeftKey(const Qt::Key key)
  * @brief Returns the left key
  * @return The left key
  */
-Qt::Key Curver::getLeftKey() const
-{
+Qt::Key Curver::getLeftKey() const {
 	return this->leftKey;
 }
 
@@ -73,8 +67,7 @@ Qt::Key Curver::getLeftKey() const
  * This key is used to rotate clockwise
  * @param key The right key
  */
-void Curver::setRightKey(const Qt::Key key)
-{
+void Curver::setRightKey(const Qt::Key key) {
 	rightKey = key;
 }
 
@@ -82,8 +75,7 @@ void Curver::setRightKey(const Qt::Key key)
  * @brief Returns the right key
  * @return The right key (not the wrong one! :) )
  */
-Qt::Key Curver::getRightKey() const
-{
+Qt::Key Curver::getRightKey() const {
 	return this->rightKey;
 }
 
@@ -91,8 +83,7 @@ Qt::Key Curver::getRightKey() const
  * @brief Returns the segments of this Curver
  * @return The segments
  */
-const std::vector<std::unique_ptr<Segment> > &Curver::getSegments() const
-{
+const std::vector<std::unique_ptr<Segment>> &Curver::getSegments() const {
 	return this->segments;
 }
 
@@ -100,8 +91,7 @@ const std::vector<std::unique_ptr<Segment> > &Curver::getSegments() const
  * @brief Returns the current position
  * @return The current position
  */
-QPointF Curver::getPos() const
-{
+QPointF Curver::getPos() const {
 	return this->lastPos;
 }
 
@@ -109,8 +99,7 @@ QPointF Curver::getPos() const
  * @brief Returns the current direction vector
  * @return The direction
  */
-QPointF Curver::getDirection() const
-{
+QPointF Curver::getDirection() const {
 	return this->direction;
 }
 
@@ -118,8 +107,7 @@ QPointF Curver::getDirection() const
  * @brief Returns the current angle
  * @return The angle
  */
-float Curver::getAngle() const
-{
+float Curver::getAngle() const {
 	return angle;
 }
 
@@ -127,8 +115,7 @@ float Curver::getAngle() const
  * @brief Determines if the Curver is currently changing segments
  * @return \c True, iif changing segments at the moment
  */
-bool Curver::isChangingSegment() const
-{
+bool Curver::isChangingSegment() const {
 	return this->changingSegment;
 }
 
@@ -139,8 +126,7 @@ bool Curver::isChangingSegment() const
  * @param key The key to process
  * @param release If the key was pressed or released
  */
-void Curver::processKey(Qt::Key key, bool release)
-{
+void Curver::processKey(Qt::Key key, bool release) {
 	if (controller != Controller::CONTROLLER_LOCAL || ((key != leftKey) && (key != rightKey))) {
 		return;
 	}
@@ -156,8 +142,7 @@ void Curver::processKey(Qt::Key key, bool release)
 /**
  * @brief Notify that the game has started
  */
-void Curver::start()
-{
+void Curver::start() {
 	resetRound();
 }
 
@@ -166,8 +151,7 @@ void Curver::start()
  * @param deltat The amount of time since the last update in milliseconds
  * @param curvers All curvers
  */
-void Curver::progress(int deltat, std::vector<std::unique_ptr<Curver> > &curvers)
-{
+void Curver::progress(int deltat, std::vector<std::unique_ptr<Curver>> &curvers) {
 	if (nextSegmentEvent <= QTime::currentTime()) {
 		if (changingSegment) {
 			// spawn a new segment
@@ -210,11 +194,10 @@ void Curver::progress(int deltat, std::vector<std::unique_ptr<Curver> > &curvers
  * @param b The end point of the line
  * @return \c True, iif the line collides
  */
-bool Curver::checkForIntersection(std::vector<std::unique_ptr<Curver> > &curvers, QPointF a, QPointF b) const
-{
+bool Curver::checkForIntersection(std::vector<std::unique_ptr<Curver>> &curvers, QPointF a, QPointF b) const {
 	for (auto &i : curvers) {
 		const auto &otherSegments = i->getSegments();
-		if (otherSegments.end() != Util::find_if(otherSegments, [&](auto &segment){return segment->checkForIntersection(a, b);})) {
+		if (otherSegments.end() != Util::find_if(otherSegments, [&](auto &segment) { return segment->checkForIntersection(a, b); })) {
 			return true;
 		}
 	}
@@ -226,8 +209,7 @@ bool Curver::checkForIntersection(std::vector<std::unique_ptr<Curver> > &curvers
  *
  * Triggers Curver::die(), if it does in fact collide
  */
-void Curver::checkForWall()
-{
+void Curver::checkForWall() {
 	QPoint dimension = Settings::getSingleton().getDimension();
 	if (alive && !changingSegment && (lastPos.x() < 0 || lastPos.x() > dimension.x() || lastPos.y() < 0 || lastPos.y() > dimension.y())) {
 		die();
@@ -239,8 +221,7 @@ void Curver::checkForWall()
  *
  * Erases all previous segments and immediately inits a new segment.
  */
-void Curver::cleanInstall()
-{
+void Curver::cleanInstall() {
 	prepareSegmentEvent(true, CLEAN_INVINCIBLE_DURATION, CLEAN_INVINCIBLE_DURATION);
 	// spawn cleaninstall animation and remove segments with it
 	cleaninstallAnimation.trigger(segments);
@@ -249,8 +230,7 @@ void Curver::cleanInstall()
 /**
  * @brief Increases the score by one
  */
-void Curver::increaseScore()
-{
+void Curver::increaseScore() {
 	++roundScore;
 	++totalScore;
 }
@@ -258,8 +238,7 @@ void Curver::increaseScore()
 /**
  * @brief Resets the round
  */
-void Curver::resetRound()
-{
+void Curver::resetRound() {
 	segments.clear();
 	// random start position
 	QPoint dimension = Settings::getSingleton().getDimension();
@@ -275,8 +254,7 @@ void Curver::resetRound()
  * @brief Changes the alive state
  * @param alive Whether this Curver is alive
  */
-void Curver::setAlive(const bool alive)
-{
+void Curver::setAlive(const bool alive) {
 	if (isAlive() && !alive) {
 		die();
 	} else {
@@ -288,8 +266,7 @@ void Curver::setAlive(const bool alive)
  * @brief Determines if the Curver is alive
  * @return \c True, iif alive
  */
-bool Curver::isAlive() const
-{
+bool Curver::isAlive() const {
 	return alive;
 }
 
@@ -298,8 +275,7 @@ bool Curver::isAlive() const
  * @param pos The point to append
  * @param changingSegment Whether the Curver is changing segments at the moment
  */
-void Curver::appendPoint(const QPointF pos, const bool changingSegment)
-{
+void Curver::appendPoint(const QPointF pos, const bool changingSegment) {
 	// segments.size() test fixes a bug, where a client would crash due to network lag
 	if (!changingSegment && (oldChangingSegment || segments.size() == 0)) {
 		segments.push_back(std::make_unique<Segment>(parentNode, &material, thickness));
@@ -329,8 +305,7 @@ void Curver::appendPoint(const QPointF pos, const bool changingSegment)
  * @param lower The lower random boundary of the segment event
  * @param upper The upper random boundary of the segment event
  */
-void Curver::prepareSegmentEvent(bool changingSegment, int lower, int upper)
-{
+void Curver::prepareSegmentEvent(bool changingSegment, int lower, int upper) {
 	nextSegmentEvent = QTime::currentTime().addMSecs(Util::randInt(lower, upper));
 	this->changingSegment = changingSegment;
 }
@@ -340,8 +315,7 @@ void Curver::prepareSegmentEvent(bool changingSegment, int lower, int upper)
  * @param location The position of the explosion
  * @param radius The size of the explosion
  */
-void Curver::spawnExplosion(QPointF location, float radius)
-{
+void Curver::spawnExplosion(QPointF location, float radius) {
 	(void) new Explosion(location, parentNode, &material, this, radius);
 }
 
@@ -349,8 +323,7 @@ void Curver::spawnExplosion(QPointF location, float radius)
  * @brief Rotates the Curver
  * @param radians The amount of radian to rotate
  */
-void Curver::rotate(float radians)
-{
+void Curver::rotate(float radians) {
 	angle += radians;
 	if (angle < 0) {
 		angle += 2 * M_PI;
@@ -366,8 +339,7 @@ void Curver::rotate(float radians)
  *
  * Spawns an Explosion at the current location.
  */
-void Curver::die()
-{
+void Curver::die() {
 	alive = false;
 	spawnExplosion(lastPos);
 	emit died();
@@ -379,7 +351,6 @@ void Curver::die()
  * @param r The right Curver
  * @return \c True, iif \a l is less than \a r, determined by whether the total score is less.
  */
-bool operator <(const std::unique_ptr<Curver> &l, const std::unique_ptr<Curver> &r)
-{
+bool operator<(const std::unique_ptr<Curver> &l, const std::unique_ptr<Curver> &r) {
 	return l->totalScore < r->totalScore;
 }

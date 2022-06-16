@@ -1,17 +1,17 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QQuickStyle>
 #include <QQmlContext>
+#include <QQuickStyle>
 
-#include "version.hpp"
-#include "models/playermodel.hpp"
 #include "game.hpp"
-#include "utility"
-#include "models/itemmodel.hpp"
-#include "settings.hpp"
-#include "models/chatmodel.hpp"
 #include "gamewatcher.hpp"
+#include "models/chatmodel.hpp"
+#include "models/itemmodel.hpp"
+#include "models/playermodel.hpp"
 #include "mumble.hpp"
+#include "settings.hpp"
+#include "utility"
+#include "version.hpp"
 
 /**
  * @mainpage Introduction
@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
 	qputenv("QSG_RENDER_LOOP", "basic");
 	QQuickStyle::setStyle(QLatin1String("Material"));
 #if defined(Q_OS_LINUX) || defined(Q_OS_WIN) || defined(Q_OS_MAC)
-	const char* materialVariantName = "QT_QUICK_CONTROLS_MATERIAL_VARIANT";
+	const char *materialVariantName = "QT_QUICK_CONTROLS_MATERIAL_VARIANT";
 	if (!qEnvironmentVariableIsSet(materialVariantName)) {
 		// dense Material style, more suited for desktop targets
 		qputenv(materialVariantName, "Dense");

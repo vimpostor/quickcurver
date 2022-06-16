@@ -8,8 +8,8 @@
  * @param parent The parent object
  * @param radius The size of the explosion
  */
-Explosion::Explosion(QPointF location, QSGNode *parentNode, QSGFlatColorMaterial *material, QObject *parent, float radius) : QObject(parent)
-{
+Explosion::Explosion(QPointF location, QSGNode *parentNode, QSGFlatColorMaterial *material, QObject *parent, float radius)
+	: QObject(parent) {
 	this->location = location;
 	this->parentNode = parentNode;
 
@@ -31,23 +31,21 @@ Explosion::Explosion(QPointF location, QSGNode *parentNode, QSGFlatColorMaterial
 	timer.start(16);
 }
 
-Explosion::~Explosion()
-{
+Explosion::~Explosion() {
 	parentNode->removeChildNode(opacityNode.get());
 }
 
 /**
  * @brief Updates the explosion each frame
  */
-void Explosion::progress()
-{
+void Explosion::progress() {
 	float timeSinceStart = initialTime.msecsTo(QTime::currentTime());
 	if (timeSinceStart > PARTICLELIFETIME) {
 		delete this;
 	} else {
 		for (int i = 0; i < PARTICLECOUNT; ++i) {
-			vertices[i].set(location.x() + PARTICLERANGE * particleDirections[i].x() * timeSinceStart / PARTICLELIFETIME, \
-							location.y() + PARTICLERANGE * particleDirections[i].y() * timeSinceStart / PARTICLELIFETIME);
+			vertices[i].set(location.x() + PARTICLERANGE * particleDirections[i].x() * timeSinceStart / PARTICLELIFETIME,
+				location.y() + PARTICLERANGE * particleDirections[i].y() * timeSinceStart / PARTICLELIFETIME);
 		}
 		opacityNode->setOpacity(1 - timeSinceStart / PARTICLELIFETIME);
 		geoNode->markDirty(QSGNode::DirtyGeometry);

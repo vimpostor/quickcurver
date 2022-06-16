@@ -6,8 +6,7 @@
  * @brief Creates a CleaninstallAnimation object
  * @param parent The parent object
  */
-CleaninstallAnimation::CleaninstallAnimation(QObject*)
-{
+CleaninstallAnimation::CleaninstallAnimation(QObject *) {
 	connect(&timer, &QTimer::timeout, this, &CleaninstallAnimation::progress);
 }
 
@@ -18,8 +17,7 @@ CleaninstallAnimation::CleaninstallAnimation(QObject*)
  * This will take ownership of all segments from the Curver object.
  * This method automatically removes all segments from the Curver object.
  */
-void CleaninstallAnimation::trigger(std::vector<std::unique_ptr<Segment> > &newSegments)
-{
+void CleaninstallAnimation::trigger(std::vector<std::unique_ptr<Segment>> &newSegments) {
 	if (newSegments.size() == 0) {
 		// do not spawn an animation, if there is nothing to animate
 		return;
@@ -44,8 +42,7 @@ void CleaninstallAnimation::trigger(std::vector<std::unique_ptr<Segment> > &newS
 /**
  * @brief Updates the animation
  */
-void CleaninstallAnimation::progress()
-{
+void CleaninstallAnimation::progress() {
 	const float timeSinceStart = initialTime.msecsTo(QTime::currentTime());
 	const float factor = timeSinceStart / ANIMATION_DURATION;
 	const float easedFactor = Util::easeInOutSine(factor);

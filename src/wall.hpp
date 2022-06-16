@@ -1,17 +1,16 @@
 #ifndef WALL_H
 #define WALL_H
 
-#include <QSGGeometryNode>
 #include <QSGFlatColorMaterial>
+#include <QSGGeometryNode>
 
-#include "util.hpp"
 #include "settings.hpp"
+#include "util.hpp"
 
 /**
  * @brief A node that visualizes the game borders in the scene graph
  */
-class Wall : public QObject
-{
+class Wall : public QObject {
 	Q_OBJECT
 public:
 	explicit Wall();

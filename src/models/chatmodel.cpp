@@ -1,7 +1,6 @@
 #include "chatmodel.hpp"
 
-ChatModel::ChatModel()
-{
+ChatModel::ChatModel() {
 	m_roleNames[UserNameRole] = "username";
 	m_roleNames[MessageRole] = "message";
 	m_roleNames[TimestampRole] = "timestamp";
@@ -11,8 +10,7 @@ ChatModel::ChatModel()
  * @brief Returns the number of rows in this model
  * @return The number of rows
  */
-int ChatModel::rowCount(const QModelIndex &) const
-{
+int ChatModel::rowCount(const QModelIndex &) const {
 	return static_cast<int>(m_data.size());
 }
 
@@ -22,8 +20,7 @@ int ChatModel::rowCount(const QModelIndex &) const
  * @param role The data to return
  * @return The data at the given \a index
  */
-QVariant ChatModel::data(const QModelIndex &index, int role) const
-{
+QVariant ChatModel::data(const QModelIndex &index, int role) const {
 	const auto &m = m_data[index.row()];
 	switch (role) {
 	case UserNameRole:
@@ -41,8 +38,7 @@ QVariant ChatModel::data(const QModelIndex &index, int role) const
  * @brief Returns the role names
  * @return Role names
  */
-QHash<int, QByteArray> ChatModel::roleNames() const
-{
+QHash<int, QByteArray> ChatModel::roleNames() const {
 	return m_roleNames;
 }
 
@@ -50,8 +46,7 @@ QHash<int, QByteArray> ChatModel::roleNames() const
  * @brief Returns a singleton ChatModel instance
  * @return The singleton
  */
-ChatModel &ChatModel::getSingleton()
-{
+ChatModel &ChatModel::getSingleton() {
 	static ChatModel singleton;
 	return singleton;
 }
@@ -61,9 +56,8 @@ ChatModel &ChatModel::getSingleton()
  * @param username The author
  * @param message The chat message
  */
-void ChatModel::appendMessage(QString username, QString message)
-{
-	beginInsertRows(index(m_data.size()-1).parent(), m_data.size(), m_data.size());
+void ChatModel::appendMessage(QString username, QString message) {
+	beginInsertRows(index(m_data.size() - 1).parent(), m_data.size(), m_data.size());
 	m_data.push_back({username, message});
 	endInsertRows();
 	emit newMessage(username, message);

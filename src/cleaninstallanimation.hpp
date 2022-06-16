@@ -2,10 +2,10 @@
 #define CLEANINSTALLANIMATION_H
 
 #include <QObject>
-#include <QSGNode>
 #include <QSGFlatColorMaterial>
-#include <QTimer>
+#include <QSGNode>
 #include <QTime>
+#include <QTimer>
 #include <memory>
 
 #include "segment.hpp"
@@ -16,12 +16,11 @@
  *
  * Takes ownership of all segments of the old Curver object
  */
-class CleaninstallAnimation : public QObject
-{
+class CleaninstallAnimation : public QObject {
 	Q_OBJECT
 public:
 	explicit CleaninstallAnimation(QObject *parent = nullptr);
-	void trigger(std::vector<std::unique_ptr<Segment>>& newSegments);
+	void trigger(std::vector<std::unique_ptr<Segment>> &newSegments);
 signals:
 	/**
 	 * @brief Request to spawn an explosion

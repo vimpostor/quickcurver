@@ -1,15 +1,13 @@
 #include "settings.hpp"
 
-Settings::Settings()
-{
+Settings::Settings() {
 }
 
 /**
  * @brief Returns the Settings singleton
  * @return The Settings singleton
  */
-Settings &Settings::getSingleton()
-{
+Settings &Settings::getSingleton() {
 	static Settings result;
 	return result;
 }
@@ -18,8 +16,7 @@ Settings &Settings::getSingleton()
  * @brief Sets the dimension of the game
  * @param dimension The new dimension
  */
-void Settings::setDimension(QPoint dimension)
-{
+void Settings::setDimension(QPoint dimension) {
 	this->dimension = dimension;
 	emit widthChanged(dimension.x());
 	emit heightChanged(dimension.y());
@@ -30,8 +27,7 @@ void Settings::setDimension(QPoint dimension)
  * @brief Returns the current dimension of the game
  * @return The current dimension
  */
-QPoint Settings::getDimension() const
-{
+QPoint Settings::getDimension() const {
 	return dimension;
 }
 
@@ -39,8 +35,7 @@ QPoint Settings::getDimension() const
  * @brief Sets the width only of the game
  * @param width The new width
  */
-void Settings::setWidth(int width)
-{
+void Settings::setWidth(int width) {
 	dimension.setX(width);
 	setDimension(dimension);
 }
@@ -49,8 +44,7 @@ void Settings::setWidth(int width)
  * @brief Returns the width of the game
  * @return The width
  */
-int Settings::getWidth() const
-{
+int Settings::getWidth() const {
 	return dimension.x();
 }
 
@@ -58,8 +52,7 @@ int Settings::getWidth() const
  * @brief Sets the height only of the game
  * @param height The new height
  */
-void Settings::setHeight(int height)
-{
+void Settings::setHeight(int height) {
 	dimension.setY(height);
 	setDimension(dimension);
 }
@@ -68,8 +61,7 @@ void Settings::setHeight(int height)
  * @brief Returns the height of the game
  * @return The height of the game
  */
-int Settings::getHeight() const
-{
+int Settings::getHeight() const {
 	return dimension.y();
 }
 
@@ -77,8 +69,7 @@ int Settings::getHeight() const
  * @brief Sets the timeout waiting for the new round after the last one was finished
  * @param roundTimeOut The new timeout
  */
-void Settings::setRoundTimeOut(int roundTimeOut)
-{
+void Settings::setRoundTimeOut(int roundTimeOut) {
 	this->roundTimeOut = roundTimeOut;
 }
 
@@ -86,8 +77,7 @@ void Settings::setRoundTimeOut(int roundTimeOut)
  * @brief Returns the current round timeout
  * @return The round timeout
  */
-int Settings::getRoundTimeOut() const
-{
+int Settings::getRoundTimeOut() const {
 	return roundTimeOut;
 }
 
@@ -95,8 +85,7 @@ int Settings::getRoundTimeOut() const
  * @brief Sets the minimum amount of time that item spawns are apart
  * @param interval The new minimum amount of time
  */
-void Settings::setItemSpawnIntervalMin(const int interval)
-{
+void Settings::setItemSpawnIntervalMin(const int interval) {
 	this->itemSpawnIntervalMin = interval;
 }
 
@@ -104,8 +93,7 @@ void Settings::setItemSpawnIntervalMin(const int interval)
  * @brief Returns the current minimum amount of time that item spawns are apart
  * @return Settings::itemSpawnIntervalMin
  */
-int Settings::getItemSpawnIntervalMin() const
-{
+int Settings::getItemSpawnIntervalMin() const {
 	return itemSpawnIntervalMin;
 }
 
@@ -113,8 +101,7 @@ int Settings::getItemSpawnIntervalMin() const
  * @brief Sets the maximum amount of time that item spawns are apart
  * @param interval The new maximum amount of time
  */
-void Settings::setItemSpawnIntervalMax(const int interval)
-{
+void Settings::setItemSpawnIntervalMax(const int interval) {
 	this->itemSpawnIntervalMax = interval;
 }
 
@@ -122,8 +109,7 @@ void Settings::setItemSpawnIntervalMax(const int interval)
  * @brief Returns hte current maximum amount of time that item spawns are apart
  * @return Settings::itemSpawnIntervalMax
  */
-int Settings::getItemSpawnIntervalMax() const
-{
+int Settings::getItemSpawnIntervalMax() const {
 	return itemSpawnIntervalMax;
 }
 
@@ -131,8 +117,7 @@ int Settings::getItemSpawnIntervalMax() const
  * @brief Sets the username of the client
  * @param name The new username
  */
-void Settings::setClientName(const QString name)
-{
+void Settings::setClientName(const QString name) {
 	clientName = name;
 }
 
@@ -140,8 +125,7 @@ void Settings::setClientName(const QString name)
  * @brief Returns the username of the client
  * @return Settings::clientName
  */
-QString Settings::getClientName() const
-{
+QString Settings::getClientName() const {
 	return clientName;
 }
 
@@ -149,8 +133,7 @@ QString Settings::getClientName() const
  * @brief Sets the color of the client
  * @param color The new color
  */
-void Settings::setClientColor(const QColor color)
-{
+void Settings::setClientColor(const QColor color) {
 	clientColor = color;
 }
 
@@ -158,8 +141,7 @@ void Settings::setClientColor(const QColor color)
  * @brief Returns the color of the client
  * @return Settings::clientColor
  */
-QColor Settings::getClientColor() const
-{
+QColor Settings::getClientColor() const {
 	return clientColor;
 }
 
@@ -167,8 +149,7 @@ QColor Settings::getClientColor() const
  * @brief Sets the amount of points that have to be scored to win the game
  * @param score The new target score
  */
-void Settings::setTargetScore(const int score)
-{
+void Settings::setTargetScore(const int score) {
 	targetScore = score;
 }
 
@@ -176,8 +157,7 @@ void Settings::setTargetScore(const int score)
  * @brief Returns the current target score
  * @return Settings::targetScore
  */
-int Settings::getTargetScore() const
-{
+int Settings::getTargetScore() const {
 	return targetScore;
 }
 
@@ -185,8 +165,7 @@ int Settings::getTargetScore() const
  * @brief Sets the network blocking value
  * @param val The new value
  */
-void Settings::setNetworkCurverBlock(const unsigned val)
-{
+void Settings::setNetworkCurverBlock(const unsigned val) {
 	networkCurverBlock = val;
 }
 
@@ -194,8 +173,7 @@ void Settings::setNetworkCurverBlock(const unsigned val)
  * @brief Returns the network blocking value
  * @return Settings::networkCurverBlock
  */
-unsigned Settings::getNetworkCurverBlock() const
-{
+unsigned Settings::getNetworkCurverBlock() const {
 	return networkCurverBlock;
 }
 
@@ -203,16 +181,14 @@ unsigned Settings::getNetworkCurverBlock() const
  * @brief Sets the amount of logic updates per second
  * @param val The new value
  */
-void Settings::setUpdatesPerSecond(const unsigned val)
-{
+void Settings::setUpdatesPerSecond(const unsigned val) {
 	updatesPerSecond = val;
 }
 
 /**
  * @brief Returns the amount of logic updates per second
  */
-unsigned Settings::getUpdatesPerSecond() const
-{
+unsigned Settings::getUpdatesPerSecond() const {
 	return updatesPerSecond;
 }
 
@@ -220,18 +196,15 @@ unsigned Settings::getUpdatesPerSecond() const
  * @brief Returns whether the application is started headless
  * @return Whether the application is started offscreen
  */
-bool Settings::getOffscreen() const
-{
+bool Settings::getOffscreen() const {
 	return QGuiApplication::platformName() == "offscreen";
 }
 
-void Settings::setPing(int ping)
-{
+void Settings::setPing(int ping) {
 	this->ping = ping;
 	emit pingChanged(ping);
 }
 
-int Settings::getPing() const
-{
+int Settings::getPing() const {
 	return ping;
 }

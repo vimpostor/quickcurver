@@ -4,8 +4,7 @@
 #define PING_INTERVAL 5000
 #define JOIN_TIMEOUT 30000
 
-Client::Client()
-{
+Client::Client() {
 	in.setDevice(&tcpSocket);
 	connect(&tcpSocket, &QTcpSocket::errorOccurred, this, &Client::socketError);
 	connect(&tcpSocket, &QTcpSocket::connected, this, &Client::socketConnected);
@@ -29,8 +28,7 @@ Client::Client()
  * @brief Returns the current join status
  * @return joinStatus
  */
-Client::JoinStatus Client::getJoinStatus() const
-{
+Client::JoinStatus Client::getJoinStatus() const {
 	return this->joinStatus;
 }
 
@@ -39,8 +37,7 @@ Client::JoinStatus Client::getJoinStatus() const
  * @param addr The IP address of the host to connect to
  * @param port The port that the host is listening on
  */
-void Client::connectToHost(QString addr, quint16 port)
-{
+void Client::connectToHost(QString addr, quint16 port) {
 	this->serverAddress = {QHostAddress(), port};
 	joinTimeoutTimer.start();
 	// first look up the hostname
@@ -52,8 +49,7 @@ void Client::connectToHost(QString addr, quint16 port)
  * @brief Sends a chat message for the Server to broadcast
  * @param msg The chat message
  */
-void Client::sendChatMessage(QString msg)
-{
+void Client::sendChatMessage(QString msg) {
 	Packet::ClientChatMsg p;
 	p.message = msg;
 	p.sendPacket(&tcpSocket);
@@ -62,8 +58,7 @@ void Client::sendChatMessage(QString msg)
 /**
  * @brief Sends the PlayerModel of the Client to the Server
  */
-void Client::sendPlayerModel()
-{
+void Client::sendPlayerModel() {
 	Packet::ClientPlayerModel p;
 	p.username = Settings::getSingleton().getClientName();
 	p.color = Settings::getSingleton().getClientColor();
@@ -77,8 +72,7 @@ void Client::sendPlayerModel()
  * @param key The key to process
  * @param release Whether the key was pressed or released
  */
-void Client::processKey(Qt::Key key, bool release)
-{
+void Client::processKey(Qt::Key key, bool release) {
 	Packet::ClientCurverRotation p;
 	if (release) {
 		p.rotation = Curver::Rotation::ROTATE_NONE;
@@ -95,8 +89,7 @@ void Client::processKey(Qt::Key key, bool release)
 /**
  * @brief Sends a custom Ping packet to a Server over UDP
  */
-void Client::pingServer()
-{
+void Client::pingServer() {
 	Packet::Ping p;
 	p.sendPacketUdp(&udpSocket, serverAddress);
 }
@@ -104,8 +97,7 @@ void Client::pingServer()
 /**
  * @brief Called, when a socket error occurred
  */
-void Client::socketError(QAbstractSocket::SocketError)
-{
+void Client::socketError(QAbstractSocket::SocketError) {
 	setJoinStatus(JoinStatus::FAILED);
 	Gui::getSingleton().postInfoBar(tcpSocket.errorString());
 }
@@ -113,8 +105,7 @@ void Client::socketError(QAbstractSocket::SocketError)
 /**
  * @brief Called, when the socket has connected
  */
-void Client::socketConnected()
-{
+void Client::socketConnected() {
 	// TCP connection successful, now try UDP
 	setJoinStatus(JoinStatus::UDP_PENDING);
 	pingServer();
@@ -123,8 +114,7 @@ void Client::socketConnected()
 /**
  * @brief Called, when the socket has disconnected
  */
-void Client::socketDisconnected()
-{
+void Client::socketDisconnected() {
 	setJoinStatus(JoinStatus::FAILED);
 	Gui::getSingleton().postInfoBar("Disconnected");
 }
@@ -132,8 +122,7 @@ void Client::socketDisconnected()
 /**
  * @brief Called, when there is new data available on the socket
  */
-void Client::socketReadyRead()
-{
+void Client::socketReadyRead() {
 	bool illformedPacket = false;
 	while (tcpSocket.bytesAvailable() && !illformedPacket) {
 		in.startTransaction();
@@ -150,16 +139,14 @@ void Client::socketReadyRead()
 /**
  * @brief Handles an UDP socket error
  */
-void Client::udpSocketError(QAbstractSocket::SocketError)
-{
+void Client::udpSocketError(QAbstractSocket::SocketError) {
 	qInfo() << udpSocket.errorString();
 }
 
 /**
  * @brief Handles incoming UDP datagrams
  */
-void Client::udpSocketReadyRead()
-{
+void Client::udpSocketReadyRead() {
 	while (udpSocket.hasPendingDatagrams()) {
 		// get datagram
 		QByteArray datagram;
@@ -180,8 +167,7 @@ void Client::udpSocketReadyRead()
  * @brief Handles the result of a DNS request
  * @param info The returned DNS info
  */
-void Client::handleDns(QHostInfo info)
-{
+void Client::handleDns(QHostInfo info) {
 	if (info.error()) {
 		setJoinStatus(JoinStatus::FAILED);
 		Gui::getSingleton().postInfoBar(info.errorString());
@@ -199,8 +185,7 @@ void Client::handleDns(QHostInfo info)
 /**
  * @brief Handles a join timeout
  */
-void Client::handleJoinTimeout()
-{
+void Client::handleJoinTimeout() {
 	if (joinStatus != JoinStatus::JOINED) {
 		setJoinStatus(JoinStatus::FAILED);
 		Gui::getSingleton().postInfoBar("The join request timed out");
@@ -211,8 +196,7 @@ void Client::handleJoinTimeout()
  * @brief Processes an already received packet
  * @param p The packet that was received
  */
-void Client::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p)
-{
+void Client::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p) {
 	// First handle flags
 	if (p->start) {
 		emit Gui::getSingleton().startGame();
@@ -222,56 +206,56 @@ void Client::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p)
 	}
 	switch (static_cast<Packet::ServerTypes>(p->type)) {
 	case Packet::ServerTypes::Chat_Message:
-	{
-		auto *chatMsg = (Packet::ServerChatMsg *)p.get();
-		ChatModel::getSingleton().appendMessage(chatMsg->username, chatMsg->message);
-		break;
-	}
+		{
+			auto *chatMsg = (Packet::ServerChatMsg *) p.get();
+			ChatModel::getSingleton().appendMessage(chatMsg->username, chatMsg->message);
+			break;
+		}
 	case Packet::ServerTypes::PlayerModelEdit:
-	{
-		auto *playerModel = (Packet::ServerPlayerModel *)p.get();
-		playerModel->extract();
-		break;
-	}
+		{
+			auto *playerModel = (Packet::ServerPlayerModel *) p.get();
+			playerModel->extract();
+			break;
+		}
 	case Packet::ServerTypes::CurverData:
-	{
-		auto *curverData = (Packet::ServerCurverData *)p.get();
-		curverData->extract();
+		{
+			auto *curverData = (Packet::ServerCurverData *) p.get();
+			curverData->extract();
 #ifdef MUMBLE_SUPPORT
-		auto &curvers = PlayerModel::getSingleton().getCurvers();
-		if (curverIndex >= 0 && curverIndex < curvers.size()) {
-			Mumble::Api::get()->updatePosition(curvers[curverIndex]->getPos());
-		}
+			auto &curvers = PlayerModel::getSingleton().getCurvers();
+			if (curverIndex >= 0 && curverIndex < curvers.size()) {
+				Mumble::Api::get()->updatePosition(curvers[curverIndex]->getPos());
+			}
 #endif // MUMBLE_SUPPORT
-		emit updateGraphics();
-		break;
-	}
+			emit updateGraphics();
+			break;
+		}
 	case Packet::ServerTypes::ItemData:
-	{
-		auto *itemData = (Packet::ServerItemData *)p.get();
-		emit integrateItem(itemData->spawned, itemData->sequenceNumber, itemData->which, itemData->pos, itemData->allowedUsers, itemData->collectorIndex);
-		break;
-	}
-	case Packet::ServerTypes::SettingsType:
-	{
-		auto *settingsData = (Packet::ServerSettingsData *)p.get();
-		settingsData->extract();
-		break;
-	}
-	case Packet::ServerTypes::Pong:
-	{
-		auto *pong = (Packet::Pong *)p.get();
-		Settings::getSingleton().setPing(Util::getTimeDiff(pong->sent));
-		this->curverIndex = pong->curverIndex;
-		if (this->joinStatus == JoinStatus::UDP_PENDING) {
-			setJoinStatus(JoinStatus::JOINED);
-			sendPlayerModel();
-#ifdef MUMBLE_SUPPORT
-			initMumble();
-#endif // MUMBLE_SUPPORT
+		{
+			auto *itemData = (Packet::ServerItemData *) p.get();
+			emit integrateItem(itemData->spawned, itemData->sequenceNumber, itemData->which, itemData->pos, itemData->allowedUsers, itemData->collectorIndex);
+			break;
 		}
-		break;
-	}
+	case Packet::ServerTypes::SettingsType:
+		{
+			auto *settingsData = (Packet::ServerSettingsData *) p.get();
+			settingsData->extract();
+			break;
+		}
+	case Packet::ServerTypes::Pong:
+		{
+			auto *pong = (Packet::Pong *) p.get();
+			Settings::getSingleton().setPing(Util::getTimeDiff(pong->sent));
+			this->curverIndex = pong->curverIndex;
+			if (this->joinStatus == JoinStatus::UDP_PENDING) {
+				setJoinStatus(JoinStatus::JOINED);
+				sendPlayerModel();
+#ifdef MUMBLE_SUPPORT
+				initMumble();
+#endif // MUMBLE_SUPPORT
+			}
+			break;
+		}
 	default:
 		qInfo() << "Unsupported packet type";
 		break;
@@ -282,8 +266,7 @@ void Client::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p)
  * @brief Sets the join status
  * @param s The new join status
  */
-void Client::setJoinStatus(const JoinStatus s)
-{
+void Client::setJoinStatus(const JoinStatus s) {
 	this->joinStatus = s;
 	if (joinStatus == JoinStatus::JOINED) {
 		pingTimer.start();
@@ -297,8 +280,7 @@ void Client::setJoinStatus(const JoinStatus s)
 /**
  * @brief Inits Mumble
  */
-void Client::initMumble()
-{
+void Client::initMumble() {
 	Mumble::Api::get()->setGeneralInfo(Settings::getSingleton().getClientName(), serverAddress.addr.toString() + ":" + QString::number(serverAddress.port));
 }
 #endif // MUMBLE_SUPPORT

@@ -8,8 +8,7 @@
 /**
  * @brief A model managing all chat messages
  */
-class ChatModel : public QAbstractListModel
-{
+class ChatModel : public QAbstractListModel {
 	Q_OBJECT
 public:
 	ChatModel();
@@ -31,8 +30,7 @@ private:
 	/**
 	 * @brief A chat message
 	 */
-	class ChatMessage
-	{
+	class ChatMessage {
 	public:
 		/**
 		 * @brief The author of the chat message

@@ -6,8 +6,7 @@
 /**
  * @brief Flashes a Curver forward depending on its velocity
  */
-class FlashItem : public Item
-{
+class FlashItem : public Item {
 public:
 	FlashItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos);
 private:

@@ -7,11 +7,10 @@
 /**
  * @brief A class representing an AI that controls a Curver
  */
-class Bot
-{
+class Bot {
 public:
 	Bot() = delete;
-	static void makeMove(Curver& c);
+	static void makeMove(Curver &c);
 };
 
 #endif // BOT_H

@@ -4,8 +4,8 @@
  * @brief Constructs an ItemModel
  * @param parent The parent object
  */
-ItemModel::ItemModel(QObject *parent) : QAbstractListModel(parent)
-{
+ItemModel::ItemModel(QObject *parent)
+	: QAbstractListModel(parent) {
 	// role names
 	m_roleNames[NameRole] = "name";
 	m_roleNames[DescriptionRole] = "description";
@@ -18,8 +18,7 @@ ItemModel::ItemModel(QObject *parent) : QAbstractListModel(parent)
  * @brief Returns the number of rows stored in this model
  * @return The row count
  */
-int ItemModel::rowCount(const QModelIndex &) const
-{
+int ItemModel::rowCount(const QModelIndex &) const {
 	return itemConfigs.size();
 }
 
@@ -29,22 +28,21 @@ int ItemModel::rowCount(const QModelIndex &) const
  * @param role The role to access
  * @return The data
  */
-QVariant ItemModel::data(const QModelIndex &index, int role) const
-{
+QVariant ItemModel::data(const QModelIndex &index, int role) const {
 	const auto &itemConfig = itemConfigs[index.row()];
 	switch (role) {
-		case NameRole:
-			return itemConfig.name;
-		case DescriptionRole:
-			return itemConfig.description;
-		case ProbabilityRole:
-			return itemConfig.probability;
-		case AllowedUsersRole:
-			return static_cast<int>(itemConfig.allowedUsers);
-		case IconNameRole:
-			return itemConfig.iconName;
-		default:
-			return "Unkown role";
+	case NameRole:
+		return itemConfig.name;
+	case DescriptionRole:
+		return itemConfig.description;
+	case ProbabilityRole:
+		return itemConfig.probability;
+	case AllowedUsersRole:
+		return static_cast<int>(itemConfig.allowedUsers);
+	case IconNameRole:
+		return itemConfig.iconName;
+	default:
+		return "Unkown role";
 	}
 }
 
@@ -52,8 +50,7 @@ QVariant ItemModel::data(const QModelIndex &index, int role) const
  * @brief Returns the role names of this model
  * @return The role names
  */
-QHash<int, QByteArray> ItemModel::roleNames() const
-{
+QHash<int, QByteArray> ItemModel::roleNames() const {
 	return m_roleNames;
 }
 
@@ -62,8 +59,7 @@ QHash<int, QByteArray> ItemModel::roleNames() const
  * @param row The index of the Item
  * @param probability The new probability
  */
-void ItemModel::setProbability(const int row, const float probability)
-{
+void ItemModel::setProbability(const int row, const float probability) {
 	if (row < 0 || static_cast<size_t>(row) >= itemConfigs.size() || probability < 0 || probability > 1) {
 		return;
 	}
@@ -75,8 +71,7 @@ void ItemModel::setProbability(const int row, const float probability)
  * @param row The index of the Item
  * @param allowedUsers The allowed users for this Item
  */
-void ItemModel::setAllowedUsers(const int row, const int allowedUsers)
-{
+void ItemModel::setAllowedUsers(const int row, const int allowedUsers) {
 	itemConfigs[static_cast<unsigned long>(row)].allowedUsers = static_cast<Item::AllowedUsers>(allowedUsers);
 }
 
@@ -84,8 +79,7 @@ void ItemModel::setAllowedUsers(const int row, const int allowedUsers)
  * @brief Returns a singleton instance of ItemModel
  * @return The singleton
  */
-ItemModel &ItemModel::getSingleton()
-{
+ItemModel &ItemModel::getSingleton() {
 	static ItemModel singleton;
 	return singleton;
 }
@@ -96,13 +90,12 @@ ItemModel &ItemModel::getSingleton()
  * @param pos The location of the Item
  * @return The just created Item
  */
-Item *ItemModel::makeRandomItem(QSGNode *parentNode, QPointF pos)
-{
+Item *ItemModel::makeRandomItem(QSGNode *parentNode, QPointF pos) {
 	float totalProbability = Util::accumulate(itemConfigs, 0.f);
 	std::vector<ItemConfig> partialSums = itemConfigs;
 	Util::partial_sum(itemConfigs, partialSums);
 	float randValue = Util::rand() * totalProbability;
-	auto it = Util::find_if(partialSums, [randValue](auto &item){ return randValue < item.probability; });
+	auto it = Util::find_if(partialSums, [randValue](auto &item) { return randValue < item.probability; });
 	auto *result = (this->*it->constructor)(parentNode, Util::expandIconName(it->iconName), it->allowedUsers, pos);
 	result->sequenceNumber = ++sequenceNumber;
 	emit itemSpawned(true, result->sequenceNumber, it - partialSums.begin(), pos, it->allowedUsers, -1);
@@ -117,8 +110,7 @@ Item *ItemModel::makeRandomItem(QSGNode *parentNode, QPointF pos)
  * @param allowedUsers The allowed users for this Item
  * @return The just created Item
  */
-Item *ItemModel::makePredefinedItem(QSGNode *parentNode, int which, QPointF pos, Item::AllowedUsers allowedUsers)
-{
+Item *ItemModel::makePredefinedItem(QSGNode *parentNode, int which, QPointF pos, Item::AllowedUsers allowedUsers) {
 	auto conf = itemConfigs[which];
 	return (this->*conf.constructor)(parentNode, Util::expandIconName(conf.iconName), allowedUsers, pos);
 }
@@ -131,8 +123,7 @@ Item *ItemModel::makePredefinedItem(QSGNode *parentNode, int which, QPointF pos,
  * @param pos The location
  * @return The just created item
  */
-Item *ItemModel::makeSpeedItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos)
-{
+Item *ItemModel::makeSpeedItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos) {
 	return new SpeedItem(parentNode, iconName, allowedUsers, pos);
 }
 
@@ -144,8 +135,7 @@ Item *ItemModel::makeSpeedItem(QSGNode *parentNode, QString iconName, Item::Allo
  * @param pos The location
  * @return The just created item
  */
-Item *ItemModel::makeCleanInstallItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos)
-{
+Item *ItemModel::makeCleanInstallItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos) {
 	return new CleanInstallItem(parentNode, iconName, allowedUsers, pos);
 }
 
@@ -157,8 +147,7 @@ Item *ItemModel::makeCleanInstallItem(QSGNode *parentNode, QString iconName, Ite
  * @param pos The location
  * @return The just created item
  */
-Item *ItemModel::makeInvisibleItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos)
-{
+Item *ItemModel::makeInvisibleItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos) {
 	return new InvisibleItem(parentNode, iconName, allowedUsers, pos);
 }
 
@@ -170,8 +159,7 @@ Item *ItemModel::makeInvisibleItem(QSGNode *parentNode, QString iconName, Item::
  * @param pos The location
  * @return The just created item
  */
-Item *ItemModel::makeAgileItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos)
-{
+Item *ItemModel::makeAgileItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos) {
 	return new AgileItem(parentNode, iconName, allowedUsers, pos);
 }
 
@@ -183,8 +171,7 @@ Item *ItemModel::makeAgileItem(QSGNode *parentNode, QString iconName, Item::Allo
  * @param pos The location
  * @return The just created item
  */
-Item *ItemModel::makeFlashItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos)
-{
+Item *ItemModel::makeFlashItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos) {
 	return new FlashItem(parentNode, iconName, allowedUsers, pos);
 }
 
@@ -196,8 +183,7 @@ Item *ItemModel::makeFlashItem(QSGNode *parentNode, QString iconName, Item::Allo
  * @param pos The location
  * @return The just created item
  */
-Item *ItemModel::makeSlowItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos)
-{
+Item *ItemModel::makeSlowItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos) {
 	return new SlowItem(parentNode, iconName, allowedUsers, pos);
 }
 
@@ -209,8 +195,7 @@ Item *ItemModel::makeSlowItem(QSGNode *parentNode, QString iconName, Item::Allow
  * @param pos The location
  * @return The just created item
  */
-Item *ItemModel::makeGhostItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos)
-{
+Item *ItemModel::makeGhostItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos) {
 	return new GhostItem(parentNode, iconName, allowedUsers, pos);
 }
 
@@ -220,8 +205,7 @@ Item *ItemModel::makeGhostItem(QSGNode *parentNode, QString iconName, Item::Allo
  * @param b The ItemModel::ItemConfig containing a probability
  * @return The accumulated probability
  */
-float operator +(const float &a, const ItemModel::ItemConfig &b)
-{
+float operator+(const float &a, const ItemModel::ItemConfig &b) {
 	return a + b.probability;
 }
 
@@ -231,8 +215,7 @@ float operator +(const float &a, const ItemModel::ItemConfig &b)
  * @param b Another configuration with a probability
  * @return The accumulated probability
  */
-ItemModel::ItemConfig operator +(const ItemModel::ItemConfig &a, const ItemModel::ItemConfig &b)
-{
+ItemModel::ItemConfig operator+(const ItemModel::ItemConfig &a, const ItemModel::ItemConfig &b) {
 	ItemModel::ItemConfig result = b;
 	result.probability = a.probability + b;
 	return result;
