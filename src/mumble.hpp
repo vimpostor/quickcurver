@@ -10,9 +10,9 @@
 #if defined(_WIN32)
 #include <windows.h>
 #elif defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
+#include <fcntl.h> /* For O_* constants */
 #include <sys/mman.h>
 #include <sys/stat.h> /* For mode constants */
-#include <fcntl.h> /* For O_* constants */
 #endif // _WIN32
 
 namespace Mumble {

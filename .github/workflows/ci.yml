@@ -9,6 +9,8 @@ jobs:
         submodules: recursive
     - name: Build the Docker image
       run: docker build -t quickcurver .
+    - name: Format code
+      run: docker run quickcurver sh -c 'scripts/format-code.sh'
     - name: Check that headless server works
       run: echo "/quit" | docker run -i quickcurver build/quickcurver -platform offscreen
     - name: Build documentation
