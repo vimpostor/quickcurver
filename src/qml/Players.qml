@@ -1,5 +1,5 @@
-import Qt.labs.platform
 import QtQuick
+import QtQuick.Dialogs
 import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick.Controls.Material
@@ -120,7 +120,7 @@ Item {
 		}
 		ColorDialog {
 			id: colorDialog
-			onAccepted: c_playerModel.setColor(playerListView.modelIndex, color);
+			onAccepted: c_playerModel.setColor(playerListView.modelIndex, selectedColor);
 		}
 		Dialog {
 			id: botDialog

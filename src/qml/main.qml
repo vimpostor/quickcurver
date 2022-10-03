@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Window
-import Qt.labs.platform as Platform
 import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
@@ -214,11 +213,11 @@ ApplicationWindow {
 				}
 				ToolButton {
 					icon.source: "qrc:///editor/format_color_fill"
-					icon.color: clientColorDialog.color
+					icon.color: clientColorDialog.selectedColor
 					onClicked: clientColorDialog.open();
-					Platform.ColorDialog {
+					ColorDialog {
 						id: clientColorDialog
-						color: Material.accent
+						selectedColor: Material.accent
 					}
 				}
 				TextField {
