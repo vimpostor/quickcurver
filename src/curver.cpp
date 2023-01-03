@@ -197,7 +197,7 @@ void Curver::progress(int deltat, std::vector<std::unique_ptr<Curver>> &curvers)
 bool Curver::checkForIntersection(std::vector<std::unique_ptr<Curver>> &curvers, QPointF a, QPointF b) const {
 	for (auto &i : curvers) {
 		const auto &otherSegments = i->getSegments();
-		if (otherSegments.end() != Util::find_if(otherSegments, [&](auto &segment) { return segment->checkForIntersection(a, b); })) {
+		if (otherSegments.end() != std::ranges::find_if(otherSegments, [&](auto &segment) { return segment->checkForIntersection(a, b); })) {
 			return true;
 		}
 	}

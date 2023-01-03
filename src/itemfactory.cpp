@@ -17,7 +17,7 @@ ItemFactory::ItemFactory(QSGNode *parentNode, QObject *parent)
  */
 void ItemFactory::resetRound() {
 	items.clear();
-	Util::for_each(usedItems, [](auto &i) { i->defuse(); });
+	std::ranges::for_each(usedItems, [](auto &i) { i->defuse(); });
 	usedItems.clear();
 	prepareNextItem();
 }
@@ -50,7 +50,7 @@ void ItemFactory::integrateItem(bool spawned, unsigned int sequenceNumber, int w
 		items.emplace_back(std::unique_ptr<Item>(ItemModel::getSingleton().makePredefinedItem(parentNode, which, pos, allowedUsers)));
 		items.back()->sequenceNumber = sequenceNumber;
 	} else {
-		auto it = Util::find_if(items, [&](auto &i) { return i->sequenceNumber == sequenceNumber; });
+		auto it = std::ranges::find_if(items, [&](auto &i) { return i->sequenceNumber == sequenceNumber; });
 		if (it != items.end()) {
 			if (collectorIndex != -1) {
 				(*it)->trigger(PlayerModel::getSingleton().getCurvers()[collectorIndex]);
@@ -81,7 +81,7 @@ void ItemFactory::spawnItem() {
 void ItemFactory::checkCollisions() {
 	auto itemIt = items.begin();
 	while (itemIt != items.end()) {
-		auto curverIt = Util::find_if(PlayerModel::getSingleton().getCurvers(), [&itemIt](auto &curver) { return (*itemIt)->isInRange(curver->getPos()); });
+		auto curverIt = std::ranges::find_if(PlayerModel::getSingleton().getCurvers(), [&itemIt](auto &curver) { return (*itemIt)->isInRange(curver->getPos()); });
 		if (curverIt != PlayerModel::getSingleton().getCurvers().end()) {
 			// trigger item
 			emit ItemModel::getSingleton().itemSpawned(false, (*itemIt)->sequenceNumber, 0, QPointF(), Item::AllowedUsers::ALLOW_ALL, curverIt - PlayerModel::getSingleton().getCurvers().begin());

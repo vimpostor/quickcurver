@@ -192,7 +192,7 @@ void Server::udpSocketReadyRead() {
 		if (udpStream.commitTransaction()) {
 			handlePacket(packet, nullptr, client);
 			// subscribe client to updates if not yet subscribed
-			if (Util::find(udpAddresses, client) == udpAddresses.end()) {
+			if (std::ranges::find(udpAddresses, client) == udpAddresses.end()) {
 				udpAddresses.push_back(client);
 			}
 		} else {
@@ -210,7 +210,7 @@ void Server::removePlayer(const QTcpSocket *s) {
 	// TODO: Actually delete something here: Note, deleting here results in a segfault, because after this method was called in socketError()
 	// or in socketDisconnect(), the TcpSocket seems to be still in use until after those methods are completely finished.
 
-	//	auto it = Util::find_if(clients, [=](const auto &c){ return c.first.get() == s; });
+	//	auto it = std::ranges::find_if(clients, [=](const auto &c){ return c.first.get() == s; });
 	//	if (it != clients.end()) {
 	//		clients.erase(it);
 	//	}
@@ -235,7 +235,7 @@ void Server::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p, const QTcp
 		Packet::ClientTypes::CurverRotation,
 	};
 	const auto packetType = static_cast<Packet::ClientTypes>(p->type);
-	if (curver == nullptr && Util::find(needsCurver, packetType) != needsCurver.end()) {
+	if (curver == nullptr && std::ranges::find(needsCurver, packetType) != needsCurver.end()) {
 		qDebug() << "curver is not set";
 		return;
 	}
@@ -285,9 +285,9 @@ void Server::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p, const QTcp
  */
 void Server::broadcastPacket(Packet::AbstractPacket &p, bool udp) {
 	if (udp) {
-		Util::for_each(udpAddresses, [&](auto &c) { p.sendPacketUdp(&udpSocket, c); });
+		std::ranges::for_each(udpAddresses, [&](auto &c) { p.sendPacketUdp(&udpSocket, c); });
 	} else {
-		Util::for_each(clients, [&](auto &c) { p.sendPacket(c.first.get()); });
+		std::ranges::for_each(clients, [&](auto &c) { p.sendPacket(c.first.get()); });
 	}
 }
 
@@ -297,7 +297,7 @@ void Server::broadcastPacket(Packet::AbstractPacket &p, bool udp) {
  * @return The index in the server-side curver array
  */
 int Server::getCurverIndex(const FullNetworkAddress peer) {
-	auto it = Util::find_if(clients, [&](auto &p) { return p.first->peerAddress() == peer.addr; });
+	auto it = std::ranges::find_if(clients, [&](auto &p) { return p.first->peerAddress() == peer.addr; });
 	if (it != clients.end()) {
 		auto &curvers = PlayerModel::getSingleton().getCurvers();
 		for (size_t i = 0; i < curvers.size(); ++i) {
@@ -316,7 +316,7 @@ int Server::getCurverIndex(const FullNetworkAddress peer) {
  * @return The Curver that belongs to \a s
  */
 Curver *Server::curverFromSocket(const QTcpSocket *s) const {
-	auto it = Util::find_if(clients, [&](auto &c) { return c.first.get() == s; });
+	auto it = std::ranges::find_if(clients, [&](auto &c) { return c.first.get() == s; });
 	if (it != clients.end()) {
 		return it->second;
 	} else {

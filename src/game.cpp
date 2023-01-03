@@ -45,7 +45,7 @@ Game::~Game() {
 void Game::startGame() {
 	tryStartGame();
 	lastProgressTime = QTime::currentTime();
-	Util::for_each(getCurvers(), [](const std::unique_ptr<Curver> &c) { c->start(); });
+	std::ranges::for_each(getCurvers(), [](const std::unique_ptr<Curver> &c) { c->start(); });
 	itemFactory->resetRound();
 	// 60 FPS = 16 ms interval
 	gameTimer.start(static_cast<int>(1000.f / Settings::getSingleton().getUpdatesPerSecond()));
@@ -59,7 +59,7 @@ void Game::startGame() {
  * @param release Whether the key was pressed or released
  */
 void Game::processKey(Qt::Key key, bool release) {
-	Util::for_each(getCurvers(), [&](auto &c) { c->processKey(key, release); });
+	std::ranges::for_each(getCurvers(), [&](auto &c) { c->processKey(key, release); });
 	if (getClient()->getJoinStatus() == Client::JoinStatus::JOINED) {
 		client.processKey(key, release);
 	}
@@ -101,7 +101,7 @@ void Game::serverReListen(quint16 port) {
  */
 void Game::resetGame() {
 	resetRound();
-	Util::for_each(getCurvers(), [](const auto &c) { c->totalScore = 0; });
+	std::ranges::for_each(getCurvers(), [](const auto &c) { c->totalScore = 0; });
 	winnerAnnounced = false;
 	PlayerModel::getSingleton().forceRefresh();
 }
@@ -151,15 +151,15 @@ void Game::progress() {
  * This method taskes care of the score board and checks if a new round is due.
  */
 void Game::curverDied() {
-	Util::for_each(getCurvers(), [](const auto &c) { if (c->isAlive()) c->increaseScore(); });
-	auto maxScorer = Util::max_element(getCurvers());
+	std::ranges::for_each(getCurvers(), [](const auto &c) { if (c->isAlive()) c->increaseScore(); });
+	auto maxScorer = std::ranges::max_element(getCurvers());
 	if ((*maxScorer)->totalScore >= Settings::getSingleton().getTargetScore() && !winnerAnnounced) {
 		// we have a winner
 		winnerAnnounced = true;
 		server.broadcastChatMessage((*maxScorer)->userName + " won!");
 	}
 	// check if only one player is remaining
-	if (Util::count_if(getCurvers(), [](const auto &c) { return c->isAlive(); }) == 1) {
+	if (std::ranges::count_if(getCurvers(), [](const auto &c) { return c->isAlive(); }) == 1) {
 		resetRoundTimer.singleShot(Settings::getSingleton().getRoundTimeOut(), this, &Game::resetRound);
 	}
 }
@@ -169,7 +169,7 @@ void Game::curverDied() {
  */
 void Game::resetRound() {
 	itemFactory->resetRound();
-	Util::for_each(getCurvers(), [](const auto &c) { c->resetRound(); });
+	std::ranges::for_each(getCurvers(), [](const auto &c) { c->resetRound(); });
 	server.resetRound();
 }
 

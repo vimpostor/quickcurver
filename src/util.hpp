@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <map>
 #include <memory>
+#include <ranges>
 
 /**
  * @brief Contains frequently used useful routines that are available for every class
@@ -72,60 +73,6 @@ T accumulate(Cnt_T &cnt, T init) {
 template<typename Cnt_T>
 auto partial_sum(Cnt_T &in, Cnt_T &out) {
 	return std::partial_sum(std::begin(in), std::end(in), std::begin(out));
-}
-
-/**
-	 * @brief Applies a function to each element of a container
-	 * @param cnt The container to apply a function to
-	 * @param f The function to apply
-	 * @return \a f
-	 */
-template<typename Cnt_T, typename UnaryFunction>
-UnaryFunction for_each(Cnt_T &cnt, UnaryFunction f) {
-	return std::for_each(std::begin(cnt), std::end(cnt), f);
-}
-
-/**
-	 * @brief Finds an element in a container
-	 * @param cnt The container to search in
-	 * @param value The value to search for
-	 * @return The iterator to the first satisfying element or the end iterator, if not found
-	 */
-template<typename Cnt_T, typename T>
-auto find(Cnt_T &cnt, const T &value) {
-	return std::find(std::begin(cnt), std::end(cnt), value);
-}
-
-/**
-	 * @brief Finds an element in a container where a given predicate is true
-	 * @param cnt The container to search in
-	 * @param p The predicate that has to be satisfied
-	 * @return The iterator to the first satisfying element or the end iterator, if not satisfiable
-	 */
-template<typename Cnt_T, typename UnaryPredicate>
-auto find_if(Cnt_T &cnt, UnaryPredicate p) {
-	return std::find_if(std::begin(cnt), std::end(cnt), p);
-}
-
-/**
-	 * @brief Counts the number of times that a given predicate is satisfied in a container
-	 * @param cnt The container to count in
-	 * @param p The predicate to satisfy
-	 * @return Number of elements satisfying the condition
-	 */
-template<typename Cnt_T, typename UnaryPredicate>
-auto count_if(Cnt_T &cnt, UnaryPredicate p) {
-	return std::count_if(std::begin(cnt), std::end(cnt), p);
-}
-
-/**
-	 * @brief Returns the maximum element in a container
-	 * @param cnt The container to find the maximum element in
-	 * @return The iterator to the greatest element
-	 */
-template<typename Cnt_T>
-auto max_element(Cnt_T &cnt) {
-	return std::max_element(std::begin(cnt), std::end(cnt));
 }
 
 // container serialization

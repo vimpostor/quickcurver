@@ -167,10 +167,10 @@ void Item::startFade(bool in) {
 void Item::applyToAffected(void (Item::*method)(Curver *)) {
 	switch (allowedUsers) {
 	case AllowedUsers::ALLOW_ALL:
-		Util::for_each(PlayerModel::getSingleton().getCurvers(), [&](auto &curver) { (this->*method)(curver.get()); });
+		std::ranges::for_each(PlayerModel::getSingleton().getCurvers(), [&](auto &curver) { (this->*method)(curver.get()); });
 		break;
 	case AllowedUsers::ALLOW_OTHERS:
-		Util::for_each(PlayerModel::getSingleton().getCurvers(), [&](auto &curver) { if (curver.get() != this->collector) (this->*method)(curver.get()); });
+		std::ranges::for_each(PlayerModel::getSingleton().getCurvers(), [&](auto &curver) { if (curver.get() != this->collector) (this->*method)(curver.get()); });
 		break;
 	case AllowedUsers::ALLOW_COLLECTOR:
 		(this->*method)(collector);

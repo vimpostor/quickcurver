@@ -95,7 +95,7 @@ Item *ItemModel::makeRandomItem(QSGNode *parentNode, QPointF pos) {
 	std::vector<ItemConfig> partialSums = itemConfigs;
 	Util::partial_sum(itemConfigs, partialSums);
 	float randValue = Util::rand() * totalProbability;
-	auto it = Util::find_if(partialSums, [randValue](auto &item) { return randValue < item.probability; });
+	auto it = std::ranges::find_if(partialSums, [randValue](auto &item) { return randValue < item.probability; });
 	auto *result = (this->*it->constructor)(parentNode, Util::expandIconName(it->iconName), it->allowedUsers, pos);
 	result->sequenceNumber = ++sequenceNumber;
 	emit itemSpawned(true, result->sequenceNumber, it - partialSums.begin(), pos, it->allowedUsers, -1);
