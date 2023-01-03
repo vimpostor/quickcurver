@@ -2,8 +2,6 @@
 This is a hardware accelerated implementation of the famous game "Achtung die Kurve", written in modern C++20 and Qt 6.
 
 [![Continuous Integration](https://github.com/vimpostor/quickcurver/actions/workflows/ci.yml/badge.svg)](https://github.com/vimpostor/quickcurver/actions/workflows/ci.yml)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/vimpostor/quickcurver.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/magnus-gross/quickcurver/alerts/)
-[![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/vimpostor/quickcurver.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/magnus-gross/quickcurver/context:cpp)
 
 ![screenshot](https://user-images.githubusercontent.com/21310755/93923083-2ed2e300-fd13-11ea-86f1-d79bc09ce96a.png)
 
@@ -28,7 +26,7 @@ paru -S quickcurver-git
 First make sure, that you have the required dependencies of QuickCurver installed. These are:
 
 * A C++ compiler with C++20 support
-* At least Qt 6.3
+* At least Qt 6.4
 * The following Qt Modules (in the parentheses there is an example how the package could be called for your distro (this depends on the distro!)):
 	- Qt Core (qt6-base)
 	- Qt GUI (qt6-base)
