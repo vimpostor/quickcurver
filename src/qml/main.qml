@@ -22,6 +22,10 @@ ApplicationWindow {
 	Material.primary: Material.Yellow
 	Material.accent: Material.Blue
 	onWidthChanged: game.checkDimension();
+	Action {
+		shortcut: StandardKey.Quit
+		onTriggered: close();
+	}
 	Item {
 		id: initialPage
 		anchors.fill: parent
