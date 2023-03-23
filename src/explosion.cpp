@@ -16,13 +16,20 @@ Explosion::Explosion(QPointF location, QSGNode *parentNode, QSGFlatColorMaterial
 	opacityNode = std::make_unique<QSGOpacityNode>();
 	geoNode = std::make_unique<QSGGeometryNode>();
 	geometry.setLineWidth(PARTICLESIZE);
-	geometry.setDrawingMode(QSGGeometry::DrawPoints);
+	geometry.setDrawingMode(QSGGeometry::DrawLines);
 	geoNode->setGeometry(&geometry);
 	geoNode->setMaterial(material);
-	geometry.allocate(PARTICLECOUNT);
+
+	/**
+	 * We need to allocate two vertices for each line.
+	 * The first point for each line is always in the origin.
+	 * The second point starts at the origin, but moves outwards over time.
+	 */
+	geometry.allocate(2 * PARTICLECOUNT);
 	vertices = geometry.vertexDataAsPoint2D();
 	for (int i = 0; i < PARTICLECOUNT; ++i) {
-		vertices[i].set(location.x(), location.y());
+		vertices[2 * i].set(location.x(), location.y());
+		vertices[2 * i + 1].set(location.x(), location.y());
 		particleDirections[i] = radius * (Util::randQPointF() - QPointF(0.5, 0.5));
 	}
 	opacityNode->appendChildNode(geoNode.get());
@@ -44,7 +51,7 @@ void Explosion::progress() {
 		delete this;
 	} else {
 		for (int i = 0; i < PARTICLECOUNT; ++i) {
-			vertices[i].set(location.x() + PARTICLERANGE * particleDirections[i].x() * timeSinceStart / PARTICLELIFETIME,
+			vertices[2 * i + 1].set(location.x() + PARTICLERANGE * particleDirections[i].x() * timeSinceStart / PARTICLELIFETIME,
 				location.y() + PARTICLERANGE * particleDirections[i].y() * timeSinceStart / PARTICLELIFETIME);
 		}
 		opacityNode->setOpacity(1 - timeSinceStart / PARTICLELIFETIME);
