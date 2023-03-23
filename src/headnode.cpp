@@ -9,12 +9,10 @@ HeadNode::HeadNode(QSGNode *parentNode, QSGFlatColorMaterial *material)
 	: QSGGeometryNode() {
 	this->parentNode = parentNode;
 
-	// TODO: Use something else, this does not work with all graphic APIs
-	// geometry.setLineWidth(6);
-	geometry.setDrawingMode(QSGGeometry::DrawPoints);
+	geometry.setDrawingMode(QSGGeometry::DrawTriangleStrip);
 	this->setGeometry(&geometry);
 	this->setMaterial(material);
-	geometry.allocate(1);
+	geometry.allocate(4);
 	parentNode->appendChildNode(this);
 }
 
@@ -27,8 +25,12 @@ HeadNode::~HeadNode() {
  * @param newPos The new location
  */
 void HeadNode::setPosition(const QPointF newPos) {
+	constexpr float pointSize = 2.f;
 	this->pos = newPos;
 	QSGGeometry::Point2D *vertices = geometry.vertexDataAsPoint2D();
-	vertices[0].set(pos.x(), pos.y());
+	vertices[0].set(pos.x() - pointSize, pos.y() - pointSize);
+	vertices[1].set(pos.x() - pointSize, pos.y() + pointSize);
+	vertices[2].set(pos.x() + pointSize, pos.y() - pointSize);
+	vertices[3].set(pos.x() + pointSize, pos.y() + pointSize);
 	this->markDirty(QSGNode::DirtyGeometry);
 }
