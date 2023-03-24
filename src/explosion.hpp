@@ -10,9 +10,9 @@
 #include "util.hpp"
 
 #define PARTICLECOUNT 64
-#define PARTICLESIZE 4
+#define PARTICLESIZE 2
 #define PARTICLERANGE 256
-#define PARTICLELIFETIME 512
+#define PARTICLELIFETIME 400
 
 /**
  * @brief A class representing a Curver explosion
