@@ -109,14 +109,8 @@ Item {
 				TextField {
 					id: textField
 				}
-				DialogButtonBox {
-					standardButtons: DialogButtonBox.Ok
-					onAccepted: {
-						c_playerModel.setUserName(playerListView.modelIndex, textField.text);
-						inputDialog.accept();
-					}
-				}
 			}
+			onAccepted: c_playerModel.setUserName(playerListView.modelIndex, textField.text);
 		}
 		ColorDialog {
 			id: colorDialog
