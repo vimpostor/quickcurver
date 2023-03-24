@@ -48,7 +48,7 @@ Item {
 						game.forceActiveFocus();
 					}
 				}
-				icon.source: "qrc:///content/send"
+				icon.source: "qrc:///send"
 				icon.color: Material.accent
 				onClicked: send();
 			}

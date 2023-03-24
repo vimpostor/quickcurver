@@ -120,7 +120,7 @@ ApplicationWindow {
 				id: optionsLayout
 				anchors {left: parent.left; right: parent.right}
 				Button {
-					icon.source: "qrc:///content/undo"
+					icon.source: "qrc:///delete"
 					enabled: !root.connectedToServer
 					onClicked: game.resetGame();
 					ToolTip.text: "Reset game"
@@ -128,14 +128,14 @@ ApplicationWindow {
 					ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
 				}
 				Button {
-					icon.source: "qrc:///file/cloud_upload"
+					icon.source: "qrc:///upload-cloud"
 					onClicked: clientDialog.open();
 					ToolTip.text: "Join game"
 					ToolTip.visible: pressed
 					ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
 				}
 				Button {
-					icon.source: "qrc:///action/settings"
+					icon.source: "qrc:///settings"
 					enabled: !root.connectedToServer
 					onClicked: pageStack.push(Qt.resolvedUrl("Settings.qml"))
 					ToolTip.text: "Settings"
@@ -143,7 +143,7 @@ ApplicationWindow {
 					ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
 				}
 				Button {
-					icon.source: "qrc:///action/info"
+					icon.source: "qrc:///info"
 					onClicked: licenseDialog.open();
 					ToolTip.text: "About"
 					ToolTip.visible: pressed
@@ -152,7 +152,7 @@ ApplicationWindow {
 				Button {
 					id: startButton
 					Layout.fillWidth: true
-					icon.source: "qrc:///maps/navigation"
+					icon.source: "qrc:///navigation"
 					enabled: !root.connectedToServer && (game ? !game.isStarted : false)
 					text: "Start!"
 					highlighted: true
@@ -216,7 +216,7 @@ ApplicationWindow {
 					text: "Client"
 				}
 				ToolButton {
-					icon.source: "qrc:///editor/format_color_fill"
+					icon.source: "qrc:///droplet"
 					icon.color: clientColorDialog.selectedColor
 					onClicked: clientColorDialog.open();
 					ColorDialog {

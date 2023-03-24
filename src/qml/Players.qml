@@ -39,7 +39,7 @@ Item {
 			height: playerIcon.implicitHeight
 			ToolButton {
 				id: playerIcon
-				icon.source: model.controller === 0 ? "qrc:///hardware/gamepad" : model.controller === 2 ? "qrc:///action/android" : "qrc:///action/account_circle"
+				icon.source: model.controller === 0 ? "qrc:///user" : model.controller === 2 ? "qrc:///hard-drive" : "qrc:///users"
 				anchors.left: parent.left
 				onClicked: playerListView.open(index, model.controller);
 			}
@@ -57,19 +57,19 @@ Item {
 				Button {
 					text: "Edit name"
 					enabled: bottomSheet.playerEditable
-					icon.source: "qrc:///action/account_circle"
+					icon.source: "qrc:///user"
 					onClicked: inputDialog.open();
 				}
 				Button {
 					text: "Edit color"
 					enabled: bottomSheet.playerEditable
-					icon.source: "qrc:///editor/format_color_fill"
+					icon.source: "qrc:///droplet"
 					onClicked: colorDialog.open();
 				}
 				Button {
 					text: "Set counterclockwise key"
 					enabled: bottomSheet.playerEditable
-					icon.source: "qrc:///hardware/keyboard_arrow_left"
+					icon.source: "qrc:///rotate-ccw"
 					onClicked: {
 						infoBar.open("Press a key!");
 						leftKeyItem.forceActiveFocus();
@@ -78,7 +78,7 @@ Item {
 				Button {
 					text: "Set clockwise key"
 					enabled: bottomSheet.playerEditable
-					icon.source: "qrc:///hardware/keyboard_arrow_right"
+					icon.source: "qrc:///rotate-cw"
 					onClicked: {
 						infoBar.open("Press a key!");
 						rightKeyItem.forceActiveFocus();
@@ -87,13 +87,13 @@ Item {
 				Button {
 					text: "Bot Settings"
 					enabled: bottomSheet.playerEditable
-					icon.source: "qrc:///action/android"
+					icon.source: "qrc:///hard-drive"
 					onClicked: botDialog.open();
 				}
 				Button {
 					text: "Delete"
 					enabled: !root.connectedToServer
-					icon.source: "qrc:///action/delete"
+					icon.source: "qrc:///trash-2"
 					onClicked: {
 						c_playerModel.removePlayer(playerListView.modelIndex);
 						bottomSheet.close();
@@ -158,7 +158,7 @@ Item {
 		anchors.bottom: parent.bottom
 		anchors.right: parent.right
 		anchors.margins: 16
-		icon.source: "qrc:///content/add"
+		icon.source: "qrc:///user-plus"
 		highlighted: true
 		onClicked: {
 			c_playerModel.appendPlayer();

@@ -1,52 +1,24 @@
 <RCC>
-    <qresource prefix="/action">
-        <file alias="account_circle">material-design-icons/action/svg/production/ic_account_circle_48px.svg</file>
-        <file alias="android">material-design-icons/action/svg/production/ic_android_48px.svg</file>
-        <file alias="delete">material-design-icons/action/svg/production/ic_delete_48px.svg</file>
-        <file alias="info">material-design-icons/action/svg/production/ic_info_48px.svg</file>
-        <file alias="settings">material-design-icons/action/svg/production/ic_settings_48px.svg</file>
-        <file alias="trending_down">material-design-icons/action/svg/production/ic_trending_down_48px.svg</file>
-        <file alias="visibility_off">material-design-icons/action/svg/production/ic_visibility_off_48px.svg</file>
-    </qresource>
-    <qresource prefix="/alert"/>
-    <qresource prefix="/av"/>
-    <qresource prefix="/communication">
-        <file alias="clear_all">material-design-icons/communication/svg/production/ic_clear_all_48px.svg</file>
-    </qresource>
-    <qresource prefix="/content">
-        <file alias="add">material-design-icons/content/svg/production/ic_add_48px.svg</file>
-        <file alias="send">material-design-icons/content/svg/production/ic_send_48px.svg</file>
-        <file alias="undo">material-design-icons/content/svg/production/ic_undo_48px.svg</file>
-    </qresource>
-    <qresource prefix="/device"/>
-    <qresource prefix="/editor">
-        <file alias="format_color_fill">material-design-icons/editor/svg/production/ic_format_color_fill_48px.svg</file>
-        <file alias="insert_link">material-design-icons/editor/svg/production/ic_insert_link_48px.svg</file>
-        <file alias="mode_edit">material-design-icons/editor/svg/production/ic_mode_edit_48px.svg</file>
-    </qresource>
-    <qresource prefix="/file">
-        <file alias="cloud_upload">material-design-icons/file/svg/production/ic_cloud_upload_48px.svg</file>
-    </qresource>
-    <qresource prefix="/hardware">
-        <file alias="gamepad">material-design-icons/hardware/svg/production/ic_gamepad_48px.svg</file>
-        <file alias="keyboard_arrow_left">material-design-icons/hardware/svg/production/ic_keyboard_arrow_left_48px.svg</file>
-        <file alias="keyboard_arrow_right">material-design-icons/hardware/svg/production/ic_keyboard_arrow_right_48px.svg</file>
-    </qresource>
-    <qresource prefix="/image">
-        <file alias="flash_on">material-design-icons/image/svg/production/ic_flash_on_48px.svg</file>
-        <file alias="rotate_90_degrees_ccw">material-design-icons/image/svg/production/ic_rotate_90_degrees_ccw_48px.svg</file>
-    </qresource>
-    <qresource prefix="/maps">
-        <file alias="directions_bike">material-design-icons/maps/svg/production/ic_directions_bike_48px.svg</file>
-        <file alias="navigation">material-design-icons/maps/svg/production/ic_navigation_48px.svg</file>
-    </qresource>
-    <qresource prefix="/navigation">
-        <file alias="close">material-design-icons/navigation/svg/production/ic_close_48px.svg</file>
-    </qresource>
-    <qresource prefix="/notification"/>
-    <qresource prefix="/places"/>
-    <qresource prefix="/social">
-        <file alias="sentiment_very_satisfied">material-design-icons/social/svg/production/ic_sentiment_very_satisfied_48px.svg</file>
-    </qresource>
-    <qresource prefix="/toggle"/>
+	<qresource prefix="/">
+		<file alias="user">feather/icons/user.svg</file>
+		<file alias="hard-drive">feather/icons/hard-drive.svg</file>
+		<file alias="trash-2">feather/icons/trash-2.svg</file>
+		<file alias="info">feather/icons/info.svg</file>
+		<file alias="settings">feather/icons/settings.svg</file>
+		<file alias="skip-back">feather/icons/skip-back.svg</file>
+		<file alias="eye-off">feather/icons/eye-off.svg</file>
+		<file alias="delete">feather/icons/delete.svg</file>
+		<file alias="user-plus">feather/icons/user-plus.svg</file>
+		<file alias="send">feather/icons/send.svg</file>
+		<file alias="rotate-ccw">feather/icons/rotate-ccw.svg</file>
+		<file alias="rotate-cw">feather/icons/rotate-cw.svg</file>
+		<file alias="droplet">feather/icons/droplet.svg</file>
+		<file alias="upload-cloud">feather/icons/upload-cloud.svg</file>
+		<file alias="users">feather/icons/users.svg</file>
+		<file alias="zap">feather/icons/zap.svg</file>
+		<file alias="fast-forward">feather/icons/fast-forward.svg</file>
+		<file alias="navigation">feather/icons/navigation.svg</file>
+		<file alias="x">feather/icons/x.svg</file>
+		<file alias="circle">feather/icons/circle.svg</file>
+	</qresource>
 </RCC>

@@ -16,7 +16,7 @@ Page {
 		}
 	}
 	ToolButton {
-		icon.source: "qrc:///navigation/close"
+		icon.source: "qrc:///x"
 		onClicked: pageStack.clear();
 	}
 	StackLayout {
