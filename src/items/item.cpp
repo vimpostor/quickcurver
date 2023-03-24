@@ -128,7 +128,8 @@ void Item::initTexture() {
 	}
 	QSvgRenderer renderer(iconPath);
 	const auto size = renderer.defaultSize();
-	QImage img = QImage(std::max(SIZE * 2, size.width()), std::max(SIZE * 2, size.height()), QImage::Format_RGB32);
+	constexpr int minRasteriseSize = SIZE * 8;
+	QImage img = QImage(std::max(minRasteriseSize, size.width()), std::max(minRasteriseSize, size.height()), QImage::Format_RGB32);
 	img.fill(color); // fill with background color
 	QPainter painter(&img);
 	renderer.render(&painter); // paint the icon on top of it
