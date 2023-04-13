@@ -14,17 +14,17 @@ Item {
 			model: c_chatModel
 			delegate: RowLayout {
 				width: parent.width
-				Text {
+				Label {
 					id: usernameLabel
 					text: model.username + ":"
 				}
-				Text {
+				Label {
 					text: model.message
 				}
 				Item {
 					Layout.fillWidth: true
 				}
-				Text {
+				Label {
 					text: Qt.formatDateTime(model.timestamp, "HH:mm")
 				}
 			}

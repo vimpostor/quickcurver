@@ -18,6 +18,7 @@ ApplicationWindow {
 	width: 1200
 	height: 900
 	title: "Quick Curver"
+	Material.theme: Material.System
 	Material.primary: Material.Yellow
 	Material.accent: Material.Blue
 	onWidthChanged: game.checkDimension();
