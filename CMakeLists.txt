@@ -6,11 +6,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 list(APPEND QT_MODULES Core Qml Quick QuickControls2 Svg)
-find_package(Qt6 6.4 COMPONENTS ${QT_MODULES} REQUIRED)
+find_package(Qt6 6.5 COMPONENTS ${QT_MODULES} REQUIRED)
+qt_standard_project_setup()
 set(QT_PREFIXED_MODULES ${QT_MODULES})
 list(TRANSFORM QT_PREFIXED_MODULES PREPEND "Qt6::")
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
 
 include_directories("src")
 
@@ -28,7 +27,6 @@ qt_add_qml_module(${PROJECT_NAME} URI "Backend" VERSION 1.0 QML_FILES ${QMLS} SO
 target_link_libraries(${PROJECT_NAME} PRIVATE ${QT_PREFIXED_MODULES})
 
 # install
-include(GNUInstallDirs)
 install(TARGETS ${PROJECT_NAME} RUNTIME)
 install(DIRECTORY "${CMAKE_SOURCE_DIR}/doc/man/" TYPE MAN)
 install(FILES "assets/${PROJECT_NAME}.desktop" DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/applications")
