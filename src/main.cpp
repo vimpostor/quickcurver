@@ -25,14 +25,6 @@
 int main(int argc, char *argv[]) {
 	// threaded render_loop, which is default on non-mesa drivers, breaks drawing
 	qputenv("QSG_RENDER_LOOP", "basic");
-	QQuickStyle::setStyle(QLatin1String("Material"));
-#if defined(Q_OS_LINUX) || defined(Q_OS_WIN) || defined(Q_OS_MAC)
-	const char *materialVariantName = "QT_QUICK_CONTROLS_MATERIAL_VARIANT";
-	if (!qEnvironmentVariableIsSet(materialVariantName)) {
-		// dense Material style, more suited for desktop targets
-		qputenv(materialVariantName, "Dense");
-	}
-#endif
 	QGuiApplication app(argc, argv);
 
 	qRegisterMetaType<Client::JoinStatus>("JoinStatus");

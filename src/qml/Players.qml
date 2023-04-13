@@ -1,9 +1,7 @@
 import QtQuick
 import QtQuick.Dialogs
 import QtQuick.Layouts
-import QtQuick.Controls
 import QtQuick.Controls.Material
-import QtQuick.Controls.impl
 
 Item {
 	id: playersRoot
