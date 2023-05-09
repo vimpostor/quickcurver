@@ -119,15 +119,6 @@ Client *Game::getClient() {
  * @return Always return Game::rootNode
  */
 QSGNode *Game::updatePaintNode(QSGNode *, QQuickItem::UpdatePaintNodeData *) {
-	// TODO: Actually do our rendering only during update
-	// Right now we can't use the threaded render loop because we update nodes from everywhere
-	return rootNode;
-}
-
-/**
- * @brief Updates the game's logic respecting how much time actually passed by
- */
-void Game::progress() {
 	int deltat = Util::getTimeDiff(lastProgressTime);
 	lastProgressTime = QTime::currentTime();
 	for (auto &c : getCurvers()) {
@@ -135,12 +126,18 @@ void Game::progress() {
 			if (c->controller == Curver::Controller::CONTROLLER_BOT) {
 				Bot::makeMove(*c.get());
 			}
-			c->progress(deltat, getCurvers());
-			c->checkForWall();
 		}
+		c->progress(deltat, getCurvers());
 	}
 	itemFactory->update();
 
+	return rootNode;
+}
+
+/**
+ * @brief Updates the game's logic respecting how much time actually passed by
+ */
+void Game::progress() {
 	update();
 	server.broadcastCurverData();
 }

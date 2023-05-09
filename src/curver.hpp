@@ -183,6 +183,10 @@ private:
 	 * Note, that this object will take ownership of all segments when triggered
 	 */
 	CleaninstallAnimation cleaninstallAnimation;
+	/**
+	 * @brief A vector holding all explosions for this Curver
+	 */
+	std::vector<std::unique_ptr<Explosion>> explosions;
 };
 
 bool operator<(const std::unique_ptr<Curver> &l, const std::unique_ptr<Curver> &r);

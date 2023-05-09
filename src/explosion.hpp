@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QPointF>
-#include <QTimer>
 #include <QtQuick>
 #include <memory>
 
@@ -24,7 +23,6 @@ class Explosion : public QObject {
 public:
 	explicit Explosion(QPointF location, QSGNode *parentNode, QSGFlatColorMaterial *material, QObject *parent = nullptr, float radius = 1.0);
 	~Explosion();
-private slots:
 	void progress();
 private:
 	/**
@@ -47,10 +45,6 @@ private:
 	 * @brief The geometry of the explosion
 	 */
 	QSGGeometry geometry = QSGGeometry(QSGGeometry::defaultAttributes_Point2D(), 0);
-	/**
-	 * @brief The timer responsible for updating the explosion
-	 */
-	QTimer timer;
 	/**
 	 * @brief The time of the explosion start
 	 */

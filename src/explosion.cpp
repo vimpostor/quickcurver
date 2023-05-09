@@ -34,8 +34,6 @@ Explosion::Explosion(QPointF location, QSGNode *parentNode, QSGFlatColorMaterial
 	}
 	opacityNode->appendChildNode(geoNode.get());
 	parentNode->appendChildNode(opacityNode.get());
-	connect(&timer, &QTimer::timeout, this, &Explosion::progress);
-	timer.start(16);
 }
 
 Explosion::~Explosion() {
@@ -48,7 +46,8 @@ Explosion::~Explosion() {
 void Explosion::progress() {
 	float timeSinceStart = initialTime.msecsTo(QTime::currentTime());
 	if (timeSinceStart > PARTICLELIFETIME) {
-		delete this;
+		// TODO: Improve lifetime of explosion, right now we only delete them at the end of each round
+		return;
 	} else {
 		for (int i = 0; i < PARTICLECOUNT; ++i) {
 			vertices[2 * i + 1].set(location.x() + PARTICLERANGE * particleDirections[i].x() * timeSinceStart / PARTICLELIFETIME,

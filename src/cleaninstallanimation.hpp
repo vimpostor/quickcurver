@@ -5,7 +5,6 @@
 #include <QSGFlatColorMaterial>
 #include <QSGNode>
 #include <QTime>
-#include <QTimer>
 #include <memory>
 
 #include "segment.hpp"
@@ -19,8 +18,8 @@
 class CleaninstallAnimation : public QObject {
 	Q_OBJECT
 public:
-	explicit CleaninstallAnimation(QObject *parent = nullptr);
 	void trigger(std::vector<std::unique_ptr<Segment>> &newSegments);
+	void progress();
 signals:
 	/**
 	 * @brief Request to spawn an explosion
@@ -28,10 +27,6 @@ signals:
 	 */
 	void spawnExplosion(QPointF location);
 private:
-	/**
-	 * @brief The timer updating the animation
-	 */
-	QTimer timer;
 	/**
 	 * @brief The point in time that the animation was triggered with trigger()
 	 */
@@ -54,8 +49,6 @@ private:
 	 * @brief The total size over all segments
 	 */
 	size_t totalSize;
-private slots:
-	void progress();
 };
 
 #endif // CLEANINSTALLANIMATION_H

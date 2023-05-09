@@ -28,11 +28,15 @@ void ItemFactory::resetRound() {
  * Also checks if any Curver triggers an Item
  */
 void ItemFactory::update() {
-	if (QTime::currentTime() >= nextItemSpawn) {
+	if (nextItemSpawn.isValid() && QTime::currentTime() >= nextItemSpawn) {
 		spawnItem();
 		prepareNextItem();
 	}
 	checkCollisions();
+
+	// update all items
+	std::ranges::for_each(items, [](auto &i) { i->update(); });
+	std::ranges::for_each(usedItems, [](auto &i) { i->update(); });
 }
 
 /**

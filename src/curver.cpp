@@ -152,6 +152,13 @@ void Curver::start() {
  * @param curvers All curvers
  */
 void Curver::progress(int deltat, std::vector<std::unique_ptr<Curver>> &curvers) {
+	// update all explosions
+	std::ranges::for_each(explosions, [](auto &i) { i->progress(); });
+	cleaninstallAnimation.progress();
+	if (!isAlive()) {
+		return;
+	}
+
 	if (nextSegmentEvent <= QTime::currentTime()) {
 		if (changingSegment) {
 			// spawn a new segment
@@ -185,6 +192,8 @@ void Curver::progress(int deltat, std::vector<std::unique_ptr<Curver>> &curvers)
 			die();
 		}
 	}
+
+	checkForWall();
 }
 
 /**
@@ -239,6 +248,7 @@ void Curver::increaseScore() {
  * @brief Resets the round
  */
 void Curver::resetRound() {
+	explosions.clear();
 	segments.clear();
 	// random start position
 	QPoint dimension = Settings::getSingleton().getDimension();
@@ -316,7 +326,7 @@ void Curver::prepareSegmentEvent(bool changingSegment, int lower, int upper) {
  * @param radius The size of the explosion
  */
 void Curver::spawnExplosion(QPointF location, float radius) {
-	(void) new Explosion(location, parentNode, &material, this, radius);
+	explosions.emplace_back(std::make_unique<Explosion>(location, parentNode, &material, this, radius));
 }
 
 /**

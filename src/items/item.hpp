@@ -6,7 +6,6 @@
 #include <QQuickWindow>
 #include <QSGNode>
 #include <QSGTextureMaterial>
-#include <QTimer>
 
 #include "curver.hpp"
 #include "models/playermodel.hpp"
@@ -29,6 +28,7 @@ public:
 
 	explicit Item(QSGNode *parentNode, QString iconPath, AllowedUsers allowedUsers, QPointF pos);
 
+	void update();
 	void defuse();
 	void trigger(std::unique_ptr<Curver> &collector);
 	bool isInRange(QPointF p) const;
@@ -67,7 +67,7 @@ protected:
 	 */
 	QPointF pos;
 	/**
-	 * @brief The amount of time that this Item stays activated before being deactivated
+	 * @brief The amount of time that this Item stays activated before being deactivated in ms
 	 *
 	 * If the Item does not have to be deactivated, this value must be 0.
 	 */
@@ -97,15 +97,15 @@ protected:
 	 */
 	QColor color;
 	/**
-	 * @brief The timer that is used to deactivate the Item again after it was triggered
+	 * @brief The time when this Item should deactivate after it was triggered
+	 *
+	 * If the item wasn't used yet, this is the null time.
 	 */
-	QTimer unUseTimer;
-	/**
-	 * @brief The timer that is used for visually fading the Item in or out
-	 */
-	QTimer fadeTimer;
+	QTime unUseTime;
 	/**
 	 * @brief The point of time that the last fade began
+	 *
+	 * If there is no fade going on right now, this is the null time.
 	 */
 	QTime fadeStart;
 	/**

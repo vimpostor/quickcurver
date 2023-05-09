@@ -26,10 +26,23 @@ Item::Item(QSGNode *parentNode, QString iconPath, AllowedUsers allowedUsers, QPo
 	material.setTexture(texture.get());
 	geoNode.setMaterial(&material);
 	geometry.allocate(4);
-	connect(&fadeTimer, &QTimer::timeout, this, &Item::fade);
 	startFade(true);
 	fade();
 	parentNode->appendChildNode(&geoNode);
+}
+
+/**
+ * @brief Performs all updates on this Item
+ */
+void Item::update() {
+	// check if needs to fade
+	if (fadeStart.isValid()) {
+		fade();
+	}
+	// check if this item should be deactivated
+	if (active && unUseTime.isValid() && QTime::currentTime() > unUseTime) {
+		defuse();
+	}
 }
 
 /**
@@ -37,7 +50,6 @@ Item::Item(QSGNode *parentNode, QString iconPath, AllowedUsers allowedUsers, QPo
  */
 void Item::defuse() {
 	if (active) {
-		unUseTimer.stop();
 		deactivate();
 	}
 }
@@ -53,7 +65,7 @@ void Item::trigger(std::unique_ptr<Curver> &collector) {
 	active = true;
 	if (this->activatedTime != 0) {
 		// has to be deactivated
-		unUseTimer.singleShot(activatedTime, this, &Item::deactivate);
+		unUseTime = QTime::currentTime().addMSecs(activatedTime);
 	}
 	startFade(false);
 }
@@ -72,7 +84,7 @@ void Item::fade() {
 	vertices[3].set(this->pos.x() + SIZE * factor, this->pos.y() + SIZE * factor, 1, 1);
 	geoNode.markDirty(QSGNode::DirtyGeometry);
 	if (actualDuration > FADEDURATION) {
-		fadeTimer.stop();
+		fadeStart = QTime();
 		if (!fadeIn && activatedTime == 0) {
 			// parentNode->removeChildNode(&geoNode);
 		}
@@ -155,9 +167,8 @@ bool Item::isInRange(QPointF p) const {
  * @param in Whether to fade in or out
  */
 void Item::startFade(bool in) {
-	fadeStart = QTime::currentTime();
 	fadeIn = in;
-	fadeTimer.start(16);
+	fadeStart = QTime::currentTime();
 }
 
 /**
