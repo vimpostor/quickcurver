@@ -29,152 +29,140 @@ ApplicationWindow {
 	Item {
 		id: initialPage
 		anchors.fill: parent
-		MouseArea {
-			id: gameWave
-			anchors {top: parent.top; left: parent.left; right: gameSeparator.left; bottom: parent.bottom; margins: 8}
-			Behavior on width {
-				NumberAnimation {
-					easing.type: Easing.OutCubic
-				}
-			}
-			Rectangle {
-				anchors.fill: parent
-				color: Material.color(Material.BlueGrey, Material.Shade900)
-			}
-			Game {
-				id: game
-				anchors.fill: parent
-				property int realWidth: c_settings.width
-				property int realHeight: c_settings.height
-				function checkDimension() {
-					if (!root.connectedToServer) {
-						// we are manually resizing anyway
-						return;
-					}
-					if (realWidth > width || realHeight > height || width > root.width) {
-						resizeSnackbar.open("The server has set a larger game size.", "Resize automatically");
-					} else {
-						resizeSnackbar.close();
-					}
-				}
-				onWidthChanged: {
-					if (!root.connectedToServer) {
-						c_settings.width = width;
-					}
-					checkDimension();
-				}
-				onHeightChanged: {
-					if (!root.connectedToServer) {
-						c_settings.height = height;
-					}
-					checkDimension();
-				}
-				onRealWidthChanged: checkDimension();
-				onRealHeightChanged: checkDimension();
-				onPostInfoBar: (msg) => infoBar.open(msg);
-				Keys.onPressed: (event) => {
-					game.processKey(event.key, false);
-				}
-				Keys.onReleased: (event) => {
-					game.processKey(event.key, true);
-				}
-				onGameStarted: {
-					game.forceActiveFocus();
-					/* gameWave.openWave(); */
-				}
-			}
+		SplitView {
+			anchors.fill: parent
 			MouseArea {
-				anchors.fill: parent
-				onClicked: game.forceActiveFocus();
-			}
-			MouseArea {
-				enabled: Backend.isMobile
-				anchors.fill: parent
-				anchors.rightMargin: parent.width / 2
-				onPressedChanged: game.processKey(Qt.Key_Left, !pressed);
-			}
-			MouseArea {
-				enabled: Backend.isMobile
-				anchors.fill: parent
-				anchors.leftMargin: parent.width / 2
-				onPressedChanged: game.processKey(Qt.Key_Right, !pressed);
-			}
-		}
-		Rectangle {
-			id: gameSeparator
-			x: Backend.isMobile ? 200 : 720
-			width: 8
-			color: Material.color(Material.Grey, Material.Shade100)
-			anchors.top: parent.top
-			anchors.bottom: parent.bottom
-			anchors.margins: 8
-			DragHandler {
-				yAxis.enabled: false
-			}
-		}
-		Item {
-			id: options
-			height: optionsLayout.implicitHeight
-			anchors {top: parent.top; left: gameSeparator.right; right: parent.right; margins: 8}
-			RowLayout {
-				id: optionsLayout
-				anchors {left: parent.left; right: parent.right}
-				Button {
-					icon.source: "qrc:///delete"
-					enabled: !root.connectedToServer
-					onClicked: game.resetGame();
-					ToolTip.text: "Reset game"
-					ToolTip.visible: pressed
-					ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+				id: gameWave
+				SplitView.preferredWidth: c_settings.width
+				Rectangle {
+					anchors.fill: parent
+					color: Material.color(Material.BlueGrey, Material.Shade900)
 				}
-				Button {
-					icon.source: "qrc:///upload-cloud"
-					onClicked: clientDialog.open();
-					ToolTip.text: "Join game"
-					ToolTip.visible: pressed
-					ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-				}
-				Button {
-					icon.source: "qrc:///settings"
-					enabled: !root.connectedToServer
-					onClicked: pageStack.push(Qt.resolvedUrl("Settings.qml"))
-					ToolTip.text: "Settings"
-					ToolTip.visible: pressed
-					ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-				}
-				Button {
-					icon.source: "qrc:///info"
-					onClicked: licenseDialog.open();
-					ToolTip.text: "About"
-					ToolTip.visible: pressed
-					ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-				}
-				Button {
-					id: startButton
-					Layout.fillWidth: true
-					icon.source: "qrc:///navigation"
-					enabled: !root.connectedToServer && (game ? !game.isStarted : false)
-					text: "Start!"
-					highlighted: true
-					onClicked: {
-						game.startGame();
+				Game {
+					id: game
+					anchors.fill: parent
+					property int realWidth: c_settings.width
+					property int realHeight: c_settings.height
+					function checkDimension() {
+						if (!root.connectedToServer) {
+							// we are manually resizing anyway
+							return;
+						}
+						if (realWidth > width || realHeight > height || width > root.width) {
+							resizeSnackbar.open("The server has set a larger game size.", "Resize automatically");
+						} else {
+							resizeSnackbar.close();
+						}
+					}
+					onWidthChanged: {
+						if (!root.connectedToServer) {
+							c_settings.width = width;
+						}
+						checkDimension();
+					}
+					onHeightChanged: {
+						if (!root.connectedToServer) {
+							c_settings.height = height;
+						}
+						checkDimension();
+					}
+					onRealWidthChanged: checkDimension();
+					onRealHeightChanged: checkDimension();
+					onPostInfoBar: (msg) => infoBar.open(msg);
+					Keys.onPressed: (event) => {
+						game.processKey(event.key, false);
+					}
+					Keys.onReleased: (event) => {
+						game.processKey(event.key, true);
+					}
+					onGameStarted: {
+						game.forceActiveFocus();
+						/* gameWave.openWave(); */
 					}
 				}
-				MessageDialog {
-					id: licenseDialog
-					text: "This software is free software licensed under the GNU GPL3.\nThe source code repository is available at https://github.com/vimpostor/quickcurver\nYou can also report any issues on the same website."
-					buttons: MessageDialog.Ok
+				MouseArea {
+					anchors.fill: parent
+					onClicked: game.forceActiveFocus();
+				}
+				MouseArea {
+					enabled: Backend.isMobile
+					anchors.fill: parent
+					anchors.rightMargin: parent.width / 2
+					onPressedChanged: game.processKey(Qt.Key_Left, !pressed);
+				}
+				MouseArea {
+					enabled: Backend.isMobile
+					anchors.fill: parent
+					anchors.leftMargin: parent.width / 2
+					onPressedChanged: game.processKey(Qt.Key_Right, !pressed);
 				}
 			}
-		}
-		Chat {
-			id: chat
-			anchors {top: options.bottom; left: gameSeparator.right; right: parent.right; margins: 8}
-			height: parent.height / 3
-		}
-		Players {
-			id: players
-			anchors {top: chat.bottom; left: gameSeparator.right; right: parent.right; bottom: parent.bottom; margins: 8}
+			Item {
+				Item {
+					id: options
+					height: optionsLayout.implicitHeight
+					anchors {top: parent.top; left: parent.left; right: parent.right; margins: 8}
+					RowLayout {
+						id: optionsLayout
+						anchors {left: parent.left; right: parent.right}
+						Button {
+							icon.source: "qrc:///delete"
+							enabled: !root.connectedToServer
+							onClicked: game.resetGame();
+							ToolTip.text: "Reset game"
+							ToolTip.visible: pressed
+							ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+						}
+						Button {
+							icon.source: "qrc:///upload-cloud"
+							onClicked: clientDialog.open();
+							ToolTip.text: "Join game"
+							ToolTip.visible: pressed
+							ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+						}
+						Button {
+							icon.source: "qrc:///settings"
+							enabled: !root.connectedToServer
+							onClicked: pageStack.push(Qt.resolvedUrl("Settings.qml"))
+							ToolTip.text: "Settings"
+							ToolTip.visible: pressed
+							ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+						}
+						Button {
+							icon.source: "qrc:///info"
+							onClicked: licenseDialog.open();
+							ToolTip.text: "About"
+							ToolTip.visible: pressed
+							ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+						}
+						Button {
+							id: startButton
+							Layout.fillWidth: true
+							icon.source: "qrc:///navigation"
+							enabled: !root.connectedToServer && (game ? !game.isStarted : false)
+							text: "Start!"
+							highlighted: true
+							onClicked: {
+								game.startGame();
+							}
+						}
+						MessageDialog {
+							id: licenseDialog
+							text: "This software is free software licensed under the GNU GPL3.\nThe source code repository is available at https://github.com/vimpostor/quickcurver\nYou can also report any issues on the same website."
+							buttons: MessageDialog.Ok
+						}
+					}
+				}
+				Chat {
+					id: chat
+					anchors {top: options.bottom; left: parent.left; right: parent.right; margins: 8}
+					height: parent.height / 3
+				}
+				Players {
+					id: players
+					anchors {top: chat.bottom; left: parent.left; right: parent.right; bottom: parent.bottom; margins: 8}
+				}
+			}
 		}
 		StackView {
 			id: pageStack
@@ -187,10 +175,10 @@ ApplicationWindow {
 			id: resizeSnackbar
 			duration: 10000
 			onAccepted: {
-				gameSeparator.x =  Math.min(c_settings.width + 16, Screen.width - 16);
+				gameWave.width =  Math.min(c_settings.width + 16, Screen.width - 16);
 				root.height = Math.min(c_settings.height + 3 * 16, Screen.height - 16);
-				if (root.width < gameSeparator.x) {
-					root.width = gameSeparator.x + 14 * 16;
+				if (root.width < gameWave.width) {
+					root.width = gameWave.width + 14 * 16;
 				}
 			}
 		}
