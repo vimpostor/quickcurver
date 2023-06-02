@@ -35,16 +35,20 @@ Item {
 		model: c_playerModel
 		delegate: Item {
 			height: playerIcon.implicitHeight
+			width: ListView.view.width
 			ToolButton {
 				id: playerIcon
 				icon.source: model.controller === 0 ? "qrc:///user" : model.controller === 2 ? "qrc:///hard-drive" : "qrc:///users"
 				anchors.left: parent.left
-				onClicked: playerListView.open(index, model.controller);
 			}
 			Label {
 				text: model.name + "   " + model.totalScore + "(+" +  model.roundScore + ")"
 				anchors.verticalCenter: parent.verticalCenter
 				anchors.left: playerIcon.right
+			}
+			MouseArea {
+				anchors.fill: parent
+				onClicked: playerListView.open(index, model.controller);
 			}
 		}
 		Dialog {
