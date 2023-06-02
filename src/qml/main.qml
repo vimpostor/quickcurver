@@ -234,7 +234,7 @@ ApplicationWindow {
 					anchors.right: parent.right
 					onClicked: {
 						c_settings.setClientName(nameTextField.text);
-						c_settings.setClientColor(clientColorDialog.color);
+						c_settings.setClientColor(clientColorDialog.selectedColor);
 						game.connectToHost(ipTextField.text, portTextField.text);
 					}
 				}
