@@ -301,7 +301,7 @@ void Packet::ServerCurverData::extract() {
  */
 void Packet::ServerCurverData::serialize(QDataStream &out) const {
 	Util::serializeCnt(out, pos);
-	// the following procedure serializes every changingSegment into a single bit
+	// the following procedure serializes every changingSegment into a single byte
 	uint8_t compressedByte = 0;
 	int lastPos = 8;
 	for (auto seg : changingSegment) {
@@ -396,7 +396,7 @@ Packet::Ping::Ping()
  * @param out The stream to serialize into
  */
 void Packet::Ping::serialize(QDataStream &out) const {
-	out << sent;
+	out << sent << delta;
 }
 
 /**
@@ -404,7 +404,7 @@ void Packet::Ping::serialize(QDataStream &out) const {
  * @param in The stream to parse from
  */
 void Packet::Ping::parse(QDataStream &in) {
-	in >> sent;
+	in >> sent >> delta;
 }
 
 /**
@@ -454,11 +454,34 @@ Packet::Pong::Pong()
 }
 
 /**
+ * @brief Automatically fills the packet with the according data
+ */
+void Packet::Pong::fill() {
+	auto &curvers = PlayerModel::getSingleton().getCurvers();
+	for (auto &c : curvers) {
+		pings.push_back(c->ping);
+	}
+}
+
+/**
+ * @brief Automatically extracts the packet data
+ */
+void Packet::Pong::extract() {
+	auto &curvers = PlayerModel::getSingleton().getCurvers();
+	for (size_t i = 0; i < std::min(curvers.size(), pings.size()); ++i) {
+		curvers[i]->ping = pings[i];
+	}
+}
+
+/**
  * @brief Serializes a Pong
  * @param out The stream to serialize into
  */
 void Packet::Pong::serialize(QDataStream &out) const {
-	out << sent << curverIndex;
+	out << sent << curverIndex << static_cast<qint64>(pings.size());
+	for (auto p : pings) {
+		out << p;
+	}
 }
 
 /**
@@ -466,5 +489,12 @@ void Packet::Pong::serialize(QDataStream &out) const {
  * @param in The stream to parse from
  */
 void Packet::Pong::parse(QDataStream &in) {
-	in >> sent >> curverIndex;
+	qint64 size;
+	qint64 ping;
+
+	in >> sent >> curverIndex >> size;
+	for (auto i = 0; i < size; ++i) {
+		in >> ping;
+		pings.push_back(ping);
+	}
 }

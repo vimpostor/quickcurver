@@ -199,12 +199,3 @@ unsigned Settings::getUpdatesPerSecond() const {
 bool Settings::getOffscreen() const {
 	return QGuiApplication::platformName() == "offscreen";
 }
-
-void Settings::setPing(int ping) {
-	this->ping = ping;
-	emit pingChanged(ping);
-}
-
-int Settings::getPing() const {
-	return ping;
-}

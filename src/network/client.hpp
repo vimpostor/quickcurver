@@ -113,6 +113,11 @@ private:
 	 */
 	QTimer pingTimer;
 	/**
+	 * @brief The current ping to the server
+	 * This is updated with every Pong packet received.
+	 */
+	qint64 ping = 0;
+	/**
 	 * @brief The timer responsible for cancelling a join request, if it takes too long
 	 */
 	QTimer joinTimeoutTimer;

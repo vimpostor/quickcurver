@@ -91,6 +91,7 @@ void Client::processKey(Qt::Key key, bool release) {
  */
 void Client::pingServer() {
 	Packet::Ping p;
+	p.delta = ping;
 	p.sendPacketUdp(&udpSocket, serverAddress);
 }
 
@@ -245,8 +246,11 @@ void Client::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p) {
 	case Packet::ServerTypes::Pong:
 		{
 			auto *pong = (Packet::Pong *) p.get();
-			Settings::getSingleton().setPing(Util::getTimeDiff(pong->sent));
+			ping = Util::getTimeDiff(pong->sent);
 			this->curverIndex = pong->curverIndex;
+			pong->extract();
+			PlayerModel::getSingleton().forceRefresh();
+
 			if (this->joinStatus == JoinStatus::UDP_PENDING) {
 				setJoinStatus(JoinStatus::JOINED);
 				sendPlayerModel();

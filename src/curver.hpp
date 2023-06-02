@@ -97,6 +97,11 @@ public:
 	 * @brief Determines if the head is visible at the moment
 	 */
 	bool headVisible = true;
+	/**
+	 * The ping to the server of this player.
+	 * This is only available in online games.
+	 */
+	qint64 ping = 0;
 signals:
 	/**
 	 * @brief Emitted, when the Curver died due to collision

@@ -14,7 +14,6 @@ class Settings : public QObject {
 
 	Q_PROPERTY(int width READ getWidth WRITE setWidth NOTIFY widthChanged)
 	Q_PROPERTY(int height READ getHeight WRITE setHeight NOTIFY heightChanged)
-	Q_PROPERTY(int ping READ getPing NOTIFY pingChanged)
 public:
 	explicit Settings();
 	static Settings &getSingleton();
@@ -41,8 +40,6 @@ public:
 	Q_INVOKABLE void setUpdatesPerSecond(const unsigned val);
 	Q_INVOKABLE unsigned getUpdatesPerSecond() const;
 	Q_INVOKABLE bool getOffscreen() const;
-	Q_INVOKABLE void setPing(int ping);
-	Q_INVOKABLE int getPing() const;
 signals:
 	/**
 	 * @brief Emitted, when the dimension of the game changed
@@ -58,11 +55,6 @@ signals:
 	 * @param height The new height
 	 */
 	void heightChanged(int height);
-	/**
-	 * @brief Emitted, when the ping changed
-	 * @param ping The ping to the Server, determined using the Ping packet
-	 */
-	void pingChanged(int ping);
 private:
 	/**
 	 * @brief The username of the client
@@ -105,10 +97,6 @@ private:
 	 * @brief The number of logic updates per second
 	 */
 	unsigned updatesPerSecond = 60;
-	/**
-	 * @brief The current ping
-	 */
-	int ping = 0;
 };
 
 #endif // SETTINGS_H

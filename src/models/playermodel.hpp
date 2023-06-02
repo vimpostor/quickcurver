@@ -70,6 +70,7 @@ private:
 		RoundScoreRole,
 		TotalScoreRole,
 		ControllerRole,
+		PingRole,
 	};
 	/**
 	 * @brief The root node in the scene graph

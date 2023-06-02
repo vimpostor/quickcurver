@@ -291,6 +291,15 @@ public:
 	 * @brief The time that the packet was sent at
 	 */
 	QTime sent = QTime::currentTime();
+	/**
+	 * @brief The last calculated ping of the client
+	 *
+	 * If the client didn't receive a Pong yet,
+	 * then it doesn't know its ping and fallsback to zero.
+	 *
+	 * The ping delta is updated with every Pong received from the server.
+	 */
+	qint64 delta = 0;
 protected:
 	virtual void serialize(QDataStream &out) const override;
 	virtual void parse(QDataStream &in) override;
@@ -319,6 +328,8 @@ protected:
 class Pong : public AbstractPacket {
 public:
 	Pong();
+	void fill();
+	void extract();
 	/**
 	 * @brief The time that the original Ping packet was sent at
 	 */
@@ -327,6 +338,10 @@ public:
 	 * @brief The index of the client-controlled curver in the server-side array
 	 */
 	int curverIndex = -1;
+	/**
+	 * The ping of each player
+	 */
+	std::vector<qint64> pings;
 protected:
 	virtual void serialize(QDataStream &out) const override;
 	virtual void parse(QDataStream &in) override;

@@ -8,15 +8,7 @@ Item {
 	ListView {
 		id: playerListView
 		header: Label {
-			property real pingFactor: Math.min(500, c_settings.ping) / 500
-			text: "Players (Ping: " + c_settings.ping + ")"
-			color: c_settings.ping ? Qt.rgba(pingFactor, (1 - pingFactor), 0, 1) : Material.secondaryTextColor
-			Behavior on color {
-				ColorAnimation {
-					duration: 800
-					easing.type: Easing.OutCubic
-				}
-			}
+			text: "Players"
 		}
 		clip: true
 		property int modelIndex: 0
@@ -45,6 +37,20 @@ Item {
 				text: model.name + "   " + model.totalScore + "(+" +  model.roundScore + ")"
 				anchors.verticalCenter: parent.verticalCenter
 				anchors.left: playerIcon.right
+			}
+			Label {
+				property real pingFactor: Math.min(500, model.ping) / 500
+				text: model.ping
+				visible: model.ping
+				color: Qt.rgba(pingFactor, (1 - pingFactor), 0, 1)
+				Behavior on color {
+					ColorAnimation {
+						duration: 800
+						easing.type: Easing.OutCubic
+					}
+				}
+				anchors.verticalCenter: parent.verticalCenter
+				anchors.right: parent.right
 			}
 			MouseArea {
 				anchors.fill: parent

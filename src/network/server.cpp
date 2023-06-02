@@ -269,6 +269,14 @@ void Server::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p, const QTcp
 			Packet::Pong pongPacket;
 			pongPacket.sent = pingPacket->sent;
 			pongPacket.curverIndex = getCurverIndex(sender);
+
+			if (pongPacket.curverIndex != -1) {
+				// store current ping of this player
+				PlayerModel::getSingleton().getCurvers()[pongPacket.curverIndex]->ping = pingPacket->delta;
+				PlayerModel::getSingleton().forceRefresh();
+			}
+
+			pongPacket.fill();
 			pongPacket.sendPacketUdp(&udpSocket, sender);
 			break;
 		}

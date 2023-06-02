@@ -14,6 +14,7 @@ PlayerModel::PlayerModel(QObject *parent)
 	m_roleNames[RoundScoreRole] = "roundScore";
 	m_roleNames[TotalScoreRole] = "totalScore";
 	m_roleNames[ControllerRole] = "controller";
+	m_roleNames[PingRole] = "ping";
 }
 
 /**
@@ -47,6 +48,8 @@ QVariant PlayerModel::data(const QModelIndex &index, int role) const {
 		return curver->totalScore;
 	case ControllerRole:
 		return static_cast<int>(curver->controller);
+	case PingRole:
+		return curver->ping;
 	default:
 		return "Unknown role";
 	}

@@ -188,7 +188,10 @@ The server sends the following data (in this order):
 
 ### Ping packet from client
 
-The client sends the current time.
+The client sends the current time and the currently estimated ping.
+If the client didn't receive a Pong from the server yet, then the estimated ping
+SHOULD be `0`.
+The estimated ping MUST be a signed 64-bit integer representing milliseconds.
 
 ### Settings from server
 
@@ -196,7 +199,10 @@ The server sends the following data:
 
 * Game dimension as QPoint
 
-### Pong packet from client
+### Pong packet from server
 
-The server sends the current time as received from the corresponding
-Ping packet.
+The server sends the current time as received from the corresponding Ping
+packet. The client MUST calculate the ping by computing the time difference
+between now and the time of the Ping relayed over this Pong packet.
+The server also sends the index of the player that it responds to and
+it additionally sends all estimated pings from all clients.
