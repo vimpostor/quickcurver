@@ -6,9 +6,10 @@
  * @param iconName The icon name
  * @param allowedUsers The allowed users
  * @param pos The location
+ * @param win The window to render in
  */
-CleanInstallItem::CleanInstallItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos)
-	: Item(parentNode, iconName, allowedUsers, pos) {
+CleanInstallItem::CleanInstallItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos, QQuickWindow *win)
+	: Item(parentNode, iconName, allowedUsers, pos, win) {
 }
 
 /**

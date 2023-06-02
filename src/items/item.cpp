@@ -12,8 +12,9 @@
  * @param iconPath The path to the icon used as a texture
  * @param allowedUsers The allowed users for this Item
  * @param pos The location of this Item
+ * @param window The window to render in
  */
-Item::Item(QSGNode *parentNode, QString iconPath, AllowedUsers allowedUsers, QPointF pos) {
+Item::Item(QSGNode *parentNode, QString iconPath, AllowedUsers allowedUsers, QPointF pos, QQuickWindow *window) {
 	this->parentNode = parentNode;
 	this->iconPath = iconPath;
 	this->allowedUsers = allowedUsers;
@@ -22,7 +23,7 @@ Item::Item(QSGNode *parentNode, QString iconPath, AllowedUsers allowedUsers, QPo
 	geometry.setDrawingMode(GL_TRIANGLE_STRIP);
 	geoNode.setGeometry(&geometry);
 	color = getColor();
-	initTexture();
+	initTexture(window);
 	material.setTexture(texture.get());
 	geoNode.setMaterial(&material);
 	geometry.allocate(4);
@@ -133,8 +134,9 @@ QColor Item::getColor() const {
 
 /**
  * @brief Initializes the texture of the Item
+ * @param window The window to create the texture in
  */
-void Item::initTexture() {
+void Item::initTexture(QQuickWindow *window) {
 	if (Settings::getSingleton().getOffscreen()) {
 		return;
 	}
@@ -145,7 +147,11 @@ void Item::initTexture() {
 	img.fill(color); // fill with background color
 	QPainter painter(&img);
 	renderer.render(&painter); // paint the icon on top of it
-	texture = std::unique_ptr<QSGTexture>(Util::getTextureGenerator()->createTextureFromImage(img));
+
+	// create the texture
+	assert(window);
+	texture = std::unique_ptr<QSGTexture>(window->createTextureFromImage(img));
+	assert(texture);
 	texture->setMipmapFiltering(QSGTexture::Linear);
 }
 

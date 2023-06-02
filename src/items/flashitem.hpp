@@ -8,7 +8,7 @@
  */
 class FlashItem : public Item {
 public:
-	FlashItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos);
+	FlashItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos, QQuickWindow *win);
 private:
 	virtual void use(Curver *curver) override;
 };

@@ -8,7 +8,7 @@
  */
 class InvisibleItem : public Item {
 public:
-	InvisibleItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos);
+	InvisibleItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos, QQuickWindow *win);
 private:
 	virtual void use(Curver *curver) override;
 };

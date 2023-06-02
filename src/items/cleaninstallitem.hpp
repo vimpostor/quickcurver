@@ -10,7 +10,7 @@
  */
 class CleanInstallItem : public Item {
 public:
-	CleanInstallItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos);
+	CleanInstallItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos, QQuickWindow *win);
 private:
 	virtual void use(Curver *curver) override;
 };

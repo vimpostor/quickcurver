@@ -8,7 +8,7 @@
  */
 class AgileItem : public Item {
 public:
-	AgileItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos);
+	AgileItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos, QQuickWindow *win);
 private:
 	virtual void use(Curver *curver) override;
 	virtual void unUse(Curver *curver) override;

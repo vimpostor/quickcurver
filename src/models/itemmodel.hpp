@@ -33,8 +33,8 @@ public:
 
 	static ItemModel &getSingleton();
 
-	Item *makeRandomItem(QSGNode *parentNode, QPointF pos);
-	Item *makePredefinedItem(QSGNode *parentNode, int which, QPointF pos, Item::AllowedUsers allowedUsers);
+	Item *makeRandomItem(QSGNode *parentNode, QPointF pos, QQuickWindow *win);
+	Item *makePredefinedItem(QSGNode *parentNode, int which, QPointF pos, Item::AllowedUsers allowedUsers, QQuickWindow *win);
 	/**
 	 * @brief This struct contains all configuration options for a Item
 	 */
@@ -42,7 +42,7 @@ public:
 		/**
 		 * @brief The constructing function for the Item in question
 		 */
-		Item *(ItemModel::*constructor)(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos);
+		Item *(ItemModel::*constructor)(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos, QQuickWindow *win);
 		/**
 		 * @brief The name of the Item
 		 */
@@ -110,13 +110,13 @@ private:
 	unsigned int sequenceNumber = 0;
 
 	// item constructors
-	Item *makeSpeedItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos);
-	Item *makeCleanInstallItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos);
-	Item *makeInvisibleItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos);
-	Item *makeAgileItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos);
-	Item *makeFlashItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos);
-	Item *makeSlowItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos);
-	Item *makeGhostItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos);
+	Item *makeSpeedItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos, QQuickWindow *win);
+	Item *makeCleanInstallItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos, QQuickWindow *win);
+	Item *makeInvisibleItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos, QQuickWindow *win);
+	Item *makeAgileItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos, QQuickWindow *win);
+	Item *makeFlashItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos, QQuickWindow *win);
+	Item *makeSlowItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos, QQuickWindow *win);
+	Item *makeGhostItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos, QQuickWindow *win);
 };
 
 float operator+(const float &a, const ItemModel::ItemConfig &b);

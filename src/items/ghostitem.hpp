@@ -8,7 +8,7 @@
  */
 class GhostItem : public Item {
 public:
-	GhostItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos);
+	GhostItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos, QQuickWindow *win);
 private:
 	virtual void use(Curver *curver) override;
 	virtual void unUse(Curver *curver) override;

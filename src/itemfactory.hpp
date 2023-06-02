@@ -24,6 +24,7 @@ public:
 	void update();
 public slots:
 	void integrateItem(bool spawned, unsigned int sequenceNumber, int which, QPointF pos, Item::AllowedUsers allowedUsers, int collectorIndex);
+	void setWindow(QQuickWindow *w);
 signals:
 private:
 	void prepareNextItem();
@@ -46,6 +47,10 @@ private:
 	 * @brief All used Item instances waiting to be deleted
 	 */
 	std::vector<std::unique_ptr<Item>> usedItems;
+	/**
+	 * @brief The window to render items in
+	 */
+	QQuickWindow *window = nullptr;
 };
 
 #endif // ITEMFACTORY_H

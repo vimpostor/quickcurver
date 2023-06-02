@@ -88,15 +88,16 @@ ItemModel &ItemModel::getSingleton() {
  * @brief Creates a random Item at a given position
  * @param parentNode The parent node in the scene graph
  * @param pos The location of the Item
+ * @param win The window to render in
  * @return The just created Item
  */
-Item *ItemModel::makeRandomItem(QSGNode *parentNode, QPointF pos) {
+Item *ItemModel::makeRandomItem(QSGNode *parentNode, QPointF pos, QQuickWindow *win) {
 	float totalProbability = Util::accumulate(itemConfigs, 0.f);
 	std::vector<ItemConfig> partialSums = itemConfigs;
 	Util::partial_sum(itemConfigs, partialSums);
 	float randValue = Util::rand() * totalProbability;
 	auto it = std::ranges::find_if(partialSums, [randValue](auto &item) { return randValue < item.probability; });
-	auto *result = (this->*it->constructor)(parentNode, Util::expandIconName(it->iconName), it->allowedUsers, pos);
+	auto *result = (this->*it->constructor)(parentNode, Util::expandIconName(it->iconName), it->allowedUsers, pos, win);
 	result->sequenceNumber = ++sequenceNumber;
 	emit itemSpawned(true, result->sequenceNumber, it - partialSums.begin(), pos, it->allowedUsers, -1);
 	return result;
@@ -108,11 +109,12 @@ Item *ItemModel::makeRandomItem(QSGNode *parentNode, QPointF pos) {
  * @param which The kind of Item
  * @param pos The location of the Item
  * @param allowedUsers The allowed users for this Item
+ * @param win The window to render in
  * @return The just created Item
  */
-Item *ItemModel::makePredefinedItem(QSGNode *parentNode, int which, QPointF pos, Item::AllowedUsers allowedUsers) {
+Item *ItemModel::makePredefinedItem(QSGNode *parentNode, int which, QPointF pos, Item::AllowedUsers allowedUsers, QQuickWindow *win) {
 	auto conf = itemConfigs[which];
-	return (this->*conf.constructor)(parentNode, Util::expandIconName(conf.iconName), allowedUsers, pos);
+	return (this->*conf.constructor)(parentNode, Util::expandIconName(conf.iconName), allowedUsers, pos, win);
 }
 
 /**
@@ -121,10 +123,11 @@ Item *ItemModel::makePredefinedItem(QSGNode *parentNode, int which, QPointF pos,
  * @param iconName The path to the icon
  * @param allowedUsers The allowed users
  * @param pos The location
+ * @param win The window to render in
  * @return The just created item
  */
-Item *ItemModel::makeSpeedItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos) {
-	return new SpeedItem(parentNode, iconName, allowedUsers, pos);
+Item *ItemModel::makeSpeedItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos, QQuickWindow *win) {
+	return new SpeedItem(parentNode, iconName, allowedUsers, pos, win);
 }
 
 /**
@@ -133,10 +136,11 @@ Item *ItemModel::makeSpeedItem(QSGNode *parentNode, QString iconName, Item::Allo
  * @param iconName The path to the icon
  * @param allowedUsers The allowed users
  * @param pos The location
+ * @param win The window to render in
  * @return The just created item
  */
-Item *ItemModel::makeCleanInstallItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos) {
-	return new CleanInstallItem(parentNode, iconName, allowedUsers, pos);
+Item *ItemModel::makeCleanInstallItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos, QQuickWindow *win) {
+	return new CleanInstallItem(parentNode, iconName, allowedUsers, pos, win);
 }
 
 /**
@@ -145,10 +149,11 @@ Item *ItemModel::makeCleanInstallItem(QSGNode *parentNode, QString iconName, Ite
  * @param iconName The path to the icon
  * @param allowedUsers The allowed users
  * @param pos The location
+ * @param win The window to render in
  * @return The just created item
  */
-Item *ItemModel::makeInvisibleItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos) {
-	return new InvisibleItem(parentNode, iconName, allowedUsers, pos);
+Item *ItemModel::makeInvisibleItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos, QQuickWindow *win) {
+	return new InvisibleItem(parentNode, iconName, allowedUsers, pos, win);
 }
 
 /**
@@ -157,10 +162,11 @@ Item *ItemModel::makeInvisibleItem(QSGNode *parentNode, QString iconName, Item::
  * @param iconName The path to the icon
  * @param allowedUsers The allowed users
  * @param pos The location
+ * @param win The window to render in
  * @return The just created item
  */
-Item *ItemModel::makeAgileItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos) {
-	return new AgileItem(parentNode, iconName, allowedUsers, pos);
+Item *ItemModel::makeAgileItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos, QQuickWindow *win) {
+	return new AgileItem(parentNode, iconName, allowedUsers, pos, win);
 }
 
 /**
@@ -169,10 +175,11 @@ Item *ItemModel::makeAgileItem(QSGNode *parentNode, QString iconName, Item::Allo
  * @param iconName The path to the icon
  * @param allowedUsers The allowed users
  * @param pos The location
+ * @param win The window to render in
  * @return The just created item
  */
-Item *ItemModel::makeFlashItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos) {
-	return new FlashItem(parentNode, iconName, allowedUsers, pos);
+Item *ItemModel::makeFlashItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos, QQuickWindow *win) {
+	return new FlashItem(parentNode, iconName, allowedUsers, pos, win);
 }
 
 /**
@@ -181,10 +188,11 @@ Item *ItemModel::makeFlashItem(QSGNode *parentNode, QString iconName, Item::Allo
  * @param iconName The path to the icon
  * @param allowedUsers The allowed users
  * @param pos The location
+ * @param win The window to render in
  * @return The just created item
  */
-Item *ItemModel::makeSlowItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos) {
-	return new SlowItem(parentNode, iconName, allowedUsers, pos);
+Item *ItemModel::makeSlowItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos, QQuickWindow *win) {
+	return new SlowItem(parentNode, iconName, allowedUsers, pos, win);
 }
 
 /**
@@ -193,10 +201,11 @@ Item *ItemModel::makeSlowItem(QSGNode *parentNode, QString iconName, Item::Allow
  * @param iconName The path to the icon
  * @param allowedUsers The allowed users
  * @param pos The location
+ * @param win The window to render in
  * @return The just created item
  */
-Item *ItemModel::makeGhostItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos) {
-	return new GhostItem(parentNode, iconName, allowedUsers, pos);
+Item *ItemModel::makeGhostItem(QSGNode *parentNode, QString iconName, Item::AllowedUsers allowedUsers, QPointF pos, QQuickWindow *win) {
+	return new GhostItem(parentNode, iconName, allowedUsers, pos, win);
 }
 
 /**

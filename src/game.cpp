@@ -16,6 +16,8 @@ Game::Game(QQuickItem *parent)
 	*/
 	rootNode = new QSGNode();
 	itemFactory = std::make_unique<ItemFactory>(rootNode);
+	// notify the item factory about window changes
+	connect(this, &QQuickItem::windowChanged, itemFactory.get(), &ItemFactory::setWindow);
 	// tell the playermodel, what the root node is, so that it can tell its curvers
 	PlayerModel::getSingleton().setRootNode(this->rootNode);
 	connect(&PlayerModel::getSingleton(), &PlayerModel::curverDied, this, &Game::curverDied);

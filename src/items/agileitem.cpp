@@ -6,9 +6,10 @@
  * @param iconName The icon name
  * @param allowedUsers The allowed users
  * @param pos The location
+ * @param win The window to render in
  */
-AgileItem::AgileItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos)
-	: Item(parentNode, iconName, allowedUsers, pos) {
+AgileItem::AgileItem(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos, QQuickWindow *win)
+	: Item(parentNode, iconName, allowedUsers, pos, win) {
 	activatedTime = 3000;
 }
 

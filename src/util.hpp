@@ -47,7 +47,6 @@ const std::map<QString, QColor> colors = {
 QString expandIconName(const QString icon);
 bool getBit(const uint8_t byte, const int pos);
 void setBit(uint8_t &byte, const int pos, bool value);
-QQuickView *getTextureGenerator();
 qint64 getTimeDiff(const QTime &t);
 float easeInOutSine(const float &a);
 

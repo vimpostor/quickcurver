@@ -80,18 +80,6 @@ void Util::setBit(uint8_t &byte, const int pos, bool value) {
 }
 
 /**
- * @brief Returns a helper object with the intent of generating textures from SVG files
- * @return The texture generator
- */
-QQuickView *Util::getTextureGenerator() {
-	static std::unique_ptr<QQuickView> result;
-	if (!result) {
-		result = std::make_unique<QQuickView>();
-	}
-	return result.get();
-}
-
-/**
  * @brief Calculates the time difference between a time and now
  * @param t The time to calculate the difference from
  * @return The resulting difference in milliseconds

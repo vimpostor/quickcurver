@@ -26,7 +26,7 @@ public:
 		ALLOW_COLLECTOR // green
 	};
 
-	explicit Item(QSGNode *parentNode, QString iconPath, AllowedUsers allowedUsers, QPointF pos);
+	explicit Item(QSGNode *parentNode, QString iconPath, AllowedUsers allowedUsers, QPointF pos, QQuickWindow *window);
 
 	void update();
 	void defuse();
@@ -46,7 +46,7 @@ protected:
 	virtual void use(Curver *);
 	virtual void unUse(Curver *);
 	QColor getColor() const;
-	void initTexture();
+	void initTexture(QQuickWindow *window);
 	void startFade(bool in = true);
 	void applyToAffected(void (Item::*method)(Curver *curver));
 
