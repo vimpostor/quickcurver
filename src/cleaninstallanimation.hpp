@@ -1,5 +1,4 @@
-#ifndef CLEANINSTALLANIMATION_H
-#define CLEANINSTALLANIMATION_H
+#pragma once
 
 #include <QObject>
 #include <QSGFlatColorMaterial>
@@ -50,5 +49,3 @@ private:
 	 */
 	size_t totalSize;
 };
-
-#endif // CLEANINSTALLANIMATION_H

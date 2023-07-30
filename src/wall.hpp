@@ -1,5 +1,4 @@
-#ifndef WALL_H
-#define WALL_H
+#pragma once
 
 #include <QSGFlatColorMaterial>
 #include <QSGGeometryNode>
@@ -36,5 +35,3 @@ private:
 	 */
 	QSGFlatColorMaterial material;
 };
-
-#endif // WALL_H

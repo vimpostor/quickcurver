@@ -1,5 +1,4 @@
-#ifndef CHATMODEL_H
-#define CHATMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 #include <QDateTime>
@@ -62,5 +61,3 @@ private:
 		TimestampRole,
 	};
 };
-
-#endif // CHATMODEL_H

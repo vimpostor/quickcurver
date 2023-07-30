@@ -1,5 +1,5 @@
-#ifndef SERVER_H
-#define SERVER_H
+#pragma once
+
 #include <QObject>
 #include <QSignalMapper>
 #include <QTimer>
@@ -77,5 +77,3 @@ private:
 	 */
 	std::vector<FullNetworkAddress> udpAddresses;
 };
-
-#endif // SERVER_H

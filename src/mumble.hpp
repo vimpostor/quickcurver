@@ -1,7 +1,6 @@
-#ifdef MUMBLE_SUPPORT
+#pragma once
 
-#ifndef MUMBLE_H
-#define MUMBLE_H
+#ifdef MUMBLE_SUPPORT
 
 #include <QMutex>
 #include <QPointF>
@@ -72,8 +71,5 @@ private:
 };
 
 }
-
-
-#endif // MUMBLE_H
 
 #endif // MUMBLE_SUPPORT

@@ -1,5 +1,4 @@
-#ifndef SEGMENT_H
-#define SEGMENT_H
+#pragma once
 
 #include <QQuickItem>
 #include <QSGFlatColorMaterial>
@@ -53,5 +52,3 @@ private:
 	 */
 	QPointF lastPoint;
 };
-
-#endif // SEGMENT_H

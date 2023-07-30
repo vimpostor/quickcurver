@@ -1,5 +1,4 @@
-#ifndef EXPLOSION_H
-#define EXPLOSION_H
+#pragma once
 
 #include <QObject>
 #include <QPointF>
@@ -58,5 +57,3 @@ private:
 	 */
 	QPointF particleDirections[PARTICLECOUNT];
 };
-
-#endif // EXPLOSION_H

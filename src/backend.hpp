@@ -1,3 +1,5 @@
+#pragma once
+
 #include <qqml.h>
 
 class Backend : public QObject {

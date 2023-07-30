@@ -1,5 +1,4 @@
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#pragma once
 
 #include <QColor>
 #include <QGuiApplication>
@@ -98,5 +97,3 @@ private:
 	 */
 	unsigned updatesPerSecond = 60;
 };
-
-#endif // SETTINGS_H

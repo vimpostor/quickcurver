@@ -1,5 +1,4 @@
-#ifndef ITEMFACTORY_H
-#define ITEMFACTORY_H
+#pragma once
 
 #include <QObject>
 #include <QSGNode>
@@ -52,5 +51,3 @@ private:
 	 */
 	QQuickWindow *window = nullptr;
 };
-
-#endif // ITEMFACTORY_H

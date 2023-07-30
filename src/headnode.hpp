@@ -1,5 +1,5 @@
-#ifndef HEADNODE_H
-#define HEADNODE_H
+#pragma once
+
 #include <QPointF>
 #include <QSGFlatColorMaterial>
 #include <QSGGeometry>
@@ -28,5 +28,3 @@ private:
 	 */
 	QPointF pos;
 };
-
-#endif // HEADNODE_H

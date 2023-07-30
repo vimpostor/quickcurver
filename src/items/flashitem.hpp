@@ -1,5 +1,4 @@
-#ifndef FLASHITEM_H
-#define FLASHITEM_H
+#pragma once
 
 #include "item.hpp"
 
@@ -12,5 +11,3 @@ public:
 private:
 	virtual void use(Curver *curver) override;
 };
-
-#endif // FLASHITEM_H

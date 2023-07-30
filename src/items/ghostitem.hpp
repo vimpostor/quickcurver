@@ -1,5 +1,4 @@
-#ifndef GHOSTITEM_H
-#define GHOSTITEM_H
+#pragma once
 
 #include "item.hpp"
 
@@ -13,5 +12,3 @@ private:
 	virtual void use(Curver *curver) override;
 	virtual void unUse(Curver *curver) override;
 };
-
-#endif // GHOSTITEM_H

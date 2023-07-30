@@ -1,5 +1,4 @@
-#ifndef AGILEITEM_H
-#define AGILEITEM_H
+#pragma once
 
 #include "item.hpp"
 
@@ -13,5 +12,3 @@ private:
 	virtual void use(Curver *curver) override;
 	virtual void unUse(Curver *curver) override;
 };
-
-#endif // AGILEITEM_H

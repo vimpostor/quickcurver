@@ -1,5 +1,4 @@
-#ifndef CLEANINSTALLITEM_H
-#define CLEANINSTALLITEM_H
+#pragma once
 
 #include "item.hpp"
 
@@ -14,5 +13,3 @@ public:
 private:
 	virtual void use(Curver *curver) override;
 };
-
-#endif // CLEANINSTALLITEM_H

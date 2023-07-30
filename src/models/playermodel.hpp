@@ -1,5 +1,4 @@
-#ifndef PLAYERMODEL_H
-#define PLAYERMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 #include <QHash>
@@ -77,5 +76,3 @@ private:
 	 */
 	QSGNode *rootNode;
 };
-
-#endif // PLAYERMODEL_H

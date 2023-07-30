@@ -1,5 +1,4 @@
-#ifndef ITEMMODEL_H
-#define ITEMMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 #include <QSGNode>
@@ -121,5 +120,3 @@ private:
 
 float operator+(const float &a, const ItemModel::ItemConfig &b);
 ItemModel::ItemConfig operator+(const ItemModel::ItemConfig &a, const ItemModel::ItemConfig &b);
-
-#endif // ITEMMODEL_H

@@ -1,5 +1,5 @@
-#ifndef CURVEITEM_H
-#define CURVEITEM_H
+#pragma once
+
 #include <QImage>
 #include <QObject>
 #include <QPointF>
@@ -119,5 +119,3 @@ protected:
 	 */
 	bool active = false;
 };
-
-#endif // CURVEITEM_H

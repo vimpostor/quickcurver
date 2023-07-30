@@ -1,5 +1,4 @@
-#ifndef UTILITY_H
-#define UTILITY_H
+#pragma once
 
 #include <QColor>
 #include <QDataStream>
@@ -104,5 +103,3 @@ void parseCnt(QDataStream &in, Cnt_T &cnt) {
 	}
 }
 }
-
-#endif // UTILITY_H

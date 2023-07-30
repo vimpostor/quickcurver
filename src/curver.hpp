@@ -1,5 +1,5 @@
-#ifndef QCURVER_H
-#define QCURVER_H
+#pragma once
+
 #include <QQuickItem>
 #include <QSGFlatColorMaterial>
 #include <QSGNode>
@@ -195,5 +195,3 @@ private:
 };
 
 bool operator<(const std::unique_ptr<Curver> &l, const std::unique_ptr<Curver> &r);
-
-#endif // QCURVER_H

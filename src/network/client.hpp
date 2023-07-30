@@ -1,5 +1,5 @@
-#ifndef CLIENT_H
-#define CLIENT_H
+#pragma once
+
 #include <QObject>
 #include <QTimer>
 #include <QtNetwork>
@@ -126,5 +126,3 @@ private:
 	 */
 	int curverIndex = -1;
 };
-
-#endif // CLIENT_H

@@ -1,5 +1,4 @@
-#ifndef GUI_H
-#define GUI_H
+#pragma once
 
 #include <QObject>
 
@@ -21,5 +20,3 @@ signals:
 	 */
 	void startGame() const;
 };
-
-#endif // GUI_H

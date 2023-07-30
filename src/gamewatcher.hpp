@@ -1,5 +1,4 @@
-#ifndef GAMEWATCHER_H
-#define GAMEWATCHER_H
+#pragma once
 
 #include <QObject>
 
@@ -27,5 +26,3 @@ private:
 	 */
 	Game game;
 };
-
-#endif // GAMEWATCHER_H

@@ -1,5 +1,5 @@
-#ifndef GAME_H
-#define GAME_H
+#pragma once
+
 #include <QKeyEvent>
 #include <QObject>
 #include <QQuickItem>
@@ -101,5 +101,3 @@ private:
 	 */
 	bool winnerAnnounced = false;
 };
-
-#endif // GAME_H

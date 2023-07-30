@@ -1,5 +1,4 @@
-#ifndef COMMANDLINEREADER_H
-#define COMMANDLINEREADER_H
+#pragma once
 
 #include <QDebug>
 #include <QObject>
@@ -92,5 +91,3 @@ private:
 	bool takeInt(int &result, std::list<QString> &l, QString info);
 	bool takeString(QString &result, std::list<QString> &l, QString info);
 };
-
-#endif // COMMANDLINEREADER_H

@@ -1,5 +1,4 @@
-#ifndef FASTITEM_H
-#define FASTITEM_H
+#pragma once
 
 #include "item.hpp"
 
@@ -13,5 +12,3 @@ private:
 	virtual void use(Curver *curver) override;
 	virtual void unUse(Curver *curver) override;
 };
-
-#endif // FASTITEM_H

@@ -1,5 +1,4 @@
-#ifndef MULTIPLAYERSETTINGS_H
-#define MULTIPLAYERSETTINGS_H
+#pragma once
 
 #include <QString>
 #include <QtNetwork>
@@ -348,5 +347,3 @@ protected:
 };
 
 }
-
-#endif // MULTIPLAYERSETTINGS_H

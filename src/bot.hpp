@@ -1,5 +1,4 @@
-#ifndef BOT_H
-#define BOT_H
+#pragma once
 
 #include "models/playermodel.hpp"
 #include "settings.hpp"
@@ -12,5 +11,3 @@ public:
 	Bot() = delete;
 	static void makeMove(Curver &c);
 };
-
-#endif // BOT_H
