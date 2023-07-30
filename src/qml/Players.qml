@@ -164,7 +164,10 @@ Item {
 		highlighted: true
 		onClicked: {
 			c_playerModel.appendPlayer();
-			/* c_playerModel.appendBot(); */
+			game.forceActiveFocus();
+		}
+		onPressAndHold: {
+			c_playerModel.appendBot();
 			game.forceActiveFocus();
 		}
 	}
