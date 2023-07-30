@@ -22,7 +22,7 @@ qt6_add_resources(RESOURCES ${RSRC})
 
 qt_add_executable(${PROJECT_NAME} ${SRCS} ${RESOURCES})
 
-qt_add_qml_module(${PROJECT_NAME} URI "Backend" VERSION 1.0 QML_FILES ${QMLS} SOURCES "src/backend.cpp")
+qt_add_qml_module(${PROJECT_NAME} URI "Backend" VERSION 1.0 NO_RESOURCE_TARGET_PATH QML_FILES ${QMLS} SOURCES "src/backend.cpp")
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${QT_PREFIXED_MODULES})
 

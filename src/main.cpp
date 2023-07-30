@@ -55,6 +55,7 @@ int main(int argc, char *argv[]) {
 	qmlRegisterType<Client>("Client", 1, 0, "Client");
 
 	QQmlApplicationEngine engine;
+	engine.addImportPath(QStringLiteral(":/"));
 
 	// context properties
 	engine.rootContext()->setContextProperty("c_playerModel", &PlayerModel::getSingleton());
@@ -62,9 +63,9 @@ int main(int argc, char *argv[]) {
 	engine.rootContext()->setContextProperty("c_chatModel", &ChatModel::getSingleton());
 	engine.rootContext()->setContextProperty("c_settings", &Settings::getSingleton());
 
-	engine.load(QUrl(QLatin1String("qrc:/Backend/src/qml/main.qml")));
+	engine.loadFromModule("Backend", "Main");
 	if (engine.rootObjects().isEmpty()) {
 		return -1;
 	}
-	return QGuiApplication::exec();
+	return app.exec();
 }
