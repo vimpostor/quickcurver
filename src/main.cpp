@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
 	qRegisterMetaType<Client::JoinStatus>("JoinStatus");
 
 	QCoreApplication::setApplicationName("Quickcurver");
-	QCoreApplication::setApplicationVersion(VERSION);
+	QCoreApplication::setApplicationVersion(Version::version_string());
 
 	QCommandLineParser parser;
 	parser.setApplicationDescription("Quickcurver");

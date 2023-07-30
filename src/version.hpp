@@ -1,6 +1,10 @@
 #ifndef VERSION_H
 #define VERSION_H
 
-#define VERSION "0.1"
+namespace Version {
+
+const char *version_string();
+
+}
 
 #endif // VERSION_H

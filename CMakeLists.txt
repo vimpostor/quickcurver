@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.21)
-project(quickcurver)
+project(quickcurver VERSION 0.1 DESCRIPTION "Modern Qt/C++ implementation of Achtung die Kurve with online multiplayer")
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -12,6 +12,7 @@ set(QT_PREFIXED_MODULES ${QT_MODULES})
 list(TRANSFORM QT_PREFIXED_MODULES PREPEND "Qt6::")
 
 include_directories("src")
+add_compile_definitions(QUICKCURVER_VERSION="${PROJECT_VERSION}")
 
 file(GLOB_RECURSE SRCS "src/*.cpp")
 file(GLOB_RECURSE HDRS "src/*.hpp")
