@@ -16,11 +16,7 @@ This is a hardware accelerated implementation of the famous game "Achtung die Ku
 # Installation
 ## Compiling from source
 
-Note: Arch Linux users can simply install [quickcurver-git](https://aur.archlinux.org/packages/quickcurver-git) from the AUR:
-
-```bash
-paru -S quickcurver-git
-```
+Note: For Arch Linux users there is an [AUR package](https://aur.archlinux.org/packages/quickcurver-git), for Nix users there is a [flake](flake.nix) available.
 
 ### Dependencies
 First make sure, that you have the required dependencies of QuickCurver installed. These are:
