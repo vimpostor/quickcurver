@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls.Material
+import Quartz
 
 Item {
 	ColumnLayout {
@@ -38,7 +39,7 @@ Item {
 				Layout.fillWidth: true
 				onAccepted: sendButton.send();
 			}
-			ToolButton {
+			IconButton {
 				id: sendButton
 				function send() {
 					game.sendChatMessage(messageTextField.text);
@@ -47,8 +48,8 @@ Item {
 						game.forceActiveFocus();
 					}
 				}
-				icon.source: "qrc:///send"
-				icon.color: Material.accent
+				ico.name: "send"
+				ico.color: Material.accent
 				onClicked: send();
 			}
 		}

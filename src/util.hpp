@@ -43,7 +43,6 @@ const std::map<QString, QColor> colors = {
 	{"Brown", QColor(0x79, 0x55, 0x48)},
 	{"Grey", QColor(0x9E, 0x9E, 0x9E)},
 	{"Blue Grey", QColor(0x60, 0x7D, 0x8B)}};
-QString expandIconName(const QString icon);
 bool getBit(const uint8_t byte, const int pos);
 void setBit(uint8_t &byte, const int pos, bool value);
 qint64 getTimeDiff(const QTime &t);

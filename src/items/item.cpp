@@ -1,7 +1,7 @@
 #include "item.hpp"
 
 #include <QPainter>
-#include <QSvgRenderer>
+#include <quartz/codepoints.hpp>
 
 #define SIZE 12
 #define FADEDURATION 256
@@ -9,14 +9,14 @@
 /**
  * @brief Constructs a new Item instance
  * @param parentNode The parent node in the scene graph
- * @param iconPath The path to the icon used as a texture
+ * @param iconName The path to the icon used as a texture
  * @param allowedUsers The allowed users for this Item
  * @param pos The location of this Item
  * @param window The window to render in
  */
-Item::Item(QSGNode *parentNode, QString iconPath, AllowedUsers allowedUsers, QPointF pos, QQuickWindow *window) {
+Item::Item(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos, QQuickWindow *window) {
 	this->parentNode = parentNode;
-	this->iconPath = iconPath;
+	this->iconName = iconName;
 	this->allowedUsers = allowedUsers;
 	this->pos = pos;
 
@@ -140,13 +140,14 @@ void Item::initTexture(QQuickWindow *window) {
 	if (Settings::getSingleton().getOffscreen()) {
 		return;
 	}
-	QSvgRenderer renderer(iconPath);
-	const auto size = renderer.defaultSize();
-	constexpr int minRasteriseSize = SIZE * 8;
-	QImage img = QImage(std::max(minRasteriseSize, size.width()), std::max(minRasteriseSize, size.height()), QImage::Format_RGB32);
+	constexpr const int res = 48;
+	QImage img = QImage(res, res, QImage::Format_RGB32);
 	img.fill(color); // fill with background color
 	QPainter painter(&img);
-	renderer.render(&painter); // paint the icon on top of it
+	QFont font {"Material Symbols Outlined"};
+	font.setPixelSize(res);
+	painter.setFont(font);
+	painter.drawText(QRect(0, 0, res, res), Qt::AlignCenter, Codepoints::get()->icon(iconName));
 
 	// create the texture
 	assert(window);

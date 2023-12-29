@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Dialogs
 import QtQuick.Layouts
 import QtQuick.Controls.Material
+import Quartz
 
 Item {
 	id: playersRoot
@@ -28,10 +29,11 @@ Item {
 		delegate: Item {
 			height: playerIcon.implicitHeight
 			width: ListView.view.width
-			ToolButton {
+			IconButton {
 				id: playerIcon
-				icon.source: model.controller === 0 ? "qrc:///user" : model.controller === 2 ? "qrc:///hard-drive" : "qrc:///users"
+				ico.name: model.controller === 0 ? "supervised_user_circle" : model.controller === 2 ? "robot" : "cloud_sync"
 				anchors.left: parent.left
+				implicitHeight: 32
 			}
 			Label {
 				text: model.name + "   " + model.totalScore + "(+" +  model.roundScore + ")"
@@ -61,47 +63,48 @@ Item {
 			id: bottomSheet
 			property bool playerEditable: true
 			title: qsTr("Edit Player")
+			width: 300
 			ColumnLayout {
-				Button {
+				IconButton {
 					text: "Edit name"
 					enabled: bottomSheet.playerEditable
-					icon.source: "qrc:///user"
+					ico.name: "user_attributes"
 					onClicked: inputDialog.open();
 				}
-				Button {
+				IconButton {
 					text: "Edit color"
 					enabled: bottomSheet.playerEditable
-					icon.source: "qrc:///droplet"
+					ico.name: "color_lens"
 					onClicked: colorDialog.open();
 				}
-				Button {
+				IconButton {
 					text: "Set counterclockwise key"
 					enabled: bottomSheet.playerEditable
-					icon.source: "qrc:///rotate-ccw"
+					ico.name: "rotate_left"
 					onClicked: {
 						infoBar.open("Press a key!");
 						leftKeyItem.forceActiveFocus();
 					}
 				}
-				Button {
+				IconButton {
 					text: "Set clockwise key"
 					enabled: bottomSheet.playerEditable
-					icon.source: "qrc:///rotate-cw"
+					ico.name: "rotate_right"
 					onClicked: {
 						infoBar.open("Press a key!");
 						rightKeyItem.forceActiveFocus();
 					}
 				}
-				Button {
+				IconButton {
 					text: "Bot Settings"
 					enabled: bottomSheet.playerEditable
-					icon.source: "qrc:///hard-drive"
+					ico.name: "robot"
 					onClicked: botDialog.open();
 				}
-				Button {
+				IconButton {
 					text: "Delete"
 					enabled: !root.connectedToServer
-					icon.source: "qrc:///trash-2"
+					ico.name: "delete"
 					onClicked: {
 						c_playerModel.removePlayer(playerListView.modelIndex);
 						bottomSheet.close();
@@ -154,13 +157,13 @@ Item {
 			}
 		}
 	}
-	Button {
+	IconButton {
 		id: addPlayerButton
 		enabled: !root.connectedToServer
 		anchors.bottom: parent.bottom
 		anchors.right: parent.right
 		anchors.margins: 16
-		icon.source: "qrc:///user-plus"
+		ico.name: "person_add"
 		highlighted: true
 		onClicked: {
 			c_playerModel.appendPlayer();

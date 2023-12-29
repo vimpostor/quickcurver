@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls.Material
 import QtQuick.Layouts
+import Quartz
 
 Page {
 	id: settings
@@ -15,8 +16,8 @@ Page {
 			text: "Item spawn probabilities"
 		}
 	}
-	ToolButton {
-		icon.source: "qrc:///x"
+	IconButton {
+		ico.name: "close"
 		onClicked: pageStack.clear();
 	}
 	StackLayout {
@@ -99,8 +100,8 @@ Page {
 				delegate: Item {
 					height: 108
 					RowLayout {
-						ToolButton {
-							icon.source: "qrc:///" + model.iconName
+						IconButton {
+							ico.name: model.iconName
 						}
 						Label {
 							text: model.name + " (" + model.description + ")"

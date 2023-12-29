@@ -3,6 +3,7 @@ import QtQuick.Window
 import QtQuick.Controls.Material
 import QtQuick.Layouts
 import QtQuick.Dialogs
+import Quartz
 
 import Game
 import Client
@@ -49,7 +50,7 @@ ApplicationWindow {
 							return;
 						}
 						if (realWidth > width || realHeight > height || width > root.width) {
-							resizeSnackbar.open("The server has set a larger game size.", "Resize automatically");
+							resizeSnackbar.display("The server has set a larger game size.", "Resize automatically");
 						} else {
 							resizeSnackbar.close();
 						}
@@ -68,7 +69,7 @@ ApplicationWindow {
 					}
 					onRealWidthChanged: checkDimension();
 					onRealHeightChanged: checkDimension();
-					onPostInfoBar: (msg) => infoBar.open(msg);
+					onPostInfoBar: (msg) => infoBar.display(msg);
 					Keys.onPressed: (event) => {
 						game.processKey(event.key, false);
 					}
@@ -105,43 +106,42 @@ ApplicationWindow {
 					RowLayout {
 						id: optionsLayout
 						anchors {left: parent.left; right: parent.right}
-						Button {
-							icon.source: "qrc:///delete"
+						IconButton {
+							ico.name: "device_reset"
 							enabled: !root.connectedToServer
 							onClicked: game.resetGame();
 							ToolTip.text: "Reset game"
 							ToolTip.visible: pressed
 							ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
 						}
-						Button {
-							icon.source: "qrc:///upload-cloud"
+						IconButton {
+							ico.name: "cloud_upload"
 							onClicked: clientDialog.open();
 							ToolTip.text: "Join game"
 							ToolTip.visible: pressed
 							ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
 						}
-						Button {
-							icon.source: "qrc:///settings"
+						IconButton {
+							ico.name: "settings"
 							enabled: !root.connectedToServer
 							onClicked: pageStack.push(Qt.resolvedUrl("Settings.qml"))
 							ToolTip.text: "Settings"
 							ToolTip.visible: pressed
 							ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
 						}
-						Button {
-							icon.source: "qrc:///info"
+						IconButton {
+							ico.name: "info"
 							onClicked: licenseDialog.open();
 							ToolTip.text: "About"
 							ToolTip.visible: pressed
 							ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
 						}
-						Button {
+						IconButton {
 							id: startButton
 							Layout.fillWidth: true
-							icon.source: "qrc:///navigation"
+							ico.name: "assistant_navigation"
 							enabled: !root.connectedToServer && (game ? !game.isStarted : false)
 							text: "Start!"
-							highlighted: true
 							onClicked: {
 								game.startGame();
 							}
@@ -168,13 +168,14 @@ ApplicationWindow {
 			id: pageStack
 			anchors.fill: parent
 		}
-		SnackBar {
+		Snackbar {
 			id: infoBar
 		}
-		SnackBar {
+		Snackbar {
 			id: resizeSnackbar
-			duration: 10000
-			onAccepted: {
+			timeout: 10000
+			text: "Resize"
+			onClicked: {
 				gameWave.width =  Math.min(c_settings.width + 16, Screen.width - 16);
 				root.height = Math.min(c_settings.height + 3 * 16, Screen.height - 16);
 				if (root.width < gameWave.width) {
@@ -203,9 +204,9 @@ ApplicationWindow {
 					placeholderText: "Username"
 					text: "Client"
 				}
-				ToolButton {
-					icon.source: "qrc:///droplet"
-					icon.color: clientColorDialog.selectedColor
+				IconButton {
+					ico.name: "color_lens"
+					ico.color: clientColorDialog.selectedColor
 					onClicked: clientColorDialog.open();
 					ColorDialog {
 						id: clientColorDialog

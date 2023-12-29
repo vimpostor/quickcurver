@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 list(APPEND QT_MODULES Core Qml Quick QuickControls2 Svg)
-find_package(Qt6 6.5 COMPONENTS ${QT_MODULES} REQUIRED)
+find_package(Qt6 6.6 COMPONENTS ${QT_MODULES} REQUIRED)
 qt_standard_project_setup()
 set(QT_PREFIXED_MODULES ${QT_MODULES})
 list(TRANSFORM QT_PREFIXED_MODULES PREPEND "Qt6::")
@@ -18,14 +18,16 @@ file(GLOB_RECURSE SRCS "src/*.cpp")
 file(GLOB_RECURSE HDRS "src/*.hpp")
 file(GLOB_RECURSE QMLS RELATIVE "${CMAKE_SOURCE_DIR}" "src/qml/*.qml")
 
-list(APPEND RSRC "icons.qrc")
-qt6_add_resources(RESOURCES ${RSRC})
-
 qt_add_executable(${PROJECT_NAME} ${SRCS} ${RESOURCES})
 
 qt_add_qml_module(${PROJECT_NAME} URI "Backend" VERSION 1.0 NO_RESOURCE_TARGET_PATH QML_FILES ${QMLS} SOURCES "src/backend.cpp")
 
+include(FetchContent)
+FetchContent_Declare(quartz GIT_REPOSITORY https://github.com/vimpostor/quartz.git GIT_TAG 2dc4bbaffd2a7bd8fcb82b2011da71efe60081e6)
+FetchContent_MakeAvailable(quartz)
+
 target_link_libraries(${PROJECT_NAME} PRIVATE ${QT_PREFIXED_MODULES})
+quartz_link(${PROJECT_NAME})
 
 # install
 install(TARGETS ${PROJECT_NAME} RUNTIME)

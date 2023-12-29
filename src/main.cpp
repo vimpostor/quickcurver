@@ -45,6 +45,8 @@ int main(int argc, char *argv[]) {
 		return app.exec();
 	}
 
+	QFontDatabase::addApplicationFont("/MaterialSymbols.woff2");
+
 	// Mumble
 #ifdef MUMBLE_SUPPORT
 	Mumble::Api::get()->initialize();

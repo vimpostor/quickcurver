@@ -26,7 +26,7 @@ public:
 		ALLOW_COLLECTOR // green
 	};
 
-	explicit Item(QSGNode *parentNode, QString iconPath, AllowedUsers allowedUsers, QPointF pos, QQuickWindow *window);
+	explicit Item(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos, QQuickWindow *window);
 
 	void update();
 	void defuse();
@@ -57,7 +57,7 @@ protected:
 	/**
 	 * @brief The path to the icon that is used as a texture
 	 */
-	QString iconPath;
+	QString iconName;
 	/**
 	 * @brief The affected Curver instances, once this Item instance is triggered
 	 */

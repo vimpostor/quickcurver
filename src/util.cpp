@@ -49,17 +49,6 @@ const QColor Util::getColor(const QString color) {
 }
 
 /**
- * @brief Expands the icon name, so that the icon name can be used from the Qt resource system
- *
- * Example icon name to expand: "action/favorite"
- * @param icon The icon name to expand
- * @return The expanded icon name, that is ready to use from the Qt resource system
- */
-QString Util::expandIconName(const QString icon) {
-	return QStringLiteral(":/%1").arg(icon);
-}
-
-/**
  * @brief Returns the bit at the position \a pos in \a byte counting from right
  * @param byte The byte to extract the bit from
  * @param pos The position of the bit

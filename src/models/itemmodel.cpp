@@ -97,7 +97,7 @@ Item *ItemModel::makeRandomItem(QSGNode *parentNode, QPointF pos, QQuickWindow *
 	Util::partial_sum(itemConfigs, partialSums);
 	float randValue = Util::rand() * totalProbability;
 	auto it = std::ranges::find_if(partialSums, [randValue](auto &item) { return randValue < item.probability; });
-	auto *result = (this->*it->constructor)(parentNode, Util::expandIconName(it->iconName), it->allowedUsers, pos, win);
+	auto *result = (this->*it->constructor)(parentNode, it->iconName, it->allowedUsers, pos, win);
 	result->sequenceNumber = ++sequenceNumber;
 	emit itemSpawned(true, result->sequenceNumber, it - partialSums.begin(), pos, it->allowedUsers, -1);
 	return result;
@@ -114,7 +114,7 @@ Item *ItemModel::makeRandomItem(QSGNode *parentNode, QPointF pos, QQuickWindow *
  */
 Item *ItemModel::makePredefinedItem(QSGNode *parentNode, int which, QPointF pos, Item::AllowedUsers allowedUsers, QQuickWindow *win) {
 	auto conf = itemConfigs[which];
-	return (this->*conf.constructor)(parentNode, Util::expandIconName(conf.iconName), allowedUsers, pos, win);
+	return (this->*conf.constructor)(parentNode, conf.iconName, allowedUsers, pos, win);
 }
 
 /**
