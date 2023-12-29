@@ -54,6 +54,10 @@ void CleaninstallAnimation::progress() {
 		segments[segmentIndex]->clear();
 		pointsDeleted[segmentIndex] = sizeCache[segmentIndex];
 	}
+	if (segmentIndex >= segments.size()) {
+		// whoops, out of bounds, so no explosion for us today
+		return;
+	}
 
 	const auto pointsAlreadyDeleted = pointsToDelete;
 	pointsToDelete -= pointsDeleted[segmentIndex];
