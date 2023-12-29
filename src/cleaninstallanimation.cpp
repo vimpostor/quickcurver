@@ -42,6 +42,8 @@ void CleaninstallAnimation::progress() {
 	const size_t pos = totalSize * easedFactor;
 	if (factor > 1) {
 		segments.clear();
+		sizeCache.clear();
+		totalSize = 0;
 		initialTime = QTime();
 		return;
 	}
