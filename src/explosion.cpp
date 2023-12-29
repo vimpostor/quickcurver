@@ -45,6 +45,8 @@ Explosion::~Explosion() {
  */
 void Explosion::progress() {
 	float timeSinceStart = initialTime.msecsTo(QTime::currentTime());
+	opacityNode->setOpacity(std::max(0.f, 1 - timeSinceStart / PARTICLELIFETIME));
+	opacityNode->markDirty(QSGNode::DirtyOpacity);
 	if (timeSinceStart > PARTICLELIFETIME) {
 		// TODO: Improve lifetime of explosion, right now we only delete them at the end of each round
 		return;
@@ -53,7 +55,6 @@ void Explosion::progress() {
 			vertices[2 * i + 1].set(location.x() + PARTICLERANGE * particleDirections[i].x() * timeSinceStart / PARTICLELIFETIME,
 				location.y() + PARTICLERANGE * particleDirections[i].y() * timeSinceStart / PARTICLELIFETIME);
 		}
-		opacityNode->setOpacity(1 - timeSinceStart / PARTICLELIFETIME);
 		geoNode->markDirty(QSGNode::DirtyGeometry);
 	}
 }
