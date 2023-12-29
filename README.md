@@ -21,8 +21,8 @@ Note: For Arch Linux users there is an [AUR package](https://aur.archlinux.org/p
 ### Dependencies
 First make sure, that you have the required dependencies of QuickCurver installed. These are:
 
-* A C++ compiler with C++20 support
-* At least Qt 6.4
+* A C++ compiler with C++23 support
+* The latest Qt
 * The following Qt Modules (in the parentheses there is an example how the package could be called for your distro (this depends on the distro!)):
 	- Qt Core (qt6-base)
 	- Qt GUI (qt6-base)
