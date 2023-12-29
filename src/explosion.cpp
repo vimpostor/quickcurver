@@ -38,6 +38,7 @@ Explosion::Explosion(QPointF location, QSGNode *parentNode, QSGFlatColorMaterial
 
 Explosion::~Explosion() {
 	parentNode->removeChildNode(opacityNode.get());
+	opacityNode->removeChildNode(geoNode.get());
 }
 
 /**
