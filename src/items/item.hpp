@@ -27,6 +27,7 @@ public:
 	};
 
 	explicit Item(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPointF pos, QQuickWindow *window);
+	~Item();
 
 	void update();
 	void defuse();

@@ -32,6 +32,10 @@ Item::Item(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPo
 	parentNode->appendChildNode(&geoNode);
 }
 
+Item::~Item() {
+	parentNode->removeChildNode(&geoNode);
+}
+
 /**
  * @brief Performs all updates on this Item
  */
@@ -86,9 +90,6 @@ void Item::fade() {
 	geoNode.markDirty(QSGNode::DirtyGeometry);
 	if (actualDuration > FADEDURATION) {
 		fadeStart = QTime();
-		if (!fadeIn && activatedTime == 0) {
-			// parentNode->removeChildNode(&geoNode);
-		}
 	}
 }
 
@@ -100,7 +101,6 @@ void Item::fade() {
 void Item::deactivate() {
 	active = false;
 	applyToAffected(&Item::unUse);
-	// parentNode->removeChildNode(&geoNode);
 }
 
 /**
