@@ -159,12 +159,19 @@ Item {
 		anchors.right: parent.right
 		anchors.margins: 16
 		name: "person_add"
-		highlighted: true
 		onClicked: {
 			c_playerModel.appendPlayer();
 			game.forceActiveFocus();
 		}
-		onPressAndHold: {
+	}
+	FloatingActionButton {
+		enabled: !root.conntectedToServer
+		anchors.bottom: addPlayerButton.top
+		anchors.horizontalCenter: addPlayerButton.horizontalCenter
+		anchors.margins: 16
+		size: FloatingActionButton.Size.Small
+		name: "robot"
+		onClicked: {
 			c_playerModel.appendBot();
 			game.forceActiveFocus();
 		}
