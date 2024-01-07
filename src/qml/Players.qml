@@ -33,12 +33,7 @@ Item {
 				id: playerIcon
 				ico.name: model.controller === 0 ? "supervised_user_circle" : model.controller === 2 ? "robot" : "cloud_sync"
 				anchors.left: parent.left
-				implicitHeight: 32
-			}
-			Label {
 				text: model.name + "   " + model.totalScore + "(+" +  model.roundScore + ")"
-				anchors.verticalCenter: parent.verticalCenter
-				anchors.left: playerIcon.right
 			}
 			Label {
 				property real pingFactor: Math.min(500, model.ping) / 500
@@ -157,13 +152,13 @@ Item {
 			}
 		}
 	}
-	IconButton {
+	FloatingActionButton {
 		id: addPlayerButton
 		enabled: !root.connectedToServer
 		anchors.bottom: parent.bottom
 		anchors.right: parent.right
 		anchors.margins: 16
-		ico.name: "person_add"
+		name: "person_add"
 		highlighted: true
 		onClicked: {
 			c_playerModel.appendPlayer();

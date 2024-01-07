@@ -142,6 +142,7 @@ ApplicationWindow {
 							ico.name: "assistant_navigation"
 							enabled: !root.connectedToServer && (game ? !game.isStarted : false)
 							text: "Start!"
+							highlighted: true
 							onClicked: {
 								game.startGame();
 							}

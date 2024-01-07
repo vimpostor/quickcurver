@@ -12,7 +12,7 @@
 				owner = "vimpostor";
 				repo = "quartz";
 				rev = builtins.head (builtins.match ".*FetchContent_Declare\\(.*GIT_TAG ([[:alnum:]\\.]+).*" (builtins.readFile ./CMakeLists.txt));
-				hash = "sha256-cbU+VTsXetn31L1znMa/f1oqoQ8Zpond/I+Lk5jVxR0=";
+				hash = "sha256-gue+anFimouxmn7TMkx5T6YGhMZvc+YBe1arqKYXnLo=";
 			};
 		in {
 			packages = rec {
