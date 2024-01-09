@@ -165,7 +165,7 @@ Item {
 		}
 	}
 	FloatingActionButton {
-		enabled: !root.conntectedToServer
+		enabled: !root.connectedToServer
 		anchors.bottom: addPlayerButton.top
 		anchors.horizontalCenter: addPlayerButton.horizontalCenter
 		anchors.margins: 16

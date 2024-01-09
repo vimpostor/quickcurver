@@ -97,7 +97,7 @@ private:
 	std::vector<ItemConfig> itemConfigs = {
 		{&ItemModel::makeSpeedItem, "Speed", "Increases speed", 0.8, Item::AllowedUsers::ALLOW_COLLECTOR, "fast_forward"},
 		{&ItemModel::makeCleanInstallItem, "Cleaninstall", "Clears all segments", 0.5, Item::AllowedUsers::ALLOW_ALL, "clear_all"},
-		{&ItemModel::makeInvisibleItem, "Invisible", "Where are you?", 0.3, Item::AllowedUsers::ALLOW_COLLECTOR, "disabled_visible"},
+		{&ItemModel::makeInvisibleItem, "Invisible", "Where are you?", 0.3, Item::AllowedUsers::ALLOW_COLLECTOR, "mystery"},
 		{&ItemModel::makeAgileItem, "Agile", "Turn around faster", 0.2, Item::AllowedUsers::ALLOW_COLLECTOR, "rotate_90_degrees_ccw"},
 		{&ItemModel::makeFlashItem, "Flash", "The fastest man alive", 0.2, Item::AllowedUsers::ALLOW_COLLECTOR, "flash_on"},
 		{&ItemModel::makeSlowItem, "Freeze", "Decreases speed", 0.1, Item::AllowedUsers::ALLOW_OTHERS, "fast_rewind"},
