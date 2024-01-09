@@ -175,7 +175,7 @@ ApplicationWindow {
 		Snackbar {
 			id: resizeSnackbar
 			timeout: 10000
-			text: "Resize"
+			action: "Resize"
 			onClicked: {
 				gameWave.width =  Math.min(c_settings.width + 16, Screen.width - 16);
 				root.height = Math.min(c_settings.height + 3 * 16, Screen.height - 16);
