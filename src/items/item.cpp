@@ -20,8 +20,10 @@ Item::Item(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPo
 	this->allowedUsers = allowedUsers;
 	this->pos = pos;
 
-	imgNode = window->createImageNode();
 	color = getColor();
+	imgNode = window->createImageNode();
+	imgNode->setFiltering(QSGTexture::Linear);
+	imgNode->setMipmapFiltering(QSGTexture::Linear);
 	initTexture(window);
 	imgNode->setTexture(texture.get());
 	startFade(true);
@@ -145,8 +147,9 @@ void Item::initTexture(QQuickWindow *window) {
 
 	// create the texture
 	assert(window);
-	texture = std::unique_ptr<QSGTexture>(window->createTextureFromImage(img));
+	texture = std::unique_ptr<QSGTexture>(window->createTextureFromImage(img, QQuickWindow::TextureHasMipmaps));
 	assert(texture);
+	texture->setFiltering(QSGTexture::Linear);
 	texture->setMipmapFiltering(QSGTexture::Linear);
 }
 
