@@ -20,20 +20,18 @@ Item::Item(QSGNode *parentNode, QString iconName, AllowedUsers allowedUsers, QPo
 	this->allowedUsers = allowedUsers;
 	this->pos = pos;
 
-	geometry.setDrawingMode(GL_TRIANGLE_STRIP);
-	geoNode.setGeometry(&geometry);
+	imgNode = window->createImageNode();
 	color = getColor();
 	initTexture(window);
-	material.setTexture(texture.get());
-	geoNode.setMaterial(&material);
-	geometry.allocate(4);
+	imgNode->setTexture(texture.get());
 	startFade(true);
 	fade();
-	parentNode->appendChildNode(&geoNode);
+	parentNode->appendChildNode(imgNode);
 }
 
 Item::~Item() {
-	parentNode->removeChildNode(&geoNode);
+	parentNode->removeChildNode(imgNode);
+	delete imgNode;
 }
 
 /**
@@ -82,12 +80,8 @@ void Item::fade() {
 	float actualDuration = fadeStart.msecsTo(QTime::currentTime());
 	float factor = !fadeIn + (fadeIn - !fadeIn) * actualDuration / FADEDURATION;
 	factor = qMin(1.f, qMax(0.f, factor)); // 0 <= factor <= 1
-	QSGGeometry::TexturedPoint2D *vertices = geometry.vertexDataAsTexturedPoint2D();
-	vertices[0].set(this->pos.x() - SIZE * factor, this->pos.y() - SIZE * factor, 0, 0);
-	vertices[1].set(this->pos.x() + SIZE * factor, this->pos.y() - SIZE * factor, 1, 0);
-	vertices[2].set(this->pos.x() - SIZE * factor, this->pos.y() + SIZE * factor, 0, 1);
-	vertices[3].set(this->pos.x() + SIZE * factor, this->pos.y() + SIZE * factor, 1, 1);
-	geoNode.markDirty(QSGNode::DirtyGeometry);
+	imgNode->setRect(this->pos.x() - SIZE * factor, this->pos.y() - SIZE * factor, 2 * SIZE * factor, 2 * SIZE * factor);
+	imgNode->markDirty(QSGNode::DirtyGeometry);
 	if (actualDuration > FADEDURATION) {
 		fadeStart = QTime();
 	}

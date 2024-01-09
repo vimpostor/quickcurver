@@ -78,21 +78,13 @@ protected:
 	 */
 	Curver *collector;
 	/**
-	 * @brief The material used for displaying this Item
-	 */
-	QSGTextureMaterial material;
-	/**
 	 * @brief The texture of this Item
 	 */
 	std::unique_ptr<QSGTexture> texture;
 	/**
 	 * @brief The node displaying this Item in the scene graph
 	 */
-	QSGGeometryNode geoNode;
-	/**
-	 * @brief The geometry of the Item
-	 */
-	QSGGeometry geometry = QSGGeometry(QSGGeometry::defaultAttributes_TexturedPoint2D(), 0);
+	QSGImageNode *imgNode;
 	/**
 	 * @brief The color of the Item
 	 */
