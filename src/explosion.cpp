@@ -8,8 +8,7 @@
  * @param parent The parent object
  * @param radius The size of the explosion
  */
-Explosion::Explosion(QPointF location, QSGNode *parentNode, QSGFlatColorMaterial *material, QObject *parent, float radius)
-	: QObject(parent) {
+Explosion::Explosion(QPointF location, QSGNode *parentNode, QSGFlatColorMaterial *material, QObject *parent, float radius) {
 	this->location = location;
 	this->parentNode = parentNode;
 
