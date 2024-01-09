@@ -100,4 +100,8 @@ private:
 	 * @brief Whether the winner was already announced
 	 */
 	bool winnerAnnounced = false;
+	/**
+	 * @brief Whether a round reset is currently pending in the queue
+	 */
+	bool resetPending = false;
 };

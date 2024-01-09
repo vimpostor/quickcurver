@@ -158,7 +158,8 @@ void Game::curverDied() {
 		server.broadcastChatMessage((*maxScorer)->userName + " won!");
 	}
 	// check if only one player is remaining
-	if (std::ranges::count_if(getCurvers(), [](const auto &c) { return c->isAlive(); }) == 1) {
+	if (!resetPending && std::ranges::count_if(getCurvers(), [](const auto &c) { return c->isAlive(); }) < 2) {
+		resetPending = true;
 		resetRoundTimer.singleShot(Settings::getSingleton().getRoundTimeOut(), this, &Game::resetRound);
 	}
 }
@@ -170,6 +171,7 @@ void Game::resetRound() {
 	itemFactory->resetRound();
 	std::ranges::for_each(getCurvers(), [](const auto &c) { c->resetRound(); });
 	server.resetRound();
+	resetPending = false;
 }
 
 /**
