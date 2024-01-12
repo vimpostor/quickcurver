@@ -1,11 +1,5 @@
 #include "chatmodel.hpp"
 
-ChatModel::ChatModel() {
-	m_roleNames[UserNameRole] = "username";
-	m_roleNames[MessageRole] = "message";
-	m_roleNames[TimestampRole] = "timestamp";
-}
-
 /**
  * @brief Returns the number of rows in this model
  * @return The number of rows
@@ -40,15 +34,6 @@ QVariant ChatModel::data(const QModelIndex &index, int role) const {
  */
 QHash<int, QByteArray> ChatModel::roleNames() const {
 	return m_roleNames;
-}
-
-/**
- * @brief Returns a singleton ChatModel instance
- * @return The singleton
- */
-ChatModel &ChatModel::getSingleton() {
-	static ChatModel singleton;
-	return singleton;
 }
 
 /**

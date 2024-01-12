@@ -37,7 +37,7 @@ void Server::broadcastChatMessage(QString username, QString message) {
 	Packet::ServerChatMsg p;
 	p.username = username;
 	p.message = message;
-	ChatModel::getSingleton().appendMessage(username, message);
+	ChatModel::get()->appendMessage(username, message);
 	broadcastPacket(p);
 }
 

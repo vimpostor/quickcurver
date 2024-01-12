@@ -3,6 +3,8 @@ import QtQuick.Layouts
 import QtQuick.Controls.Material
 import Quartz
 
+import Backend
+
 Item {
 	ColumnLayout {
 		anchors.fill: parent
@@ -12,7 +14,7 @@ Item {
 				text: "Chat"
 			}
 			clip: true
-			model: c_chatModel
+			model: ChatModel
 			delegate: RowLayout {
 				width: parent.width
 				Label {

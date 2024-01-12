@@ -209,7 +209,7 @@ void Client::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p) {
 	case Packet::ServerTypes::Chat_Message:
 		{
 			auto *chatMsg = (Packet::ServerChatMsg *) p.get();
-			ChatModel::getSingleton().appendMessage(chatMsg->username, chatMsg->message);
+			ChatModel::get()->appendMessage(chatMsg->username, chatMsg->message);
 			break;
 		}
 	case Packet::ServerTypes::PlayerModelEdit:

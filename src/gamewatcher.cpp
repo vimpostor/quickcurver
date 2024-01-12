@@ -22,7 +22,7 @@ GameWatcher::GameWatcher(QObject *parent)
 	connect(&cliReader, &CommandlineReader::targetScore, &Settings::getSingleton(), &Settings::setTargetScore);
 
 	// copy ingame chat to terminal
-	connect(&ChatModel::getSingleton(), &ChatModel::newMessage, this, &GameWatcher::printChatMessage);
+	connect(ChatModel::get(), &ChatModel::newMessage, this, &GameWatcher::printChatMessage);
 }
 
 /**

@@ -2,6 +2,7 @@
 
 #include <QAbstractListModel>
 #include <QDateTime>
+#include <quartz/macros.hpp>
 #include <vector>
 
 /**
@@ -9,14 +10,15 @@
  */
 class ChatModel : public QAbstractListModel {
 	Q_OBJECT
+	QML_ELEMENT
+	QML_SINGLETON
 public:
-	ChatModel();
+	QML_CPP_SINGLETON(ChatModel)
 
 	virtual int rowCount(const QModelIndex &) const override;
 	virtual QVariant data(const QModelIndex &index, int role) const override;
 	virtual QHash<int, QByteArray> roleNames() const override;
 
-	static ChatModel &getSingleton();
 	void appendMessage(QString username, QString message);
 signals:
 	/**
@@ -49,10 +51,6 @@ private:
 	 */
 	std::vector<ChatMessage> m_data;
 	/**
-	 * @brief The role name strings for this model
-	 */
-	QHash<int, QByteArray> m_roleNames;
-	/**
 	 * @brief The role names for this model
 	 */
 	enum RoleNames {
@@ -60,4 +58,8 @@ private:
 		MessageRole,
 		TimestampRole,
 	};
+	/**
+	 * @brief The role name strings for this model
+	 */
+	QHash<int, QByteArray> m_roleNames = {{UserNameRole, "username"}, {MessageRole, "message"}, {TimestampRole, "timestamp"}};
 };
