@@ -50,7 +50,7 @@ void Game::startGame() {
 	std::ranges::for_each(getCurvers(), [](const std::unique_ptr<Curver> &c) { c->start(); });
 	itemFactory->resetRound();
 	// 60 FPS = 16 ms interval
-	gameTimer.start(static_cast<int>(1000.f / Settings::getSingleton().getUpdatesPerSecond()));
+	gameTimer.start(static_cast<int>(1000.f / Settings::get()->getUpdatesPerSecond()));
 }
 
 /**
@@ -157,7 +157,7 @@ void Game::progress() {
 void Game::curverDied() {
 	std::ranges::for_each(getCurvers(), [](const auto &c) { if (c->isAlive()) c->increaseScore(); });
 	auto maxScorer = std::ranges::max_element(getCurvers());
-	if ((*maxScorer)->totalScore >= Settings::getSingleton().getTargetScore() && !winnerAnnounced) {
+	if ((*maxScorer)->totalScore >= Settings::get()->getTargetScore() && !winnerAnnounced) {
 		// we have a winner
 		winnerAnnounced = true;
 		server.broadcastChatMessage((*maxScorer)->userName + " won!");
@@ -165,7 +165,7 @@ void Game::curverDied() {
 	// check if only one player is remaining
 	if (!resetPending && std::ranges::count_if(getCurvers(), [](const auto &c) { return c->isAlive(); }) < 2) {
 		resetPending = true;
-		resetRoundTimer.singleShot(Settings::getSingleton().getRoundTimeOut(), this, &Game::triggerResetRound);
+		resetRoundTimer.singleShot(Settings::get()->getRoundTimeOut(), this, &Game::triggerResetRound);
 	}
 }
 

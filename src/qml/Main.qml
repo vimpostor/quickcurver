@@ -34,7 +34,7 @@ ApplicationWindow {
 			anchors.fill: parent
 			MouseArea {
 				id: gameWave
-				SplitView.preferredWidth: c_settings.width
+				SplitView.preferredWidth: Settings.width
 				Rectangle {
 					anchors.fill: parent
 					color: Material.color(Material.BlueGrey, Material.Shade900)
@@ -42,8 +42,8 @@ ApplicationWindow {
 				Game {
 					id: game
 					anchors.fill: parent
-					property int realWidth: c_settings.width
-					property int realHeight: c_settings.height
+					property int realWidth: Settings.width
+					property int realHeight: Settings.height
 					function checkDimension() {
 						if (!root.connectedToServer) {
 							// we are manually resizing anyway
@@ -57,13 +57,13 @@ ApplicationWindow {
 					}
 					onWidthChanged: {
 						if (!root.connectedToServer) {
-							c_settings.width = width;
+							Settings.width = width;
 						}
 						checkDimension();
 					}
 					onHeightChanged: {
 						if (!root.connectedToServer) {
-							c_settings.height = height;
+							Settings.height = height;
 						}
 						checkDimension();
 					}
@@ -177,8 +177,8 @@ ApplicationWindow {
 			timeout: 10000
 			action: "Resize"
 			onClicked: {
-				gameWave.width =  Math.min(c_settings.width + 16, Screen.width - 16);
-				root.height = Math.min(c_settings.height + 3 * 16, Screen.height - 16);
+				gameWave.width =  Math.min(Settings.width + 16, Screen.width - 16);
+				root.height = Math.min(Settings.height + 3 * 16, Screen.height - 16);
 				if (root.width < gameWave.width) {
 					root.width = gameWave.width + 14 * 16;
 				}
@@ -235,8 +235,8 @@ ApplicationWindow {
 					anchors.left: parent.left
 					anchors.right: parent.right
 					onClicked: {
-						c_settings.setClientName(nameTextField.text);
-						c_settings.setClientColor(clientColorDialog.selectedColor);
+						Settings.setClientName(nameTextField.text);
+						Settings.setClientColor(clientColorDialog.selectedColor);
 						game.connectToHost(ipTextField.text, portTextField.text);
 					}
 				}

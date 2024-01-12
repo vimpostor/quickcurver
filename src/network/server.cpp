@@ -3,7 +3,7 @@
 Server::Server() {
 	connect(&tcpServer, &QTcpServer::acceptError, this, &Server::acceptError);
 	connect(&tcpServer, &QTcpServer::newConnection, this, &Server::newConnection);
-	connect(&Settings::getSingleton(), &Settings::dimensionChanged, this, &Server::broadcastSettings);
+	connect(Settings::get(), &Settings::dimensionChanged, this, &Server::broadcastSettings);
 	connect(&udpSocket, &QUdpSocket::errorOccurred, this, &Server::udpSocketError);
 	connect(&udpSocket, &QUdpSocket::readyRead, this, &Server::udpSocketReadyRead);
 	reListen(0);
@@ -17,7 +17,7 @@ Server::~Server() {
  * @brief Broadcasts new Curver data to every Client
  */
 void Server::broadcastCurverData() {
-	if (++dataBroadcastIteration % Settings::getSingleton().getNetworkCurverBlock() == 0) {
+	if (++dataBroadcastIteration % Settings::get()->getNetworkCurverBlock() == 0) {
 		Packet::ServerCurverData p;
 		p.fill();
 		p.start = true;

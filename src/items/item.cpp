@@ -133,7 +133,7 @@ QColor Item::getColor() const {
  * @param window The window to create the texture in
  */
 void Item::initTexture(QQuickWindow *window) {
-	if (Settings::getSingleton().getOffscreen()) {
+	if (Settings::get()->getOffscreen()) {
 		return;
 	}
 	constexpr const int res = 48;

@@ -76,14 +76,14 @@ void ItemFactory::setWindow(QQuickWindow *w) {
  * @brief Prepares a new Item spawn
  */
 void ItemFactory::prepareNextItem() {
-	nextItemSpawn = QTime::currentTime().addMSecs(Util::randInt(Settings::getSingleton().getItemSpawnIntervalMin(), Settings::getSingleton().getItemSpawnIntervalMax()));
+	nextItemSpawn = QTime::currentTime().addMSecs(Util::randInt(Settings::get()->getItemSpawnIntervalMin(), Settings::get()->getItemSpawnIntervalMax()));
 }
 
 /**
  * @brief Spawns a new Item
  */
 void ItemFactory::spawnItem() {
-	QPoint dimension = Settings::getSingleton().getDimension();
+	QPoint dimension = Settings::get()->getDimension();
 	items.emplace_back(std::unique_ptr<Item>(ItemModel::get()->makeRandomItem(parentNode, QPointF(Util::randInt(SPAWN_WALL_THRESHOLD, dimension.x() - SPAWN_WALL_THRESHOLD), Util::randInt(SPAWN_WALL_THRESHOLD, dimension.y() - SPAWN_WALL_THRESHOLD)), window)));
 }
 

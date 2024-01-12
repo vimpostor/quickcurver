@@ -418,14 +418,14 @@ Packet::ServerSettingsData::ServerSettingsData()
  * @brief Automatically fills the packet
  */
 void Packet::ServerSettingsData::fill() {
-	this->dimension = Settings::getSingleton().getDimension();
+	this->dimension = Settings::get()->getDimension();
 }
 
 /**
  * @brief Automatically extracts the packet
  */
 void Packet::ServerSettingsData::extract() {
-	Settings::getSingleton().setDimension(this->dimension);
+	Settings::get()->setDimension(this->dimension);
 }
 
 /**

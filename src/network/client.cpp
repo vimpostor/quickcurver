@@ -60,8 +60,8 @@ void Client::sendChatMessage(QString msg) {
  */
 void Client::sendPlayerModel() {
 	Packet::ClientPlayerModel p;
-	p.username = Settings::getSingleton().getClientName();
-	p.color = Settings::getSingleton().getClientColor();
+	p.username = Settings::get()->getClientName();
+	p.color = Settings::get()->getClientColor();
 	p.sendPacket(&tcpSocket);
 }
 
@@ -285,6 +285,6 @@ void Client::setJoinStatus(const JoinStatus s) {
  * @brief Inits Mumble
  */
 void Client::initMumble() {
-	Mumble::Api::get()->setGeneralInfo(Settings::getSingleton().getClientName(), serverAddress.addr.toString() + ":" + QString::number(serverAddress.port));
+	Mumble::Api::get()->setGeneralInfo(Settings::get()->getClientName(), serverAddress.addr.toString() + ":" + QString::number(serverAddress.port));
 }
 #endif // MUMBLE_SUPPORT

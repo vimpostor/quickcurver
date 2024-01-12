@@ -1,17 +1,5 @@
 #include "settings.hpp"
 
-Settings::Settings() {
-}
-
-/**
- * @brief Returns the Settings singleton
- * @return The Settings singleton
- */
-Settings &Settings::getSingleton() {
-	static Settings result;
-	return result;
-}
-
 /**
  * @brief Sets the dimension of the game
  * @param dimension The new dimension

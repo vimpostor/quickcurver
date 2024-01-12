@@ -4,18 +4,21 @@
 #include <QGuiApplication>
 #include <QObject>
 #include <QPoint>
+#include <quartz/macros.hpp>
 
 /**
  * @brief This class represents settings that affect the game in any way
  */
 class Settings : public QObject {
 	Q_OBJECT
+	QML_ELEMENT
+	QML_SINGLETON
 
 	Q_PROPERTY(int width READ getWidth WRITE setWidth NOTIFY widthChanged)
 	Q_PROPERTY(int height READ getHeight WRITE setHeight NOTIFY heightChanged)
 public:
-	explicit Settings();
-	static Settings &getSingleton();
+	QML_CPP_SINGLETON(Settings)
+
 	void setDimension(QPoint dimension);
 	QPoint getDimension() const;
 	Q_INVOKABLE void setWidth(int width);

@@ -17,7 +17,7 @@ void Bot::makeMove(Curver &c) {
 	auto &curvers = PlayerModel::get()->getCurvers();
 	QPointF p = c.getPos();
 	QPointF dir = c.getDirection();
-	const QPointF dim = Settings::getSingleton().getDimension();
+	const QPointF dim = Settings::get()->getDimension();
 	const float v = c.velocity;
 	const bool aboutToCollide = c.checkForIntersection(curvers, p, p + LOOK_AHEAD * v * dir);
 	// are we going straight for a wall?

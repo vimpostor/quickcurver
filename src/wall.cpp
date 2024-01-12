@@ -11,7 +11,7 @@ Wall::Wall() {
 	geometry.allocate(5);
 	updateDimension();
 	resize();
-	connect(&Settings::getSingleton(), &Settings::dimensionChanged, this, &Wall::updateDimension);
+	connect(Settings::get(), &Settings::dimensionChanged, this, &Wall::updateDimension);
 }
 
 /**
@@ -26,7 +26,7 @@ void Wall::setParentNode(QSGNode *parentNode) {
  * @brief Updates the dimension of the game
  */
 void Wall::updateDimension() {
-	this->dimension = Settings::getSingleton().getDimension();
+	this->dimension = Settings::get()->getDimension();
 	resize();
 }
 

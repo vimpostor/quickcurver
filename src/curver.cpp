@@ -219,7 +219,7 @@ bool Curver::checkForIntersection(std::vector<std::unique_ptr<Curver>> &curvers,
  * Triggers Curver::die(), if it does in fact collide
  */
 void Curver::checkForWall() {
-	QPoint dimension = Settings::getSingleton().getDimension();
+	QPoint dimension = Settings::get()->getDimension();
 	if (alive && !changingSegment && (lastPos.x() < 0 || lastPos.x() > dimension.x() || lastPos.y() < 0 || lastPos.y() > dimension.y())) {
 		die();
 	}
@@ -251,7 +251,7 @@ void Curver::resetRound() {
 	explosions.clear();
 	segments.clear();
 	// random start position
-	QPoint dimension = Settings::getSingleton().getDimension();
+	QPoint dimension = Settings::get()->getDimension();
 	lastPos = QPointF(Util::randInt(SPAWN_WALL_THRESHOLD, dimension.x() - SPAWN_WALL_THRESHOLD), Util::randInt(SPAWN_WALL_THRESHOLD, dimension.y() - SPAWN_WALL_THRESHOLD));
 	rotate(Util::rand() * 2 * M_PI);
 	prepareSegmentEvent(true, SPAWN_INVINCIBLE_DURATION, SPAWN_INVINCIBLE_DURATION);

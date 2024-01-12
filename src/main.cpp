@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
 	parser.process(app);
 
 	// headless server
-	if (Settings::getSingleton().getOffscreen()) {
+	if (Settings::get()->getOffscreen()) {
 		GameWatcher gameWatcher;
 		gameWatcher.start();
 		return app.exec();
@@ -56,8 +56,6 @@ int main(int argc, char *argv[]) {
 
 	QQmlApplicationEngine engine;
 	engine.addImportPath(QStringLiteral(":/"));
-
-	engine.rootContext()->setContextProperty("c_settings", &Settings::getSingleton());
 
 	engine.loadFromModule("Backend", "Main");
 	if (engine.rootObjects().isEmpty()) {

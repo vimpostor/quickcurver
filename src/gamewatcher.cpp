@@ -9,17 +9,17 @@ GameWatcher::GameWatcher(QObject *parent)
 	connect(&cliReader, &CommandlineReader::addBot, PlayerModel::get(), &PlayerModel::appendBot);
 	connect(&cliReader, &CommandlineReader::chat, &game, &Game::sendChatMessage);
 	connect(&cliReader, &CommandlineReader::itemSpawn, ItemModel::get(), &ItemModel::setProbability);
-	connect(&cliReader, &CommandlineReader::itemWait, [](int min, int max) { Settings::getSingleton().setItemSpawnIntervalMin(min); Settings::getSingleton().setItemSpawnIntervalMax(max); });
+	connect(&cliReader, &CommandlineReader::itemWait, [](int min, int max) { Settings::get()->setItemSpawnIntervalMin(min); Settings::get()->setItemSpawnIntervalMax(max); });
 	connect(&cliReader, &CommandlineReader::listen, &game, &Game::serverReListen);
-	connect(&cliReader, &CommandlineReader::logicUpdate, &Settings::getSingleton(), &Settings::setUpdatesPerSecond);
-	connect(&cliReader, &CommandlineReader::networkUpdate, &Settings::getSingleton(), &Settings::setNetworkCurverBlock);
+	connect(&cliReader, &CommandlineReader::logicUpdate, Settings::get(), &Settings::setUpdatesPerSecond);
+	connect(&cliReader, &CommandlineReader::networkUpdate, Settings::get(), &Settings::setNetworkCurverBlock);
 	connect(&cliReader, &CommandlineReader::quit, this, &GameWatcher::quit, Qt::QueuedConnection);
 	// TODO: Remove player must call the slot in Server
 	connect(&cliReader, &CommandlineReader::remove, PlayerModel::get(), &PlayerModel::removePlayer);
 	connect(&cliReader, &CommandlineReader::reset, &game, &Game::resetGame);
-	connect(&cliReader, &CommandlineReader::resize, &Settings::getSingleton(), &Settings::setDimension);
+	connect(&cliReader, &CommandlineReader::resize, Settings::get(), &Settings::setDimension);
 	connect(&cliReader, &CommandlineReader::start, &game, &Game::startGame);
-	connect(&cliReader, &CommandlineReader::targetScore, &Settings::getSingleton(), &Settings::setTargetScore);
+	connect(&cliReader, &CommandlineReader::targetScore, Settings::get(), &Settings::setTargetScore);
 
 	// copy ingame chat to terminal
 	connect(ChatModel::get(), &ChatModel::newMessage, this, &GameWatcher::printChatMessage);

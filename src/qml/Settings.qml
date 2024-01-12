@@ -34,10 +34,10 @@ Page {
 					}
 					Slider {
 						height: 24
-						value: c_settings.getRoundTimeOut();
+						value: Settings.getRoundTimeOut();
 						from: 0
 						to: 5000
-						onValueChanged: c_settings.setRoundTimeOut(value);
+						onValueChanged: Settings.setRoundTimeOut(value);
 					}
 				}
 				RowLayout {
@@ -48,10 +48,10 @@ Page {
 						height: 24
 						from: 50
 						to: 10000
-						first.value: c_settings.getItemSpawnIntervalMin();
-						second.value: c_settings.getItemSpawnIntervalMax();
-						first.onValueChanged: c_settings.setItemSpawnIntervalMin(first.value);
-						second.onValueChanged: c_settings.setItemSpawnIntervalMax(second.value);
+						first.value: Settings.getItemSpawnIntervalMin();
+						second.value: Settings.getItemSpawnIntervalMax();
+						first.onValueChanged: Settings.setItemSpawnIntervalMin(first.value);
+						second.onValueChanged: Settings.setItemSpawnIntervalMax(second.value);
 					}
 				}
 				RowLayout {
@@ -59,9 +59,9 @@ Page {
 						text: "Score to win"
 					}
 					TextField {
-						text: c_settings.getTargetScore()
+						text: Settings.getTargetScore()
 						inputMethodHints: Qt.ImhDigitsOnly
-						onTextChanged: c_settings.setTargetScore(text);
+						onTextChanged: Settings.setTargetScore(text);
 					}
 				}
 				RowLayout {
@@ -70,12 +70,12 @@ Page {
 					}
 					Slider {
 						height: 24
-						value: c_settings.getUpdatesPerSecond();
+						value: Settings.getUpdatesPerSecond();
 						from: 30
 						to: 144
 						snapMode: Slider.SnapAlways
 						stepSize: 1
-						onValueChanged: c_settings.setUpdatesPerSecond(value);
+						onValueChanged: Settings.setUpdatesPerSecond(value);
 					}
 				}
 				RowLayout {
@@ -84,12 +84,12 @@ Page {
 					}
 					Slider {
 						height: 24
-						value: c_settings.getNetworkCurverBlock();
+						value: Settings.getNetworkCurverBlock();
 						from: 1
 						to: 8
 						snapMode: Slider.SnapAlways
 						stepSize: 1
-						onValueChanged: c_settings.setNetworkCurverBlock(value);
+						onValueChanged: Settings.setNetworkCurverBlock(value);
 					}
 				}
 			}
