@@ -34,6 +34,7 @@ Item {
 				ico.name: model.controller === 0 ? "supervised_user_circle" : model.controller === 2 ? "robot" : "cloud_sync"
 				anchors.left: parent.left
 				text: model.name + "   " + model.totalScore + "(+" +  model.roundScore + ")"
+				onClicked: playerListView.open(index, model.controller);
 			}
 			Label {
 				property real pingFactor: Math.min(500, model.ping) / 500
@@ -48,10 +49,6 @@ Item {
 				}
 				anchors.verticalCenter: parent.verticalCenter
 				anchors.right: parent.right
-			}
-			MouseArea {
-				anchors.fill: parent
-				onClicked: playerListView.open(index, model.controller);
 			}
 		}
 		Dialog {
