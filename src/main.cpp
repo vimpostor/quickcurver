@@ -23,8 +23,6 @@
 
 
 int main(int argc, char *argv[]) {
-	// threaded render_loop, which is default on non-mesa drivers, breaks drawing
-	qputenv("QSG_RENDER_LOOP", "basic");
 	QGuiApplication app(argc, argv);
 
 	qRegisterMetaType<Client::JoinStatus>("JoinStatus");
