@@ -8,7 +8,6 @@
 #include "models/chatmodel.hpp"
 #include "models/itemmodel.hpp"
 #include "models/playermodel.hpp"
-#include "mumble.hpp"
 #include "settings.hpp"
 #include "utility"
 #include "version.hpp"
@@ -44,11 +43,6 @@ int main(int argc, char *argv[]) {
 	}
 
 	QFontDatabase::addApplicationFont("/MaterialSymbols.woff2");
-
-	// Mumble
-#ifdef MUMBLE_SUPPORT
-	Mumble::Api::get()->initialize();
-#endif // MUMBLE_SUPPORT
 
 	// register QML types here
 	qmlRegisterType<Game>("Game", 1, 0, "Game");

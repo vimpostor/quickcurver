@@ -1,5 +1,4 @@
 #include "client.hpp"
-#include "mumble.hpp"
 
 #define PING_INTERVAL 5000
 #define JOIN_TIMEOUT 30000
@@ -222,12 +221,6 @@ void Client::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p) {
 		{
 			auto *curverData = (Packet::ServerCurverData *) p.get();
 			curverData->extract();
-#ifdef MUMBLE_SUPPORT
-			auto &curvers = PlayerModel::get()->getCurvers();
-			if (curverIndex >= 0 && curverIndex < curvers.size()) {
-				Mumble::Api::get()->updatePosition(curvers[curverIndex]->getPos());
-			}
-#endif // MUMBLE_SUPPORT
 			emit updateGraphics();
 			break;
 		}
@@ -254,9 +247,6 @@ void Client::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p) {
 			if (this->joinStatus == JoinStatus::UDP_PENDING) {
 				setJoinStatus(JoinStatus::JOINED);
 				sendPlayerModel();
-#ifdef MUMBLE_SUPPORT
-				initMumble();
-#endif // MUMBLE_SUPPORT
 			}
 			break;
 		}
@@ -279,12 +269,3 @@ void Client::setJoinStatus(const JoinStatus s) {
 	}
 	emit joinStatusChanged(s);
 }
-
-#ifdef MUMBLE_SUPPORT
-/**
- * @brief Inits Mumble
- */
-void Client::initMumble() {
-	Mumble::Api::get()->setGeneralInfo(Settings::get()->getClientName(), serverAddress.addr.toString() + ":" + QString::number(serverAddress.port));
-}
-#endif // MUMBLE_SUPPORT

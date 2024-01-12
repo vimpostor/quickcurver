@@ -85,9 +85,6 @@ private slots:
 private:
 	void handlePacket(std::unique_ptr<Packet::AbstractPacket> &p);
 	void setJoinStatus(const JoinStatus s);
-#ifdef MUMBLE_SUPPORT
-	void initMumble();
-#endif // MUMBLE_SUPPORT
 	/**
 	 * @brief The TCP socket to communicate with
 	 */
