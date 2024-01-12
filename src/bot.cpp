@@ -14,7 +14,7 @@ void Bot::makeMove(Curver &c) {
 	// Otherwise bots "race" with other curvers heads right next to them
 	// good default value, if we don't want to change anything, we can just return
 	c.rotation = Curver::Rotation::ROTATE_NONE;
-	auto &curvers = PlayerModel::getSingleton().getCurvers();
+	auto &curvers = PlayerModel::get()->getCurvers();
 	QPointF p = c.getPos();
 	QPointF dir = c.getDirection();
 	const QPointF dim = Settings::getSingleton().getDimension();

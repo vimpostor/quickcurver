@@ -3,6 +3,7 @@
 #include <QAbstractListModel>
 #include <QHash>
 #include <QSGNode>
+#include <quartz/macros.hpp>
 #include <vector>
 
 #include "curver.hpp"
@@ -13,14 +14,14 @@
  */
 class PlayerModel : public QAbstractListModel {
 	Q_OBJECT
+	QML_ELEMENT
+	QML_SINGLETON
 public:
-	explicit PlayerModel(QObject *parent = NULL);
+	QML_CPP_SINGLETON(PlayerModel)
 
 	virtual int rowCount(const QModelIndex &) const override;
 	virtual QVariant data(const QModelIndex &index, int role) const override;
 	virtual QHash<int, QByteArray> roleNames() const override;
-
-	static PlayerModel &getSingleton();
 
 	Q_INVOKABLE void appendPlayer();
 	Q_INVOKABLE void appendBot();
@@ -55,10 +56,6 @@ private:
 	 */
 	std::vector<std::unique_ptr<Curver>> m_data;
 	/**
-	 * @brief The role name strings
-	 */
-	QHash<int, QByteArray> m_roleNames;
-	/**
 	 * @brief The role names
 	 */
 	enum RoleNames {
@@ -71,6 +68,11 @@ private:
 		ControllerRole,
 		PingRole,
 	};
+	/**
+	 * @brief The role name strings
+	 */
+	QHash<int, QByteArray> m_roleNames {{NameRole, "name"}, {ColorRole, "color"}, {LeftKeyRole, "leftKey"}, {RightKeyRole, "rightKey"}, {RoundScoreRole, "roundScore"}, {TotalScoreRole, "totalScore"}, {ControllerRole, "controller"}, {PingRole, "ping"}};
+
 	/**
 	 * @brief The root node in the scene graph
 	 */

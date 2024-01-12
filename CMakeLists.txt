@@ -11,7 +11,7 @@ qt_standard_project_setup()
 set(QT_PREFIXED_MODULES ${QT_MODULES})
 list(TRANSFORM QT_PREFIXED_MODULES PREPEND "Qt6::")
 
-include_directories("src")
+include_directories("src" "src/models")
 add_compile_definitions(QUICKCURVER_VERSION="${PROJECT_VERSION}")
 
 file(GLOB_RECURSE SRCS "src/*.cpp")

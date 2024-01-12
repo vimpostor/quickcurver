@@ -57,8 +57,6 @@ int main(int argc, char *argv[]) {
 	QQmlApplicationEngine engine;
 	engine.addImportPath(QStringLiteral(":/"));
 
-	// context properties
-	engine.rootContext()->setContextProperty("c_playerModel", &PlayerModel::getSingleton());
 	engine.rootContext()->setContextProperty("c_itemModel", &ItemModel::getSingleton());
 	engine.rootContext()->setContextProperty("c_chatModel", &ChatModel::getSingleton());
 	engine.rootContext()->setContextProperty("c_settings", &Settings::getSingleton());

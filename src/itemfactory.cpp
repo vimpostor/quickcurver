@@ -57,7 +57,7 @@ void ItemFactory::integrateItem(bool spawned, unsigned int sequenceNumber, int w
 		auto it = std::ranges::find_if(items, [&](auto &i) { return i->sequenceNumber == sequenceNumber; });
 		if (it != items.end()) {
 			if (collectorIndex != -1) {
-				(*it)->trigger(PlayerModel::getSingleton().getCurvers()[collectorIndex]);
+				(*it)->trigger(PlayerModel::get()->getCurvers()[collectorIndex]);
 			}
 			items.erase(it);
 		}
@@ -93,10 +93,10 @@ void ItemFactory::spawnItem() {
 void ItemFactory::checkCollisions() {
 	auto itemIt = items.begin();
 	while (itemIt != items.end()) {
-		auto curverIt = std::ranges::find_if(PlayerModel::getSingleton().getCurvers(), [&itemIt](auto &curver) { return (*itemIt)->isInRange(curver->getPos()); });
-		if (curverIt != PlayerModel::getSingleton().getCurvers().end()) {
+		auto curverIt = std::ranges::find_if(PlayerModel::get()->getCurvers(), [&itemIt](auto &curver) { return (*itemIt)->isInRange(curver->getPos()); });
+		if (curverIt != PlayerModel::get()->getCurvers().end()) {
 			// trigger item
-			emit ItemModel::getSingleton().itemSpawned(false, (*itemIt)->sequenceNumber, 0, QPointF(), Item::AllowedUsers::ALLOW_ALL, curverIt - PlayerModel::getSingleton().getCurvers().begin());
+			emit ItemModel::getSingleton().itemSpawned(false, (*itemIt)->sequenceNumber, 0, QPointF(), Item::AllowedUsers::ALLOW_ALL, curverIt - PlayerModel::get()->getCurvers().begin());
 			(*itemIt)->trigger(*curverIt);
 			usedItems.emplace_back(std::move(*itemIt));
 			itemIt = items.erase(itemIt);

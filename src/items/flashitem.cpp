@@ -22,6 +22,6 @@ void FlashItem::use(Curver *curver) {
 	curver->prepareSegmentEvent(true, RECOVER_TIME, RECOVER_TIME);
 	Curver::Rotation backup = curver->rotation;
 	curver->rotation = Curver::Rotation::ROTATE_NONE;
-	curver->progress(RECOVER_TIME, PlayerModel::getSingleton().getCurvers());
+	curver->progress(RECOVER_TIME, PlayerModel::get()->getCurvers());
 	curver->rotation = backup;
 }

@@ -19,9 +19,9 @@ Game::Game(QQuickItem *parent)
 	// notify the item factory about window changes
 	connect(this, &QQuickItem::windowChanged, itemFactory.get(), &ItemFactory::setWindow);
 	// tell the playermodel, what the root node is, so that it can tell its curvers
-	PlayerModel::getSingleton().setRootNode(this->rootNode);
-	connect(&PlayerModel::getSingleton(), &PlayerModel::curverDied, this, &Game::curverDied);
-	connect(&PlayerModel::getSingleton(), &PlayerModel::playerModelChanged, &server, &Server::broadcastPlayerModel);
+	PlayerModel::get()->setRootNode(this->rootNode);
+	connect(PlayerModel::get(), &PlayerModel::curverDied, this, &Game::curverDied);
+	connect(PlayerModel::get(), &PlayerModel::playerModelChanged, &server, &Server::broadcastPlayerModel);
 	connect(&ItemModel::getSingleton(), &ItemModel::itemSpawned, &server, &Server::broadcastItemData);
 	wall.setParentNode(rootNode);
 	connect(&client, &Client::integrateItem, itemFactory.get(), &ItemFactory::integrateItem);
@@ -105,7 +105,7 @@ void Game::resetGame() {
 	triggerResetRound();
 	std::ranges::for_each(getCurvers(), [](const auto &c) { c->totalScore = 0; });
 	winnerAnnounced = false;
-	PlayerModel::getSingleton().forceRefresh();
+	PlayerModel::get()->forceRefresh();
 }
 
 /**
@@ -206,5 +206,5 @@ void Game::tryStartGame() {
  * @return A vector containing all curvers
  */
 std::vector<std::unique_ptr<Curver>> &Game::getCurvers() {
-	return PlayerModel::getSingleton().getCurvers();
+	return PlayerModel::get()->getCurvers();
 }

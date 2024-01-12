@@ -6,7 +6,7 @@
  */
 GameWatcher::GameWatcher(QObject *parent)
 	: QObject(parent) {
-	connect(&cliReader, &CommandlineReader::addBot, &PlayerModel::getSingleton(), &PlayerModel::appendBot);
+	connect(&cliReader, &CommandlineReader::addBot, PlayerModel::get(), &PlayerModel::appendBot);
 	connect(&cliReader, &CommandlineReader::chat, &game, &Game::sendChatMessage);
 	connect(&cliReader, &CommandlineReader::itemSpawn, &ItemModel::getSingleton(), &ItemModel::setProbability);
 	connect(&cliReader, &CommandlineReader::itemWait, [](int min, int max) { Settings::getSingleton().setItemSpawnIntervalMin(min); Settings::getSingleton().setItemSpawnIntervalMax(max); });
@@ -15,7 +15,7 @@ GameWatcher::GameWatcher(QObject *parent)
 	connect(&cliReader, &CommandlineReader::networkUpdate, &Settings::getSingleton(), &Settings::setNetworkCurverBlock);
 	connect(&cliReader, &CommandlineReader::quit, this, &GameWatcher::quit, Qt::QueuedConnection);
 	// TODO: Remove player must call the slot in Server
-	connect(&cliReader, &CommandlineReader::remove, &PlayerModel::getSingleton(), &PlayerModel::removePlayer);
+	connect(&cliReader, &CommandlineReader::remove, PlayerModel::get(), &PlayerModel::removePlayer);
 	connect(&cliReader, &CommandlineReader::reset, &game, &Game::resetGame);
 	connect(&cliReader, &CommandlineReader::resize, &Settings::getSingleton(), &Settings::setDimension);
 	connect(&cliReader, &CommandlineReader::start, &game, &Game::startGame);

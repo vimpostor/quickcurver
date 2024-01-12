@@ -223,7 +223,7 @@ void Client::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p) {
 			auto *curverData = (Packet::ServerCurverData *) p.get();
 			curverData->extract();
 #ifdef MUMBLE_SUPPORT
-			auto &curvers = PlayerModel::getSingleton().getCurvers();
+			auto &curvers = PlayerModel::get()->getCurvers();
 			if (curverIndex >= 0 && curverIndex < curvers.size()) {
 				Mumble::Api::get()->updatePosition(curvers[curverIndex]->getPos());
 			}
@@ -249,7 +249,7 @@ void Client::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p) {
 			ping = Util::getTimeDiff(pong->sent);
 			this->curverIndex = pong->curverIndex;
 			pong->extract();
-			PlayerModel::getSingleton().forceRefresh();
+			PlayerModel::get()->forceRefresh();
 
 			if (this->joinStatus == JoinStatus::UDP_PENDING) {
 				setJoinStatus(JoinStatus::JOINED);

@@ -120,7 +120,7 @@ void Server::newConnection() {
 	QTcpSocket *s = tcpServer.nextPendingConnection();
 	// socket must not be NULL
 	if (s) {
-		auto *curver = PlayerModel::getSingleton().getNewPlayer();
+		auto *curver = PlayerModel::get()->getNewPlayer();
 		curver->controller = Curver::Controller::CONTROLLER_REMOTE;
 		clients[std::unique_ptr<QTcpSocket>(s)] = curver;
 		connect(s, &QTcpSocket::errorOccurred, this, &Server::socketError);
@@ -252,7 +252,7 @@ void Server::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p, const QTcp
 			auto *playerData = (Packet::ClientPlayerModel *) p.get();
 			curver->userName = playerData->username;
 			curver->setColor(playerData->color);
-			PlayerModel::getSingleton().forceRefresh();
+			PlayerModel::get()->forceRefresh();
 			break;
 		}
 	case Packet::ClientTypes::CurverRotation:
@@ -272,8 +272,8 @@ void Server::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p, const QTcp
 
 			if (pongPacket.curverIndex != -1) {
 				// store current ping of this player
-				PlayerModel::getSingleton().getCurvers()[pongPacket.curverIndex]->ping = pingPacket->delta;
-				PlayerModel::getSingleton().forceRefresh();
+				PlayerModel::get()->getCurvers()[pongPacket.curverIndex]->ping = pingPacket->delta;
+				PlayerModel::get()->forceRefresh();
 			}
 
 			pongPacket.fill();
@@ -307,7 +307,7 @@ void Server::broadcastPacket(Packet::AbstractPacket &p, bool udp) {
 int Server::getCurverIndex(const FullNetworkAddress peer) {
 	auto it = std::ranges::find_if(clients, [&](auto &p) { return p.first->peerAddress() == peer.addr; });
 	if (it != clients.end()) {
-		auto &curvers = PlayerModel::getSingleton().getCurvers();
+		auto &curvers = PlayerModel::get()->getCurvers();
 		for (size_t i = 0; i < curvers.size(); ++i) {
 			if (curvers[i].get() == it->second) {
 				return i;

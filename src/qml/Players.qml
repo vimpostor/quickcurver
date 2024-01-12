@@ -4,6 +4,8 @@ import QtQuick.Layouts
 import QtQuick.Controls.Material
 import Quartz
 
+import Backend
+
 Item {
 	id: playersRoot
 	ListView {
@@ -25,7 +27,7 @@ Item {
 			bottomSheet.open();
 		}
 		anchors.fill: parent
-		model: c_playerModel
+		model: PlayerModel
 		delegate: Item {
 			height: playerIcon.implicitHeight
 			width: ListView.view.width
@@ -98,7 +100,7 @@ Item {
 					enabled: !root.connectedToServer
 					ico.name: "delete"
 					onClicked: {
-						c_playerModel.removePlayer(playerListView.modelIndex);
+						PlayerModel.removePlayer(playerListView.modelIndex);
 						bottomSheet.close();
 					}
 				}
@@ -113,11 +115,11 @@ Item {
 					id: textField
 				}
 			}
-			onAccepted: c_playerModel.setUserName(playerListView.modelIndex, textField.text);
+			onAccepted: PlayerModel.setUserName(playerListView.modelIndex, textField.text);
 		}
 		ColorDialog {
 			id: colorDialog
-			onAccepted: c_playerModel.setColor(playerListView.modelIndex, selectedColor);
+			onAccepted: PlayerModel.setColor(playerListView.modelIndex, selectedColor);
 		}
 		Dialog {
 			id: botDialog
@@ -128,7 +130,7 @@ Item {
 				}
 				CheckBox {
 					id: botCheckbox
-					onCheckedChanged: c_playerModel.setController(playerListView.modelIndex, 2 * botCheckbox.checked);
+					onCheckedChanged: PlayerModel.setController(playerListView.modelIndex, 2 * botCheckbox.checked);
 				}
 			}
 		}
@@ -136,7 +138,7 @@ Item {
 			id: leftKeyItem
 			visible: false
 			Keys.onPressed: (event) => {
-				c_playerModel.setLeftKey(playerListView.modelIndex, event.key);
+				PlayerModel.setLeftKey(playerListView.modelIndex, event.key);
 				game.forceActiveFocus();
 			}
 		}
@@ -144,7 +146,7 @@ Item {
 			id: rightKeyItem
 			visible: false
 			Keys.onPressed: (event) => {
-				c_playerModel.setRightKey(playerListView.modelIndex, event.key);
+				PlayerModel.setRightKey(playerListView.modelIndex, event.key);
 				game.forceActiveFocus();
 			}
 		}
@@ -157,7 +159,7 @@ Item {
 		anchors.margins: 16
 		name: "person_add"
 		onClicked: {
-			c_playerModel.appendPlayer();
+			PlayerModel.appendPlayer();
 			game.forceActiveFocus();
 		}
 	}
@@ -169,7 +171,7 @@ Item {
 		size: FloatingActionButton.Size.Small
 		name: "robot"
 		onClicked: {
-			c_playerModel.appendBot();
+			PlayerModel.appendBot();
 			game.forceActiveFocus();
 		}
 	}

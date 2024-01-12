@@ -206,7 +206,7 @@ Packet::ServerPlayerModel::ServerPlayerModel()
 void Packet::ServerPlayerModel::fill() {
 	QByteArray buf;
 	QDataStream pipe(&buf, QIODevice::WriteOnly);
-	PlayerModel::getSingleton().serialize(pipe);
+	PlayerModel::get()->serialize(pipe);
 	QDataStream in(&buf, QIODevice::ReadOnly);
 	this->parse(in);
 }
@@ -219,7 +219,7 @@ void Packet::ServerPlayerModel::extract() {
 	QDataStream pipe(&buf, QIODevice::WriteOnly);
 	this->serialize(pipe);
 	QDataStream in(&buf, QIODevice::ReadOnly);
-	PlayerModel::getSingleton().parse(in);
+	PlayerModel::get()->parse(in);
 }
 
 /**
@@ -272,7 +272,7 @@ Packet::ServerCurverData::ServerCurverData()
  * @brief Automatically fills the packet with the according data
  */
 void Packet::ServerCurverData::fill() {
-	auto &curvers = PlayerModel::getSingleton().getCurvers();
+	auto &curvers = PlayerModel::get()->getCurvers();
 	pos.resize(curvers.size());
 	changingSegment.resize(curvers.size());
 	for (uint i = 0; i < curvers.size(); ++i) {
@@ -285,7 +285,7 @@ void Packet::ServerCurverData::fill() {
  * @brief Automatically extracts the packet data
  */
 void Packet::ServerCurverData::extract() {
-	auto &curvers = PlayerModel::getSingleton().getCurvers();
+	auto &curvers = PlayerModel::get()->getCurvers();
 	if (curvers.size() != pos.size()) {
 		// invalid size, can be UDP related
 		return;
@@ -457,7 +457,7 @@ Packet::Pong::Pong()
  * @brief Automatically fills the packet with the according data
  */
 void Packet::Pong::fill() {
-	auto &curvers = PlayerModel::getSingleton().getCurvers();
+	auto &curvers = PlayerModel::get()->getCurvers();
 	for (auto &c : curvers) {
 		pings.push_back(c->ping);
 	}
@@ -467,7 +467,7 @@ void Packet::Pong::fill() {
  * @brief Automatically extracts the packet data
  */
 void Packet::Pong::extract() {
-	auto &curvers = PlayerModel::getSingleton().getCurvers();
+	auto &curvers = PlayerModel::get()->getCurvers();
 	for (size_t i = 0; i < std::min(curvers.size(), pings.size()); ++i) {
 		curvers[i]->ping = pings[i];
 	}

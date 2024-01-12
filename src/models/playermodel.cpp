@@ -1,23 +1,6 @@
 #include "playermodel.hpp"
 
 /**
- * @brief Constructs a PlayerModel
- * @param parent The parent object
- */
-PlayerModel::PlayerModel(QObject *parent)
-	: QAbstractListModel(parent) {
-	// role names
-	m_roleNames[NameRole] = "name";
-	m_roleNames[ColorRole] = "color";
-	m_roleNames[LeftKeyRole] = "leftKey";
-	m_roleNames[RightKeyRole] = "rightKey";
-	m_roleNames[RoundScoreRole] = "roundScore";
-	m_roleNames[TotalScoreRole] = "totalScore";
-	m_roleNames[ControllerRole] = "controller";
-	m_roleNames[PingRole] = "ping";
-}
-
-/**
  * @brief Returns the number of rows in this model
  * @return The row count
  */
@@ -61,15 +44,6 @@ QVariant PlayerModel::data(const QModelIndex &index, int role) const {
  */
 QHash<int, QByteArray> PlayerModel::roleNames() const {
 	return m_roleNames;
-}
-
-/**
- * @brief Returns a singleton instance of PlayerModel
- * @return The singleton
- */
-PlayerModel &PlayerModel::getSingleton() {
-	static PlayerModel singleton;
-	return singleton;
 }
 
 /**
