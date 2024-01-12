@@ -56,6 +56,7 @@ private slots:
 	void progress();
 	void curverDied();
 	void resetRound();
+	void triggerResetRound();
 	void tryStartGame();
 private:
 	std::vector<std::unique_ptr<Curver>> &getCurvers();
@@ -104,4 +105,8 @@ private:
 	 * @brief Whether a round reset is currently pending in the queue
 	 */
 	bool resetPending = false;
+	/**
+	 * @brief Whether a round reset must be triggered in the next update event loop iteration
+	 */
+	bool triggerReset = false;
 };

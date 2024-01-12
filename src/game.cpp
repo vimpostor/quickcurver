@@ -25,7 +25,7 @@ Game::Game(QQuickItem *parent)
 	connect(&ItemModel::getSingleton(), &ItemModel::itemSpawned, &server, &Server::broadcastItemData);
 	wall.setParentNode(rootNode);
 	connect(&client, &Client::integrateItem, itemFactory.get(), &ItemFactory::integrateItem);
-	connect(&client, &Client::resetRound, this, &Game::resetRound);
+	connect(&client, &Client::resetRound, this, &Game::triggerResetRound);
 	connect(&client, &Client::updateGraphics, this, &QQuickItem::update);
 	// GUI signals
 	connect(&Gui::getSingleton(), &Gui::postInfoBar, this, &Game::postInfoBar);
@@ -102,7 +102,7 @@ void Game::serverReListen(quint16 port) {
  * @brief Resets the entire game
  */
 void Game::resetGame() {
-	resetRound();
+	triggerResetRound();
 	std::ranges::for_each(getCurvers(), [](const auto &c) { c->totalScore = 0; });
 	winnerAnnounced = false;
 	PlayerModel::getSingleton().forceRefresh();
@@ -121,6 +121,11 @@ Client *Game::getClient() {
  * @return Always return Game::rootNode
  */
 QSGNode *Game::updatePaintNode(QSGNode *, QQuickItem::UpdatePaintNodeData *) {
+	// check if round should be reset
+	if (triggerReset) {
+		resetRound();
+	}
+
 	int deltat = Util::getTimeDiff(lastProgressTime);
 	lastProgressTime = QTime::currentTime();
 	for (auto &c : getCurvers()) {
@@ -160,7 +165,7 @@ void Game::curverDied() {
 	// check if only one player is remaining
 	if (!resetPending && std::ranges::count_if(getCurvers(), [](const auto &c) { return c->isAlive(); }) < 2) {
 		resetPending = true;
-		resetRoundTimer.singleShot(Settings::getSingleton().getRoundTimeOut(), this, &Game::resetRound);
+		resetRoundTimer.singleShot(Settings::getSingleton().getRoundTimeOut(), this, &Game::triggerResetRound);
 	}
 }
 
@@ -172,6 +177,16 @@ void Game::resetRound() {
 	std::ranges::for_each(getCurvers(), [](const auto &c) { c->resetRound(); });
 	server.resetRound();
 	resetPending = false;
+	triggerReset = false;
+}
+
+/**
+ * @brief Sets a flag so that the next update event iteration will reset the round
+ *
+ * We cannot just immediately reset, because a round reset will touch some nodes, which must only happen inside the render thread.
+ */
+void Game::triggerResetRound() {
+	this->triggerReset = true;
 }
 
 /**
