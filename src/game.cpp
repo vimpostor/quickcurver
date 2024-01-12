@@ -22,7 +22,7 @@ Game::Game(QQuickItem *parent)
 	PlayerModel::get()->setRootNode(this->rootNode);
 	connect(PlayerModel::get(), &PlayerModel::curverDied, this, &Game::curverDied);
 	connect(PlayerModel::get(), &PlayerModel::playerModelChanged, &server, &Server::broadcastPlayerModel);
-	connect(&ItemModel::getSingleton(), &ItemModel::itemSpawned, &server, &Server::broadcastItemData);
+	connect(ItemModel::get(), &ItemModel::itemSpawned, &server, &Server::broadcastItemData);
 	wall.setParentNode(rootNode);
 	connect(&client, &Client::integrateItem, itemFactory.get(), &ItemFactory::integrateItem);
 	connect(&client, &Client::resetRound, this, &Game::triggerResetRound);

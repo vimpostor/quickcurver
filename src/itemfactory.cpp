@@ -51,7 +51,7 @@ void ItemFactory::update() {
 void ItemFactory::integrateItem(bool spawned, unsigned int sequenceNumber, int which, QPointF pos, Item::AllowedUsers allowedUsers, int collectorIndex) {
 	if (spawned) {
 		// add the new spawned item
-		items.emplace_back(std::unique_ptr<Item>(ItemModel::getSingleton().makePredefinedItem(parentNode, which, pos, allowedUsers, window)));
+		items.emplace_back(std::unique_ptr<Item>(ItemModel::get()->makePredefinedItem(parentNode, which, pos, allowedUsers, window)));
 		items.back()->sequenceNumber = sequenceNumber;
 	} else {
 		auto it = std::ranges::find_if(items, [&](auto &i) { return i->sequenceNumber == sequenceNumber; });
@@ -84,7 +84,7 @@ void ItemFactory::prepareNextItem() {
  */
 void ItemFactory::spawnItem() {
 	QPoint dimension = Settings::getSingleton().getDimension();
-	items.emplace_back(std::unique_ptr<Item>(ItemModel::getSingleton().makeRandomItem(parentNode, QPointF(Util::randInt(SPAWN_WALL_THRESHOLD, dimension.x() - SPAWN_WALL_THRESHOLD), Util::randInt(SPAWN_WALL_THRESHOLD, dimension.y() - SPAWN_WALL_THRESHOLD)), window)));
+	items.emplace_back(std::unique_ptr<Item>(ItemModel::get()->makeRandomItem(parentNode, QPointF(Util::randInt(SPAWN_WALL_THRESHOLD, dimension.x() - SPAWN_WALL_THRESHOLD), Util::randInt(SPAWN_WALL_THRESHOLD, dimension.y() - SPAWN_WALL_THRESHOLD)), window)));
 }
 
 /**
@@ -96,7 +96,7 @@ void ItemFactory::checkCollisions() {
 		auto curverIt = std::ranges::find_if(PlayerModel::get()->getCurvers(), [&itemIt](auto &curver) { return (*itemIt)->isInRange(curver->getPos()); });
 		if (curverIt != PlayerModel::get()->getCurvers().end()) {
 			// trigger item
-			emit ItemModel::getSingleton().itemSpawned(false, (*itemIt)->sequenceNumber, 0, QPointF(), Item::AllowedUsers::ALLOW_ALL, curverIt - PlayerModel::get()->getCurvers().begin());
+			emit ItemModel::get()->itemSpawned(false, (*itemIt)->sequenceNumber, 0, QPointF(), Item::AllowedUsers::ALLOW_ALL, curverIt - PlayerModel::get()->getCurvers().begin());
 			(*itemIt)->trigger(*curverIt);
 			usedItems.emplace_back(std::move(*itemIt));
 			itemIt = items.erase(itemIt);

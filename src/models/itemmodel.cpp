@@ -1,20 +1,6 @@
 #include "itemmodel.hpp"
 
 /**
- * @brief Constructs an ItemModel
- * @param parent The parent object
- */
-ItemModel::ItemModel(QObject *parent)
-	: QAbstractListModel(parent) {
-	// role names
-	m_roleNames[NameRole] = "name";
-	m_roleNames[DescriptionRole] = "description";
-	m_roleNames[ProbabilityRole] = "probability";
-	m_roleNames[AllowedUsersRole] = "allowedUsers";
-	m_roleNames[IconNameRole] = "iconName";
-}
-
-/**
  * @brief Returns the number of rows stored in this model
  * @return The row count
  */
@@ -73,15 +59,6 @@ void ItemModel::setProbability(const int row, const float probability) {
  */
 void ItemModel::setAllowedUsers(const int row, const int allowedUsers) {
 	itemConfigs[static_cast<unsigned long>(row)].allowedUsers = static_cast<Item::AllowedUsers>(allowedUsers);
-}
-
-/**
- * @brief Returns a singleton instance of ItemModel
- * @return The singleton
- */
-ItemModel &ItemModel::getSingleton() {
-	static ItemModel singleton;
-	return singleton;
 }
 
 /**

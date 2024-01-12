@@ -20,8 +20,10 @@
  */
 class ItemModel : public QAbstractListModel {
 	Q_OBJECT
+	QML_ELEMENT
+	QML_SINGLETON
 public:
-	explicit ItemModel(QObject *parent = NULL);
+	QML_CPP_SINGLETON(ItemModel)
 
 	virtual int rowCount(const QModelIndex &) const override;
 	virtual QVariant data(const QModelIndex &index, int role) const override;
@@ -29,8 +31,6 @@ public:
 
 	Q_INVOKABLE void setProbability(const int row, const float probability);
 	Q_INVOKABLE void setAllowedUsers(const int row, const int allowedUsers);
-
-	static ItemModel &getSingleton();
 
 	Item *makeRandomItem(QSGNode *parentNode, QPointF pos, QQuickWindow *win);
 	Item *makePredefinedItem(QSGNode *parentNode, int which, QPointF pos, Item::AllowedUsers allowedUsers, QQuickWindow *win);
@@ -78,10 +78,6 @@ signals:
 	void itemSpawned(bool spawned, unsigned int sequenceNumber, int which, QPointF pos, Item::AllowedUsers allowedUsers, int collectorIndex);
 private:
 	/**
-	 * @brief The role name strings for this model
-	 */
-	QHash<int, QByteArray> m_roleNames;
-	/**
 	 * @brief The role names for this model
 	 */
 	enum RoleNames {
@@ -91,6 +87,10 @@ private:
 		AllowedUsersRole,
 		IconNameRole
 	};
+	/**
+	 * @brief The role name strings for this model
+	 */
+	QHash<int, QByteArray> m_roleNames = {{NameRole, "name"}, {DescriptionRole, "description"}, {ProbabilityRole, "probability"}, {AllowedUsersRole, "allowedUsers"}, {IconNameRole, "iconName"}};
 	/**
 	 * @brief A vector containing all item configurations
 	 */

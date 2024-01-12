@@ -3,6 +3,8 @@ import QtQuick.Controls.Material
 import QtQuick.Layouts
 import Quartz
 
+import Backend
+
 Page {
 	id: settings
 	title: "Settings"
@@ -96,7 +98,7 @@ Page {
 			ListView {
 				id: itemListView
 				anchors.fill: parent
-				model: c_itemModel
+				model: ItemModel
 				delegate: Item {
 					height: 108
 					RowLayout {
@@ -109,7 +111,7 @@ Page {
 						Slider {
 							id: probabilitySlider
 							value: model.probability
-							onValueChanged: c_itemModel.setProbability(index, value);
+							onValueChanged: ItemModel.setProbability(index, value);
 						}
 						ComboBox {
 							model: ListModel {
@@ -119,7 +121,7 @@ Page {
 							}
 							width: probabilitySlider.width
 							currentIndex: allowedUsers
-							onCurrentIndexChanged: c_itemModel.setAllowedUsers(index, currentIndex);
+							onCurrentIndexChanged: ItemModel.setAllowedUsers(index, currentIndex);
 						}
 					}
 				}
