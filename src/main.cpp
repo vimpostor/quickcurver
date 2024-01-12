@@ -42,8 +42,6 @@ int main(int argc, char *argv[]) {
 		return app.exec();
 	}
 
-	QFontDatabase::addApplicationFont("/MaterialSymbols.woff2");
-
 	// register QML types here
 	qmlRegisterType<Game>("Game", 1, 0, "Game");
 	qmlRegisterType<Client>("Client", 1, 0, "Client");
