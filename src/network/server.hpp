@@ -57,8 +57,10 @@ private:
 	QUdpSocket udpSocket;
 	/**
 	 * @brief The mapping between TCP sockets and their Curver instances
+	 *
+	 * We do not need to delete the QTcpSocket instances, Qt manages the lifetime of them and will delete them once the server goes down.
 	 */
-	std::map<std::unique_ptr<QTcpSocket>, Curver *> clients;
+	std::map<QTcpSocket *, Curver *> clients;
 	Curver *curverFromSocket(const QTcpSocket *s) const;
 	/**
 	 * @brief Whether the round has to be reset

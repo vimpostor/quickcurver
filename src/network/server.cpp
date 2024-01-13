@@ -122,7 +122,7 @@ void Server::newConnection() {
 	if (s) {
 		auto *curver = PlayerModel::get()->getNewPlayer();
 		curver->controller = Curver::Controller::CONTROLLER_REMOTE;
-		clients[std::unique_ptr<QTcpSocket>(s)] = curver;
+		clients[s] = curver;
 		connect(s, &QTcpSocket::errorOccurred, this, &Server::socketError);
 		connect(s, &QTcpSocket::disconnected, this, &Server::socketDisconnect);
 		connect(s, &QTcpSocket::readyRead, this, &Server::socketReadyRead);
@@ -206,14 +206,10 @@ void Server::udpSocketReadyRead() {
  * @param s The socket that defines the Curver to remove
  */
 void Server::removePlayer(const QTcpSocket *s) {
-	// TODO: Reconsider, whether Server should remove the Curver from the player model as well
-	// TODO: Actually delete something here: Note, deleting here results in a segfault, because after this method was called in socketError()
-	// or in socketDisconnect(), the TcpSocket seems to be still in use until after those methods are completely finished.
-
-	//	auto it = std::ranges::find_if(clients, [=](const auto &c){ return c.first.get() == s; });
-	//	if (it != clients.end()) {
-	//		clients.erase(it);
-	//	}
+	auto it = std::ranges::find_if(clients, [=](const auto &c) { return c.first == s; });
+	if (it != clients.end()) {
+		clients.erase(it);
+	}
 	broadcastChatMessage(s->peerAddress().toString() + " left the game");
 }
 
@@ -295,7 +291,7 @@ void Server::broadcastPacket(Packet::AbstractPacket &p, bool udp) {
 	if (udp) {
 		std::ranges::for_each(udpAddresses, [&](auto &c) { p.sendPacketUdp(&udpSocket, c); });
 	} else {
-		std::ranges::for_each(clients, [&](auto &c) { p.sendPacket(c.first.get()); });
+		std::ranges::for_each(clients, [&](auto &c) { p.sendPacket(c.first); });
 	}
 }
 
@@ -324,7 +320,7 @@ int Server::getCurverIndex(const FullNetworkAddress peer) {
  * @return The Curver that belongs to \a s
  */
 Curver *Server::curverFromSocket(const QTcpSocket *s) const {
-	auto it = std::ranges::find_if(clients, [&](auto &c) { return c.first.get() == s; });
+	auto it = std::ranges::find_if(clients, [&](auto &c) { return c.first == s; });
 	if (it != clients.end()) {
 		return it->second;
 	} else {
