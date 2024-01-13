@@ -115,19 +115,29 @@ ApplicationWindow {
 							ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
 						}
 						IconButton {
+							id: joinDialogButton
 							ico.name: "cloud_upload"
 							onClicked: clientDialog.open();
 							ToolTip.text: "Join game"
 							ToolTip.visible: pressed
 							ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+							Shortcut {
+								sequence: "Ctrl+J"
+								onActivated: joinDialogButton.clicked();
+							}
 						}
 						IconButton {
+							id: settingsDialogButton
 							ico.name: "settings"
 							enabled: !root.connectedToServer
 							onClicked: pageStack.push(Qt.resolvedUrl("Settings.qml"))
 							ToolTip.text: "Settings"
 							ToolTip.visible: pressed
 							ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+							Shortcut {
+								sequence: "Ctrl+I"
+								onActivated: settingsDialogButton.clicked();
+							}
 						}
 						IconButton {
 							ico.name: "info"
