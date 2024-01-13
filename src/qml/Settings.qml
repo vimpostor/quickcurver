@@ -30,71 +30,63 @@ Page {
 		anchors {top: bar.bottom; left: parent.left; right: parent.right; bottom: parent.bottom}
 		currentIndex: bar.currentIndex
 		Item {
-			ColumnLayout {
+			GridLayout {
 				anchors.centerIn: parent
-				RowLayout {
-					Label {
-						text: "Round time out"
-					}
-					Slider {
-						height: 24
-						value: Settings.getRoundTimeOut();
-						from: 0
-						to: 5000
-						onValueChanged: Settings.setRoundTimeOut(value);
-					}
+				columns: 2
+				uniformCellWidths: true
+				Label {
+					text: "Round time out"
 				}
-				RowLayout {
-					Label {
-						text: "Item spawn"
-					}
-					RangeSlider {
-						height: 24
-						from: 50
-						to: 10000
-						first.value: Settings.getItemSpawnIntervalMin();
-						second.value: Settings.getItemSpawnIntervalMax();
-						first.onValueChanged: Settings.setItemSpawnIntervalMin(first.value);
-						second.onValueChanged: Settings.setItemSpawnIntervalMax(second.value);
-					}
+				Slider {
+					height: 24
+					value: Settings.getRoundTimeOut();
+					from: 0
+					to: 5000
+					onValueChanged: Settings.setRoundTimeOut(value);
 				}
-				RowLayout {
-					Label {
-						text: "Score to win"
-					}
-					TextField {
-						text: Settings.getTargetScore()
-						inputMethodHints: Qt.ImhDigitsOnly
-						onTextChanged: Settings.setTargetScore(text);
-					}
+				Label {
+					text: "Item spawn"
 				}
-				RowLayout {
-					Label {
-						text: "Logic update rate"
-					}
-					Slider {
-						height: 24
-						value: Settings.getUpdatesPerSecond();
-						from: 30
-						to: 144
-						snapMode: Slider.SnapAlways
-						stepSize: 1
-						onValueChanged: Settings.setUpdatesPerSecond(value);
-					}
+				RangeSlider {
+					height: 24
+					from: 50
+					to: 10000
+					first.value: Settings.getItemSpawnIntervalMin();
+					second.value: Settings.getItemSpawnIntervalMax();
+					first.onValueChanged: Settings.setItemSpawnIntervalMin(first.value);
+					second.onValueChanged: Settings.setItemSpawnIntervalMax(second.value);
 				}
-				RowLayout {
-					Label {
-						text: "Network update rate"
-					}
-					Slider {
-						height: 24
-						value: Settings.getNetworkCurverBlock();
-						from: 1
-						to: 8
-						snapMode: Slider.SnapAlways
-						stepSize: 1
-						onValueChanged: Settings.setNetworkCurverBlock(value);
-					}
+				Label {
+					text: "Score to win"
+				}
+				TextField {
+					text: Settings.getTargetScore()
+					inputMethodHints: Qt.ImhDigitsOnly
+					onTextChanged: Settings.setTargetScore(text);
+				}
+				Label {
+					text: "Logic update rate"
+				}
+				Slider {
+					height: 24
+					value: Settings.getUpdatesPerSecond();
+					from: 30
+					to: 144
+					snapMode: Slider.SnapAlways
+					stepSize: 1
+					onValueChanged: Settings.setUpdatesPerSecond(value);
+				}
+				Label {
+					text: "Network update rate"
+				}
+				Slider {
+					height: 24
+					value: Settings.getNetworkCurverBlock();
+					from: 1
+					to: 8
+					snapMode: Slider.SnapAlways
+					stepSize: 1
+					onValueChanged: Settings.setNetworkCurverBlock(value);
 				}
 			}
 		}
