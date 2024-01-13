@@ -199,6 +199,7 @@ ApplicationWindow {
 			}
 			Column {
 				width: 150
+				spacing: 8
 				TextField {
 					id: nameTextField
 					anchors.left: parent.left

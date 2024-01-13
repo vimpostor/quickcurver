@@ -10,7 +10,8 @@ Page {
 	title: "Settings"
 	TabBar {
 		id: bar
-		width: parent.width
+		anchors.left: parent.left
+		anchors.right: closeButton.left
 		TabButton {
 			text: "General"
 		}
@@ -19,6 +20,9 @@ Page {
 		}
 	}
 	IconButton {
+		id: closeButton
+		anchors.right: parent.right
+		anchors.top: parent.top
 		ico.name: "close"
 		onClicked: pageStack.clear();
 	}
@@ -99,30 +103,29 @@ Page {
 				id: itemListView
 				anchors.fill: parent
 				model: ItemModel
-				delegate: Item {
-					height: 108
-					RowLayout {
-						IconButton {
-							ico.name: model.iconName
+				delegate: RowLayout {
+					width: parent.width
+					IconButton {
+						ico.name: model.iconName
+					}
+					Label {
+						text: model.name + " (" + model.description + ")"
+						Layout.fillWidth: true
+					}
+					Slider {
+						id: probabilitySlider
+						value: model.probability
+						onValueChanged: ItemModel.setProbability(index, value);
+					}
+					ComboBox {
+						model: ListModel {
+							ListElement { name: "Allow all" }
+							ListElement { name: "Allow others" }
+							ListElement { name: "Allow collector" }
 						}
-						Label {
-							text: model.name + " (" + model.description + ")"
-						}
-						Slider {
-							id: probabilitySlider
-							value: model.probability
-							onValueChanged: ItemModel.setProbability(index, value);
-						}
-						ComboBox {
-							model: ListModel {
-								ListElement { name: "Allow all" }
-								ListElement { name: "Allow others" }
-								ListElement { name: "Allow collector" }
-							}
-							width: probabilitySlider.width
-							currentIndex: allowedUsers
-							onCurrentIndexChanged: ItemModel.setAllowedUsers(index, currentIndex);
-						}
+						implicitWidth: 160
+						currentIndex: allowedUsers
+						onCurrentIndexChanged: ItemModel.setAllowedUsers(index, currentIndex);
 					}
 				}
 			}
