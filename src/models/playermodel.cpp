@@ -78,6 +78,17 @@ void PlayerModel::removePlayer(int row) {
 }
 
 /**
+ * @brief Removes a player from this model
+ * @param curver The pointer to the player
+ */
+void PlayerModel::removeCurver(Curver *curver) {
+	auto it = std::ranges::find_if(m_data, [=](const auto &c) { return c.get() == curver; });
+	if (it != m_data.cend()) {
+		removePlayer(it - m_data.cbegin());
+	}
+}
+
+/**
  * @brief Sets the color of a player
  * @param row The index of the player
  * @param color The new color

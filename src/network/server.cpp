@@ -110,7 +110,7 @@ void Server::broadcastItemData(bool spawned, unsigned int sequenceNumber, int wh
  * @brief This function is called, when an error occurred during accepting an incoming connection
  */
 void Server::acceptError(QAbstractSocket::SocketError) {
-	Gui::getSingleton().postInfoBar(tcpServer.errorString());
+	qDebug() << tcpServer.errorString();
 }
 
 /**
@@ -136,7 +136,7 @@ void Server::newConnection() {
  */
 void Server::socketError(QAbstractSocket::SocketError) {
 	QTcpSocket *s = static_cast<QTcpSocket *>(sender());
-	Gui::getSingleton().postInfoBar(s->errorString());
+	qDebug() << s->errorString();
 	removePlayer(s);
 }
 
@@ -171,7 +171,7 @@ void Server::socketReadyRead() {
  * @brief Handles an UDP socket error
  */
 void Server::udpSocketError(QAbstractSocket::SocketError) {
-	qDebug() << udpSocket.errorString();
+	qDebug() << "UDP error" << udpSocket.errorString();
 }
 
 /**
@@ -208,9 +208,11 @@ void Server::udpSocketReadyRead() {
 void Server::removePlayer(const QTcpSocket *s) {
 	auto it = std::ranges::find_if(clients, [=](const auto &c) { return c.first == s; });
 	if (it != clients.end()) {
+		auto *c = it->second;
 		clients.erase(it);
+		PlayerModel::get()->removeCurver(c);
+		broadcastChatMessage(s->peerAddress().toString() + " left the game");
 	}
-	broadcastChatMessage(s->peerAddress().toString() + " left the game");
 }
 
 /**

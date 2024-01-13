@@ -26,6 +26,7 @@ public:
 	Q_INVOKABLE void appendPlayer();
 	Q_INVOKABLE void appendBot();
 	Q_INVOKABLE void removePlayer(int row);
+	void removeCurver(Curver *curver);
 	Q_INVOKABLE void setColor(int row, QColor color);
 	Q_INVOKABLE void setLeftKey(int row, Qt::Key key);
 	Q_INVOKABLE void setRightKey(int row, Qt::Key key);
