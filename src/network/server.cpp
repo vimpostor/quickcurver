@@ -126,6 +126,8 @@ void Server::newConnection() {
 		connect(s, &QTcpSocket::errorOccurred, this, &Server::socketError);
 		connect(s, &QTcpSocket::disconnected, this, &Server::socketDisconnect);
 		connect(s, &QTcpSocket::readyRead, this, &Server::socketReadyRead);
+
+		// the username is not sent yet, so we cannot pretty print the name yet
 		broadcastChatMessage(s->peerAddress().toString() + " joined");
 		broadcastSettings();
 	}
@@ -218,7 +220,7 @@ void Server::removePlayer(const QTcpSocket *s) {
 		}
 		// remove from player model
 		PlayerModel::get()->removeCurver(c);
-		broadcastChatMessage(s->peerAddress().toString() + " left the game");
+		broadcastChatMessage(curverNetworkName(s, c) + " left the game");
 	}
 }
 
@@ -321,6 +323,16 @@ int Server::getCurverIndex(const FullNetworkAddress peer) {
 	}
 	qDebug() << "Client index not found" << peer.addr << peer.port;
 	return -1;
+}
+
+/**
+ * @brief Returns a pretty-printed name for a network user
+ * @param s The socket corresponding to the user
+ * @param curver The curver corresponding to the user
+ * @return A pretty-printed name
+ */
+QString Server::curverNetworkName(const QTcpSocket *s, const Curver *curver) {
+	return QString("%1 (%2)").arg(s->peerAddress().toString()).arg(curver->userName);
 }
 
 /**

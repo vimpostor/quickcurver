@@ -47,6 +47,7 @@ private:
 	void handlePacket(std::unique_ptr<Packet::AbstractPacket> &p, const QTcpSocket *s = nullptr, FullNetworkAddress sender = {});
 	void broadcastPacket(Packet::AbstractPacket &p, bool udp = false);
 	int getCurverIndex(const FullNetworkAddress peer);
+	QString curverNetworkName(const QTcpSocket *s, const Curver *curver);
 	/**
 	 * @brief The server instance that handles every incoming connection
 	 */
