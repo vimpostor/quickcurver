@@ -16,6 +16,7 @@ GameWatcher::GameWatcher(QObject *parent)
 	connect(&cliReader, &CommandlineReader::quit, this, &GameWatcher::quit, Qt::QueuedConnection);
 	// TODO: Remove player must call the slot in Server
 	connect(&cliReader, &CommandlineReader::remove, PlayerModel::get(), &PlayerModel::removePlayer);
+	connect(&cliReader, &CommandlineReader::removeBots, PlayerModel::get(), &PlayerModel::removeBots);
 	connect(&cliReader, &CommandlineReader::reset, &game, &Game::resetGame);
 	connect(&cliReader, &CommandlineReader::resize, Settings::get(), &Settings::setDimension);
 	connect(&cliReader, &CommandlineReader::start, &game, &Game::startGame);
