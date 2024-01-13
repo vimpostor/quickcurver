@@ -209,7 +209,14 @@ void Server::removePlayer(const QTcpSocket *s) {
 	auto it = std::ranges::find_if(clients, [=](const auto &c) { return c.first == s; });
 	if (it != clients.end()) {
 		auto *c = it->second;
+		// remove from TCP list (Qt will delete the socket later, when the server shuts down)
 		clients.erase(it);
+		// remove from UDP list
+		auto udpit = std::ranges::find_if(udpAddresses, [&](const auto &a) { return a.addr == s->peerAddress(); });
+		if (udpit != udpAddresses.cend()) {
+			udpAddresses.erase(udpit);
+		}
+		// remove from player model
 		PlayerModel::get()->removeCurver(c);
 		broadcastChatMessage(s->peerAddress().toString() + " left the game");
 	}
@@ -303,8 +310,8 @@ void Server::broadcastPacket(Packet::AbstractPacket &p, bool udp) {
  * @return The index in the server-side curver array
  */
 int Server::getCurverIndex(const FullNetworkAddress peer) {
-	auto it = std::ranges::find_if(clients, [&](auto &p) { return p.first->peerAddress() == peer.addr; });
-	if (it != clients.end()) {
+	auto it = std::ranges::find_if(clients, [&](const auto &p) { return p.first->peerAddress() == peer.addr; });
+	if (it != clients.cend()) {
 		auto &curvers = PlayerModel::get()->getCurvers();
 		for (size_t i = 0; i < curvers.size(); ++i) {
 			if (curvers[i].get() == it->second) {
@@ -322,8 +329,8 @@ int Server::getCurverIndex(const FullNetworkAddress peer) {
  * @return The Curver that belongs to \a s
  */
 Curver *Server::curverFromSocket(const QTcpSocket *s) const {
-	auto it = std::ranges::find_if(clients, [&](auto &c) { return c.first == s; });
-	if (it != clients.end()) {
+	auto it = std::ranges::find_if(clients, [&](const auto &c) { return c.first == s; });
+	if (it != clients.cend()) {
 		return it->second;
 	} else {
 		return nullptr;
