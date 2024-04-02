@@ -8,23 +8,23 @@ import Backend
 Page {
 	id: settings
 	title: "Settings"
+	IconButton {
+		id: closeButton
+		anchors.left: parent.left
+		anchors.top: parent.top
+		ico.name: "arrow_back"
+		onClicked: pageStack.clear();
+	}
 	TabBar {
 		id: bar
-		anchors.left: parent.left
-		anchors.right: closeButton.left
+		anchors.left: closeButton.right
+		anchors.right: parent.right
 		TabButton {
 			text: "General"
 		}
 		TabButton {
 			text: "Item spawn probabilities"
 		}
-	}
-	IconButton {
-		id: closeButton
-		anchors.right: parent.right
-		anchors.top: parent.top
-		ico.name: "close"
-		onClicked: pageStack.clear();
 	}
 	StackLayout {
 		anchors {top: bar.bottom; left: parent.left; right: parent.right; bottom: parent.bottom}
