@@ -33,7 +33,6 @@ Page {
 			GridLayout {
 				anchors.centerIn: parent
 				columns: 2
-				uniformCellWidths: true
 				Label {
 					text: "Round time out"
 				}

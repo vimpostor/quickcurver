@@ -137,6 +137,7 @@ QSGNode *Game::updatePaintNode(QSGNode *, QQuickItem::UpdatePaintNodeData *) {
 		c->progress(deltat, getCurvers());
 	}
 	itemFactory->update();
+	rootNode->markDirty(QSGNode::DirtyStateBit::DirtyGeometry);
 
 	return rootNode;
 }
