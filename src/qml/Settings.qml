@@ -93,7 +93,9 @@ Page {
 			ListView {
 				id: itemListView
 				anchors.fill: parent
+				anchors.margins: 8
 				model: ItemModel
+				spacing: 8
 				delegate: RowLayout {
 					width: parent.width
 					IconButton {
