@@ -23,7 +23,7 @@ qt_add_executable(${PROJECT_NAME} ${SRCS} ${RESOURCES})
 qt_add_qml_module(${PROJECT_NAME} URI "Backend" VERSION 1.0 NO_RESOURCE_TARGET_PATH QML_FILES ${QMLS} SOURCES "src/backend.cpp")
 
 include(FetchContent)
-FetchContent_Declare(quartz GIT_REPOSITORY https://github.com/vimpostor/quartz.git GIT_TAG v0.4)
+FetchContent_Declare(quartz GIT_REPOSITORY https://github.com/vimpostor/quartz.git GIT_TAG v0.8)
 FetchContent_MakeAvailable(quartz)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${QT_PREFIXED_MODULES})
