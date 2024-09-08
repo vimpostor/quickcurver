@@ -42,12 +42,12 @@ void CommandlineReader::run() {
 						amount = 1;
 					}
 					for (int i = 0; i < amount; ++i) {
-						emit addBot();
+						addBot();
 					}
 				} else if (command == "chat") {
 					QString message;
 					if (takeString(message, parts, "Chat message")) {
-						emit chat(message);
+						chat(message);
 					}
 				} else if (command == "help") {
 					qInfo() << "/start starts the game";
@@ -55,51 +55,51 @@ void CommandlineReader::run() {
 					int index;
 					float prob;
 					if (takeInt(index, parts, "Index") && takeFloat(prob, parts, "Probability")) {
-						emit itemSpawn(index, prob);
+						itemSpawn(index, prob);
 					}
 				} else if (command == "itemwait") {
 					int min, max;
 					if (takeInt(min, parts, "Min") && takeInt(max, parts, "Max")) {
-						emit itemWait(min, max);
+						itemWait(min, max);
 					}
 				} else if (command == "listen") {
 					int port;
 					if (takeInt(port, parts, "Pass the port")) {
-						emit listen(port);
+						listen(port);
 					}
 				} else if (command == "logicupdate") {
 					int rate;
 					if (takeInt(rate, parts, "Logic update rate")) {
-						emit logicUpdate(rate);
+						logicUpdate(rate);
 					}
 				} else if (command == "networkupdate") {
 					int rate;
 					if (takeInt(rate, parts, "Network update rate")) {
-						emit networkUpdate(rate);
+						networkUpdate(rate);
 					}
 				} else if (command == "quit") {
 					cancel = true;
-					emit quit();
+					quit();
 				} else if (command == "remove") {
 					int index;
 					if (takeInt(index, parts, "index")) {
-						emit remove(index);
+						remove(index);
 					}
 				} else if (command == "removebots") {
-					emit removeBots();
+					removeBots();
 				} else if (command == "reset") {
-					emit reset();
+					reset();
 				} else if (command == "resize") {
 					int width, height;
 					if (takeInt(width, parts, "width") && takeInt(height, parts, "height")) {
-						emit resize(QPoint(width, height));
+						resize(QPoint(width, height));
 					}
 				} else if (command == "start") {
-					emit start();
+					start();
 				} else if (command == "score") {
 					int score;
 					if (takeInt(score, parts, "Score to reach")) {
-						emit targetScore(score);
+						targetScore(score);
 					}
 				} else {
 					qInfo() << "Unknown command. See /help for more info.";

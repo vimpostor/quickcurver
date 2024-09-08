@@ -55,7 +55,7 @@ void PlayerModel::appendPlayer() {
 	m_data.back()->userName = "Player " + QString::number(m_data.size());
 	connect(m_data.back().get(), &Curver::died, this, &PlayerModel::processDeath);
 	endResetModel();
-	emit playerModelChanged();
+	playerModelChanged();
 }
 
 /**
@@ -74,7 +74,7 @@ void PlayerModel::removePlayer(int row) {
 	beginResetModel();
 	m_data.erase(m_data.begin() + row);
 	endResetModel();
-	emit playerModelChanged();
+	playerModelChanged();
 }
 
 /**
@@ -95,7 +95,7 @@ void PlayerModel::removeCurver(Curver *curver) {
  */
 void PlayerModel::setColor(int row, QColor color) {
 	m_data[static_cast<unsigned long>(row)]->setColor(color);
-	emit playerModelChanged();
+	playerModelChanged();
 }
 
 /**
@@ -106,7 +106,7 @@ void PlayerModel::setColor(int row, QColor color) {
 void PlayerModel::setLeftKey(int row, Qt::Key key) {
 	const auto player = m_data[static_cast<unsigned long>(row)].get();
 	player->setLeftKey(key);
-	emit Gui::getSingleton().postInfoBar("Set left key of " + player->userName + " to " + QKeySequence(key).toString());
+	Gui::getSingleton().postInfoBar("Set left key of " + player->userName + " to " + QKeySequence(key).toString());
 }
 
 /**
@@ -117,7 +117,7 @@ void PlayerModel::setLeftKey(int row, Qt::Key key) {
 void PlayerModel::setRightKey(int row, Qt::Key key) {
 	const auto player = m_data[static_cast<unsigned long>(row)].get();
 	player->setRightKey(key);
-	emit Gui::getSingleton().postInfoBar("Set right key of " + player->userName + " to " + QKeySequence(key).toString());
+	Gui::getSingleton().postInfoBar("Set right key of " + player->userName + " to " + QKeySequence(key).toString());
 }
 
 /**
@@ -127,8 +127,8 @@ void PlayerModel::setRightKey(int row, Qt::Key key) {
  */
 void PlayerModel::setUserName(int row, QString username) {
 	m_data[static_cast<unsigned long>(row)]->userName = username;
-	emit dataChanged(index(row, 0), index(row, 0), QVector<int>() = {NameRole});
-	emit playerModelChanged();
+	dataChanged(index(row, 0), index(row, 0), QVector<int>() = {NameRole});
+	playerModelChanged();
 }
 
 /**
@@ -138,8 +138,8 @@ void PlayerModel::setUserName(int row, QString username) {
  */
 void PlayerModel::setController(int row, int ctrl) {
 	m_data[static_cast<unsigned long>(row)]->controller = static_cast<Curver::Controller>(ctrl);
-	emit dataChanged(index(row, 0), index(row, 0), QVector<int>() = {ControllerRole});
-	emit playerModelChanged();
+	dataChanged(index(row, 0), index(row, 0), QVector<int>() = {ControllerRole});
+	playerModelChanged();
 }
 
 /**
@@ -175,7 +175,7 @@ void PlayerModel::serialize(QDataStream &out) const {
  * @param in The stream to parse from
  */
 void PlayerModel::parse(QDataStream &in) {
-	emit beginResetModel();
+	beginResetModel();
 	unsigned size;
 	in >> size;
 	m_data.resize(size);
@@ -190,7 +190,7 @@ void PlayerModel::parse(QDataStream &in) {
 		c->controller = static_cast<Curver::Controller>(ctrl);
 		c->setAlive(static_cast<bool>(isAlive));
 	}
-	emit endResetModel();
+	endResetModel();
 }
 
 /**
@@ -206,18 +206,18 @@ Curver *PlayerModel::getNewPlayer() {
  * @brief Forces a refresh of the GUI
  */
 void PlayerModel::forceRefresh() {
-	emit beginResetModel();
-	emit endResetModel();
-	emit playerModelChanged();
+	beginResetModel();
+	endResetModel();
+	playerModelChanged();
 }
 
 /**
  * @brief Forces a refresh of the score roles in the GUI
  */
 void PlayerModel::processDeath() {
-	emit curverDied();
-	emit dataChanged(index(0, 0), index(static_cast<int>(m_data.size()) - 1, 0), QVector<int>() = {RoundScoreRole, TotalScoreRole});
-	emit playerModelChanged();
+	curverDied();
+	dataChanged(index(0, 0), index(static_cast<int>(m_data.size()) - 1, 0), QVector<int>() = {RoundScoreRole, TotalScoreRole});
+	playerModelChanged();
 }
 
 /**

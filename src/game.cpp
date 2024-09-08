@@ -198,7 +198,7 @@ void Game::triggerResetRound() {
 void Game::tryStartGame() {
 	if (!started) {
 		started = true;
-		emit gameStarted();
+		gameStarted();
 	}
 }
 

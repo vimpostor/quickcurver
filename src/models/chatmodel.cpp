@@ -45,5 +45,5 @@ void ChatModel::appendMessage(QString username, QString message) {
 	beginInsertRows(index(m_data.size() - 1).parent(), m_data.size(), m_data.size());
 	m_data.push_back({username, message});
 	endInsertRows();
-	emit newMessage(username, message);
+	newMessage(username, message);
 }

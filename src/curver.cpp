@@ -352,7 +352,7 @@ void Curver::rotate(float radians) {
 void Curver::die() {
 	alive = false;
 	spawnExplosion(lastPos);
-	emit died();
+	died();
 }
 
 /**

@@ -6,9 +6,9 @@
  */
 void Settings::setDimension(QPoint dimension) {
 	this->dimension = dimension;
-	emit widthChanged(dimension.x());
-	emit heightChanged(dimension.y());
-	emit dimensionChanged();
+	widthChanged(dimension.x());
+	heightChanged(dimension.y());
+	dimensionChanged();
 }
 
 /**

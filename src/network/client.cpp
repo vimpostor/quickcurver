@@ -199,10 +199,10 @@ void Client::handleJoinTimeout() {
 void Client::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p) {
 	// First handle flags
 	if (p->start) {
-		emit Gui::getSingleton().startGame();
+		Gui::getSingleton().startGame();
 	}
 	if (p->reset) {
-		emit resetRound();
+		resetRound();
 	}
 	switch (static_cast<Packet::ServerTypes>(p->type)) {
 	case Packet::ServerTypes::Chat_Message:
@@ -221,13 +221,13 @@ void Client::handlePacket(std::unique_ptr<Packet::AbstractPacket> &p) {
 		{
 			auto *curverData = (Packet::ServerCurverData *) p.get();
 			curverData->extract();
-			emit updateGraphics();
+			updateGraphics();
 			break;
 		}
 	case Packet::ServerTypes::ItemData:
 		{
 			auto *itemData = (Packet::ServerItemData *) p.get();
-			emit integrateItem(itemData->spawned, itemData->sequenceNumber, itemData->which, itemData->pos, itemData->allowedUsers, itemData->collectorIndex);
+			integrateItem(itemData->spawned, itemData->sequenceNumber, itemData->which, itemData->pos, itemData->allowedUsers, itemData->collectorIndex);
 			break;
 		}
 	case Packet::ServerTypes::SettingsType:
@@ -267,5 +267,5 @@ void Client::setJoinStatus(const JoinStatus s) {
 	} else {
 		pingTimer.stop();
 	}
-	emit joinStatusChanged(s);
+	joinStatusChanged(s);
 }
