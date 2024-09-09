@@ -12,7 +12,7 @@
 			packages = {
 				default = pkgs.stdenv.mkDerivation {
 					pname = "quickcurver";
-					version = builtins.head (builtins.match ".*project\\([[:alnum:]]+ VERSION ([0-9]+\.[0-9]+).*" (builtins.readFile ./CMakeLists.txt));
+					version = quartz.lib.cmakeProjectVersion ./CMakeLists.txt;
 
 					src = ./.;
 
@@ -27,7 +27,7 @@
 						qt6.qtdeclarative
 						qt6.qtsvg
 					];
-					cmakeFlags = quartz.cmakeWrapper { inherit pkgs; cmakeFile = ./CMakeLists.txt; };
+					cmakeFlags = quartz.lib.cmakeWrapper { inherit pkgs; cmakeFile = ./CMakeLists.txt; };
 					postBuild = "make linux-desktop-integration";
 				 };
 			};
